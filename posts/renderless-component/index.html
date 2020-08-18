@@ -1,0 +1,163 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no,user-scalable=no"><meta name=author content=馬腊咯稽><meta name=description content="Renderless Component"><meta name=keywords content=HTML,CSS,JS,React,Vue><link rel=canonical href=https://vikingama.github.io/posts/renderless-component/><link rel="shortcut icon" href=https://vikingama.github.io/images/favicon.ico><link rel=stylesheet href=https://vikingama.github.io/css/zozo.css><link rel=stylesheet href=https://vikingama.github.io/css/animate.css><link rel=stylesheet href=https://vikingama.github.io/css/highlight.css><link rel=stylesheet href=https://vikingama.github.io/css/remixicon.css><title>Renderless Component &middot; 不需要仰望谁的传说 · 我拥有自己的模样</title></head><body><div class="main animated"><div class="nav_container animated fadeInDown"><div class=site_nav id=site_nav><ul><li><a href=/>首页</a></li><li><a href=/posts/>归档</a></li><li><a href=/tags/>标签</a></li><li><a href=/inspires/>启发</a></li><li><a href=/about/>关于</a></li></ul></div><div class=menu_icon><a id=menu_icon><i class=remixicon-links-line></i></a></div></div><div class="header animated fadeInDown"><div class=site_title_container><div class=site_title><h1><a href=https://vikingama.github.io><img style=width:65px;height:auto;vertical-align:top src=https://vikingama.github.io/images/avatar.png></a></h1></div><div class=description><p class=sub_title>不需要仰望谁的传说<br>我拥有自己的模样</p><div class=my_socials><a href=https://www.douban.com/people/nicknoonan title=douban target=_blank><i class=remixicon-douban-fill></i></a><a href=https://github.com/Vikingama title=github target=_blank><i class=remixicon-github-fill></i></a><a href=https://www.zhihu.com/people/vikingama title=zhihu target=_blank><i class=remixicon-zhihu-fill></i></a><a href=https://vikingama.github.io/index.xml type=application/rss+xml title=rss target=_blank><i class=remixicon-rss-fill></i></a></div></div></div></div><div class=content><div class=post_page><div class="post animated fadeInDown"><div class="post_title post_detail_title"><h2><a href=/posts/renderless-component/>Renderless Component</a></h2><span class=date>2020.04.29</span></div><div class="post_content markdown"><blockquote><p>昨天面试被问到了 Renderless 组件，一脸懵逼。</p></blockquote><h3 id=具名插槽>具名插槽</h3><p>具名插槽相当于一个占位符，它的内容会被父组件插入的内容所取代：</p><pre><code class=language-html>&lt;!-- Child.vue --&gt;
+&lt;template&gt;
+    &lt;div class=&quot;child&quot;&gt;
+        &lt;slot name=&quot;namedSlot&quot;&gt;
+            Named Slot Content
+        &lt;/slot&gt;
+        &lt;slot&gt;
+            Default Slot Content
+        &lt;/slot&gt;
+    &lt;/div&gt;
+&lt;/template&gt;
+&lt;!-- Parent.vue --&gt;
+&lt;template&gt;
+    &lt;div class=&quot;parent&quot;&gt;
+        &lt;Child&gt;
+            &lt;h1&gt;出现在默认插槽里&lt;/h1&gt;
+            &lt;template #namedSlot&gt;
+                &lt;h2&gt;出现在具名插槽里&lt;/h2&gt;
+            &lt;/template&gt;
+            &lt;h1&gt;出现在默认插槽里&lt;/h1&gt;
+        &lt;/Child&gt;
+    &lt;/div&gt;
+&lt;/template&gt;
+&lt;!-- 渲染结果 --&gt;
+&lt;div class=&quot;parent&quot;&gt;
+    &lt;div class=&quot;child&quot;&gt;
+        &lt;h2&gt;出现在具名插槽里&lt;/h2&gt;
+        &lt;h1&gt;出现在默认插槽里&lt;/h1&gt;
+        &lt;h3&gt;出现在默认插槽里&lt;/h3&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+</code></pre><h3 id=作用域插槽>作用域插槽</h3><p>作用域插槽就是给普通插槽添加了传递参数的能力；作用域插槽会被编译为一个返回 VNode 的函数，通过函数调用，可以将子组件的变量传递到父组件；很像 React 的 Render Props 模式：</p><pre><code class=language-html>&lt;!-- Child.vue --&gt;
+&lt;template&gt;
+    &lt;ul class=&quot;child&quot;&gt;
+        &lt;li v-for=&quot;item in list&quot; :key=&quot;item.name&quot;&gt;
+            &lt;slot name=&quot;item&quot; :itemData=&quot;item&quot;&gt;
+                我是候补...
+            &lt;/slot&gt;
+        &lt;/li&gt;
+    &lt;/ul&gt;
+&lt;/template&gt;
+&lt;!-- Parent.vue --&gt;
+&lt;template&gt;
+    &lt;div class=&quot;parent&quot;&gt;
+        &lt;Child&gt;
+            &lt;template #item=&quot;{itemData}&quot;&gt;
+                &lt;a href=&quot;itemData.link&quot;&gt;{{ itemData.name }}&lt;/a&gt;
+            &lt;/template&gt;
+        &lt;/Child&gt;
+    &lt;/div&gt;
+&lt;/template&gt;
+&lt;!-- 渲染结果 --&gt;
+&lt;div class=&quot;parent&quot;&gt;
+    &lt;ul class=&quot;child&quot;&gt;
+        &lt;li&gt;&lt;a href=&quot;itemData.link&quot;&gt;Baidu&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href=&quot;itemData.link&quot;&gt;Google&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href=&quot;itemData.link&quot;&gt;So&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+&lt;/div&gt;
+</code></pre><h3 id=renderless-组件>Renderless 组件</h3><p>Renderless 组件不会渲染具体内容，它仅仅管理一些状态和行为，将这些状态和行为通过作用域插槽暴露给父组件，由父组件对渲染内容进行控制：</p><pre><code class=language-html>&lt;!-- RenderlessComponent.vue --&gt;
+&lt;script&gt;
+    export default {
+        render() {
+            // 通过 $slots[name] 访问具名插槽，通过 $scopedSlots[name] 访问作用域插槽
+            return this.$scopedSlots.default({
+                value: &quot;ABCer&quot;,
+            });
+        },
+    };
+&lt;/script&gt;
+&lt;!-- Parent.vue --&gt;
+&lt;div class=&quot;parent&quot;&gt;
+    &lt;renderless-component&gt;
+        &lt;template #default=&quot;{value}&quot;&gt;
+            &lt;p&gt;Hello, {{value}}&lt;/p&gt;
+        &lt;/template&gt;
+    &lt;/renderless-component&gt;
+&lt;/div&gt;
+&lt;!-- 渲染结果 --&gt;
+&lt;div class=&quot;parent&quot;&gt;
+    &lt;p&gt;Hello, ABCer&lt;/p&gt;
+&lt;/div&gt;
+</code></pre><p>举个别人的<a href=https://codepen.io/adamwathan/pen/qorebJ>例子</a>：</p><pre><code class=language-html>&lt;!-- RenderlessComponent.vue --&gt;
+&lt;script&gt;
+    export default {
+        props: [&quot;value&quot;],
+        data() {
+            return {
+                tag: &quot;&quot;,
+            };
+        },
+        methods: {
+            add() {
+                if (!this.tag || this.tag.trim().length === 0) {
+                    return;
+                }
+                this.$emit(&quot;input&quot;, [...this.value, this.tag.trim()]);
+                this.tag = &quot;&quot;;
+            },
+            remove(tag) {
+                this.$emit(
+                    &quot;input&quot;,
+                    this.value.filter((v) =&gt; v !== tag)
+                );
+            },
+        },
+        render() {
+            return this.$scopedSlots.default({
+                list: this.value,
+                add: this.add, // 传了不一定会用，只是为了适应多种业务场景
+                remove: this.remove,
+                inputAttrs: {
+                    value: this.tag,
+                },
+                inputEvents: {
+                    input: (e) =&gt; {
+                        this.tag = e.target.value;
+                    },
+                    keydown: (e) =&gt; {
+                        if (e.keyCode === 13) {
+                            e.preventDefault();
+                            this.add();
+                        }
+                    },
+                },
+            });
+        },
+    };
+&lt;/script&gt;
+&lt;!-- Parent.vue --&gt;
+&lt;template&gt;
+    &lt;renderless-component v-model=&quot;tags&quot;&gt;
+        &lt;template #default=&quot;{list, remove, inputAttrs, inputEvents}&quot;&gt;
+            &lt;div class=&quot;tags-input&quot;&gt;
+                &lt;span class=&quot;tags-input-tag&quot;&gt;
+                    &lt;span v-for=&quot;item in list&quot; :key=&quot;item&quot;&gt;
+                        {{ item }}
+                    &lt;/span&gt;
+                    &lt;button class=&quot;tags-input-remove&quot; @click=&quot;remove&quot;&gt;
+                        &amp;times;
+                    &lt;/button&gt;
+                &lt;/span&gt;
+                &lt;input
+                    class=&quot;tags-input-text&quot;
+                    placeholder=&quot;add tag&quot;
+                    v-bind=&quot;inputAttrs&quot;
+                    v-on=&quot;inputEvents&quot;
+                /&gt;
+            &lt;/div&gt;
+        &lt;/template&gt;
+    &lt;/renderless-component&gt;
+&lt;/template&gt;
+&lt;script&gt;
+    export default {
+        data() {
+            return {
+                tags: [&quot;Testing&quot;, &quot;Design&quot;],
+            };
+        },
+    };
+&lt;/script&gt;
+</code></pre><p>当项目中有很多逻辑层相同展示层不同的组件时，Renderless 组件可以很好地实现逻辑复用。</p><h5 id=参考-renderless-components-in-vue-js-https-adamwathan-me-renderless-components-in-vuejs>参考：<a href=https://adamwathan.me/renderless-components-in-vuejs/>Renderless Components in Vue.js</a></h5></div><div class=post_footer><div class=meta><div class=info><span class="field tags"><i class=remixicon-stack-line></i><a href=https://vikingama.github.io/tags/vue/>Vue</a></span></div></div></div></div><div class=doc_comments><div class=comments_block_title>发表评论</div><div id=vcomments></div></div><link rel=stylesheet href=https://vikingama.github.io/css/comments.css><script src=/js/av.js></script><script src=/js/valine.js></script><script type=text/javascript>new Valine({el:'#vcomments',appId:'U06blUXOot4uJgfMu8I9xJXz-MdYXbMMI',appKey:'BnrXC06FJsvRNpr4aqb1HYPd',placeholder:'来都来了，不打个招呼吗？',visitor:'true',});</script></div></div><a id=back_to_top href=# class=back_to_top><span>△</span></a></div><footer class=footer><div class=powered_by><a href=https://zok.im/ target=_blank>Designed by <span class=jitters>Zeuk</span>,</a>
+<a href=https://www.gohugo.io/ target=_blank>Published with <span class=jitters>Hugo</span></a></div><div class=footer_slogan><span id=enter_time></span></div></footer><script src=https://vikingama.github.io/js/jquery.js></script><script src=https://vikingama.github.io/js/highlight.js></script><script src=https://vikingama.github.io/js/zozo.js></script><script>hljs.initHighlightingOnLoad();</script></body></html>

@@ -1,0 +1,135 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no,user-scalable=no"><meta name=author content=馬腊咯稽><meta name=description content="React 复习笔记（中）"><meta name=keywords content=React><link rel=canonical href=https://vikingama.github.io/posts/react-design/><link rel="shortcut icon" href=https://vikingama.github.io/images/favicon.ico><link rel=stylesheet href=https://vikingama.github.io/css/zozo.css><link rel=stylesheet href=https://vikingama.github.io/css/animate.css><link rel=stylesheet href=https://vikingama.github.io/css/highlight.css><link rel=stylesheet href=https://vikingama.github.io/css/remixicon.css><title>React 复习笔记（中） &middot; 不需要仰望谁的传说 · 我拥有自己的模样</title></head><body><div class="main animated"><div class="nav_container animated fadeInDown"><div class=site_nav id=site_nav><ul><li><a href=/>首页</a></li><li><a href=/posts/>归档</a></li><li><a href=/tags/>标签</a></li><li><a href=/inspires/>启发</a></li><li><a href=/about/>关于</a></li></ul></div><div class=menu_icon><a id=menu_icon><i class=remixicon-links-line></i></a></div></div><div class="header animated fadeInDown"><div class=site_title_container><div class=site_title><h1><a href=https://vikingama.github.io><img style=width:65px;height:auto;vertical-align:top src=https://vikingama.github.io/images/avatar.png></a></h1></div><div class=description><p class=sub_title>不需要仰望谁的传说<br>我拥有自己的模样</p><div class=my_socials><a href=https://www.douban.com/people/nicknoonan title=douban target=_blank><i class=remixicon-douban-fill></i></a><a href=https://github.com/Vikingama title=github target=_blank><i class=remixicon-github-fill></i></a><a href=https://www.zhihu.com/people/vikingama title=zhihu target=_blank><i class=remixicon-zhihu-fill></i></a><a href=https://vikingama.github.io/index.xml type=application/rss+xml title=rss target=_blank><i class=remixicon-rss-fill></i></a></div></div></div></div><div class=content><div class=post_page><div class="post animated fadeInDown"><div class="post_title post_detail_title"><h2><a href=/posts/react-design/>React 复习笔记（中）</a></h2><span class=date>2020.02.26</span></div><div class="post_content markdown"><blockquote><p>不属于 React 官方发布的内容，是在开发过程中常常使用的一些模式。</p></blockquote><h3 id=higherordercomponent>HigherOrderComponent</h3><p>const EnhancedComponent = higherOrderComponent(WrappedComponent);</p><p>高阶组件是参数为组件，返回值为新组件的函数；组件是将 props 转换为 UI，而高阶组件是将组件转换为另一个组件，是 React 中用于复用组件逻辑的一种技巧。</p><pre><code class=language-jsx>// 新组件包裹旧组件
+function enhancerOne(WrappedComponent) {
+    class EnhancerComponent extends React.Component {
+        // ...
+        render() {
+            if (boolean) {
+                return null;
+            }
+            // 将 HOC 接受到的 props 传入被包裹的组件，还传入了一些新的 props
+            return (
+                &lt;&gt;
+                    &lt;h1 style={{ fontSize: 24 }}&gt;Title&lt;/h1&gt;
+                    &lt;div style={{ fontSize: 16 }}&gt;
+                        &lt;WrappedComponent {...this.props} {...newProps} /&gt;
+                    &lt;/div&gt;
+                &lt;/&gt;
+            );
+        }
+        // ...
+    }
+
+    function getDisplayName(WC) {
+        return WC.displayName || WC.name || &quot;Component&quot;;
+    }
+    // 设置组件名称，方便调试
+    EnhancerComponent.displayName = `EC(${getDisplayName(WrappedComponent)})`;
+
+    return EnhancerComponent;
+}
+// 新组件继承旧的组件
+function enhancerTwo(WrappedComponent) {
+    return class EnhancerComponent extends WrappedComponent {
+        // 可以通过 super 访问到 WrappedComponent 中的各种变量和方法
+        render() {
+            if (boolean) {
+                return null;
+            }
+            return (
+                &lt;&gt;
+                    &lt;div&gt;EnhancerComponent&lt;/div&gt;
+                    {super.render()}
+                &lt;/&gt;
+            );
+        }
+    };
+}
+</code></pre><h3 id=render-props>Render Props</h3><p>“Render Props”是指一种在 React 组件之间使用一个值为函数的 prop 共享代码的技术；这种模式会抵消 React.PureComponent / React.momo 的优势。</p><pre><code class=language-jsx>const Auth = (props) =&gt; {
+    const userName = getUserName();
+
+    if (userName) {
+        const newProps = { userName, ...porps };
+        return &lt;&gt;{props.login(newProps)}&lt;/&gt;;
+    }
+
+    return &lt;&gt;{props.noLogin(props)}&lt;/&gt;;
+};
+// 这样使用
+&lt;Auth
+    login={({ userName }) =&gt; &lt;h1&gt;Hello, {userName}...&lt;/h1&gt;}
+    noLogin={() =&gt; &lt;h1&gt;Please Login...&lt;/h1&gt;}
+/&gt;;
+const Cat = ({ mouse }) =&gt; (
+    &lt;img
+        style={{
+            position: &quot;absolute&quot;,
+            top: mouse.y,
+            left: mouse.x,
+        }}
+        src=&quot;./cat.jpg&quot;
+    /&gt;
+);
+class Mouse extends React.Component {
+    state = {
+        x: 0,
+        y: 0,
+    };
+    handleMouseMove = (e) =&gt; {
+        this.setState({
+            x: e.clientX,
+            y: e.clientY,
+        });
+    };
+    render() {
+        return (
+            &lt;div style={{ height: &quot;100%&quot; }} onMouseMove={this.handleMouseMove}&gt;
+                {this.props.bbb(this.state)}
+            &lt;/div&gt;
+        );
+    }
+}
+// 这样使用
+&lt;Mouse bbb={(aaa) =&gt; &lt;Cat mouse={aaa}&gt;&lt;/Cat&gt;} /&gt;;
+</code></pre><h3 id=组合模式>组合模式</h3><pre><code class=language-jsx>const TabItem = (props) =&gt; {
+    const { active, onClick } = props;
+    const style = {
+        color: active ? &quot;red&quot; : &quot;green&quot;,
+        border: active ? &quot;1px solid red&quot; : 0,
+    };
+
+    return (
+        &lt;h3 style={style} onClick={onClick}&gt;
+            {props.children}
+        &lt;/h3&gt;
+    );
+};
+
+class Tabs extends React.Component {
+    state = {
+        activeIndex: 0,
+    };
+    render() {
+        const childrenArr = React.children
+            .toArray(this.props.children)
+            .map((child, index) =&gt; {
+                if (child.type) {
+                    return React.cloneElement(child, {
+                        active: this.state.activeIndex === index,
+                        onClick: () =&gt; this.setState({ activeIndex: index }),
+                    });
+                } else {
+                    return child;
+                }
+            });
+        // 不渲染原有的 children，改为渲染 childrenArr
+        return &lt;&gt;{childrenArr}&lt;/&gt;;
+    }
+}
+// 这样使用
+&lt;Tabs&gt;
+    &lt;TabItem&gt;One&lt;/TabItem&gt;
+    &lt;TabItem&gt;Two&lt;/TabItem&gt;
+    &lt;TabItem&gt;Three&lt;/TabItem&gt;
+&lt;/Tabs&gt;;
+</code></pre></div><div class=post_footer><div class=meta><div class=info><span class="field tags"><i class=remixicon-stack-line></i><a href=https://vikingama.github.io/tags/react/>React</a></span></div></div></div></div><div class=doc_comments><div class=comments_block_title>发表评论</div><div id=vcomments></div></div><link rel=stylesheet href=https://vikingama.github.io/css/comments.css><script src=/js/av.js></script><script src=/js/valine.js></script><script type=text/javascript>new Valine({el:'#vcomments',appId:'U06blUXOot4uJgfMu8I9xJXz-MdYXbMMI',appKey:'BnrXC06FJsvRNpr4aqb1HYPd',placeholder:'来都来了，不打个招呼吗？',visitor:'true',});</script></div></div><a id=back_to_top href=# class=back_to_top><span>△</span></a></div><footer class=footer><div class=powered_by><a href=https://zok.im/ target=_blank>Designed by <span class=jitters>Zeuk</span>,</a>
+<a href=https://www.gohugo.io/ target=_blank>Published with <span class=jitters>Hugo</span></a></div><div class=footer_slogan><span id=enter_time></span></div></footer><script src=https://vikingama.github.io/js/jquery.js></script><script src=https://vikingama.github.io/js/highlight.js></script><script src=https://vikingama.github.io/js/zozo.js></script><script>hljs.initHighlightingOnLoad();</script></body></html>

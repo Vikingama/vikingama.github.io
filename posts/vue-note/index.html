@@ -1,0 +1,653 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no,user-scalable=no"><meta name=author content=馬腊咯稽><meta name=description content="Vue 2.x 复习总结"><meta name=keywords content=Vue><link rel=canonical href=https://vikingama.github.io/posts/vue-note/><link rel="shortcut icon" href=https://vikingama.github.io/images/favicon.ico><link rel=stylesheet href=https://vikingama.github.io/css/zozo.css><link rel=stylesheet href=https://vikingama.github.io/css/animate.css><link rel=stylesheet href=https://vikingama.github.io/css/highlight.css><link rel=stylesheet href=https://vikingama.github.io/css/remixicon.css><title>Vue 2.x 复习总结 &middot; 不需要仰望谁的传说 · 我拥有自己的模样</title></head><body><div class="main animated"><div class="nav_container animated fadeInDown"><div class=site_nav id=site_nav><ul><li><a href=/>首页</a></li><li><a href=/posts/>归档</a></li><li><a href=/tags/>标签</a></li><li><a href=/inspires/>启发</a></li><li><a href=/about/>关于</a></li></ul></div><div class=menu_icon><a id=menu_icon><i class=remixicon-links-line></i></a></div></div><div class="header animated fadeInDown"><div class=site_title_container><div class=site_title><h1><a href=https://vikingama.github.io><img style=width:65px;height:auto;vertical-align:top src=https://vikingama.github.io/images/avatar.png></a></h1></div><div class=description><p class=sub_title>不需要仰望谁的传说<br>我拥有自己的模样</p><div class=my_socials><a href=https://www.douban.com/people/nicknoonan title=douban target=_blank><i class=remixicon-douban-fill></i></a><a href=https://github.com/Vikingama title=github target=_blank><i class=remixicon-github-fill></i></a><a href=https://www.zhihu.com/people/vikingama title=zhihu target=_blank><i class=remixicon-zhihu-fill></i></a><a href=https://vikingama.github.io/index.xml type=application/rss+xml title=rss target=_blank><i class=remixicon-rss-fill></i></a></div></div></div></div><div class=content><div class=post_page><div class="post animated fadeInDown"><div class="post_title post_detail_title"><h2><a href=/posts/vue-note/>Vue 2.x 复习总结</a></h2><span class=date>2020.03.04</span></div><div class="post_content markdown"><blockquote><p>快两年没碰 Vue 了，这还面试个屁呀，摔。</p></blockquote><h3 id=生命周期>生命周期</h3><p><img src=/vue-note/lifecycle.png alt="Local Image"></p><h3 id=异步组件>异步组件</h3><p>Vue 允许你以一个工厂函数的方式定义你的组件，这个工厂函数会异步解析你的组件定义；只有在这个组件需要被渲染的时候才会触发该工厂函数，且会把结果缓存起来供未来重渲染。</p><pre><code class=language-javascript>const AsyncComponent = () =&gt; ({
+    // 需要加载的组件 (应该是一个 `Promise` 对象)
+    component: import(&quot;./MyComponent.vue&quot;),
+    // 异步组件加载时使用的组件
+    loading: LoadingComponent,
+    // 加载失败时使用的组件
+    error: ErrorComponent,
+    // 展示加载时组件的延时时间。默认值是 200 (毫秒)
+    delay: 200,
+    // 如果提供了超时时间且组件加载也超时了，
+    // 则使用加载失败时使用的组件。默认值是：`Infinity`
+    timeout: 3000,
+});
+</code></pre><h3 id=插件系统>插件系统</h3><p>插件通常用来为 Vue 添加全局功能。插件的功能范围没有严格的限制：</p><ol><li>添加全局方法或者属性；</li><li>添加全局资源：指令/过滤器/过渡等；</li><li>通过全局混入来添加一些组件选项；</li><li>添加 Vue 实例方法，通过把它们添加到 Vue.prototype 上实现；</li><li>提供自己的 API，同时提供上面提到的一个或多个功能。</li></ol><p>举个例子：</p><pre><code class=language-javascript>Example.install = (Vue, options) =&gt; {
+    Vue.$shareConfig = (configObj) =&gt; {
+        const { sharetitle, sharedesc, shareimg, shareurl } = configObj;
+        const shareObj = {
+            title: sharetitle,
+            desc: sharedesc,
+            link: shareurl,
+            imgUrl: shareimg,
+            success: function () {},
+            cancel: function () {},
+        };
+        wx.config({
+            appId: this.$store.state.appId,
+            debug: false,
+            jsApiList: [
+                &quot;onMenuShareTimeline&quot;,
+                &quot;onMenuShareAppMessage&quot;,
+                &quot;onMenuShareQQ&quot;,
+                &quot;onMenuShareWeibo&quot;,
+            ],
+            nonceStr: this.$store.state.nonceStr,
+            signature: this.$store.state.signature,
+            timestamp: this.$store.state.timestamp,
+        });
+        wx.ready(function () {
+            wx.onMenuShareTimeline(shareObj);
+            wx.onMenuShareQQ(shareObj);
+            wx.onMenuShareAppMessage(shareObj);
+            wx.onMenuShareWeibo(shareObj);
+        });
+    };
+};
+// 使用插件并向插件传入可选选项
+Vue.use(Example, {});
+</code></pre><h3 id=自定义指令>自定义指令</h3><p>自定义指令适用于需要对普通 DOM 元素进行底层操作的情况。</p><pre><code class=language-javascript>// 全局注册
+Vue.directive(&quot;focus&quot;, {
+    // 当被绑定的元素插入到 DOM 中时
+    inserted: function (el) {
+        el.focus(); // 聚焦元素
+    },
+});
+// 局部注册
+new Vue({
+    directives: {
+        focus: {
+            inserted(el) {
+                el.focus();
+            },
+        },
+    },
+});
+</code></pre><p>指令定义对象可以提供如下几个钩子函数：</p><ul><li>bind：只调用一次，指令第一次绑定到元素时调用；在这里可以进行一次性的初始化设置；</li><li>inserted：被绑定元素插入父节点时调用（仅保证父节点存在，但不一定已被插入文档中）；</li><li>update：所在组件的 VNode 更新时调用，可以通过比较更新前后的值来忽略不必要的模板更新；</li><li>componentUpdated：指令所在组件的 VNode 及其子 VNode 全部更新后调用；</li><li>unbind：只调用一次，指令与元素解绑时调用。</li></ul><p>钩子函数参数：</p><ul><li>el：指令所绑定的元素，可以用来直接操作 DOM；</li><li>binding：一个对象，包含以下属性：<ul><li>name：指令名，不包括 v- 前缀；</li><li>value：指令的绑定值，例如：v-my=&quot;1 + 1&quot;中，绑定值为 2；</li><li>oldValue：指令绑定的前一个值，仅在 update 和 componentUpdated 钩子中可用；</li><li>expression：字符串形式的指令表达式，例如 v-my=&quot;1 + 1&quot;中，表达式为 &quot;1 + 1&quot;；</li><li>arg：传给指令的参数，可选；例如 v-my:foo 中，参数为 &quot;foo&quot;；</li><li>modifiers：一个包含修饰符的对象；例如：v-my.foo.bar 中，修饰符对象为 { foo: true, bar: true }。</li></ul></li><li>vnode：编译生成的虚拟节点；</li><li>oldVnode：上一个虚拟节点，仅在 update 和 componentUpdated 钩子中可用。</li></ul><p>举个例子：</p><pre><code class=language-html>&lt;div id=&quot;hook-arguments&quot; v-demo:foo.a.b=&quot;message&quot;&gt;&lt;/div&gt;
+&lt;script&gt;
+    Vue.directive(&quot;demo&quot;, {
+        bind(el, binding, vnode) {
+            var s = JSON.stringify;
+            el.innerHTML = `
+            name: ${s(binding.name)},
+            value: ${s(binding.value)},
+            expression: ${s(binding.expression)},
+            argument: ${s(binding.arg)},
+            modifiers: ${s(binding.modifiers)},
+            vnode keys: ${Object.keys(vnode).join(&quot;, &quot;)}
+            `;
+        },
+    });
+    new Vue({
+        el: &quot;#hook-arguments&quot;,
+        data: {
+            message: &quot;hello&quot;,
+        },
+    });
+    /*
+        name: &quot;demo&quot;
+        value: &quot;hello&quot;
+        expression: &quot;message&quot;
+        argument: &quot;foo&quot;
+        modifiers: {&quot;a&quot;:true,&quot;b&quot;:true}
+        vnode keys: tag, data, children, text...
+    */
+&lt;/script&gt;
+</code></pre><p>动态指令：</p><pre><code class=language-html>&lt;div id=&quot;dynamic&quot;&gt;
+    &lt;h3&gt;Scroll down inside this section...&lt;/h3&gt;
+    &lt;p v-pin:[direction]=&quot;200&quot;&gt;
+        I am pinned onto the page at 200px to the left...
+    &lt;/p&gt;
+&lt;/div&gt;
+&lt;script&gt;
+    new Vue({
+        el: &quot;#dynamic&quot;,
+        data() {
+            return {
+                direction: &quot;left&quot;,
+            };
+        },
+        directives: {
+            pin: {
+                bind(el, binding, vnode) {
+                    el.style.position = &quot;fixed&quot;;
+                    el.style[binding.arg] = `${binding.value}px`;
+                },
+            },
+        },
+    });
+&lt;/script&gt;
+</code></pre><h3 id=响应式原理>响应式原理</h3><p>当把一个普通的 JS 对象传入 Vue 实例作为 data 选项，Vue 将遍历此对象所有的属性，并使用 Object.defineProperty 把这些属性全部转为 getter/setter；在内部它们让 Vue 能够追踪依赖，在属性被访问和修改时通知变更；每个组件实例都对应一个 watcher 实例，它会在组件渲染的过程中把“接触”过的数据属性记录为依赖；之后当依赖项的 setter 触发时，会通知 watcher，从而使它关联的组件重新渲染。</p><p>Object.freeze 会阻止修改现有的属性，也意味着响应系统无法再追踪变化。</p><p>Vue 不能检测以下数组的变动（因为性能问题）：</p><ul><li>利用索引直接设置一个数组项时，例如：vm.items[indexOfItem] = newValue；</li><li>修改数组的长度时，例如：vm.items.length = newLength。</li></ul><p>举个例子：</p><pre><code class=language-javascript>var vm = new Vue({
+    data: {
+        items: [&quot;a&quot;, &quot;b&quot;, &quot;c&quot;],
+    },
+});
+
+vm.items[1] = &quot;x&quot;; // 不是响应性的
+vm.$set(vm.items, indexOfItem, newValue); // 解决问题
+vm.items.splice(indexOfItem, 1, newValue); // 解决问题
+
+vm.items.length = 2; // 不是响应性的
+vm.items.splice(newLength); // 解决问题
+</code></pre><p>Vue 不能检测对象属性的添加或删除：</p><pre><code class=language-javascript>var vm = new Vue({
+    data: {
+        a: 1,
+        userProfile: {
+            name: &quot;Anika&quot;,
+        },
+    },
+});
+// 对于已经创建的实例，Vue 不允许动态添加根级别的响应式属性
+vm.b = 2; // vm.b 不是响应式的
+// 可以向嵌套对象添加响应式属性
+vm.$set(vm.userProfile, &quot;age&quot;, 27);
+vm.userProfile = Object.assign({}, vm.userProfile, {
+    favoriteColor: &quot;Green&quot;,
+});
+</code></pre><p>Vue 在更新 DOM 时是异步执行的；只要侦听到数据变化，Vue 将开启一个队列，并缓冲在同一事件循环中发生的所有数据变更；如果同一个 watcher 被多次触发，只会被推入到队列中一次；然后，在下一个的事件循环“tick”中，Vue 刷新队列并执行实际 (已去重的) 工作。</p><p>在内部对异步队列尝试使用原生的 Promise.then、MutationObserver 和 setImmediate，如果执行环境不支持，则会采用 setTimeout(fn, 0) 代替。</p><p>可以在数据变化之后立即使用 Vue.nextTick(callback)；回调函数将在 DOM 更新完成后被调用；例如：</p><pre><code class=language-javascript>var vm = new Vue({
+    el: &quot;#example&quot;,
+    data: {
+        message: &quot;123&quot;,
+    },
+});
+vm.message = &quot;new message&quot;; // 更改数据
+vm.$el.textContent === &quot;new message&quot;; // false
+vw.$nextTick(function () {
+    vm.$el.textContent === &quot;new message&quot;; // true
+});
+</code></pre><h3 id=依赖注入>依赖注入</h3><p>Vue 中也有 context 机制：</p><pre><code class=language-html>&lt;google-map&gt;
+    &lt;google-map-region v-bind:shape=&quot;cityBoundaries&quot;&gt;
+        &lt;google-map-markers v-bind:places=&quot;iceCreamShops&quot;&gt;&lt;/google-map-markers&gt;
+    &lt;/google-map-region&gt;
+&lt;/google-map&gt;
+
+&lt;script&gt;
+    Vue.component(&quot;google-map&quot;, {
+        data() {
+            return {
+                sigma: 123,
+            };
+        },
+        provide() {
+            return {
+                sigma: this.sigma,
+                getMap: this.getMap,
+            };
+        },
+        methods: {
+            getMap() {
+                // ...
+            },
+        },
+    });
+    Vue.component(&quot;google-map-markers&quot;, {
+        // 可以跨越多个层级拿到值
+        inject: [&quot;sigma&quot;, &quot;getMap&quot;],
+    });
+&lt;/script&gt;
+</code></pre><h3 id=事件监听器>事件监听器</h3><ul><li>通过 \$on(eventName, eventHandler) 侦听一个事件</li><li>通过 \$once(eventName, eventHandler) 一次性侦听一个事件</li><li>通过 \$off(eventName, eventHandler) 停止侦听一个事件</li></ul><p>举个例子：</p><pre><code class=language-javascript>new Vue({
+    mounted() {
+        this.picker = new Pikaday({
+            field: this.$refs.input,
+            format: &quot;YYYY-MM-DD&quot;,
+        });
+    },
+    beforeDestroy() {
+        this.picker.destroy();
+    },
+});
+// 可以修改为
+new Vue({
+    mounted() {
+        var picker = new Pikaday({
+            field: this.$refs.input,
+            format: &quot;YYYY-MM-DD&quot;,
+        });
+
+        this.$once(&quot;hook:beforeDestroy&quot;, function () {
+            picker.destroy();
+        });
+    },
+});
+</code></pre><h3 id=混入>混入</h3><p>混入提供了一种非常灵活的方式，来分发 Vue 组件中的可复用功能；一个混入对象可以包含任意组件选项；当组件使用混入对象时，所有混入对象的选项将被“混合”进入该组件本身的选项。</p><p>混入原则：</p><ul><li>数据对象在内部会进行递归合并，并在发生冲突时以『组件数据优先』；</li><li>同名钩子函数将合并为一个数组，因此都将被调用；『混入对象』的钩子将在『组件自身』钩子『之前』调用；</li><li>值为对象的选项，例如 methods、components 和 directives，将被合并为同一个对象；『组件对象』优先级较高。</li></ul><p>Vue.extend 也使用同样的合并策略。</p><pre><code class=language-javascript>var myMixin = {
+    data() {
+        return {
+            message: &quot;hello&quot;,
+            foo: &quot;abc&quot;,
+        };
+    },
+    methods: {
+        hi() {
+            console.log(&quot;hi&quot;);
+        },
+        bye() {
+            console.log(&quot;bye&quot;);
+        },
+    },
+    mounted() {
+        console.log(&quot;mixin mounted&quot;);
+    },
+};
+var vm = new Vue({
+    mixins: [myMixin],
+    data() {
+        return {
+            message: &quot;it's me&quot;,
+            bar: &quot;def&quot;,
+        };
+    },
+    methods: {
+        hi() {
+            console.log(&quot;hihihi&quot;);
+        },
+        do() {
+            console.log(&quot;dododo&quot;);
+        },
+    },
+    created() {
+        console.log(this.$data); // { message: &quot;it's me&quot;, foo: &quot;abc&quot;, bar: &quot;def&quot; }
+    },
+    mounted() {
+        console.log(&quot;component mounted&quot;); // mixin mounted, component mounted
+    },
+});
+
+vm.hi(); // hihihi
+vm.bye(); // bye
+vm.do(); // dododo
+// 全局混入，将影响每一个之后创建的 Vue 实例
+Vue.mixin(myMixin);
+</code></pre><h3 id=computed-vs-watch-vs-methods>computed vs watch vs methods</h3><pre><code class=language-html>&lt;template&gt;
+    &lt;div&gt;
+        &lt;div&gt;{v1()}&lt;/div&gt;
+        &lt;div&gt;{v2}&lt;/div&gt;
+        &lt;div&gt;{v3}&lt;/div&gt;
+    &lt;/div&gt;
+&lt;/template&gt;
+&lt;script&gt;
+    new Vue({
+        data() {
+            // data 选项必须是一个函数，每个实例可以维护一份被返回对象的独立的拷贝
+            return {
+                value: 123,
+                v3: 0,
+            };
+        },
+        methods: {
+            // 每当触发重新渲染时，方法将总会再次执行；无论 vm.value 是否变化
+            v1() {
+                return `v1: ${this.value}`;
+            },
+        },
+        computed: {
+            // 计算属性是基于响应式依赖进行缓存的，只在相关响应式依赖发生改变时它们才会重新求值
+            v2() {
+                return `v2: ${this.value}`;
+            },
+        },
+        watch: {
+            // 在相关数据变化时，执行异步或开销较大的副作用有点像 React.useEffect
+            v3() {
+                this.v3 = `v3: ${this.value}`;
+            },
+        },
+    });
+&lt;/script&gt;
+</code></pre><h3 id=v-model>v-model</h3><p>v-model 本质上是语法糖；它负责监听用户的输入事件以更新数据，并对一些极端场景进行一些特殊处理；在内部为不同的输入元素使用不同的属性并抛出不同的事件：</p><pre><code class=language-html>&lt;input v-model=&quot;searchText&quot; /&gt;
+等价于
+&lt;input
+    v-bind:value=&quot;searchText&quot;
+    v-on:input=&quot;searchText = $event.target.value&quot;
+/&gt;
+</code></pre><ul><li>text 和 textarea 使用 value 属性和 input 事件；</li><li>checkbox 和 radio 使用 checked 属性和 change 事件；</li><li>select 字段将 value 作为 prop 并将 change 作为事件。</li></ul><p>v-model 有配套的修饰符：</p><pre><code class=language-html>&lt;!-- 使用 change 事件替换 input 事件将输入框的值与数据进行同步 --&gt;
+&lt;input v-model.lazy=&quot;msg&quot; /&gt;
+&lt;!-- 将用户的输入值转为数值类型 --&gt;
+&lt;input v-model.number=&quot;age&quot; type=&quot;number&quot; /&gt;
+&lt;!-- 过滤用户输入的首尾空白字符 --&gt;
+&lt;input v-model.trim=&quot;msg&quot; /&gt;
+</code></pre><p>一个组件上的 v-model 默认会利用名为 value 的 prop 和名为 input 的事件；但是像单选框、复选框等类型的输入控件可能会将 value attribute 用于不同的目的。</p><pre><code class=language-javascript>Vue.component(&quot;base-checkbox&quot;, {
+    model: {
+        prop: &quot;checked&quot;,
+        event: &quot;change&quot;,
+    },
+    props: {
+        checked: Boolean,
+    },
+    template: `
+    &lt;input
+      type=&quot;checkbox&quot;
+      v-bind:checked=&quot;checked&quot;
+      v-on:change=&quot;$emit('change', $event.target.checked)&quot;
+    &gt;`,
+});
+// 这样使用
+&lt;base-checkbox v-model=&quot;lovingVue&quot;&gt;&lt;/base-checkbox&gt;;
+</code></pre><h3 id=props>props</h3><pre><code class=language-javascript>new Vue({
+    props: [&quot;title&quot;, &quot;likes&quot;, &quot;isPublished&quot;, &quot;commentIds&quot;, &quot;author&quot;],
+});
+new Vue({
+    // 类型可以是：String、Number、Boolean、Array、Object、Date、Function、Symbol
+    props: {
+        title: String,
+        likes: Number,
+        isPublished: Boolean,
+        commentIds: Array,
+        author: Object,
+        callback: Function,
+        contactsPromise: Promise,
+    },
+});
+new Vue({
+    props: {
+        // 基础的类型检查（null 和 undefined 会通过任何类型验证）
+        propA: Number,
+        // 多个可能的类型
+        propB: [String, Number],
+        // 必填的字符串
+        propC: {
+            type: String,
+            required: true,
+        },
+        // 带有默认值的数字
+        propD: {
+            type: Number,
+            default: 100,
+        },
+        // 带有默认值的对象
+        propE: {
+            type: Object,
+            // 对象或数组默认值必须从一个工厂函数获取
+            default() {
+                return { message: &quot;hello&quot; };
+            },
+        },
+        // 自定义验证函数
+        propF: {
+            validator(value) {
+                // 这个值必须匹配下列字符串中的一个
+                return [&quot;success&quot;, &quot;warning&quot;, &quot;danger&quot;].indexOf(value) !== -1;
+            },
+        },
+    },
+});
+</code></pre><h3 id=key>key</h3><ul><li>管理可复用元素；</li><li>表示元素是独立的，不要复用。</li></ul><p>举个例子：</p><pre><code class=language-html>&lt;!-- 
+    如果不设置独立的 key 属性，在切换 loginType 时，input 将被复用
+    用户已经输入的内容将不会被清除，很明显是不合理的
+--&gt;
+&lt;template v-if=&quot;loginType === 'username'&quot;&gt;
+    &lt;label&gt;UserName&lt;/label&gt;
+    &lt;input placeholder=&quot;Enter your username&quot; key=&quot;username&quot; /&gt;
+&lt;/template&gt;
+&lt;template v-else&gt;
+    &lt;label&gt;Email&lt;/label&gt;
+    &lt;input placeholder=&quot;Enter your email&quot; key=&quot;email&quot; /&gt;
+&lt;/template&gt;
+</code></pre><h3 id=is>is</h3><p>is 用来将普通元素或组件指定渲染为指定的组件。</p><p>有些 HTML 元素，诸如 &lt;ul&gt;、&lt;ol&gt;、&lt;table&gt; 和 &lt;select&gt;，对于哪些元素可以出现在其内部是有严格限制的；而有些元素，诸如 &lt;li&gt;、&lt;tr&gt; 和 &lt;option&gt;，只能出现在其它某些特定的元素内部。</p><pre><code class=language-html>&lt;!-- 这个自定义组件 &lt;blog-post-row&gt; 会被作为无效的内容提升到外部，并导致最终渲染结果出错 --&gt;
+&lt;table&gt;
+    &lt;blog-post-row&gt;&lt;/blog-post-row&gt;
+&lt;/table&gt;
+&lt;!-- 可以这样解决 --&gt;
+&lt;table&gt;
+    &lt;tr is=&quot;blog-post-row&quot;&gt;&lt;/tr&gt;
+&lt;/table&gt;
+
+&lt;!-- 通过将 currentTabComponent 设定为不同的组件来切换渲染结果--&gt;
+&lt;component v-bind:is=&quot;currentTabComponent&quot;&gt;&lt;/component&gt;
+</code></pre><h3 id=slot>slot</h3><p>具名插槽：</p><pre><code class=language-html>&lt;!-- &lt;base-layout&gt; 组件 --&gt;
+&lt;div class=&quot;container&quot;&gt;
+    &lt;header&gt;
+        &lt;slot name=&quot;header&quot;&gt;&lt;/slot&gt;
+    &lt;/header&gt;
+    &lt;main&gt;
+        &lt;slot&gt;后备用内容，name=&quot;default&quot;&lt;/slot&gt;
+    &lt;/main&gt;
+    &lt;footer&gt;
+        &lt;slot name=&quot;footer&quot;&gt;&lt;/slot&gt;
+    &lt;/footer&gt;
+&lt;/div&gt;
+&lt;!-- 这样使用 --&gt;
+&lt;base-layout&gt;
+    &lt;template v-slot:header&gt;
+        &lt;h1&gt;header 内容&lt;/h1&gt;
+    &lt;/template&gt;
+
+    &lt;p&gt;这两行会被插入到 main 标签&lt;/p&gt;
+    &lt;p&gt;这两行会被插入到 main 标签&lt;/p&gt;
+
+    &lt;template v-slot:footer&gt;
+        &lt;p&gt;footer 内容&lt;/p&gt;
+    &lt;/template&gt;
+&lt;/base-layout&gt;
+&lt;!-- 缩写 --&gt;
+&lt;base-layout&gt;
+    &lt;template #header&gt;
+        &lt;h1&gt;header 内容&lt;/h1&gt;
+    &lt;/template&gt;
+
+    &lt;p&gt;这两行会被插入到 main 标签&lt;/p&gt;
+    &lt;p&gt;这两行会被插入到 main 标签&lt;/p&gt;
+
+    &lt;template #footer&gt;
+        &lt;p&gt;footer 内容&lt;/p&gt;
+    &lt;/template&gt;
+&lt;/base-layout&gt;
+</code></pre><p>作用域插槽（让插槽内容能够访问子组件中才有的数据）：</p><pre><code class=language-html>&lt;!-- &lt;current-user&gt; 组件 --&gt;
+&lt;span&gt;
+    &lt;!-- user 存在于 current-user 组件内作用域中--&gt;
+    &lt;slot&gt;{{ user.lastName }}&lt;/slot&gt;
+&lt;/span&gt;
+&lt;!-- 在父组件中 --&gt;
+&lt;current-user&gt;
+    &lt;!-- 取不到 current-user 组件内作用域中的 user--&gt;
+    {{ user.firstName }}
+&lt;/current-user&gt;
+</code></pre><p>为了让 user 在父级的插槽内容中可用，可以将 user 作为 &lt;slot&gt; 元素的一个属性绑定上去：</p><pre><code class=language-html>&lt;!-- &lt;current-user&gt; 组件 --&gt;
+&lt;span&gt;
+    &lt;slot v-bind:user=&quot;user&quot;&gt;
+        {{ user.lastName }}
+    &lt;/slot&gt;
+&lt;/span&gt;
+&lt;!-- 在父组件中 --&gt;
+&lt;current-user&gt;
+    &lt;template v-slot:default=&quot;slotProps&quot;&gt;
+        {{ slotProps.user.firstName }}
+        &lt;template v-slot:one=&quot;oneSlotProps&quot;&gt;
+            slotProps is NOT available here
+        &lt;/template&gt;
+    &lt;/template&gt;
+    &lt;template v-slot:two=&quot;twoSlotProps&quot;&gt;
+        slotProps is NOT available here
+    &lt;/template&gt;
+&lt;/current-user&gt;
+&lt;!-- 也可以酱 --&gt;
+&lt;current-user v-slot=&quot;{ user }&quot;&gt;
+    {{ user.firstName }}
+&lt;/current-user&gt;
+&lt;!-- 也可以酱 --&gt;
+&lt;current-user v-slot=&quot;{ user: person }&quot;&gt;
+    {{ person.firstName }}
+&lt;/current-user&gt;
+&lt;!-- 还可以定义后备内容 --&gt;
+&lt;current-user v-slot=&quot;{ user = { firstName: 'Guest' } }&quot;&gt;
+    {{ user.firstName }}
+&lt;/current-user&gt;
+</code></pre><h3 id=命名视图-滚动行为>命名视图 &amp; 滚动行为</h3><pre><code class=language-html>&lt;router-view class=&quot;view one&quot;&gt;&lt;/router-view&gt;
+&lt;router-view class=&quot;view two&quot; name=&quot;a&quot;&gt;&lt;/router-view&gt;
+&lt;router-view class=&quot;view three&quot; name=&quot;b&quot;&gt;&lt;/router-view&gt;
+&lt;script&gt;
+    new VueRouter({
+        routes: [
+            {
+                path: &quot;/&quot;,
+                components: {
+                    default: Foo,
+                    a: Bar,
+                    b: Baz,
+                },
+            },
+        ],
+        scrollBehavior(to, from, savedPosition) {
+            // return 期望滚动到哪个的位置
+            if (savedPosition) {
+                return savedPosition;
+            } else {
+                return { x: 0, y: 0 };
+            }
+        },
+    });
+&lt;/script&gt;
+</code></pre><h3 id=路由组件传参>路由组件传参</h3><p>有一个 User 组件，对于所有 ID 不同的用户，都要使用这个组件来渲染；通常的做法是“动态路由匹配”或者“Query 参数”，在组件中使用 vm.$route 来获取参数；在组件中使用 $route 会使之与其对应路由形成高度耦合，从而使组件只能在某些特定的 URL 上使用，限制了其灵活性。</p><p>组件与 \$route 的耦合：</p><pre><code class=language-html>&lt;script&gt;
+    new Router({
+        routes: [
+            {
+                path: &quot;/user/:id&quot;,
+                name: &quot;User&quot;,
+                component: User,
+            },
+        ],
+    });
+&lt;/script&gt;
+&lt;template&gt;
+    &lt;div class=&quot;user&quot;&gt;
+        &lt;div&gt;userId：{{$route.params.id}}&lt;/div&gt;
+    &lt;/div&gt;
+&lt;/template&gt;
+</code></pre><p>通过 props 与组件解耦：</p><pre><code class=language-html>&lt;script&gt;
+    // 布尔模式
+    new Router({
+        routes: [
+            {
+                path: &quot;/user/:id&quot;,
+                name: &quot;User&quot;,
+                component: User,
+                props: true,
+            },
+        ],
+    });
+    // 对象模式
+    new Router({
+        routes: [
+            {
+                path: &quot;/user&quot;,
+                name: &quot;User&quot;,
+                component: User,
+                props: { id: 1 },
+            },
+        ],
+    });
+    // 函数模式
+    new Router({
+        routes: [
+            {
+                path: &quot;/user&quot;,
+                name: &quot;User&quot;,
+                component: User,
+                // /user?id=123 会将 {query: '123'} 作为属性传递给 user 组件
+                props: (route) =&gt; ({ query: route.query.id }),
+            },
+        ],
+    });
+&lt;/script&gt;
+&lt;template&gt;
+    &lt;div class=&quot;user&quot;&gt;
+        &lt;div&gt;userId：{{id}}&lt;/div&gt;
+    &lt;/div&gt;
+&lt;/template&gt;
+&lt;script&gt;
+    export default {
+        props: [&quot;id&quot;],
+    };
+&lt;/script&gt;
+</code></pre><h3 id=路由钩子>路由钩子</h3><p>参数或查询的改变并不会触发进入/离开的导航守卫；可以通过观察 \$route 对象来应对这些变化，或使用 beforeRouteUpdate 的组件内守卫。</p><pre><code class=language-javascript>const router = new VueRouter({
+    routes: [
+        {
+            path: &quot;/foo&quot;,
+            component: Foo,
+            // 路由独享守卫
+            beforeEnter: (to, from, next) =&gt; {
+                /*
+                    to:Route      即将要进入的目标路由
+                    from:Route    当前导航正要离开的路由
+                    next:Function 调用该方法来 resolve 这个钩子
+                        next()
+                            进行管道中的下一个钩子
+                        next(false)
+                            中断当前的导航
+                        next('/') 或者 next({ path: '/' })
+                            当前的导航被中断，然后进行一个新的导航；可以向 next 传递任意位置对象，且允许设置诸如 replace: true、name: 'home' 之类的选项
+                        next(error)
+                            传入 Error 实例，导航会被终止且该错误会被传递给 router.onError
+                */
+            },
+        },
+    ],
+});
+// 全局前置守卫
+router.beforeEach((to, from, next) =&gt; {
+    // 参数含义同上
+});
+// 全局解析守卫
+router.beforeResolve((to, from, next) =&gt; {
+    // 参数含义同上，所有组件内守卫和异步路由组件被解析之后，解析守卫就被调用
+});
+// 全局后置钩子
+router.afterEach((to, from) =&gt; {
+    // 参数含义同上
+});
+new Vue({
+    // 用来在导航完成前获取数据
+    beforeRouteEnter(to, from, next) {
+        // 在渲染该组件的对应路由被 confirm 前调用
+        // 不！能！获取组件实例 this
+        // 守卫执行前，组件实例还没被创建
+        next((vm) =&gt; {
+            // 通过 vm 访问实例
+        });
+    },
+    beforeRouteUpdate(to, from, next) {
+        // 在当前路由改变，但是该组件被复用时调用
+        // 对于一个带有动态参数的路径 /foo/:id，在 /foo/1 和 /foo/2 之间跳转的时候，
+        // 组件实例会被复用；而这个钩子就会在这个情况下被调用。
+        // 可以访问组件实例 this
+    },
+    beforeRouteLeave(to, from, next) {
+        // 导航离开该组件的对应路由时调用
+        // 可以访问组件实例 this
+        let isBye = window.confirm();
+        if (isBye) {
+            next();
+        } else {
+            next(false);
+        }
+    },
+});
+</code></pre><p>完整的导航解析流程：</p><ul><li>导航被触发；</li><li>在失活的组件里调用 beforeRouteLeave；</li><li>调用全局的 beforeEach；</li><li>在重用的组件里调用 beforeRouteUpdate；</li><li>在路由配置里调用 beforeEnter；</li><li>解析异步路由组件；</li><li>在被激活的组件里调用 beforeRouteEnter；</li><li>调用全局的 beforeResolve；</li><li>导航被确认；</li><li>调用全局的 afterEach；</li><li>触发 DOM 更新；</li><li>用创建好的实例调用 beforeRouteEnter 守卫中传给 next 的回调函数。</li></ul><h3 id=路由元信息>路由元信息</h3><pre><code class=language-javascript>const router = new VueRouter({
+    routes: [
+        {
+            path: &quot;/foo&quot;,
+            component: Foo,
+            children: [
+                {
+                    path: &quot;bar&quot;,
+                    component: Bar,
+                    meta: { requiresAuth: true },
+                },
+            ],
+        },
+    ],
+});
+router.beforeEach((to, from, next) =&gt; {
+    if (to.matched.some((v) =&gt; v.meta.requiresAuth)) {
+        if (!auth.loggedIn()) {
+            next({
+                path: &quot;/login&quot;,
+                query: { redirect: to.fullPath },
+            });
+        } else {
+            next();
+        }
+    } else {
+        next();
+    }
+});
+</code></pre></div><div class=post_footer><div class=meta><div class=info><span class="field tags"><i class=remixicon-stack-line></i><a href=https://vikingama.github.io/tags/vue/>Vue</a></span></div></div></div></div><div class=doc_comments><div class=comments_block_title>发表评论</div><div id=vcomments></div></div><link rel=stylesheet href=https://vikingama.github.io/css/comments.css><script src=/js/av.js></script><script src=/js/valine.js></script><script type=text/javascript>new Valine({el:'#vcomments',appId:'U06blUXOot4uJgfMu8I9xJXz-MdYXbMMI',appKey:'BnrXC06FJsvRNpr4aqb1HYPd',placeholder:'来都来了，不打个招呼吗？',visitor:'true',});</script></div></div><a id=back_to_top href=# class=back_to_top><span>△</span></a></div><footer class=footer><div class=powered_by><a href=https://zok.im/ target=_blank>Designed by <span class=jitters>Zeuk</span>,</a>
+<a href=https://www.gohugo.io/ target=_blank>Published with <span class=jitters>Hugo</span></a></div><div class=footer_slogan><span id=enter_time></span></div></footer><script src=https://vikingama.github.io/js/jquery.js></script><script src=https://vikingama.github.io/js/highlight.js></script><script src=https://vikingama.github.io/js/zozo.js></script><script>hljs.initHighlightingOnLoad();</script></body></html>

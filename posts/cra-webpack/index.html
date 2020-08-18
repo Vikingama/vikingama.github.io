@@ -1,0 +1,622 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no,user-scalable=no"><meta name=author content=馬腊咯稽><meta name=description content="CRA 的 Webpack 配置"><meta name=keywords content=HTML,CSS,JS,React,Vue><link rel=canonical href=https://vikingama.github.io/posts/cra-webpack/><link rel="shortcut icon" href=https://vikingama.github.io/images/favicon.ico><link rel=stylesheet href=https://vikingama.github.io/css/zozo.css><link rel=stylesheet href=https://vikingama.github.io/css/animate.css><link rel=stylesheet href=https://vikingama.github.io/css/highlight.css><link rel=stylesheet href=https://vikingama.github.io/css/remixicon.css><title>CRA 的 Webpack 配置 &middot; 不需要仰望谁的传说 · 我拥有自己的模样</title></head><body><div class="main animated"><div class="nav_container animated fadeInDown"><div class=site_nav id=site_nav><ul><li><a href=/>首页</a></li><li><a href=/posts/>归档</a></li><li><a href=/tags/>标签</a></li><li><a href=/inspires/>启发</a></li><li><a href=/about/>关于</a></li></ul></div><div class=menu_icon><a id=menu_icon><i class=remixicon-links-line></i></a></div></div><div class="header animated fadeInDown"><div class=site_title_container><div class=site_title><h1><a href=https://vikingama.github.io><img style=width:65px;height:auto;vertical-align:top src=https://vikingama.github.io/images/avatar.png></a></h1></div><div class=description><p class=sub_title>不需要仰望谁的传说<br>我拥有自己的模样</p><div class=my_socials><a href=https://www.douban.com/people/nicknoonan title=douban target=_blank><i class=remixicon-douban-fill></i></a><a href=https://github.com/Vikingama title=github target=_blank><i class=remixicon-github-fill></i></a><a href=https://www.zhihu.com/people/vikingama title=zhihu target=_blank><i class=remixicon-zhihu-fill></i></a><a href=https://vikingama.github.io/index.xml type=application/rss+xml title=rss target=_blank><i class=remixicon-rss-fill></i></a></div></div></div></div><div class=content><div class=post_page><div class="post animated fadeInDown"><div class="post_title post_detail_title"><h2><a href=/posts/cra-webpack/>CRA 的 Webpack 配置</a></h2><span class=date>2020.04.27</span></div><div class="post_content markdown"><blockquote><p>明明写的最多的是业务代码，为什么配置 Webpack 会成为前端必备技能？</p></blockquote><h3 id=目录结构>目录结构</h3><pre><code>.
+├── config
+│   ├── env.js                              运行环境配置
+│   ├── getHttpsConfig.js                   获取 HTTPS 配置
+│   ├── modules.js                          模块配置，例如路径别名、TS 配置...
+│   ├── paths.js                            对路径进行处理，没太懂...
+│   ├── pnpTs.js                            TS 文件的编译配置，没太懂...
+│   ├── webpack.config.js                   Webpack 配置
+│   └── webpackDevServer.config.js          DevServer 配置
+├── package.json                            项目依赖
+├── public
+├── scripts
+│   ├── build.js                            运行打包任务
+│   └── start.js                            运行开发任务
+└── src                                     业务代码
+</code></pre><h3 id=webpack-config-js>webpack.config.js</h3><pre><code class=language-javascript>&quot;use strict&quot;;
+
+const fs = require(&quot;fs&quot;);
+const path = require(&quot;path&quot;);
+const webpack = require(&quot;webpack&quot;);
+const resolve = require(&quot;resolve&quot;);
+// ts-pnp 的 Webpack 插件
+const PnpWebpackPlugin = require(&quot;pnp-webpack-plugin&quot;);
+const HtmlWebpackPlugin = require(&quot;html-webpack-plugin&quot;);
+// 防止不同的系统下对于路径大小写的问题导致的出错
+const CaseSensitivePathsPlugin = require(&quot;case-sensitive-paths-webpack-plugin&quot;);
+const InlineChunkHtmlPlugin = require(&quot;react-dev-utils/InlineChunkHtmlPlugin&quot;);
+const TerserPlugin = require(&quot;terser-webpack-plugin&quot;); // 压缩 JS
+const MiniCssExtractPlugin = require(&quot;mini-css-extract-plugin&quot;); // 将 CSS 单独提取出来
+const OptimizeCSSAssetsPlugin = require(&quot;optimize-css-assets-webpack-plugin&quot;); // 压缩 CSS
+const safePostCssParser = require(&quot;postcss-safe-parser&quot;); // 修复 CSS 语法错误
+const ManifestPlugin = require(&quot;webpack-manifest-plugin&quot;); // 生成 Manifest 文件，管理所有所需模块之间的交互
+const InterpolateHtmlPlugin = require(&quot;react-dev-utils/InterpolateHtmlPlugin&quot;); // 允许你在 index.html 中使用变量
+const WorkboxWebpackPlugin = require(&quot;workbox-webpack-plugin&quot;); // 将需要缓存的资源注入到 service worker 中
+const WatchMissingNodeModulesPlugin = require(&quot;react-dev-utils/WatchMissingNodeModulesPlugin&quot;); // 安装缺失的模块之后，自动重启 Webpack
+const ModuleScopePlugin = require(&quot;react-dev-utils/ModuleScopePlugin&quot;); // 禁止引入项目目录之外的模块
+const getCSSModuleLocalIdent = require(&quot;react-dev-utils/getCSSModuleLocalIdent&quot;);
+const paths = require(&quot;./paths&quot;);
+const modules = require(&quot;./modules&quot;);
+const getClientEnvironment = require(&quot;./env&quot;);
+const ModuleNotFoundPlugin = require(&quot;react-dev-utils/ModuleNotFoundPlugin&quot;);
+const ForkTsCheckerWebpackPlugin = require(&quot;react-dev-utils/ForkTsCheckerWebpackPlugin&quot;);
+const typescriptFormatter = require(&quot;react-dev-utils/typescriptFormatter&quot;);
+const postcssNormalize = require(&quot;postcss-normalize&quot;); // 根据浏览器配置项，引入部分样式重置文件
+const appPackageJson = require(paths.appPackageJson);
+const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== &quot;false&quot;; // 是否生成 SourceMap
+const shouldInlineRuntimeChunk = process.env.INLINE_RUNTIME_CHUNK !== &quot;false&quot;;
+const isExtendingEslintConfig = process.env.EXTEND_ESLINT === &quot;true&quot;;
+const imageInlineSizeLimit = parseInt(
+    process.env.IMAGE_INLINE_SIZE_LIMIT || &quot;10000&quot; // 将图片打包的阈值
+);
+const useTypeScript = fs.existsSync(paths.appTsConfig);
+// 匹配样式文件的正则
+const cssRegex = /\.css$/;
+const cssModuleRegex = /\.module\.css$/;
+const sassRegex = /\.(scss|sass)$/;
+const sassModuleRegex = /\.module\.(scss|sass)$/;
+// 开发和打包的公用配置
+module.exports = function (webpackEnv) {
+    const isEnvDevelopment = webpackEnv === &quot;development&quot;;
+    const isEnvProduction = webpackEnv === &quot;production&quot;;
+    const isEnvProductionProfile =
+        isEnvProduction &amp;&amp; process.argv.includes(&quot;--profile&quot;);
+
+    // 提供对 %PUBLIC_URL% 和 process.env.PUBLIC_URL 的支持
+    const env = getClientEnvironment(paths.publicUrlOrPath.slice(0, -1));
+
+    // 配置样式 Loader
+    const getStyleLoaders = (cssOptions, preProcessor) =&gt; {
+        const loaders = [
+            // 如果在开发环境，将 CSS 注入 HTML
+            isEnvDevelopment &amp;&amp; require.resolve(&quot;style-loader&quot;),
+            // 生产环境压缩 CSS
+            isEnvProduction &amp;&amp; {
+                loader: MiniCssExtractPlugin.loader,
+                options: paths.publicUrlOrPath.startsWith(&quot;.&quot;)
+                    ? { publicPath: &quot;../../&quot; }
+                    : {},
+            },
+            {
+                loader: require.resolve(&quot;css-loader&quot;),
+                options: cssOptions,
+            },
+            {
+                loader: require.resolve(&quot;postcss-loader&quot;),
+                options: {
+                    ident: &quot;postcss&quot;,
+                    plugins: () =&gt; [
+                        require(&quot;postcss-flexbugs-fixes&quot;),
+                        require(&quot;postcss-preset-env&quot;)({
+                            autoprefixer: {
+                                flexbox: &quot;no-2009&quot;,
+                            },
+                            stage: 3,
+                        }),
+                        postcssNormalize(),
+                    ],
+                    sourceMap: isEnvProduction &amp;&amp; shouldUseSourceMap,
+                },
+            },
+        ].filter(Boolean);
+        if (preProcessor) {
+            loaders.push(
+                {
+                    loader: require.resolve(&quot;resolve-url-loader&quot;),
+                    options: {
+                        sourceMap: isEnvProduction &amp;&amp; shouldUseSourceMap,
+                    },
+                },
+                {
+                    loader: require.resolve(preProcessor),
+                    options: {
+                        sourceMap: true,
+                    },
+                }
+            );
+        }
+        return loaders;
+    };
+
+    return {
+        // Webpack 运行模式
+        mode: isEnvProduction
+            ? &quot;production&quot;
+            : isEnvDevelopment &amp;&amp; &quot;development&quot;,
+        // 在出现错误时停止编译抛出错误，默认情况下会提示错误继续打包
+        bail: isEnvProduction,
+        // 对开发者工具的支持
+        devtool: isEnvProduction
+            ? shouldUseSourceMap
+                ? &quot;source-map&quot;
+                : false
+            : isEnvDevelopment &amp;&amp; &quot;cheap-module-source-map&quot;,
+        // 项目入口
+        entry: [
+            isEnvDevelopment &amp;&amp;
+                require.resolve(&quot;react-dev-utils/webpackHotDevClient&quot;),
+            paths.appIndexJs,
+        ].filter(Boolean),
+        output: {
+            // 生产环境下，将项目打包到 paths.appBuild 目录
+            path: isEnvProduction ? paths.appBuild : undefined,
+            // 在 bundle 中引入「所包含模块信息」的相关注释
+            pathinfo: isEnvDevelopment,
+            // 打包生成的文件名，生产环境默认根据文件名和文件内容哈希值设置
+            filename: isEnvProduction
+                ? &quot;static/js/[name].[contenthash:8].js&quot;
+                : isEnvDevelopment &amp;&amp; &quot;static/js/bundle.js&quot;,
+            futureEmitAssets: true,
+            // 代码分割时，分割出去的代码块命名规则
+            chunkFilename: isEnvProduction
+                ? &quot;static/js/[name].[contenthash:8].chunk.js&quot;
+                : isEnvDevelopment &amp;&amp; &quot;static/js/[name].chunk.js&quot;,
+            // 对于按需加载或加载外部资源来说是很重要的选项
+            publicPath: paths.publicUrlOrPath,
+            // 自定义每个 source map 的 sources 数组中使用的名称
+            devtoolModuleFilenameTemplate: isEnvProduction
+                ? (info) =&gt;
+                      path
+                          .relative(paths.appSrc, info.absoluteResourcePath)
+                          .replace(/\\/g, &quot;/&quot;)
+                : isEnvDevelopment &amp;&amp;
+                  ((info) =&gt;
+                      path
+                          .resolve(info.absoluteResourcePath)
+                          .replace(/\\/g, &quot;/&quot;)),
+            // 用于按需加载 chunk 的 JSONP 函数，如果在同一网页中使用了多个（来自不同编译过程的）Webpack Runtime，则需要修改此选项
+            jsonpFunction: `webpackJsonp${appPackageJson.name}`,
+            // 设置模块中的顶级对象，在浏览器中指向 window，在 Node 中指向 global
+            globalObject: &quot;this&quot;,
+        },
+        // 自定义优化，只在生产环境生效
+        optimization: {
+            minimize: isEnvProduction, // 使用 TerserPlugin 压缩 bundle
+            minimizer: [
+                // 通过提供一个或多个定制过的 TerserPlugin 实例，覆盖默认压缩工具
+                new TerserPlugin({
+                    terserOptions: {
+                        parse: {
+                            ecma: 8,
+                        },
+                        compress: {
+                            ecma: 5,
+                            warnings: false,
+                            comparisons: false,
+                            inline: 2,
+                        },
+                        mangle: {
+                            safari10: true,
+                        },
+                        keep_classnames: isEnvProductionProfile,
+                        keep_fnames: isEnvProductionProfile,
+                        output: {
+                            ecma: 5,
+                            comments: false,
+                            ascii_only: true,
+                        },
+                    },
+                    sourceMap: shouldUseSourceMap,
+                }),
+                new OptimizeCSSAssetsPlugin({
+                    cssProcessorOptions: {
+                        parser: safePostCssParser,
+                        map: shouldUseSourceMap
+                            ? {
+                                  inline: false,
+                                  annotation: true,
+                              }
+                            : false,
+                    },
+                    cssProcessorPluginOptions: {
+                        preset: [
+                            &quot;default&quot;,
+                            { minifyFontValues: { removeQuotes: false } },
+                        ],
+                    },
+                }),
+            ],
+            // 对于动态导入模块，默认使用全新的通用分块策略
+            splitChunks: {
+                chunks: &quot;all&quot;, // 将动态导入的所有模块分块
+                name: false,
+            },
+            /*
+                runtime 是 Webpack 的运行环境（具体作用就是模块解析、加载）和模块信息清单，模块信息清单在每次有模块变更时都会变更，
+                把这部分代码单独打包出来，配合后端缓存策略，这样就不会因为某个模块的变更导致包含模块信息的模块缓存失效，
+                optimization.runtimeChunk 就是告诉 Webpack 是否要把这部分单独打包出来
+            */
+            runtimeChunk: {
+                name: (entrypoint) =&gt; `runtime-${entrypoint.name}`,
+            },
+        },
+        // 模块解析细节
+        resolve: {
+            // 解析模块时应该搜索的目录
+            modules: [&quot;node_modules&quot;, paths.appNodeModules].concat(
+                modules.additionalModulePaths || []
+            ),
+            // 自动解析确定的扩展
+            extensions: paths.moduleFileExtensions
+                .map((ext) =&gt; `.${ext}`)
+                .filter((ext) =&gt; useTypeScript || !ext.includes(&quot;ts&quot;)),
+            // 创建 import 或 require 的别名，来确保模块引入变得更简单
+            alias: {
+                &quot;react-native&quot;: &quot;react-native-web&quot;,
+                ...(isEnvProductionProfile &amp;&amp; {
+                    &quot;react-dom$&quot;: &quot;react-dom/profiling&quot;,
+                    &quot;scheduler/tracing&quot;: &quot;scheduler/tracing-profiling&quot;,
+                }),
+                ...(modules.webpackAliases || {}),
+            },
+            // 额外的解析插件列表
+            plugins: [
+                PnpWebpackPlugin,
+                new ModuleScopePlugin(paths.appSrc, [paths.appPackageJson]),
+            ],
+        },
+        resolveLoader: {
+            plugins: [PnpWebpackPlugin.moduleLoader(module)],
+        },
+        // 对不同模块的处理
+        module: {
+            strictExportPresence: true, // 文件中如果缺少导出时会直接报错而不是警告
+            rules: [
+                {
+                    // 禁用 require.ensure
+                    parser: {
+                        requireEnsure: false,
+                    },
+                },
+                {
+                    test: /\.(js|mjs|jsx|ts|tsx)$/,
+                    // 首先进行 ESLint 检查
+                    enforce: &quot;pre&quot;,
+                    use: [
+                        {
+                            options: {
+                                cache: true,
+                                formatter: require.resolve(
+                                    // 默认的 ESLint 配置，在对警告/错误的信息做了美化
+                                    &quot;react-dev-utils/eslintFormatter&quot;
+                                ),
+                                eslintPath: require.resolve(&quot;eslint&quot;),
+                                resolvePluginsRelativeTo: __dirname,
+                            },
+                            loader: require.resolve(&quot;eslint-loader&quot;),
+                        },
+                    ],
+                    include: paths.appSrc,
+                },
+                {
+                    // 当规则匹配时，只匹配下列中的一个，都不满足则应用最后一条规则
+                    oneOf: [
+                        {
+                            test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],
+                            loader: require.resolve(&quot;url-loader&quot;),
+                            options: {
+                                limit: imageInlineSizeLimit,
+                                name: &quot;static/media/[name].[hash:8].[ext]&quot;,
+                            },
+                        },
+                        {
+                            test: /\.(js|mjs|jsx|ts|tsx)$/,
+                            include: paths.appSrc, // 只处理 src 目录下的文件
+                            loader: require.resolve(&quot;babel-loader&quot;),
+                            options: {
+                                customize: require.resolve(
+                                    &quot;babel-preset-react-app/webpack-overrides&quot;
+                                ),
+                                plugins: [
+                                    [
+                                        require.resolve(
+                                            &quot;babel-plugin-named-asset-import&quot;
+                                        ),
+                                        {
+                                            loaderMap: {
+                                                svg: {
+                                                    ReactComponent:
+                                                        &quot;@svgr/webpack?-svgo,+titleProp,+ref![path]&quot;,
+                                                },
+                                            },
+                                        },
+                                    ],
+                                ],
+                                // 启用 babel-loader 缓存
+                                cacheDirectory: true,
+                                cacheCompression: false,
+                                compact: isEnvProduction,
+                            },
+                        },
+                        {
+                            test: /\.(js|mjs)$/,
+                            exclude: /@babel(?:\/|\\{1,2})runtime/,
+                            loader: require.resolve(&quot;babel-loader&quot;),
+                            options: {
+                                babelrc: false,
+                                configFile: false,
+                                compact: false,
+                                presets: [
+                                    [
+                                        require.resolve(
+                                            &quot;babel-preset-react-app/dependencies&quot;
+                                        ),
+                                        { helpers: true },
+                                    ],
+                                ],
+                                cacheDirectory: true,
+                                cacheCompression: false,
+                                sourceMaps: shouldUseSourceMap,
+                                inputSourceMap: shouldUseSourceMap,
+                            },
+                        },
+                        {
+                            test: cssRegex,
+                            exclude: cssModuleRegex,
+                            use: getStyleLoaders({
+                                importLoaders: 1,
+                                sourceMap:
+                                    isEnvProduction &amp;&amp; shouldUseSourceMap,
+                            }),
+                            sideEffects: true,
+                        },
+                        // 默认支持 CSS Module
+                        {
+                            test: cssModuleRegex,
+                            use: getStyleLoaders({
+                                importLoaders: 1,
+                                sourceMap:
+                                    isEnvProduction &amp;&amp; shouldUseSourceMap,
+                                modules: {
+                                    getLocalIdent: getCSSModuleLocalIdent,
+                                },
+                            }),
+                        },
+                        // 默认支持 SASS
+                        {
+                            test: sassRegex,
+                            exclude: sassModuleRegex,
+                            use: getStyleLoaders(
+                                {
+                                    importLoaders: 3,
+                                    sourceMap:
+                                        isEnvProduction &amp;&amp; shouldUseSourceMap,
+                                },
+                                &quot;sass-loader&quot;
+                            ),
+                            sideEffects: true,
+                        },
+                        // 同时支持 CSS Module 和 SASS
+                        {
+                            test: sassModuleRegex,
+                            use: getStyleLoaders(
+                                {
+                                    importLoaders: 3,
+                                    sourceMap:
+                                        isEnvProduction &amp;&amp; shouldUseSourceMap,
+                                    modules: {
+                                        getLocalIdent: getCSSModuleLocalIdent,
+                                    },
+                                },
+                                &quot;sass-loader&quot;
+                            ),
+                        },
+                        {
+                            loader: require.resolve(&quot;file-loader&quot;),
+                            exclude: [
+                                /\.(js|mjs|jsx|ts|tsx)$/,
+                                /\.html$/,
+                                /\.json$/,
+                            ],
+                            options: {
+                                name: &quot;static/media/[name].[hash:8].[ext]&quot;,
+                            },
+                        },
+                    ],
+                },
+            ],
+        },
+        plugins: [
+            // 生成 HTML 文件
+            new HtmlWebpackPlugin(
+                Object.assign(
+                    {},
+                    {
+                        inject: true,
+                        //  模板目录
+                        template: paths.appHtml,
+                    },
+                    isEnvProduction
+                        ? {
+                              minify: {
+                                  removeComments: true,
+                                  collapseWhitespace: true,
+                                  removeRedundantAttributes: true,
+                                  useShortDoctype: true,
+                                  removeEmptyAttributes: true,
+                                  removeStyleLinkTypeAttributes: true,
+                                  keepClosingSlash: true,
+                                  minifyJS: true,
+                                  minifyCSS: true,
+                                  minifyURLs: true,
+                              },
+                          }
+                        : undefined
+                )
+            ),
+            // 将 runtime 脚本嵌入到 HTML 中，这个文件很小，不会阻塞网络请求
+            isEnvProduction &amp;&amp;
+                shouldInlineRuntimeChunk &amp;&amp;
+                new InlineChunkHtmlPlugin(HtmlWebpackPlugin, [
+                    /runtime-.+[.]js/,
+                ]),
+            // 注入一些环境变量到 index.html
+            new InterpolateHtmlPlugin(HtmlWebpackPlugin, env.raw),
+            // 当模块丢失时，给予必要的提示
+            new ModuleNotFoundPlugin(paths.appPath),
+            // 使一些环境变量在 JS 代码中可访问 if (process.env.NODE_ENV === 'production') { ... }...
+            new webpack.DefinePlugin(env.stringified),
+            // HMR 的支持
+            isEnvDevelopment &amp;&amp; new webpack.HotModuleReplacementPlugin(),
+            isEnvDevelopment &amp;&amp; new CaseSensitivePathsPlugin(),
+            // npm install 之后不需要重启 Webpack
+            isEnvDevelopment &amp;&amp;
+                new WatchMissingNodeModulesPlugin(paths.appNodeModules),
+            isEnvProduction &amp;&amp;
+                new MiniCssExtractPlugin({
+                    filename: &quot;static/css/[name].[contenthash:8].css&quot;,
+                    chunkFilename:
+                        &quot;static/css/[name].[contenthash:8].chunk.css&quot;,
+                }),
+            new ManifestPlugin({
+                fileName: &quot;asset-manifest.json&quot;,
+                publicPath: paths.publicUrlOrPath,
+                generate: (seed, files, entrypoints) =&gt; {
+                    const manifestFiles = files.reduce((manifest, file) =&gt; {
+                        manifest[file.name] = file.path;
+                        return manifest;
+                    }, seed);
+                    const entrypointFiles = entrypoints.main.filter(
+                        (fileName) =&gt; !fileName.endsWith(&quot;.map&quot;)
+                    );
+
+                    return {
+                        files: manifestFiles,
+                        entrypoints: entrypointFiles,
+                    };
+                },
+            }),
+            // 对于 moment.js 的优化
+            new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+            // 生成 service worker 脚本
+            isEnvProduction &amp;&amp;
+                new WorkboxWebpackPlugin.GenerateSW({
+                    clientsClaim: true,
+                    exclude: [/\.map$/, /asset-manifest\.json$/],
+                    importWorkboxFrom: &quot;cdn&quot;,
+                    navigateFallback: paths.publicUrlOrPath + &quot;index.html&quot;,
+                    navigateFallbackBlacklist: [
+                        new RegExp(&quot;^/_&quot;),
+                        new RegExp(&quot;/[^/?]+\\.[^/]+$&quot;),
+                    ],
+                }),
+            // TypeScript 类型检查
+            useTypeScript &amp;&amp;
+                new ForkTsCheckerWebpackPlugin({
+                    typescript: resolve.sync(&quot;typescript&quot;, {
+                        basedir: paths.appNodeModules,
+                    }),
+                    async: isEnvDevelopment,
+                    useTypescriptIncrementalApi: true,
+                    checkSyntacticErrors: true,
+                    resolveModuleNameModule: process.versions.pnp
+                        ? `${__dirname}/pnpTs.js`
+                        : undefined,
+                    resolveTypeReferenceDirectiveModule: process.versions.pnp
+                        ? `${__dirname}/pnpTs.js`
+                        : undefined,
+                    tsconfig: paths.appTsConfig,
+                    reportFiles: [
+                        &quot;**&quot;,
+                        &quot;!**/__tests__/**&quot;,
+                        &quot;!**/?(*.)(spec|test).*&quot;,
+                        &quot;!**/src/setupProxy.*&quot;,
+                        &quot;!**/src/setupTests.*&quot;,
+                    ],
+                    silent: true,
+                    formatter: isEnvProduction
+                        ? typescriptFormatter
+                        : undefined,
+                }),
+        ].filter(Boolean),
+        node: {
+            module: &quot;empty&quot;,
+            dgram: &quot;empty&quot;,
+            dns: &quot;mock&quot;,
+            fs: &quot;empty&quot;,
+            http2: &quot;empty&quot;,
+            net: &quot;empty&quot;,
+            tls: &quot;empty&quot;,
+            child_process: &quot;empty&quot;,
+        },
+        // 不启用 Webpack 内置的优化策略
+        performance: false,
+    };
+};
+</code></pre><h3 id=webpackdevserver-config-js>webpackDevServer.config.js</h3><pre><code class=language-javascript>&quot;use strict&quot;;
+
+const fs = require(&quot;fs&quot;);
+// 可以直接通过报错打开本地的编辑器并跳转到对应的位置，在 WebpackDevServer 的 before 钩子上
+const errorOverlayMiddleware = require(&quot;react-dev-utils/errorOverlayMiddleware&quot;);
+const evalSourceMapMiddleware = require(&quot;react-dev-utils/evalSourceMapMiddleware&quot;);
+// 避免在开发环境中使用生产版本到的 service-worker.js，返回一个使用重置的 service worker 配置
+const noopServiceWorkerMiddleware = require(&quot;react-dev-utils/noopServiceWorkerMiddleware&quot;);
+// 返回一个忽略 node_modules 的正则表达式
+const ignoredFiles = require(&quot;react-dev-utils/ignoredFiles&quot;);
+const redirectServedPath = require(&quot;react-dev-utils/redirectServedPathMiddleware&quot;);
+const paths = require(&quot;./paths&quot;);
+const getHttpsConfig = require(&quot;./getHttpsConfig&quot;);
+const host = process.env.HOST || &quot;0.0.0.0&quot;;
+const sockHost = process.env.WDS_SOCKET_HOST;
+const sockPath = process.env.WDS_SOCKET_PATH;
+const sockPort = process.env.WDS_SOCKET_PORT;
+
+module.exports = function (proxy, allowedHost) {
+    return {
+        // 设置为 true 时，此选项绕过主机检查；不检查主机的应用程序容易受到 DNS 重新连接攻击
+        disableHostCheck:
+            !proxy || process.env.DANGEROUSLY_DISABLE_HOST_CHECK === &quot;true&quot;,
+        // 启用 gzip 压缩
+        compress: true,
+        // CRA 的意思是，这玩意没什么卵用
+        clientLogLevel: &quot;none&quot;,
+        // 告诉服务器从哪个目录中提供内容
+        contentBase: paths.appPublic,
+        contentBasePublicPath: paths.publicUrlOrPath,
+        // 开启此选项后，在文件修改之后，会触发一次完整的页面重载
+        watchContentBase: true,
+        // 当 CSS 文件修改时 CRA 会 HMR，JS 文件修改时会刷新页面
+        hot: true,
+        // 使用 Websocket 替代 sockjs-node
+        transportMode: &quot;ws&quot;,
+        injectClient: false,
+        sockHost,
+        sockPath,
+        sockPort,
+        // 此路径下的打包文件可在浏览器中访问
+        publicPath: paths.publicUrlOrPath.slice(0, -1),
+        // 除了初始启动信息之外的任何内容都不会被打印到控制台；Webpack 的错误或警告在控制台不可见
+        quiet: true,
+        // 对于某些系统，监听大量文件系统会导致大量的 CPU 或内存占用，这个选项可以排除一些巨大的文件夹
+        watchOptions: {
+            ignored: ignoredFiles(paths.appSrc),
+        },
+        https: getHttpsConfig(),
+        host,
+        // 当出现编译器错误或警告时，在浏览器中显示全屏覆盖层；默认禁用
+        overlay: false,
+        historyApiFallback: {
+            disableDotRule: true,
+            index: paths.publicUrlOrPath,
+        },
+        public: allowedHost,
+        // proxy 将在 WDS 的 before、after 钩子之间运行
+        proxy,
+        // 在服务内部的所有其他中间件之前，提供执行自定义中间件的功能，这可以用来配置自定义处理程序
+        before(app, server) {
+            app.use(evalSourceMapMiddleware(server));
+            app.use(errorOverlayMiddleware());
+
+            if (fs.existsSync(paths.proxySetup)) {
+                require(paths.proxySetup)(app);
+            }
+        },
+        // 在服务内部的所有其他中间件之后，提供执行自定义中间件的功能
+        after(app) {
+            app.use(redirectServedPath(paths.publicUrlOrPath));
+            app.use(noopServiceWorkerMiddleware(paths.publicUrlOrPath));
+        },
+    };
+};
+</code></pre></div><div class=post_footer><div class=meta><div class=info><span class="field tags"><i class=remixicon-stack-line></i><a href=https://vikingama.github.io/tags/webpack/>Webpack</a></span></div></div></div></div><div class=doc_comments><div class=comments_block_title>发表评论</div><div id=vcomments></div></div><link rel=stylesheet href=https://vikingama.github.io/css/comments.css><script src=/js/av.js></script><script src=/js/valine.js></script><script type=text/javascript>new Valine({el:'#vcomments',appId:'U06blUXOot4uJgfMu8I9xJXz-MdYXbMMI',appKey:'BnrXC06FJsvRNpr4aqb1HYPd',placeholder:'来都来了，不打个招呼吗？',visitor:'true',});</script></div></div><a id=back_to_top href=# class=back_to_top><span>△</span></a></div><footer class=footer><div class=powered_by><a href=https://zok.im/ target=_blank>Designed by <span class=jitters>Zeuk</span>,</a>
+<a href=https://www.gohugo.io/ target=_blank>Published with <span class=jitters>Hugo</span></a></div><div class=footer_slogan><span id=enter_time></span></div></footer><script src=https://vikingama.github.io/js/jquery.js></script><script src=https://vikingama.github.io/js/highlight.js></script><script src=https://vikingama.github.io/js/zozo.js></script><script>hljs.initHighlightingOnLoad();</script></body></html>

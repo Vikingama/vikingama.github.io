@@ -1,0 +1,210 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no,user-scalable=no"><meta name=author content=馬腊咯稽><meta name=description content=如何在组件卸载时取消请求？><meta name=keywords content=React,Vue><link rel=canonical href=https://vikingama.github.io/posts/cancel-request/><link rel="shortcut icon" href=https://vikingama.github.io/images/favicon.ico><link rel=stylesheet href=https://vikingama.github.io/css/zozo.css><link rel=stylesheet href=https://vikingama.github.io/css/animate.css><link rel=stylesheet href=https://vikingama.github.io/css/highlight.css><link rel=stylesheet href=https://vikingama.github.io/css/remixicon.css><title>如何在组件卸载时取消请求？ &middot; 不需要仰望谁的传说 · 我拥有自己的模样</title></head><body><div class="main animated"><div class="nav_container animated fadeInDown"><div class=site_nav id=site_nav><ul><li><a href=/>首页</a></li><li><a href=/posts/>归档</a></li><li><a href=/tags/>标签</a></li><li><a href=/inspires/>启发</a></li><li><a href=/about/>关于</a></li></ul></div><div class=menu_icon><a id=menu_icon><i class=remixicon-links-line></i></a></div></div><div class="header animated fadeInDown"><div class=site_title_container><div class=site_title><h1><a href=https://vikingama.github.io><img style=width:65px;height:auto;vertical-align:top src=https://vikingama.github.io/images/avatar.png></a></h1></div><div class=description><p class=sub_title>不需要仰望谁的传说<br>我拥有自己的模样</p><div class=my_socials><a href=https://www.douban.com/people/nicknoonan title=douban target=_blank><i class=remixicon-douban-fill></i></a><a href=https://github.com/Vikingama title=github target=_blank><i class=remixicon-github-fill></i></a><a href=https://www.zhihu.com/people/vikingama title=zhihu target=_blank><i class=remixicon-zhihu-fill></i></a><a href=https://vikingama.github.io/index.xml type=application/rss+xml title=rss target=_blank><i class=remixicon-rss-fill></i></a></div></div></div></div><div class=content><div class=post_page><div class="post animated fadeInDown"><div class="post_title post_detail_title"><h2><a href=/posts/cancel-request/>如何在组件卸载时取消请求？</a></h2><span class=date>2020.05.10</span></div><div class="post_content markdown"><blockquote><p>最近接触到了一些复杂的 Vue 项目，发现在组件销毁时，组件里的请求也会取消。</p></blockquote><p>说实话，自己之前没有注意过这个问题；一来是因为单打独斗惯了，没有工程化的思想；二来自己的 HTTP 知识浅薄，没有遭遇极端情况。</p><h3 id=api>API</h3><p>XMLHttpRequest、fetch 和 axios 都提供了取消请求的方法：</p><pre><code class=language-javascript>// XMLHttpRequest
+var xhr = new XMLHttpRequest();
+xhr.open(&quot;GET&quot;, &quot;https://developer.mozilla.org/&quot;, true);
+xhr.send();
+xhr.abort();
+// fetch
+var controller = new AbortController();
+var signal = controller.signal;
+setTimeout(() =&gt; {
+    controller.abort();
+}, 100);
+fetch(&quot;https://developer.mozilla.org/&quot;, {
+    method: &quot;GET&quot;,
+    signal,
+})
+    .then((res) =&gt; res.json())
+    .then((json) =&gt; {
+        console.log(json);
+    })
+    .catch((err) =&gt; {
+        console.error(err);
+    });
+// axios
+var CancelToken = axios.CancelToken;
+var source = CancelToken.source();
+axios
+    .post(
+        &quot;https://developer.mozilla.org/&quot;,
+        {
+            name: &quot;mozilla&quot;,
+        },
+        {
+            cancelToken: source.token,
+        }
+    )
+    .then((res) =&gt; {
+        console.info(res);
+    })
+    .catch((info) =&gt; {
+        if (axios.isCancel(info)) {
+            console.log(info);
+        } else {
+            console.error(info);
+        }
+    });
+source.cancel(&quot;...&quot;);
+</code></pre><h3 id=vue>Vue</h3><p>这篇<a href=https://adamwathan.me/renderless-components-in-vuejs/>文章</a>的<a href=https://codepen.io/adamwathan/pen/JLJKJE>最后</a>的例子很有启发性；这个组件返回了一个作用域插槽；通过组件 props 接收请求地址、参数和方法，将请求状态和返回数据注入插槽：</p><pre><code class=language-javascript>Vue.component(&quot;fetch-data&quot;, {
+    props: {
+        url: {
+            type: String,
+            required: true,
+        },
+        method: {
+            type: String,
+            default: &quot;GET&quot;,
+        },
+        params: {
+            type: Object,
+            default: {},
+        },
+        body: {
+            type: Object,
+            default: {},
+        },
+    },
+    data() {
+        return {
+            loaded: false,
+            response: null,
+            error: null,
+        };
+    },
+    created() {
+        var CancelToken = axios.CancelToken;
+        var source = CancelToken.source();
+        axios({
+            url: this.url,
+            method: this.method.toUpperCase(),
+            params: this.params,
+            data: this.body,
+            cancelToken: source.token,
+        })
+            .then((response) =&gt; {
+                this.response = response;
+                this.loaded = true;
+            })
+            .catch((error) =&gt; {
+                this.error = error;
+                this.loaded = true;
+            });
+        // 在组件销毁之前如果请求没有完成，则取消请求
+        this.$once(&quot;hook:beforeDestroy&quot;, () =&gt; {
+            source.cancel(&quot;...&quot;);
+        });
+    },
+    render() {
+        if (!this.loaded) {
+            return this.$scopedSlots.default({
+                loading: true,
+                response: null,
+                error: null,
+            });
+        }
+        return this.$scopedSlots.default({
+            loading: false,
+            response: this.response.data,
+            error: this.error,
+        });
+    },
+});
+</code></pre><h3 id=react>React</h3><p>React 可以通过高阶组件或者 Hook 实现：</p><pre><code class=language-jsx>// HOC 伪代码
+const withFetchData = (Comp) =&gt;
+    class WithFetchData extends React.Component {
+        ct = axios.CancelToken.source();
+        state = {
+            isLoading: true,
+            res: null,
+            err: null,
+        };
+        loadData = () =&gt; {
+            const cancelToken = this.ct.token;
+            // 请求方式、参数、地址可以通过 Props 传入
+            const { apiConf } = this.props;
+            axios({
+                ...apiConf,
+                cancelToken,
+            })
+                .then((response) =&gt; {
+                    this.setState({
+                        isLoading: false,
+                        res: response,
+                    });
+                })
+                .catch((error) =&gt; {
+                    this.setState({
+                        isLoading: false,
+                        err: error,
+                    });
+                });
+        };
+        shouldComponentUpdate(nextProps, nextState) {
+            // 如果请求参数变化就重新发起请求
+            return !isEqual(this.props, nextProps);
+        }
+        componentDidMount() {
+            this.loadData();
+        }
+        componentDidUpdate() {
+            // 重新请求之前取消上次请求
+            this.ct.cancel(&quot;...&quot;);
+            this.setState({
+                isLoading: true,
+                res: null,
+                err: null,
+            });
+            this.loadData();
+        }
+        componentWillUnmount() {
+            this.ct.cancel(&quot;...&quot;);
+        }
+        render() {
+            const { isLoading, res, err } = this.state;
+            if (isLoading) {
+                return &lt;Loading /&gt;;
+            }
+            if (res) {
+                return &lt;Comp {...this.props} data={res} /&gt;;
+            }
+            if (err) {
+                return &lt;Error /&gt;;
+            }
+        }
+    };
+// Hook 伪代码
+const useFetch = (apiConf) =&gt; {
+    const [isLoading, setIsLoading] = useState(true);
+    const [res, setRes] = useState(null);
+    const [err, setErr] = useState(null);
+    const ct = useRef();
+    useEffect(() =&gt; {
+        ct.current = axios.CancelToken.source();
+    }, []);
+    useEffect(() =&gt; {
+        setIsLoading(true);
+        axios({
+            ...apiConf,
+            cancelToken: ct.current.token,
+        })
+            .then((response) =&gt; {
+                setRes(response);
+            })
+            .catch((error) =&gt; {
+                setErr(error);
+            })
+            .finally(() =&gt; {
+                setIsLoading(false);
+            });
+        return () =&gt; {
+            ct.current.cancel(&quot;...&quot;);
+        };
+    }, [apiConfig]);
+    return {
+        isLoading,
+        res,
+        err,
+    };
+};
+</code></pre><p>当然，取消请求只适用于获取数据的情况；当用户进行增删改等关键操作时，请求就不应该被取消。</p></div><div class=post_footer><div class=meta><div class=info><span class="field tags"><i class=remixicon-stack-line></i><a href=https://vikingama.github.io/tags/react/>React</a>
+<a href=https://vikingama.github.io/tags/vue/>Vue</a></span></div></div></div></div><div class=doc_comments><div class=comments_block_title>发表评论</div><div id=vcomments></div></div><link rel=stylesheet href=https://vikingama.github.io/css/comments.css><script src=/js/av.js></script><script src=/js/valine.js></script><script type=text/javascript>new Valine({el:'#vcomments',appId:'U06blUXOot4uJgfMu8I9xJXz-MdYXbMMI',appKey:'BnrXC06FJsvRNpr4aqb1HYPd',placeholder:'来都来了，不打个招呼吗？',visitor:'true',});</script></div></div><a id=back_to_top href=# class=back_to_top><span>△</span></a></div><footer class=footer><div class=powered_by><a href=https://zok.im/ target=_blank>Designed by <span class=jitters>Zeuk</span>,</a>
+<a href=https://www.gohugo.io/ target=_blank>Published with <span class=jitters>Hugo</span></a></div><div class=footer_slogan><span id=enter_time></span></div></footer><script src=https://vikingama.github.io/js/jquery.js></script><script src=https://vikingama.github.io/js/highlight.js></script><script src=https://vikingama.github.io/js/zozo.js></script><script>hljs.initHighlightingOnLoad();</script></body></html>

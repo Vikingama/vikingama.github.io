@@ -1,0 +1,53 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no,user-scalable=no"><meta name=author content=馬腊咯稽><meta name=description content="使用 Sapper 过程中遇到的问题"><meta name=keywords content=Sapper,Svelte><link rel=canonical href=https://vikingama.github.io/posts/sapper-tips/><link rel="shortcut icon" href=https://vikingama.github.io/images/favicon.ico><link rel=stylesheet href=https://vikingama.github.io/css/zozo.css><link rel=stylesheet href=https://vikingama.github.io/css/animate.css><link rel=stylesheet href=https://vikingama.github.io/css/highlight.css><link rel=stylesheet href=https://vikingama.github.io/css/remixicon.css><title>使用 Sapper 过程中遇到的问题 &middot; 不需要仰望谁的传说 · 我拥有自己的模样</title></head><body><div class="main animated"><div class="nav_container animated fadeInDown"><div class=site_nav id=site_nav><ul><li><a href=/>首页</a></li><li><a href=/posts/>归档</a></li><li><a href=/tags/>标签</a></li><li><a href=/inspires/>启发</a></li><li><a href=/about/>关于</a></li></ul></div><div class=menu_icon><a id=menu_icon><i class=remixicon-links-line></i></a></div></div><div class="header animated fadeInDown"><div class=site_title_container><div class=site_title><h1><a href=https://vikingama.github.io><img style=width:65px;height:auto;vertical-align:top src=https://vikingama.github.io/images/avatar.png></a></h1></div><div class=description><p class=sub_title>不需要仰望谁的传说<br>我拥有自己的模样</p><div class=my_socials><a href=https://www.douban.com/people/nicknoonan title=douban target=_blank><i class=remixicon-douban-fill></i></a><a href=https://github.com/Vikingama title=github target=_blank><i class=remixicon-github-fill></i></a><a href=https://www.zhihu.com/people/vikingama title=zhihu target=_blank><i class=remixicon-zhihu-fill></i></a><a href=https://vikingama.github.io/index.xml type=application/rss+xml title=rss target=_blank><i class=remixicon-rss-fill></i></a></div></div></div></div><div class=content><div class=post_page><div class="post animated fadeInDown"><div class="post_title post_detail_title"><h2><a href=/posts/sapper-tips/>使用 Sapper 过程中遇到的问题</a></h2><span class=date>2019.07.24</span></div><div class="post_content markdown"><blockquote><p>最近试着用 Sapper 写了花瓣主站的 Demo，总结一下遇到的问题。</p></blockquote><h3 id=请求的拦截与转发>请求的拦截与转发</h3><p>Sapper 并没有提供代理后台服务器的配置入口，需要自己引入中间件。由于没有找到合适的 polka 中间件，所以此处将 polka 替换为 express。</p><pre><code class=language-javascript>// src/server.js
+···
+const app = require(&quot;express&quot;);
+const proxy = require(&quot;express-http-proxy&quot;); // 需要引入的中间件
+···
+app()
+    // 配置代理
+    .use(
+        &quot;/api&quot;,
+        proxy(&quot;www.example.com&quot;, {
+            https: true,
+            proxyReqPathResolver: function(req) {
+                return req.url;
+            }
+        })
+    )
+    .use(
+        compression({ threshold: 0 }),
+        sirv(&quot;static&quot;, { dev }),
+        sapper.middleware()
+    )
+    .listen(PORT, err =&gt; {
+        if (err) console.log(&quot;error&quot;, err);
+    });
+// src/plugins/apis.js
+import axios from &quot;axios&quot;;
+axios.defaults.baseURL = &quot;/api&quot;;
+···
+</code></pre><h3 id=preload-函数的返回值>preload 函数的返回值</h3><p>preload 是一个可以在服务器端运行的钩子函数，其返回值必须用对象包裹，否则获取到的值为 undefined。</p><pre><code class=language-html>&lt;script context=&quot;module&quot;&gt;
+    export async function preload(page, session) {
+        let routeInfo = Object.assign({}, { ...page }, { ...session });
+        // 不能直接返回 routeInfo，需要放在 {} 中返回
+        return { routeInfo };
+    }
+&lt;/script&gt;
+
+&lt;script&gt;
+    export let routeInfo;
+    console.log(routeInfo);
+&lt;/script&gt;
+</code></pre><h3 id=隐藏浏览器滚动条>隐藏浏览器滚动条</h3><p>这个不能算 Sapper 的问题，但写 Demo 时遇到了。</p><pre><code class=language-css>html {
+    /* IE */
+    -ms-overflow-style: none;
+    /* Firefox */
+    overflow: -moz-scrollbars-none;
+}
+/* Chrome */
+html::-webkit-scrollbar {
+    width: 0px;
+}
+</code></pre><h3 id=待解决问题>待解决问题</h3><ol><li>_layout.svelte 中的组件不能根据 {#if 条件}{:else}{/if} 进行切换；</li><li>preload 钩子中，无论是使用 this.fetch 还是 axios，均请求异常；</li><li>浏览器不会自动刷新，终端显示 &quot;Server is not listening on port 3000&quot; 错误；更改端口、添加运行参数，问题依旧（在官方仓库 issues 中，有人遇到同样的问题，官人没能解决）；</li><li>column-count 瀑布流更新数据时，时间轴错乱（column-count 压根不适合做瀑布流）。</li></ol><p>未完待续...</p></div><div class=post_footer><div class=meta><div class=info><span class="field tags"><i class=remixicon-stack-line></i><a href=https://vikingama.github.io/tags/sapper/>Sapper</a>
+<a href=https://vikingama.github.io/tags/svelte/>Svelte</a></span></div></div></div></div><div class=doc_comments><div class=comments_block_title>发表评论</div><div id=vcomments></div></div><link rel=stylesheet href=https://vikingama.github.io/css/comments.css><script src=/js/av.js></script><script src=/js/valine.js></script><script type=text/javascript>new Valine({el:'#vcomments',appId:'U06blUXOot4uJgfMu8I9xJXz-MdYXbMMI',appKey:'BnrXC06FJsvRNpr4aqb1HYPd',placeholder:'来都来了，不打个招呼吗？',visitor:'true',});</script></div></div><a id=back_to_top href=# class=back_to_top><span>△</span></a></div><footer class=footer><div class=powered_by><a href=https://zok.im/ target=_blank>Designed by <span class=jitters>Zeuk</span>,</a>
+<a href=https://www.gohugo.io/ target=_blank>Published with <span class=jitters>Hugo</span></a></div><div class=footer_slogan><span id=enter_time></span></div></footer><script src=https://vikingama.github.io/js/jquery.js></script><script src=https://vikingama.github.io/js/highlight.js></script><script src=https://vikingama.github.io/js/zozo.js></script><script>hljs.initHighlightingOnLoad();</script></body></html>

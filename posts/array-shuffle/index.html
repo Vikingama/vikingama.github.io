@@ -1,0 +1,31 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no,user-scalable=no"><meta name=author content=馬腊咯稽><meta name=description content=随机排列一个数组><meta name=keywords content=数组><link rel=canonical href=https://vikingama.github.io/posts/array-shuffle/><link rel="shortcut icon" href=https://vikingama.github.io/images/favicon.ico><link rel=stylesheet href=https://vikingama.github.io/css/zozo.css><link rel=stylesheet href=https://vikingama.github.io/css/animate.css><link rel=stylesheet href=https://vikingama.github.io/css/highlight.css><link rel=stylesheet href=https://vikingama.github.io/css/remixicon.css><title>随机排列一个数组 &middot; 不需要仰望谁的传说 · 我拥有自己的模样</title></head><body><div class="main animated"><div class="nav_container animated fadeInDown"><div class=site_nav id=site_nav><ul><li><a href=/>首页</a></li><li><a href=/posts/>归档</a></li><li><a href=/tags/>标签</a></li><li><a href=/inspires/>启发</a></li><li><a href=/about/>关于</a></li></ul></div><div class=menu_icon><a id=menu_icon><i class=remixicon-links-line></i></a></div></div><div class="header animated fadeInDown"><div class=site_title_container><div class=site_title><h1><a href=https://vikingama.github.io><img style=width:65px;height:auto;vertical-align:top src=https://vikingama.github.io/images/avatar.png></a></h1></div><div class=description><p class=sub_title>不需要仰望谁的传说<br>我拥有自己的模样</p><div class=my_socials><a href=https://www.douban.com/people/nicknoonan title=douban target=_blank><i class=remixicon-douban-fill></i></a><a href=https://github.com/Vikingama title=github target=_blank><i class=remixicon-github-fill></i></a><a href=https://www.zhihu.com/people/vikingama title=zhihu target=_blank><i class=remixicon-zhihu-fill></i></a><a href=https://vikingama.github.io/index.xml type=application/rss+xml title=rss target=_blank><i class=remixicon-rss-fill></i></a></div></div></div></div><div class=content><div class=post_page><div class="post animated fadeInDown"><div class="post_title post_detail_title"><h2><a href=/posts/array-shuffle/>随机排列一个数组</a></h2><span class=date>2019.05.22</span></div><div class="post_content markdown"><blockquote><p>母鸡为什么这么衰，没想出来简直是耻辱。</p></blockquote><h3 id=array-prototype-sort>Array.prototype.sort()</h3><p>sort 方法不能实现随机排序的原因是：当对一个数组进行 n 次排序后，这 n 个数组的第 x 项的平均数并不是无限接近于原数组所有项的平均数。</p><pre><code class=language-javascript>const arr = [1, 7, 0, 5, 6, 4, 2, 9, 3, 8];
+// [1, 7, 0, 5, 6, 4, 2, 9, 3, 8]
+console.log(arr.slice().sort((a, b) =&gt; 0)); // 保持不变
+// [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+console.log(arr.slice().sort((a, b) =&gt; a - b)); // 升序
+// [9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
+console.log(arr.concat().sort((a, b) =&gt; b - a)); // 降序
+// [3, 6, 5, 2, 9, 7, 1, 0, 4, 8]
+console.log(arr.concat().sort((a, b) =&gt; 0.5 - Math.random())); // 伪随机
+</code></pre><h3 id=经典洗牌算法>经典洗牌算法</h3><pre><code class=language-javascript>let arr = [1, 7, 0, 5, 6, 4, 2, 9, 3, 8];
+
+function randomList(initArr) {
+    let length = initArr.length,
+        tempArr = [], // 保存随机下标
+        resultArr = []; // 保存结果
+    while (length) {
+        // 随机下标 [0, initArr.length] 的整数
+        let randomIndex = Math.floor(Math.random() * initArr.length);
+        // 防止随机下标重复
+        if (!tempArr.includes(randomIndex)) {
+            tempArr.push(randomIndex);
+            resultArr[randomIndex] = initArr[length - 1];
+            length--;
+        }
+    }
+    return resultArr;
+}
+
+console.log(randomList(arr));
+</code></pre><h5 id=参考-js-中随机排列数组顺序-经典洗牌算法-和数组的排序方法-https-zhuanlan-zhihu-com-p-27589512>参考：<a href=https://zhuanlan.zhihu.com/p/27589512>JS 中随机排列数组顺序（经典洗牌算法）和数组的排序方法</a></h5></div><div class=post_footer><div class=meta><div class=info><span class="field tags"><i class=remixicon-stack-line></i><a href=https://vikingama.github.io/tags/%E6%95%B0%E7%BB%84/>数组</a></span></div></div></div></div><div class=doc_comments><div class=comments_block_title>发表评论</div><div id=vcomments></div></div><link rel=stylesheet href=https://vikingama.github.io/css/comments.css><script src=/js/av.js></script><script src=/js/valine.js></script><script type=text/javascript>new Valine({el:'#vcomments',appId:'U06blUXOot4uJgfMu8I9xJXz-MdYXbMMI',appKey:'BnrXC06FJsvRNpr4aqb1HYPd',placeholder:'来都来了，不打个招呼吗？',visitor:'true',});</script></div></div><a id=back_to_top href=# class=back_to_top><span>△</span></a></div><footer class=footer><div class=powered_by><a href=https://zok.im/ target=_blank>Designed by <span class=jitters>Zeuk</span>,</a>
+<a href=https://www.gohugo.io/ target=_blank>Published with <span class=jitters>Hugo</span></a></div><div class=footer_slogan><span id=enter_time></span></div></footer><script src=https://vikingama.github.io/js/jquery.js></script><script src=https://vikingama.github.io/js/highlight.js></script><script src=https://vikingama.github.io/js/zozo.js></script><script>hljs.initHighlightingOnLoad();</script></body></html>
