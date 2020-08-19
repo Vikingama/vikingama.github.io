@@ -10,8 +10,17 @@
 
 html {
     -webkit-font-smoothing: antialiased;
-    background: repeating-radial-gradient(#d76d77, #318fb5, #ffaf7b);
     background-attachment: fixed;
+}
+
+html.success {
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+html.error {
+    background: repeating-radial-gradient(#d76d77, #318fb5, #ffaf7b);
     background-size: 200% 200%;
     animation-duration: 30s;
     animation-name: gradient;
@@ -374,7 +383,7 @@ a:active {
     color: #ccc;
     font-size: 8px;
     letter-spacing: 1px;
-    opacity: 0.3;
+    opacity: 0.5;
 }
 
 .list_with_title {
