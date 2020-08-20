@@ -1,4 +1,5 @@
 'use strict';
+
 $(document).ready(
     (function (_this) {
         return function () {
@@ -63,7 +64,6 @@ $(document).ready(
 //                 // 2K-
 //                 document.documentElement.style.backgroundImage = `url(${urls.regular})`;
 //             }
-//             document.documentElement.classList.add("success");
 //             if (user.first_name && user.last_name) {
 //                 $('#enter_time').text(`Photo of the Day by ${user.first_name} ${user.last_name}`);
 //             } else {
@@ -71,14 +71,12 @@ $(document).ready(
 //             }
 //         },
 //         error(err) {
-//             document.documentElement.classList.add("error");
 //             console.error(err);
 //         }
 //     });
 // })();
 (function () {
     const between = new Date() - new Date('2017-08-21');
-    const years = Math.floor(between / 1000 / 60 / 60 / 24 / 365);
-    const days = Math.floor(between / 1000 / 60 / 60 / 24 - years * 365);
-    $('#enter_time').text(`入杭 ${years} 年又 ${days} 天了`);
+    const days = Math.floor(between / 1000 / 60 / 60 / 24);
+    $('#enter_time').text(`入杭 ${days} 天了`);
 })();
