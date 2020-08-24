@@ -1,0 +1,487 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no,user-scalable=no"><meta name=author content=馬腊咯稽><meta name=description content=数据结构与算法学习笔记><meta name=keywords content=Algorithms><link rel=canonical href=https://vikingama.github.io/posts/data-structures-algorithms/><link rel="shortcut icon" href=https://vikingama.github.io/images/favicon.ico><link rel=stylesheet href=https://vikingama.github.io/css/zozo.css><link rel=stylesheet href=https://vikingama.github.io/css/animate.css><link rel=stylesheet href=https://vikingama.github.io/css/highlight.css><link rel=stylesheet href=https://vikingama.github.io/css/remixicon.css><title>数据结构与算法学习笔记 &middot; 不需要仰望谁的传说 · 我拥有自己的模样</title></head><body><div class="main animated"><div class="nav_container animated fadeInDown"><div class=site_nav id=site_nav><ul><li><a href=/>首页</a></li><li><a href=/posts/>归档</a></li><li><a href=/tags/>标签</a></li><li><a href=/inspires/>启发</a></li><li><a href=/about/>关于</a></li></ul></div><div class=menu_icon><a id=menu_icon><i class=remixicon-links-line></i></a></div></div><div class="header animated fadeInDown"><div class=site_title_container><div class=site_title><h1><a href=https://vikingama.github.io><img style=width:65px;height:auto;vertical-align:top src=https://vikingama.github.io/images/avatar.png></a></h1></div><div class=description><p class=sub_title>不需要仰望谁的传说<br>我拥有自己的模样</p><div class=my_socials><a href=https://www.douban.com/people/nicknoonan title=douban target=_blank><i class=remixicon-douban-fill></i></a><a href=https://github.com/Vikingama title=github target=_blank><i class=remixicon-github-fill></i></a><a href=https://www.zhihu.com/people/vikingama title=zhihu target=_blank><i class=remixicon-zhihu-fill></i></a><a href=https://vikingama.github.io/index.xml type=application/rss+xml title=rss target=_blank><i class=remixicon-rss-fill></i></a></div></div></div></div><div class=content><div class=post_page><div class="post animated fadeInDown"><div class="post_title post_detail_title"><h2><a href=/posts/data-structures-algorithms/>数据结构与算法学习笔记</a></h2><span class=date>0001.01.01</span></div><div class="post_content markdown"><blockquote><p>非科班出身的难民，学算法不易。</p></blockquote><h3 id=栈>栈</h3><p>栈是一种遵从后进先出（LIFO）原则的有序集合；新添加或待删除的元素都保存在栈的同一端（栈顶），另一端就叫栈底；在栈里，新元素都靠近栈顶，旧元素都接近栈底。</p><p>基于数组的栈：方法的复杂度为 O(n)，操作基于数组的栈需要迭代整个数组。</p><pre><code class=language-javascript>class StackBasedOnArray {
+    constructor() {
+        this.temp = [];
+    }
+    push(...items) {
+        // 添加到栈顶
+        this.temp.push(...items);
+    }
+    pop() {
+        // 移除栈顶元素并返回该元素
+        return this.temp.pop();
+    }
+    peek() {
+        // 返回栈顶元素
+        return this.temp[this.temp.length - 1];
+    }
+    size() {
+        // 返回栈中元素数量
+        return this.temp.length;
+    }
+    clear() {
+        // 清空栈
+        this.temp = [];
+    }
+    isEmpty() {
+        // 返回栈是否为空
+        return this.temp.length === 0;
+    }
+}
+</code></pre><p>基于对象的栈：除了 push，其他方法复杂度为 O(1)。</p><pre><code class=language-javascript>class StackBasedOnObject {
+    constructor() {
+        this.count = 0;
+        this.temp = {};
+    }
+    push(...items) {
+        // 添加到栈顶
+        items.forEach((item) =&gt; {
+            this.temp[this.count] = item;
+            this.count++;
+        });
+    }
+    pop() {
+        // 移除栈顶元素并返回该元素
+        if (this.isEmpty()) {
+            return undefined;
+        }
+        this.count--;
+        const park = this.temp[this.count];
+        delete this.temp[this.count];
+        return park;
+    }
+    peek() {
+        // 返回栈顶元素
+        return this.isEmpty() ? undefined : this.temp[this.count - 1];
+    }
+    size() {
+        // 返回栈中元素数量
+        return this.count;
+    }
+    clear() {
+        // 清空栈
+        this.count = 0;
+        this.temp = {};
+    }
+    isEmpty() {
+        // 返回栈是否为空
+        return this.count === 0;
+    }
+}
+</code></pre><p>基于数组/对象实现的栈的内部数据得不到保护；理想情况下，用户只能通过我们暴露的方法对栈进行操作，所以有了基于 Map 的栈。</p><pre><code class=language-javascript>class StackBasedOnMap {
+    static wm = new Map();
+    constructor() {
+        const { wm } = this.constructor;
+        wm.set(this, []);
+    }
+    push(...items) {
+        // 添加到栈顶
+        const { wm } = this.constructor;
+        const temp = wm.get(this);
+        temp.push(...items);
+    }
+    pop() {
+        // 移除栈顶元素并返回该元素
+        const { wm } = this.constructor;
+        const temp = wm.get(this);
+        return temp.pop();
+    }
+    peek() {
+        // 返回栈顶元素
+        const { wm } = this.constructor;
+        const temp = wm.get(this);
+        return temp[temp.length - 1];
+    }
+    size() {
+        // 返回栈中元素数量
+        const { wm } = this.constructor;
+        const temp = wm.get(this);
+        return temp.length;
+    }
+    clear() {
+        // 清空栈
+        const { wm } = this.constructor;
+        wm.set(this, []);
+    }
+    isEmpty() {
+        // 返回栈是否为空
+        const { wm } = this.constructor;
+        const temp = wm.get(this);
+        return temp.length === 0;
+    }
+}
+</code></pre><p>使用栈实现十进制转二进制：</p><pre><code class=language-javascript>function decimalToBinary(decimalNumber) {
+    const stack = new StackBasedOnMap(); // 用数组也可以
+    let decimal = decimalNumber;
+    let remainder = 0;
+    let binary = '';
+
+    while (decimal &gt; 0) {
+        remainder = Math.floor(decimal % 2); // 对余数取整
+        stack.push(remainder);
+        decimal = Math.floor(decimal / 2);
+    }
+    while (!stack.isEmpty()) {
+        binary += stack.pop().toString();
+    }
+
+    return binary;
+}
+</code></pre><h3 id=队列>队列</h3><p>队列是遵从先进先出（FIFO）原则的一组有序的项；队列在尾部添加新元素，并从顶部移除元素；最新添加的元素必须排在队列的末尾。</p><pre><code class=language-javascript>class Queue {
+    constructor() {
+        this.tail = 0; // // 指向最后一个元素
+        this.arrow = 0; // 指向第一个元素
+        this.temp = {};
+    }
+    enqueue(...items) {
+        // 向队列尾部添加项
+        items.forEach((item) =&gt; {
+            this.temp[this.tail] = item;
+            this.tail++;
+        });
+    }
+    dequeue() {
+        // 移除队列第一项并返回该项
+        if (!this.isEmpty()) {
+            const park = this.temp[this.arrow];
+            delete this.temp[this.arrow];
+            this.arrow++;
+            return park;
+        }
+        return undefined;
+    }
+    peek() {
+        // 返回队列第一项
+        return this.temp[this.arrow];
+    }
+    size() {
+        // 返回队列包含的元素个数
+        return this.tail - this.arrow;
+    }
+    clear() {
+        this.tail = 0;
+        this.arrow = 0;
+        this.temp = {};
+    }
+    isEmpty() {
+        // 返回队列是否为空
+        return this.size() === 0;
+    }
+}
+</code></pre><h3 id=双端队列>双端队列</h3><p>双端队列是一种允许我们同时从前端和后端添加和移除元素的特殊队列（先进先出、后进先出）。</p><pre><code class=language-javascript>class DoubleEndedQueue {
+    constructor() {
+        this.tail = 0;
+        this.arrow = 0;
+        this.temp = {};
+    }
+    addFront(...items) {
+        // 向队列头部添加
+        items.forEach((item) =&gt; {
+            this.arrow--;
+            this.temp[this.arrow] = item;
+        });
+    }
+    removeFront() {
+        // 移除队列头部元素并返回
+        if (!this.isEmpty()) {
+            const park = this.temp[this.arrow];
+            delete this.temp[this.arrow];
+            this.arrow++;
+            return park;
+        }
+        return undefined;
+    }
+    addBack(...items) {
+        // 向队列尾部添加
+        items.forEach((item) =&gt; {
+            this.temp[this.tail] = item;
+            this.tail++;
+        });
+    }
+    removeBack() {
+        // 移除队列尾部元素并返回
+        if (!this.isEmpty()) {
+            this.tail--;
+            const park = this.temp[this.tail];
+            delete this.temp[this.tail];
+            return park;
+        }
+        return undefined;
+    }
+    peekFront() {
+        // 返回队列头部元素
+        return this.temp[this.arrow];
+    }
+    peekBack() {
+        // 返回队列尾部元素
+        return this.temp[this.tail - 1];
+    }
+    size() {
+        // 返回队列包含的元素个数
+        return this.tail - this.arrow;
+    }
+    clear() {
+        this.tail = 0;
+        this.arrow = 0;
+        this.temp = {};
+    }
+    isEmpty() {
+        // 返回队列是否为空
+        return this.size() === 0;
+    }
+}
+</code></pre><h3 id=链表>链表</h3><p>在大多数语言中，数组的大小是固定的；从数组的起点或中间插入或移除项的成本很高，因为需要移动元素；链表是存储有序的元素集合，不同于数组，链表中的元素在内存中并不是连续放置的，每个元素由一个存储元素本身的节点和一个指向下一个元素的引用（指针/链接）组成；链表添加或移除元素的时候不需要移动其他元素。</p><p><img src=/data-structures-algorithms/linked-list.png alt="Local Image"></p><p>在数组中，我们可以直接访问任何位置的任何元素；而要想访问链表中间的一个元素，则需要从起点（表头）开始迭代链表直到找到所需的元素。</p><pre><code class=language-javascript>// 比较是否相等
+function defaultEquals(a, b) {
+    return a === b;
+}
+// 链表中的项
+class Node {
+    constructor(value, next) {
+        this.value = value; // 当前项的值
+        this.next = next; // 指向下一个项的指针
+    }
+}
+// 链表
+class LinkedList {
+    constructor(equalsFn = defaultEquals) {
+        this.count = 0; // 链表元素数量
+        this.head = undefined; // 指向链表中的第一个元素
+        this.equalsFn = equalsFn;
+    }
+    push(item) {
+        // 向链表尾部添加元素
+        const node = new Node(item, undefined); // 新建元素
+        let current;
+        if (!this.head) {
+            // 如果链表不存在第一个元素
+            this.head = node;
+        } else {
+            current = this.head;
+            while (current.next) {
+                current = current.next; // 获取到链表的最后一项
+            }
+        }
+        current.next = node; // 将最后一项的指针指向该元素
+        this.count++;
+    }
+    insert(item, pos) {
+        // 在指定位置插入元素
+        if (pos &gt;= 0 &amp;&amp; pos &lt;= this.count) {
+            const node = new Node(item, undefined);
+            if (pos === 0) {
+                // 如果是在链表头部插入新元素
+                node.next = this.head; // 将新元素的指针指向原来的头部元素
+                this.head = node; // 将新元素设置为链表头部
+            } else {
+                // 获取待插入位置的前一个元素
+                let previous = this.getItemAt(pos - 1);
+                // 获取待插入位置的元素
+                let current = previous.next;
+                // 将新元素的指针指向该元素
+                node.next = current;
+                // 前一个位置的元素指针指向新元素
+                previous.next = node;
+            }
+            this.count++;
+        }
+        return false;
+    }
+    getItemAt(pos) {
+        // 返回特定位置的元素
+        if (pos &gt;= 0 &amp;&amp; pos &lt; this.count) {
+            let current = this.head;
+            for (let i = 0; i &lt; pos; i++) {
+                current = current.next;
+            }
+            return current.value;
+        }
+        return undefined;
+    }
+    remove(item) {
+        // 移除指定元素
+        const pos = this.indexOf(item);
+        return this.removeAt(pos);
+    }
+    removeAt(pos) {
+        // 移除指定位置的元素
+        if (pos &gt;= 0 &amp;&amp; pos &lt; this.count) {
+            let current = this.head;
+            if (pos === 0) {
+                // 如果要移除链表的第一个元素，只需要将 this.head 指向下一个元素即可
+                this.head = current.next;
+            } else {
+                // 移除的不是链表的第一个元素，需要获取移除元素的前一个元素和后一个元素
+                let previous = this.getItemAt(pos - 1);
+                current = previous.next;
+                // 将前一个元素的指针指向下一个元素（跳过要移除的元素）
+                previous.next = current.next;
+            }
+            this.count--;
+            return current.value;
+        }
+        return undefined;
+    }
+    indexOf(item) {
+        // 返回元素在链表中的索引
+        let current = this.head;
+        for (let i = 0; i &lt; this.count; i++) {
+            if (this.equalsFn(item, current.value)) {
+                return i;
+            }
+            current = current.next;
+        }
+        return -1;
+    }
+    clear() {
+        this.count = 0;
+        this.head = undefined;
+    }
+    size() {
+        // 链表中的元素个数
+        return this.count;
+    }
+    isEmpty() {
+        // 链表是否为空
+        return this.size() === 0;
+    }
+    getHead() {
+        // 返回链表第一个元素
+        return this.head;
+    }
+    toString() {
+        // 返回链表字符串
+        if (this.head) {
+            let str = `${this.head.value}`;
+            let current = this.head.next;
+            for (let i = 0; i &lt; this.count; i++) {
+                str = `${str},${current.value}`;
+                current = current.next;
+            }
+        }
+        return '';
+    }
+}
+</code></pre><h3 id=双向链表>双向链表</h3><p>双向链表和普通链表的区别在于，在双向链表中，每个节点有两个指针，分别指向前一个节点和后一个节点。</p><pre><code class=language-javascript>class DoublyNode extends Node {
+    constructor(value, next, prev) {
+        super(value, next);
+        this.prev = prev;
+    }
+}
+class DoublyLinkedList extends LinkedList {
+    constructor(equalsFn = defaultEquals) {
+        super(equalsFn);
+        this.tail = undefined; // 指向链表中的最后一个元素
+    }
+    push(item) {
+        const node = new DoublyNode(item, undefined, undefined);
+        if (!this.head) {
+            this.head = this.tail = node;
+        } else {
+            this.tail.next = node;
+            node.prev = this.tail;
+            this.tail = node;
+        }
+        this.count++;
+    }
+    insert(item, pos) {
+        if (pos &gt;= 0 &amp;&amp; pos &lt;= this.count) {
+            const node = new DoublyNode(item, undefined, undefined);
+            if (pos === 0) {
+                // 向链表首部插入元素
+                let current = this.head;
+                if (current) {
+                    // 链表头部已经有元素
+                    current.prev = node;
+                    node.next = current;
+                    this.head = node;
+                } else {
+                    // 链表头部没有元素，此时链表为空
+                    this.head = this.tail = node;
+                }
+            } else if (pos === this.count) {
+                // 向链表尾部插入元素
+                let current = this.tail;
+                current.next = node;
+                node.prev = current;
+                this.tail = node;
+            } else {
+                const previous = this.getItemAt(pos - 1); // node 的前一个元素
+                const current = previous.next; // node 的后一个元素
+                node.prev = previous;
+                node.next = current;
+                previous.next = node;
+                current.prev = node;
+            }
+            this.count++;
+            return true;
+        }
+        return false;
+    }
+    removeAt(pos) {
+        if (pos &gt;= 0 &amp;&amp; pos &lt; this.count) {
+            let current = this.head;
+            if (pos === 0) {
+                this.head = this.head.next;
+                if (this.count === 1) {
+                    this.tail = undefined;
+                } else {
+                    this.head.prev = undefined;
+                }
+            } else if (pos === this.count - 1) {
+                current = this.tail;
+                this.tail = this.tail.prev;
+                this.tail.next = undefined;
+            } else {
+                current = this.getItemAt(pos);
+                const prevNode = current.prev;
+                const nextNode = current.next;
+                prevNode.next = nextNode;
+                nextNode.prev = prevNode;
+            }
+            this.count--;
+            return current.value;
+        }
+        return undefined;
+    }
+    indexOf(item) {
+        let current = this.head;
+        let index = 0;
+        while (current) {
+            if (this.equalsFn(current.value, item)) {
+                return index;
+            }
+            index++;
+            current = current.next;
+        }
+        return -1;
+    }
+    clear() {
+        super.clear();
+        this.tail = undefined;
+    }
+    size() {
+        return this.count;
+    }
+    isEmpty() {
+        return this.count === 0;
+    }
+    getHead() {
+        return this.head;
+    }
+    getTail() {
+        return this.tail;
+    }
+    toString() {
+        if (this.head) {
+            let str = `${this.head.value}`;
+            let current = this.head.next;
+            while (current) {
+                str = `${str},${current.value}`;
+                current = current.next;
+            }
+            return str;
+        }
+        return '';
+    }
+}
+</code></pre><h3 id=循环链表>循环链表</h3><p>最后一个元素指向下一个元素的指针（tail.next）不是 undefined，而是指向第一个元素（head）。</p><h3 id=有序链表>有序链表</h3><p>保持元素有序的链表结构。</p><h3 id=集合>集合</h3><h3 id=字典-散列表>字典、散列表</h3><h3 id=递归>递归</h3><h3 id=树>树</h3><h3 id=二叉堆-堆排序>二叉堆、堆排序</h3><h3 id=图>图</h3><h3 id=排序-搜索>排序、搜索</h3><h3 id=算法设计>算法设计</h3><h3 id=算法复杂度>算法复杂度</h3></div><div class=post_footer><div class=meta><div class=info><span class="field tags"><i class=remixicon-stack-line></i><a href=https://vikingama.github.io/tags/algorithms/>Algorithms</a></span></div></div></div></div><div class=doc_comments><div class=comments_block_title>发表评论</div><div id=vcomments></div></div><link rel=stylesheet href=https://vikingama.github.io/css/comments.css><script src=/js/av.js></script><script src=/js/valine.js></script><script type=text/javascript>new Valine({el:'#vcomments',appId:'U06blUXOot4uJgfMu8I9xJXz-MdYXbMMI',appKey:'BnrXC06FJsvRNpr4aqb1HYPd',placeholder:'来都来了，不打个招呼吗？',visitor:'true',});</script></div></div><a id=back_to_top href=# class=back_to_top><span>△</span></a></div><footer class=footer><div class=powered_by><a href=https://zok.im/ target=_blank>Designed by <span class=jitters>Zeuk</span>,</a>
+<a href=https://www.gohugo.io/ target=_blank>Published with <span class=jitters>Hugo</span></a></div><div class=footer_slogan><span id=enter_time></span></div></footer><script src=https://vikingama.github.io/js/jquery.js></script><script src=https://vikingama.github.io/js/highlight.js></script><script src=https://vikingama.github.io/js/zozo.js></script><script>hljs.initHighlightingOnLoad();</script></body></html>

@@ -30,8 +30,7 @@ addLessLoader({
 &quot;test&quot;: &quot;react-app-rewired test&quot;,
 &quot;eject&quot;: &quot;react-scripts eject&quot;
 }
-</code></pre></li></ul><h3 id=查看项目打包后各个文件的具体构成>查看项目打包后各个文件的具体构成</h3><p>之前写 Vue 的时候，Vue-Cli 官方文档有提到过这个点；这次顺带发现了 BizCharts 没有按需引入的问题。
-<img src=/summary-of-station-platform/source-map.png alt="Local Image"></p><ul><li>npm install source-map-explorer -D 安装依赖；</li><li><p>修改 package.json:</p><pre><code class=language-javascript>&quot;scripts&quot;: {
+</code></pre></li></ul><h3 id=查看项目打包后各个文件的具体构成>查看项目打包后各个文件的具体构成</h3><p>之前写 Vue 的时候，Vue-Cli 官方文档有提到过这个点；这次顺带发现了 BizCharts 没有按需引入的问题。</p><p><img src=/summary-of-station-platform/source-map.png alt="Local Image"></p><ul><li>npm install source-map-explorer -D 安装依赖；</li><li><p>修改 package.json:</p><pre><code class=language-javascript>&quot;scripts&quot;: {
 ...
 &quot;analyze&quot;: &quot;source-map-explorer 'build/static/js/*.js'&quot;,
 ...
