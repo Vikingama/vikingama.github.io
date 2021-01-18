@@ -93,7 +93,69 @@ module.exports = {
             })
     ]
 };
-</code></pre><p>为了 SEO，你可能需要 extract-text-webpack-plugin 将样式单独打包。</p><h2 id=两种文件>两种文件</h2><p>公司的 SEO 服务商让在服务器根目录放了几个“文件”，最有用的是两种是 Sitemap 和 robots。</p><p>Sitemap 是用来告诉蜘蛛网站上有哪些可供抓取的网页；Sitepmap 可以是 XML、TXT、HTML 文件，其中包含了站点中的网址以及关于每个网址的元数据（更新时间、更新频率、重要程度、语言版本等），以便搜索引擎可以更加智能地抓取网站；Sitemap 并不能保证网页会被蜘蛛抓取，但可向蜘蛛提供一些提示以便网站被更有效地抓取：</p><pre><code class=language-xml>&lt;?xml version='1.0' encoding='UTF-8'?&gt;
+</code></pre><p>为了 SEO，你可能需要 extract-text-webpack-plugin 将样式单独打包。</p><h4 id=prerenderspaplugin-逻辑>PrerenderSPAPlugin 逻辑</h4><pre><code class=language-javascript>function PrerenderSPAPlugin(...args) {
+    // 对入参做处理
+    this._options = args[0] || {};
+}
+PrerenderSPAPlugin.prototype.apply((compiler) =&gt; {
+    // apply 方法在安装插件时，会被 Webpack 编译器调用一次，在异步操作完成之后调用 callback
+    const afterEmit = (compilation, callback) =&gt; {
+        // Prerenderer 会开启 express 服务器和 puppeteer 实例
+        const prender = new Prerenderer(this._options);
+        prender
+            .initialize()
+            // express 会代理静态目录，通过 puppeteer 访问页面并将页面保存
+            .then(() =&gt; prender.renderRoutes(this._options.routes || []))
+            .then((renderedRoutes) =&gt; {
+                /*[{
+                    originalRoute: route,
+                    route: await page.evaluate('window.location.pathname'),
+                    html: await page.content()
+                }...]*/
+                const isValid = renderedRoutes.every(
+                    (r) =&gt; typeof r === 'object'
+                );
+                if (isValid) {
+                    return renderedRoutes;
+                } else {
+                    throw new Error('...');
+                }
+            })
+            .then((renderedRoutes) =&gt; {
+                if (this._options.minify) {
+                    // minify...
+                    return renderedRoutes;
+                }
+                return renderedRoutes;
+            })
+            .then((renderedRoutes) =&gt;
+                Promise.all(
+                    renderedRoutes.map(
+                        (renderedRoute) =&gt;
+                            new Promise((resolve, reject) =&gt; {
+                                // write files...
+                                resolve();
+                            })
+                    )
+                )
+            )
+            .then(() =&gt; {
+                // 完成文件写入之后退出
+                prender.destory();
+                callback();
+            })
+            .catch((error) =&gt; {
+                prender.destory();
+                // 如果有报错，在编译过程抛出
+                compilation.errors.push(new Error(error));
+                callback();
+            });
+    };
+    const plugin = { name: 'PrerenderSPAPlugin' };
+    // 向编译器的钩子上注册异步方法，可以对当前编译实例（过程）做操作
+    compiler.hooks.afterEmit.tapAsync(plugin, afterEmit);
+});
+</code></pre><h2 id=两种文件>两种文件</h2><p>公司的 SEO 服务商让在服务器根目录放了几个“文件”，最有用的是两种是 Sitemap 和 robots。</p><p>Sitemap 是用来告诉蜘蛛网站上有哪些可供抓取的网页；Sitepmap 可以是 XML、TXT、HTML 文件，其中包含了站点中的网址以及关于每个网址的元数据（更新时间、更新频率、重要程度、语言版本等），以便搜索引擎可以更加智能地抓取网站；Sitemap 并不能保证网页会被蜘蛛抓取，但可向蜘蛛提供一些提示以便网站被更有效地抓取：</p><pre><code class=language-xml>&lt;?xml version='1.0' encoding='UTF-8'?&gt;
 &lt;urlset&gt;
 &lt;url&gt;
 &lt;loc&gt;&lt;![CDATA[https://www.example.com]]&gt;&lt;/loc&gt;
