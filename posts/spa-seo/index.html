@@ -155,7 +155,7 @@ PrerenderSPAPlugin.prototype.apply((compiler) =&gt; {
     // 向编译器的钩子上注册异步方法，可以对当前编译实例（过程）做操作
     compiler.hooks.afterEmit.tapAsync(plugin, afterEmit);
 });
-</code></pre><h2 id=两种文件>两种文件</h2><p>公司的 SEO 服务商让在服务器根目录放了几个“文件”，最有用的是两种是 Sitemap 和 robots。</p><p>Sitemap 是用来告诉蜘蛛网站上有哪些可供抓取的网页；Sitepmap 可以是 XML、TXT、HTML 文件，其中包含了站点中的网址以及关于每个网址的元数据（更新时间、更新频率、重要程度、语言版本等），以便搜索引擎可以更加智能地抓取网站；Sitemap 并不能保证网页会被蜘蛛抓取，但可向蜘蛛提供一些提示以便网站被更有效地抓取：</p><pre><code class=language-xml>&lt;?xml version='1.0' encoding='UTF-8'?&gt;
+</code></pre><h2 id=两种文件>两种文件</h2><p>公司的 SEO 服务商让在服务器根目录放了几个“文件”，最有用的是两种是 Sitemap 和 robots。</p><p>Sitemap 是用来告诉蜘蛛网站上有哪些可供抓取的网页；Sitemap 可以是 XML、TXT、HTML 文件，其中包含了站点中的网址以及关于每个网址的元数据（更新时间、更新频率、重要程度、语言版本等），以便搜索引擎可以更加智能地抓取网站；Sitemap 并不能保证网页会被蜘蛛抓取，但可向蜘蛛提供一些提示以便网站被更有效地抓取：</p><pre><code class=language-xml>&lt;?xml version='1.0' encoding='UTF-8'?&gt;
 &lt;urlset&gt;
 &lt;url&gt;
 &lt;loc&gt;&lt;![CDATA[https://www.example.com]]&gt;&lt;/loc&gt;
