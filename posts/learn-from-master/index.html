@@ -1,0 +1,457 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no,user-scalable=no"><meta name=author content=馬腊咯稽><meta name=description content=偷“师”学“艺”><meta name=keywords content=Lerna,Pipes,Slot,Workspaces><link rel=canonical href=https://vikingama.github.io/posts/learn-from-master/><link rel="shortcut icon" href=https://vikingama.github.io/images/favicon.ico><link rel=stylesheet href=https://vikingama.github.io/css/zozo.css><link rel=stylesheet href=https://vikingama.github.io/css/animate.css><link rel=stylesheet href=https://vikingama.github.io/css/highlight.css><link rel=stylesheet href=https://vikingama.github.io/css/remixicon.css><title>偷“师”学“艺” &middot; 庙小妖风大 · 水浅王八多</title></head><body><div class="main animated"><div class="nav_container animated fadeInDown"><div class=site_nav id=site_nav><ul><li><a href=/>首页</a></li><li><a href=/posts/>归档</a></li><li><a href=/tags/>标签</a></li><li><a href=/inspires/>启发</a></li><li><a href=/about/>关于</a></li></ul></div><div class=menu_icon><a id=menu_icon><i class=remixicon-links-line></i></a></div></div><div class="header animated fadeInDown"><div class=site_title_container><div class=site_title><h1><a href=https://vikingama.github.io><img style=width:65px;height:auto;vertical-align:top src=https://vikingama.github.io/images/avatar.png></a></h1></div><div class=description><p class=sub_title>庙小妖风大<br>水浅王八多</p><div class=my_socials><a href=https://www.douban.com/people/nicknoonan title=douban target=_blank><i class=remixicon-douban-fill></i></a><a href=https://github.com/Vikingama title=github target=_blank><i class=remixicon-github-fill></i></a><a href=https://www.zhihu.com/people/vikingama title=zhihu target=_blank><i class=remixicon-zhihu-fill></i></a><a href=https://vikingama.github.io/index.xml type=application/rss+xml title=rss target=_blank><i class=remixicon-rss-fill></i></a></div></div></div></div><div class=content><div class=post_page><div class="post animated fadeInDown"><div class="post_title post_detail_title"><h2><a href=/posts/learn-from-master/>偷“师”学“艺”</a></h2><span class=date>2021.07.19</span></div><div class="post_content markdown"><blockquote><p>公司项目迁移终于接近尾声了，在这期间也学到不少前端工程化的知识和之前没见到过的编程思路。</p></blockquote><h3 id=monorepo>monorepo</h3><p>公司的主要业务是混合云管，所以除了官网这种 ToC 的项目之外，其余均是 ToB 的管理后台项目；根据具体业务分为了：容器服务、镜像管理、服务商监控、应用管理等等。这些子项目有统一的 UI 风格、相近的交互逻辑、耦合的业务逻辑；所以非常适合 monorepo 的项目管理方式。</p><p>Lerna 是前端 monorepo 比较好的解决方案，搭配 yarn 可以非常好的管理项目外部与项目之间的依赖。每个项目都是一个独立的 package，每个 package 都有自己的 workspace，可以将自己的 APIs 通过 lib 暴露并 publish 到内部 npm 仓库，这样每个 package 既是独立的项目也是其他 package 的依赖。</p><pre><code class=language-javascript>// lerna.json
+{
+  &quot;packages&quot;: [
+    &quot;packages/@cli/*&quot;, // 脚手架依赖，放置 linters 规则和配置
+    &quot;packages/@common/*&quot;, // 公共依赖，放置工具函数和组件
+    &quot;packages/@project/*&quot; // 业务代码，放置具体的业务实现
+  ],
+  &quot;version&quot;: &quot;independent&quot;, // 独立模式，每个 package 有独立的版本号
+  &quot;useWorkspaces&quot;: true, // 启用 workspace 模式
+  &quot;npmClient&quot;: &quot;yarn&quot;, // 使用 yarn 取代 npm
+  // ...
+}
+// package.json
+{
+  &quot;name&quot;: &quot;lerna&quot;,
+  &quot;private&quot;: true,
+  &quot;workspaces&quot;: [
+    &quot;packages/@cli/*&quot;,
+    &quot;packages/@common/*&quot;,
+    &quot;packages/@project/*&quot;
+  ],
+  // ...
+}
+</code></pre><h3 id=commit>commit</h3><p>对于需要多人维护的复杂项目，相同的代码样式和具体的提交信息是必要的；借助 husky 和 lint-staged，可以对待提交的文件进行校验、格式化，也可以对 commit message 进行约束。</p><h5 id=提交工作流钩子>提交工作流钩子：</h5><ul><li><p>pre-commit：在键入提交信息前运行；它用于检查即将提交的快照，例如，检查是否有所遗漏，确保测试运行，以及核查代码；不过你可以用 git commit --no-verify 来绕过这个环节。你可以利用该钩子来检查代码风格是否一致（运行类似 lint 的程序）等。</p></li><li><p>prepare-commit-msg：在启动提交信息编辑器之前，默认信息被创建之后运行；它允许你编辑提交者所看到的默认信息。它对一般的提交来说并没有什么用；然而对那些会自动产生默认信息的提交，如提交信息模板、合并提交、压缩提交和修订提交等非常实用。</p></li><li><p>commit-msg：接收一个参数（存有当前提交信息的临时文件的路径）。可以用来在提交通过前验证项目状态或提交信息。</p></li><li><p>post-commit：在整个提交过程完成后运行；该钩子一般用于通知之类的事情。</p></li></ul><h5 id=workspace-信息>workspace 信息：</h5><pre><code class=language-javascript>const { execSync } = require('child_process');
+// 将 yarn workspaces info 输出为对象
+const getWorkspacesInfo = () =&gt; {
+  let temp;
+  try {
+    const yarnStdout = execSync('yarn workspaces info', {
+      encoding: 'utf8'
+    })
+      .replace(/^yarn workspaces.*$/m, '')
+      .replace(/^Done.*$/m, '')
+      .replace(/\n/g, '');
+    temp = JSON.parse(yarnStdout);
+  } catch (error) {
+    throw new Error(
+      `执行 yarn workspaces info 命令时出错，具体如下：\n${error}`
+    );
+  }
+  if (Object.prototype.toString.call(temp) !== '[object Object]') {
+    return {};
+  }
+  return temp;
+};
+const getWorkspaces = () =&gt; {
+  let temp;
+  try {
+    temp = getWorkspacesInfo();
+  } catch (error) {
+    throw new Error(`获取不到 workspaces 信息。\n${error}`);
+  }
+  if (Object.prototype.toString.call(temp) !== '[object Object]') {
+    return [];
+  }
+  return Object.keys(temp).map((name) =&gt; ({ name, ...temp[name] }));
+};
+const getWorkspacesName = () =&gt; {
+  let temp;
+  try {
+    temp = getWorkspacesInfo();
+  } catch (error) {
+    throw new Error(`获取不到 workspaces name 信息。\n${error}`);
+  }
+  if (Object.prototype.toString.call(temp) !== '[object Object]') {
+    return [];
+  }
+  return Object.keys(temp);
+};
+
+exports.getWorkspaces = getWorkspaces;
+exports.getWorkspacesInfo = getWorkspacesInfo;
+exports.getWorkspacesName = getWorkspacesName;
+</code></pre><h5 id=git-信息>git 信息：</h5><pre><code class=language-javascript>const { execSync } = require('child_process');
+const { getWorkspacesName } = require('./workspace');
+// 获取当前所在 git 分支
+const getCurrentBranch = () =&gt; {
+  try {
+    const gitStatus = execSync('git status', { encoding: 'utf8' });
+    return gitStatus.split('\n')[0].replace('On branch ', '');
+  } catch (error) {
+    throw new Error(`执行 git 命令时出错，具体如下：\n${error.toString()}`);
+  }
+};
+const getCommitScopes = () =&gt; {
+  const temp = getWorkspacesName();
+  if (Array.isArray(temp)) {
+    return temp.map((name) =&gt;
+      name.charAt(0) === '@' ? name.split('/')[1] : name
+    );
+  }
+  return [];
+};
+
+exports.getCurrentBranch = getCurrentBranch;
+exports.getCommitScopes = getCommitScopes;
+</code></pre><h5 id=stylelint-配置>stylelint 配置：</h5><pre><code class=language-javascript>module.exports = {
+  defaultSeverity: 'error',
+  extends: [
+    'stylelint-config-standard',
+    'stylelint-config-rational-order',
+    'stylelint-config-prettier'
+  ],
+  ignoreDisables: true,
+  ignoreFiles: ['**/*.json'],
+  plugins: [
+    'stylelint-declaration-block-no-ignored-properties',
+    'stylelint-declaration-strict-value',
+    'stylelint-scss'
+  ],
+  rules: {
+    'at-rule-no-unknown': null,
+    'scss/at-rule-no-unknown': true,
+    'plugin/declaration-block-no-ignored-properties': true,
+    'scale-unlimited/declaration-strict-value': [
+      ['/color$/', 'z-index'],
+      {
+        ignoreKeywords: {
+          '/color$/': ['currentColor', 'inherit', 'transparent'],
+          'z-index': ['auto']
+        },
+        disableFix: true
+      }
+    ]
+  }
+};
+</code></pre><h5 id=eslint-配置>eslint 配置：</h5><pre><code class=language-javascript>module.exports = {
+  globals: {
+    __PRERENDER__INJECTED__: 'readonly',
+    __PROJECT__: 'readonly'
+  },
+  env: {
+    browser: true,
+    node: true
+  },
+  extends: [
+    'airbnb-base', // 剔除 react 规则 的 eslint-config-airbnb
+    'plugin:vue/essential', // vue 2.x 规则
+    'plugin:promise/recommended', // promise 规则
+    'plugin:markdown/recommended', // markdown 规则
+    'plugin:prettier/recommended' // prettier 冲突规则
+  ],
+  plugins: ['html'],
+  root: true, // 根配置
+  rules: {
+    'import/prefer-default-export': 'off', // 不强制使用默认导出
+    'no-param-reassign': [
+      'error',
+      {
+        props: false // 禁止对函数参数进行重新赋值，形参属性除外
+      }
+    ],
+    'no-plusplus': [
+      'error',
+      {
+        allowForLoopAfterthoughts: true // 允许在 for 循环中使用 ++
+      }
+    ],
+    'no-restricted-syntax': ['error', 'WithStatement'], // 可以使用函数表达式和 in 操作符号，不能用 with
+    'no-shadow': [
+      'error',
+      {
+        allow: ['state', 'series'] // 禁止变量声明与外层作用域的变量同名
+      }
+    ],
+    'no-underscore-dangle': 'off', // 标识符中可以有下划线
+    'no-unused-expressions': [
+      'error',
+      {
+        allowShortCircuit: true // 允许在表达式中使用逻辑短路求值
+      }
+    ],
+    'no-use-before-define': [
+      'error',
+      {
+        functions: false // 禁止在变量定义之前使用它们，函数声明除外
+      }
+    ],
+    'prefer-destructuring': [
+      'error', // 不强制使用数组解构
+      {
+        array: false,
+        object: true
+      }
+    ],
+    'promise/always-return': 'off', // then 方法可以没有返回值
+    'promise/catch-or-return': [
+      'error',
+      {
+        allowFinally: true // 允许使用 finally
+      }
+    ],
+    'vue/require-default-prop': 'off', // 不要求 prop 有默认值
+    'vue/require-prop-types': 'off' // 不要求必须规定 prop 类型
+  }
+};
+</code></pre><h5 id=prettier-配置>prettier 配置：</h5><pre><code class=language-json>{
+  &quot;arrowParens&quot;: &quot;avoid&quot;,
+  &quot;bracketSpacing&quot;: true,
+  &quot;embeddedLanguageFormatting&quot;: &quot;auto&quot;,
+  &quot;endOfLine&quot;: &quot;lf&quot;,
+  &quot;htmlWhitespaceSensitivity&quot;: &quot;strict&quot;,
+  &quot;jsxBracketSameLine&quot;: true,
+  &quot;jsxSingleQuote&quot;: true,
+  &quot;printWidth&quot;: 120,
+  &quot;proseWrap&quot;: &quot;preserve&quot;,
+  &quot;quoteProps&quot;: &quot;consistent&quot;,
+  &quot;semi&quot;: false,
+  &quot;singleQuote&quot;: true,
+  &quot;tabWidth&quot;: 2,
+  &quot;trailingComma&quot;: &quot;es5&quot;,
+  &quot;useTabs&quot;: false,
+  &quot;vueIndentScriptAndStyle&quot;: true
+}
+</code></pre><h5 id=husky-配置>husky 配置：</h5><p>.husky/commit-msg 钩子：</p><pre><code class=language-bash>#!/bin/sh
+. &quot;$(dirname &quot;$0&quot;)/_/husky.sh&quot;
+
+npx --no-install commitlint --edit &quot;$1&quot;
+</code></pre><p>.husky/pre-commit 钩子：</p><pre><code class=language-bash>#!/bin/sh
+. &quot;$(dirname &quot;$0&quot;)/_/husky.sh&quot;
+
+npx lint-staged
+</code></pre><h5 id=commitlint-配置>commitlint 配置：</h5><p>commitlint.rules：</p><pre><code class=language-javascript>function customSubjectActionEnum({ subject }, when = 'never', value = []) {
+  const always = when === 'always';
+  if (!always) {
+    return [true];
+  }
+  if (
+    typeof subject !== 'string' ||
+    (typeof subject === 'string' &amp;&amp; subject.length === 0)
+  ) {
+    return [false, `提交的简要描述不能为空`];
+  }
+  const action = subject.slice(0, 2);
+  if (!value.find((item) =&gt; action === item)) {
+    return [
+      false,
+      `提交的简要描述应该以中文动词加一个空格起头，动词可选值为[${value}]，当前值为 '${action}'`
+    ];
+  }
+  if (!subject.startsWith(`${action} `) || subject.slice(3, 4) === ' ') {
+    return [false, `提交的简要描述中动词后需且仅需添加一个空格`];
+  }
+  return [true];
+}
+function customScopeEnum({ scope }, when = 'never', value = []) {
+  const always = when === 'always';
+  if (!always) {
+    return [true];
+  }
+  return [
+    value.find((item) =&gt; scope === item),
+    `scope 必须为 [${value}] 其中之一，当前为 ${scope}`
+  ];
+}
+
+module.exports = {
+  'custom-subject-action-enum': customSubjectActionEnum,
+  'custom-scope-enum': customScopeEnum
+};
+</code></pre><p>commitlint.config：</p><pre><code class=language-javascript>const { getCommitScopes } = require('./git');
+const rules = require('./commitlint.rules');
+
+const commitScopes = getCommitScopes();
+/*
+ * type(scope?): subject
+ * body?
+ * footer?
+ */
+module.exports = {
+  extends: ['@commitlint/config-conventional'],
+  plugins: [
+    {
+      rules
+    }
+  ],
+  /*
+   * Level-[0.1.2]: 0-disables、1-warning、2-error
+   * Applicable-always|never: never-inverts the rule
+   * Value: value to use for this rule
+   */
+  rules: {
+    'body-full-stop': [0],
+    'body-leading-blank': [2, 'always'],
+    'body-empty': [0],
+    'body-max-length': [2, 'always', 144],
+    'body-max-line-length': [0],
+    'body-min-length': [0],
+    'body-case': [0],
+    'footer-leading-blank': [2, 'always'],
+    'footer-empty': [0],
+    'footer-max-length': [0],
+    'footer-max-line-length': [2, 'always', 1],
+    'footer-min-length': [0],
+    'header-case': [0],
+    'header-full-stop': [0],
+    'header-max-length': [0],
+    'header-min-length': [0],
+    'references-empty': [0],
+    'scope-enum': [0],
+    'scope-case': [2, 'always', 'lower-case'],
+    'scope-empty': [2, 'never'],
+    'scope-max-length': [0],
+    'scope-min-length': [0],
+    'subject-case': [0],
+    'subject-empty': [2, 'never'],
+    'subject-full-stop': [0],
+    'subject-max-length': [0],
+    'subject-min-length': [2, 'always', 5],
+    'type-enum': [
+      2,
+      'always',
+      ['build', 'ci', 'feat', 'fix', 'st', 'sit', 'style', 'version']
+    ],
+    'type-case': [2, 'always', 'lower-case'],
+    'type-empty': [2, 'never'],
+    'type-max-length': [0],
+    'type-min-length': [0],
+    'signed-off-by': [0],
+    'custom-subject-action-enum': [
+      2,
+      'always',
+      [
+        '添加',
+        '完善',
+        '修复',
+        '解决',
+        '删除',
+        '禁用',
+        '修改',
+        '调整',
+        '优化',
+        '重构',
+        '发布',
+        '合并'
+      ]
+    ],
+    'custom-scope-enum': [2, 'always', ['root', ...commitScopes]]
+  }
+};
+</code></pre><h5 id=commitizen-配置>commitizen 配置：</h5><pre><code class=language-javascript>const { getCommitScopes } = require('./git');
+const scopes = getCommitScopes();
+
+module.exports = {
+  subjectLimit: 72,
+  subjectSeparator: ': ',
+  typePrefix: '',
+  typeSuffix: '',
+  scopes: [{ name: 'root' }, ...scopes.map((name) =&gt; ({ name }))],
+  scopeOverrides: {},
+  allowCustomScopes: false,
+  allowBreakingChanges: ['feat', 'fix', 'st', 'sit'],
+  skipQuestions: [],
+  appendBranchNameToCommitMessage: false,
+  // ticketNumberPrefix: '',
+  // breakingPrefix: '',
+  // footerPrefix: '',
+  breaklineChar: '|',
+  upperCaseSubject: false,
+  askForBreakingChangeFirst: false,
+  types: [
+    {
+      name: 'build:     涉及构建系统及与其相关的外部依赖变动',
+      value: 'build'
+    },
+    {
+      name: 'ci:        涉及 CI 配置文件或脚本修改的变动',
+      value: 'ci'
+    },
+    {
+      name: 'feat:      增加了新的功能特征，对应 action 只能为“添加”',
+      value: 'feat'
+    },
+    {
+      name: 'fix:       修复 bug，对应 action 只能为“修复”',
+      value: 'fix'
+    },
+    {
+      name: 'st:        解决 ST 单子，仅限 release 分支，对应 action 只能为“修复”',
+      value: 'st'
+    },
+    {
+      name: 'sit:       解决 SIT 单子，仅限 release 分支，对应 action 只能为“修复”',
+      value: 'sit'
+    },
+    {
+      name: 'style:     不影响代码含义的风格修改，比如空格、格式化、缺失的分号等，对应 action 只能为“调整”',
+      value: 'style'
+    },
+    {
+      name: 'version:   发布版本，一般由脚本自动化发布，对应 action 只能为“发布”',
+      value: 'version'
+    }
+  ],
+  messages: {
+    type: '选择本次更改的提交类型: \n',
+    scope: '选择本次更改涉及模块: \n',
+    subject: '输入针对本次更改的简要说明: \n',
+    body: '输入针对本次更改的详细描述（非必须），使用&quot; | &quot;进行换行，每行长度不要超过 72: \n', // 这里有问题
+    breaking:
+      '如果本次更改存在不兼容的修改，则须对更改的内容进行详细描述，否则无需填写: \n',
+    footer: '列举本次更改对应的 Tapd 缺陷 ID（比如 #31、#34）: \n',
+    confirmCommit: '是否使用以上提交信息进行提交？'
+  }
+};
+</code></pre><h5 id=package-json-对应配置>package.json 对应配置：</h5><pre><code class=language-javascript>{
+  &quot;lint-staged&quot;: {
+    &quot;**/*.{js,ts,vue,htm,html,md}&quot;: &quot;eslint --format=codeframe&quot;,
+    &quot;**/*.{css,scss,sass,vue}&quot;: &quot;stylelint --formatter verbose&quot;,
+    &quot;**/*&quot;: &quot;prettier --check&quot;
+  },
+  &quot;config&quot;: {
+    &quot;commitizen&quot;: {
+      &quot;path&quot;: &quot;cz-customizable&quot;
+    }
+  },
+  &quot;scripts&quot;: {
+    &quot;commit&quot;: &quot;git add . &amp;&amp; cz&quot;,
+    &quot;format&quot;: &quot;prettier --write .&quot;,
+    &quot;eslint:fix&quot;: &quot;eslint --fix . --ext .js,.ts,.vue,.htm,.html,.md&quot;,
+    &quot;stylelint:fix&quot;: &quot;stylelint --fix **/*.{css,scss,sass,vue}&quot;,
+  }
+  // ...
+}
+</code></pre><h5 id=整个提交流程>整个提交流程：</h5><p><img src=/learn-from-master/commit-process.svg alt="Local Image"></p><h6 id=注意-git-add-相比-git-add-all-不处理删除文件-仅提交当前目录或者后代目录下的文件>注意：git add . 相比 git add --all，不处理删除文件；仅提交当前目录或者后代目录下的文件。</h6><h3 id=verdaccio>verdaccio</h3><p>私有仓库使用 Verdaccio 搭建并使用 pm2 守护（找运维小哥）：</p><pre><code class=language-bash># 安装 wget
+yum install -y wget
+# 下载 node
+wget https://nodejs.org/dist/v10.6.0/node-v10.6.0-linux-x64.tar.xz
+# 解压 node
+tar -xvf node-v10.6.0-linux-x64.tar.xz
+# 重命名安装目录
+mv node-v10.6.0-linux-x64.tar.xz nodejs
+# 建立软连接
+ln -s /usr/local/node/nodejs/bin/npm /usr/local/bin
+ln -s /usr/local/node/nodejs/bin/node /usr/local/bin
+# 安装 verdaccio
+npm install -g verdaccio
+# 建立软连接
+ln -s /usr/local/node/nodejs/bin/verdaccio /usr/local/bin
+# 安装 pm2
+npm install -g pm2
+# 建立软连接
+ln -s /usr/local/node/nodejs/bin/pm2 /usr/local/bin
+# 使用 pm2 运行 verdaccio
+pm2 start verdaccio
+</code></pre><p>配置 .npmrc、.yarnrc：</p><pre><code class=language-yaml>registry &quot;http://npm.inner.com/&quot;
+</code></pre><p>配置 package.json：</p><pre><code class=language-json>{
+  &quot;publishConfig&quot;: {
+    &quot;registry&quot;: &quot;http://npm.inner.com/&quot;
+  }
+  // ...
+}
+</code></pre><p>安装依赖时，会向私服请求 package，如果找不到，服务器就会向 npmjs.org 请求并缓存。</p><h3 id=request>request</h3><p>后端数据会通过无渲染组件请求，组件通过 props 接受请求参数，再将返回数据通过作用域插槽暴露。</p><p><img src=/learn-from-master/request.svg alt="Local Image"></p><p>RlApiRequest 的 render 函数返回了 $scopedSlots.default(this.cSlotScopeProps)；继承了 RlApiRequest 的组件通过传入不同的 props 和 aSlotScopeProps（会改写 cSlotScopeProps），达到不同的目的。</p><h3 id=pipes>pipes</h3><p>对于数据的处理都会交给管道层，组件通过 props 接受原始数据，处理过的数据通过默认的作用域插槽返回。</p><p><img src=/learn-from-master/pipes-renderless.svg alt="Local Image"></p><p>多个 pipe 共同组成了 pipes 总管道，通过传入 enablePipeFormat、enablePipeFilter 等 props 控制对应管道的开闭；本质上是作用域插槽的应用。</p></div><div class=post_footer><div class=meta><div class=info><span class="field tags"><i class=remixicon-stack-line></i><a href=https://vikingama.github.io/tags/lerna/>Lerna</a>
+<a href=https://vikingama.github.io/tags/pipes/>Pipes</a>
+<a href=https://vikingama.github.io/tags/slot/>Slot</a>
+<a href=https://vikingama.github.io/tags/workspaces/>Workspaces</a></span></div></div></div></div><div class=doc_comments><div class=comments_block_title>发表评论</div><div id=vcomments></div></div><link rel=stylesheet href=https://vikingama.github.io/css/comments.css><script src=/js/av.js></script><script src=/js/valine.js></script><script type=text/javascript>new Valine({el:'#vcomments',appId:'U06blUXOot4uJgfMu8I9xJXz-MdYXbMMI',appKey:'BnrXC06FJsvRNpr4aqb1HYPd',placeholder:'来都来了，不打个招呼吗？',visitor:'true',});</script></div></div><a id=back_to_top href=# class=back_to_top><span>△</span></a></div><footer class=footer><div class=powered_by><a href=https://zok.im/ target=_blank>Designed by <span class=jitters>Zeuk</span>,</a>
+<a href=https://www.gohugo.io/ target=_blank>Published with <span class=jitters>Hugo</span></a></div><div class=footer_slogan><span id=enter_time></span></div></footer><script src=https://vikingama.github.io/js/jquery.js></script><script src=https://vikingama.github.io/js/highlight.js></script><script src=https://vikingama.github.io/js/zozo.js></script><script>hljs.initHighlightingOnLoad();</script></body></html>
