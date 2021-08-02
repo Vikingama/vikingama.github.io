@@ -1,87 +1,87 @@
-<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no,user-scalable=no"><meta name=author content=馬腊咯稽><meta name=description content=如何实现弹幕效果？><meta name=keywords content=HTML,CSS,JS,React,Vue><link rel=canonical href=https://vikingama.github.io/posts/barrage/><link rel="shortcut icon" href=https://vikingama.github.io/images/favicon.ico><link rel=stylesheet href=https://vikingama.github.io/css/zozo.css><link rel=stylesheet href=https://vikingama.github.io/css/animate.css><link rel=stylesheet href=https://vikingama.github.io/css/highlight.css><link rel=stylesheet href=https://vikingama.github.io/css/remixicon.css><title>如何实现弹幕效果？ &middot; 庙小妖风大 · 水浅王八多</title></head><body><div class="main animated"><div class="nav_container animated fadeInDown"><div class=site_nav id=site_nav><ul><li><a href=/>首页</a></li><li><a href=/posts/>归档</a></li><li><a href=/tags/>标签</a></li><li><a href=/inspires/>启发</a></li><li><a href=/about/>关于</a></li></ul></div><div class=menu_icon><a id=menu_icon><i class=remixicon-links-line></i></a></div></div><div class="header animated fadeInDown"><div class=site_title_container><div class=site_title><h1><a href=https://vikingama.github.io><img style=width:65px;height:auto;vertical-align:top src=https://vikingama.github.io/images/avatar.png></a></h1></div><div class=description><p class=sub_title>庙小妖风大<br>水浅王八多</p><div class=my_socials><a href=https://www.douban.com/people/nicknoonan title=douban target=_blank><i class=remixicon-douban-fill></i></a><a href=https://github.com/Vikingama title=github target=_blank><i class=remixicon-github-fill></i></a><a href=https://www.zhihu.com/people/vikingama title=zhihu target=_blank><i class=remixicon-zhihu-fill></i></a><a href=https://vikingama.github.io/index.xml type=application/rss+xml title=rss target=_blank><i class=remixicon-rss-fill></i></a></div></div></div></div><div class=content><div class=post_page><div class="post animated fadeInDown"><div class="post_title post_detail_title"><h2><a href=/posts/barrage/>如何实现弹幕效果？</a></h2><span class=date>2020.04.20</span></div><div class="post_content markdown"><blockquote><p>今天的面试涉及到直播弹幕，问我做不做得出来；我当然母鸡了，又不能打嘴炮。</p></blockquote><p>弹幕一般用在直播或者视频播放的场景中，是评论的一种变形；按照我的理解，它的数据格式应该是：</p><pre><code class=language-javascript>{
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no,user-scalable=no"><meta name=author content=馬腊咯稽><meta name=description content=如何实现弹幕效果？><meta name=keywords content=HTML,CSS,JS,React,Vue><link rel=canonical href=https://vikingama.github.io/posts/barrage/><link rel="shortcut icon" href=https://vikingama.github.io/images/favicon.ico><link rel=stylesheet href=https://vikingama.github.io/css/zozo.css><link rel=stylesheet href=https://vikingama.github.io/css/animate.css><link rel=stylesheet href=https://vikingama.github.io/css/highlight.css><link rel=stylesheet href=https://vikingama.github.io/css/remixicon.css><title>如何实现弹幕效果？ &middot; 庙小妖风大 · 水浅王八多</title></head><body><div class="main animated"><div class="nav_container animated fadeInDown"><div class=site_nav id=site_nav><ul><li><a href=/>首页</a></li><li><a href=/posts/>归档</a></li><li><a href=/tags/>标签</a></li><li><a href=/inspires/>启发</a></li><li><a href=/about/>关于</a></li></ul></div><div class=menu_icon><a id=menu_icon><i class=remixicon-links-line></i></a></div></div><div class="header animated fadeInDown"><div class=site_title_container><div class=site_title><h1><a href=https://vikingama.github.io><img style=width:65px;height:auto;vertical-align:top src=https://vikingama.github.io/images/avatar.png></a></h1></div><div class=description><p class=sub_title>庙小妖风大<br>水浅王八多</p><div class=my_socials><a href=https://www.douban.com/people/nicknoonan title=douban target=_blank><i class=remixicon-douban-fill></i></a><a href=https://github.com/Vikingama title=github target=_blank><i class=remixicon-github-fill></i></a><a href=https://www.zhihu.com/people/vikingama title=zhihu target=_blank><i class=remixicon-zhihu-fill></i></a><a href=https://vikingama.github.io/index.xml type=application/rss+xml title=rss target=_blank><i class=remixicon-rss-fill></i></a></div></div></div></div><div class=content><div class=post_page><div class="post animated fadeInDown"><div class="post_title post_detail_title"><h2><a href=/posts/barrage/>如何实现弹幕效果？</a></h2><span class=date>2020.04.20</span></div><div class="post_content markdown"><blockquote><p>今天的面试涉及到直播弹幕，问我做不做得出来；我当然母鸡了，又不能打嘴炮。</p></blockquote><p>弹幕一般用在直播或者视频播放的场景中，是评论的一种变形；按照我的理解，它的数据格式应该是：</p><pre><code class=language-js>{
     [时间戳/视频对应的秒数]: [对应时间点的弹幕列表],
     31415926: [{name: &quot;张三&quot;, content: &quot;哈哈哈哈哈&quot;}, {}, {}...],
     ...
 }
-</code></pre><p>当用户发布弹幕时，获取当前视频的时间点，将弹幕插入到弹幕列表中：</p><pre><code class=language-javascript>addBarrage = () =&gt; {
-    let barrage = inputEle.value;
+</code></pre><p>当用户发布弹幕时，获取当前视频的时间点，将弹幕插入到弹幕列表中：</p><pre><code class=language-js>addBarrage = () =&gt; {
+  let barrage = inputEle.value;
 
-    if (barrage &amp;&amp; barrage.trim().length &gt; 0) {
-        let now = this.getCurrentTime();
-        let content = barrage.trim();
+  if (barrage &amp;&amp; barrage.trim().length &gt; 0) {
+    let now = this.getCurrentTime();
+    let content = barrage.trim();
 
-        if (this.barrages[now]) {
-            this.barrages[now].push({
-                name: &quot;麻辣个鸡&quot;, // 当前用户的用户名
-                content,
-            });
-        } else {
-            this.barrages[now] = [
-                {
-                    name: &quot;麻辣个鸡&quot;,
-                    content,
-                },
-            ];
+    if (this.barrages[now]) {
+      this.barrages[now].push({
+        name: '麻辣个鸡', // 当前用户的用户名
+        content
+      });
+    } else {
+      this.barrages[now] = [
+        {
+          name: '麻辣个鸡',
+          content
         }
-
-        inputEle.value = &quot;&quot;;
+      ];
     }
+
+    inputEle.value = '';
+  }
 };
-</code></pre><p>实时获取视频的播放状态，当视频播放时，获取视频播放位置；当播放时间等于弹幕时间时，展示对应弹幕：</p><pre><code class=language-javascript>// 这个函数要放到计时器里执行
+</code></pre><p>实时获取视频的播放状态，当视频播放时，获取视频播放位置；当播放时间等于弹幕时间时，展示对应弹幕：</p><pre><code class=language-js>// 这个函数要放到计时器里执行
 appendBarrage = () =&gt; {
-    let list = this.barrages[this.getCurrentTime()] || null;
+  let list = this.barrages[this.getCurrentTime()] || null;
 
-    if (Array.isArray(list)) {
-        list.forEach((item, index) =&gt; {
-            this.id = this.id + 1;
+  if (Array.isArray(list)) {
+    list.forEach((item, index) =&gt; {
+      this.id = this.id + 1;
 
-            let id = this.id;
-            let node = this.generateSpan(item, index, id); // 生成每条弹幕的容器
+      let id = this.id;
+      let node = this.generateSpan(item, index, id); // 生成每条弹幕的容器
 
-            sectioner.append(node);
-            // 弹幕最短的运动长度就是视频窗口宽度加上弹幕本身的长度了
-            let temp = document.querySelector(`[data-id=&quot;${id}&quot;]`);
-            let where = temp.dataset.where;
-            // 使用 translate 性能比较好
-            temp.style.transform = `translate3D(-${temp.clientWidth}px, ${
-                where * 20
-            }px, 0)`;
-            // 当弹幕弹出屏幕时，可将弹幕移除 DOM 提升性能
-            temp.addEventListener(
-                &quot;transitionend&quot;,
-                function () {
-                    this.remove(true);
-                },
-                { once: true }
-            );
-        });
-    }
+      sectioner.append(node);
+      // 弹幕最短的运动长度就是视频窗口宽度加上弹幕本身的长度了
+      let temp = document.querySelector(`[data-id=&quot;${id}&quot;]`);
+      let where = temp.dataset.where;
+      // 使用 translate 性能比较好
+      temp.style.transform = `translate3D(-${temp.clientWidth}px, ${
+        where * 20
+      }px, 0)`;
+      // 当弹幕弹出屏幕时，可将弹幕移除 DOM 提升性能
+      temp.addEventListener(
+        'transitionend',
+        function () {
+          this.remove(true);
+        },
+        { once: true }
+      );
+    });
+  }
 };
-</code></pre><p>怎么展示弹幕呢？可以根据视频的高度和弹幕的高度，设置相应的弹幕轨道：</p><pre><code class=language-javascript>// 计算轨道数
+</code></pre><p>怎么展示弹幕呢？可以根据视频的高度和弹幕的高度，设置相应的弹幕轨道：</p><pre><code class=language-js>// 计算轨道数
 setFloors = () =&gt; {
-    this.floor = Math.floor(videoEle.clientHeight / 20) - 1;
+  this.floor = Math.floor(videoEle.clientHeight / 20) - 1;
 };
 generateSpan = (item, index, id) =&gt; {
-    let where = 0;
-    let span = document.createElement(&quot;span&quot;);
+  let where = 0;
+  let span = document.createElement('span');
 
-    where = this.where;
-    // 分层摆放每条弹幕
-    if (this.where &gt; this.floor - 1) {
-        this.where = 0;
-    } else {
-        this.where++;
-    }
+  where = this.where;
+  // 分层摆放每条弹幕
+  if (this.where &gt; this.floor - 1) {
+    this.where = 0;
+  } else {
+    this.where++;
+  }
 
-    span.innerText = `${item.name}: ${item.content}`;
-    span.dataset.id = `${id}`;
-    span.dataset.where = `${where}`;
-    span.style.zIndex = `${index}`;
-    span.style.transform = `translate3D(${videoEle.clientWidth}px, ${
-        where * 20
-    }px, 0)`;
+  span.innerText = `${item.name}: ${item.content}`;
+  span.dataset.id = `${id}`;
+  span.dataset.where = `${where}`;
+  span.style.zIndex = `${index}`;
+  span.style.transform = `translate3D(${videoEle.clientWidth}px, ${
+    where * 20
+  }px, 0)`;
 
-    return span;
+  return span;
 };
 </code></pre><p>好吧，这是我瞎写的；DEMO 在<a href=https://vikingama.github.io/demosforife/Barrage.html>这里</a>，暂停视频时当前时间对应的弹幕停止滚动还没想好怎么实现（初步想法是使用 animation 替换 transform，因为 animation-play-state 可以控制动画的进行），未完待续...</p></div><div class=post_footer><div class=meta><div class=info><span class="field tags"><i class=remixicon-stack-line></i><a href=https://vikingama.github.io/tags/%E4%BA%A4%E4%BA%92/>交互</a></span></div></div></div></div><div class=doc_comments><div class=comments_block_title>发表评论</div><div id=vcomments></div></div><link rel=stylesheet href=https://vikingama.github.io/css/comments.css><script src=/js/av.js></script><script src=/js/valine.js></script><script type=text/javascript>new Valine({el:'#vcomments',appId:'U06blUXOot4uJgfMu8I9xJXz-MdYXbMMI',appKey:'BnrXC06FJsvRNpr4aqb1HYPd',placeholder:'来都来了，不打个招呼吗？',visitor:'true',});</script></div></div><a id=back_to_top href=# class=back_to_top><span>△</span></a></div><footer class=footer><div class=powered_by><a href=https://zok.im/ target=_blank>Designed by <span class=jitters>Zeuk</span>,</a>
 <a href=https://www.gohugo.io/ target=_blank>Published with <span class=jitters>Hugo</span></a></div><div class=footer_slogan><span id=enter_time></span></div></footer><script src=https://vikingama.github.io/js/jquery.js></script><script src=https://vikingama.github.io/js/highlight.js></script><script src=https://vikingama.github.io/js/zozo.js></script><script>hljs.initHighlightingOnLoad();</script></body></html>

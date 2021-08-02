@@ -1,159 +1,157 @@
-<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no,user-scalable=no"><meta name=author content=馬腊咯稽><meta name=description content="SPA 的 SEO 实践"><meta name=keywords content=SEO,预渲染><link rel=canonical href=https://vikingama.github.io/posts/spa-seo/><link rel="shortcut icon" href=https://vikingama.github.io/images/favicon.ico><link rel=stylesheet href=https://vikingama.github.io/css/zozo.css><link rel=stylesheet href=https://vikingama.github.io/css/animate.css><link rel=stylesheet href=https://vikingama.github.io/css/highlight.css><link rel=stylesheet href=https://vikingama.github.io/css/remixicon.css><title>SPA 的 SEO 实践 &middot; 庙小妖风大 · 水浅王八多</title></head><body><div class="main animated"><div class="nav_container animated fadeInDown"><div class=site_nav id=site_nav><ul><li><a href=/>首页</a></li><li><a href=/posts/>归档</a></li><li><a href=/tags/>标签</a></li><li><a href=/inspires/>启发</a></li><li><a href=/about/>关于</a></li></ul></div><div class=menu_icon><a id=menu_icon><i class=remixicon-links-line></i></a></div></div><div class="header animated fadeInDown"><div class=site_title_container><div class=site_title><h1><a href=https://vikingama.github.io><img style=width:65px;height:auto;vertical-align:top src=https://vikingama.github.io/images/avatar.png></a></h1></div><div class=description><p class=sub_title>庙小妖风大<br>水浅王八多</p><div class=my_socials><a href=https://www.douban.com/people/nicknoonan title=douban target=_blank><i class=remixicon-douban-fill></i></a><a href=https://github.com/Vikingama title=github target=_blank><i class=remixicon-github-fill></i></a><a href=https://www.zhihu.com/people/vikingama title=zhihu target=_blank><i class=remixicon-zhihu-fill></i></a><a href=https://vikingama.github.io/index.xml type=application/rss+xml title=rss target=_blank><i class=remixicon-rss-fill></i></a></div></div></div></div><div class=content><div class=post_page><div class="post animated fadeInDown"><div class="post_title post_detail_title"><h2><a href=/posts/spa-seo/>SPA 的 SEO 实践</a></h2><span class=date>2020.11.15</span></div><div class="post_content markdown"><blockquote><p>为了搜索引擎优化，雷德竟然让我用 jQuery 重写官网...</p></blockquote><p>SEO 就是让搜索引擎了解网站，在用户进行关键词搜索时，网站能出现在搜索结果中比较靠前的位置。</p><h2 id=搜索引擎如何工作>搜索引擎如何工作</h2><ul><li>找出存在的网页：跟踪已知网页上的链接、与网站托管服务合作、站长提交站点地图；</li><li>编入索引：解析网页内容并构建搜索索引，网页的标题、关键词和描述可以改善编入效果；</li><li>呈现：根据搜索内容和其他因素（位置、语言、设备等）从索引中找到最相关的信息返回给用户；</li><li>排名：提高网页加载速度并保持一定的更新频率有利于网站排名。</li></ul><h2 id=搜索引擎蜘蛛>搜索引擎蜘蛛</h2><p><img src=/spa-seo/googlebot-crawl-render.png alt=蜘蛛抓取过程></p><p>蜘蛛是搜索引擎抓用来页面信息和构建信息索引的工具，例如：<a href="https://help.baidu.com/question?prod_id=99&amp;class=476&amp;id=2996">Baiduspider</a> 和 <a href=https://developers.google.com/search/docs/advanced/crawling/googlebot>Googlebot</a> ；蜘蛛在访问页面的过程中，处理文字内容、关键内容标记和属性，例如网站标题、Alt 属性、图片、视频等；此外，蜘蛛还会查找页面上的链接，并将这些链接添加到它要抓取的网页的列表中；这张列表记录着新建立的网站、对现有网站进行的更改以及无效链接，并据此更新索引。</p><p>百度曾发布过一个<a href=https://ziyuan.baidu.com/wiki/990>公告</a>，提到 Baiduspider 会访问页面的 CSS、JS 和图片资源，但是 JS 会不会执行、JS 的执行结果会不会被编入索引则没有明说；Google 在<a href=https://developers.google.com/search/docs/guides/javascript-seo-basics>文档</a>中指出：Googlebot 支持对 SPA 和动态内容的抓取，在抓取过程中会使用 Chrome 加载网页并运行 JS。</p><p>显然，搜索引擎更喜欢“有内容的”HTML。</p><h2 id=spa-如何产生-有内容的-html>SPA 如何产生“有内容的” HTML</h2><h4 id=预渲染>预渲染</h4><p>在客户端访问之前提前渲染好 HTML（一般是在打包阶段）；在客户端初次访问页面时，会从静态服务器请求事先渲染好的 HTML；之后 JS 会接管交互、渲染和路由等工作；这是一种混合模式，从客户端来看，页面的行为就像 SPA 一样。</p><p>优点：</p><ul><li>更好的 SEO，爬虫可以直接抓取页面内容；</li><li>更快的（非用户相关内容的）首屏渲染。</li></ul><p>缺点：</p><ul><li>无法实时更新静态服务器端 HTML 的内容（除非在数据发生变动时重新打包部署）。</li><li>无法用于不可穷举的动态路由场景；</li><li>不支持哈希路由。</li></ul><h4 id=服务端同构渲染>服务端同构渲染</h4><p>在客户端发起请求时实时渲染 HTML，服务端总会请求最新的数据完成渲染；加载完第一个页面之后，客户端还是会进入 JS 渲染的模式（混合渲染，例如：Nuxt 和 Next）；这种方式和预渲染模式的差别在于渲染 HTML 的时机不同。</p><p>优点：</p><ul><li>更好的 SEO，爬虫可以直接抓取页面内容；</li><li>更快的首屏渲染。</li></ul><p>缺点：</p><ul><li>需要动态服务，不能 CDN 部署，有可能出现服务只能部署在 A 地，但用户却在 B 地的情况；</li><li>不是所有的开发依赖都支持在服务端运行；</li><li>动态服务器比静态服务器更耗资源；</li><li>客户端与服务端的状态同步；</li><li>不支持哈希路由。</li></ul><h4 id=基于-ua-的动态渲染>基于 UA 的动态渲染</h4><p>Google 搜索中心提到的一种模式，根据 UA 判断，客户端是不是“蜘蛛”；蜘蛛访问的是渲染之后（不一定是动态渲染）的 HTML，普通用户访问的还是一个 SPA。这种模式将客户端分为“用户”和“蜘蛛”两种，可以减轻服务器压力、对搜索引擎抓取的内容进行针对性的优化。</p><h4 id=预渲染配置>预渲染配置</h4><p>通过 HtmlWebpackPlugin 配置项目 TWD：</p><pre><code class=language-javascript>const title = '我是标题...';
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no,user-scalable=no"><meta name=author content=馬腊咯稽><meta name=description content="SPA 的 SEO 实践"><meta name=keywords content=SEO,预渲染><link rel=canonical href=https://vikingama.github.io/posts/spa-seo/><link rel="shortcut icon" href=https://vikingama.github.io/images/favicon.ico><link rel=stylesheet href=https://vikingama.github.io/css/zozo.css><link rel=stylesheet href=https://vikingama.github.io/css/animate.css><link rel=stylesheet href=https://vikingama.github.io/css/highlight.css><link rel=stylesheet href=https://vikingama.github.io/css/remixicon.css><title>SPA 的 SEO 实践 &middot; 庙小妖风大 · 水浅王八多</title></head><body><div class="main animated"><div class="nav_container animated fadeInDown"><div class=site_nav id=site_nav><ul><li><a href=/>首页</a></li><li><a href=/posts/>归档</a></li><li><a href=/tags/>标签</a></li><li><a href=/inspires/>启发</a></li><li><a href=/about/>关于</a></li></ul></div><div class=menu_icon><a id=menu_icon><i class=remixicon-links-line></i></a></div></div><div class="header animated fadeInDown"><div class=site_title_container><div class=site_title><h1><a href=https://vikingama.github.io><img style=width:65px;height:auto;vertical-align:top src=https://vikingama.github.io/images/avatar.png></a></h1></div><div class=description><p class=sub_title>庙小妖风大<br>水浅王八多</p><div class=my_socials><a href=https://www.douban.com/people/nicknoonan title=douban target=_blank><i class=remixicon-douban-fill></i></a><a href=https://github.com/Vikingama title=github target=_blank><i class=remixicon-github-fill></i></a><a href=https://www.zhihu.com/people/vikingama title=zhihu target=_blank><i class=remixicon-zhihu-fill></i></a><a href=https://vikingama.github.io/index.xml type=application/rss+xml title=rss target=_blank><i class=remixicon-rss-fill></i></a></div></div></div></div><div class=content><div class=post_page><div class="post animated fadeInDown"><div class="post_title post_detail_title"><h2><a href=/posts/spa-seo/>SPA 的 SEO 实践</a></h2><span class=date>2020.11.15</span></div><div class="post_content markdown"><blockquote><p>为了搜索引擎优化，雷德竟然让我用 jQuery 重写官网...</p></blockquote><p>SEO 就是让搜索引擎了解网站，在用户进行关键词搜索时，网站能出现在搜索结果中比较靠前的位置。</p><h2 id=搜索引擎如何工作>搜索引擎如何工作</h2><ul><li>找出存在的网页：跟踪已知网页上的链接、与网站托管服务合作、站长提交站点地图；</li><li>编入索引：解析网页内容并构建搜索索引，网页的标题、关键词和描述可以改善编入效果；</li><li>呈现：根据搜索内容和其他因素（位置、语言、设备等）从索引中找到最相关的信息返回给用户；</li><li>排名：提高网页加载速度并保持一定的更新频率有利于网站排名。</li></ul><h2 id=搜索引擎蜘蛛>搜索引擎蜘蛛</h2><p><img src=/spa-seo/googlebot-crawl-render.png alt=蜘蛛抓取过程></p><p>蜘蛛是搜索引擎抓用来页面信息和构建信息索引的工具，例如：<a href="https://help.baidu.com/question?prod_id=99&amp;class=476&amp;id=2996">Baiduspider</a> 和 <a href=https://developers.google.com/search/docs/advanced/crawling/googlebot>Googlebot</a> ；蜘蛛在访问页面的过程中，处理文字内容、关键内容标记和属性，例如网站标题、Alt 属性、图片、视频等；此外，蜘蛛还会查找页面上的链接，并将这些链接添加到它要抓取的网页的列表中；这张列表记录着新建立的网站、对现有网站进行的更改以及无效链接，并据此更新索引。</p><p>百度曾发布过一个<a href=https://ziyuan.baidu.com/wiki/990>公告</a>，提到 Baiduspider 会访问页面的 CSS、JS 和图片资源，但是 JS 会不会执行、JS 的执行结果会不会被编入索引则没有明说；Google 在<a href=https://developers.google.com/search/docs/guides/javascript-seo-basics>文档</a>中指出：Googlebot 支持对 SPA 和动态内容的抓取，在抓取过程中会使用 Chrome 加载网页并运行 JS。</p><p>显然，搜索引擎更喜欢“有内容的”HTML。</p><h2 id=spa-如何产生-有内容的-html>SPA 如何产生“有内容的” HTML</h2><h4 id=预渲染>预渲染</h4><p>在客户端访问之前提前渲染好 HTML（一般是在打包阶段）；在客户端初次访问页面时，会从静态服务器请求事先渲染好的 HTML；之后 JS 会接管交互、渲染和路由等工作；这是一种混合模式，从客户端来看，页面的行为就像 SPA 一样。</p><p>优点：</p><ul><li>更好的 SEO，爬虫可以直接抓取页面内容；</li><li>更快的（非用户相关内容的）首屏渲染。</li></ul><p>缺点：</p><ul><li>无法实时更新静态服务器端 HTML 的内容（除非在数据发生变动时重新打包部署）。</li><li>无法用于不可穷举的动态路由场景；</li><li>不支持哈希路由。</li></ul><h4 id=服务端同构渲染>服务端同构渲染</h4><p>在客户端发起请求时实时渲染 HTML，服务端总会请求最新的数据完成渲染；加载完第一个页面之后，客户端还是会进入 JS 渲染的模式（混合渲染，例如：Nuxt 和 Next）；这种方式和预渲染模式的差别在于渲染 HTML 的时机不同。</p><p>优点：</p><ul><li>更好的 SEO，爬虫可以直接抓取页面内容；</li><li>更快的首屏渲染。</li></ul><p>缺点：</p><ul><li>需要动态服务，不能 CDN 部署，有可能出现服务只能部署在 A 地，但用户却在 B 地的情况；</li><li>不是所有的开发依赖都支持在服务端运行；</li><li>动态服务器比静态服务器更耗资源；</li><li>客户端与服务端的状态同步；</li><li>不支持哈希路由。</li></ul><h4 id=基于-ua-的动态渲染>基于 UA 的动态渲染</h4><p>Google 搜索中心提到的一种模式，根据 UA 判断，客户端是不是“蜘蛛”；蜘蛛访问的是渲染之后（不一定是动态渲染）的 HTML，普通用户访问的还是一个 SPA。这种模式将客户端分为“用户”和“蜘蛛”两种，可以减轻服务器压力、对搜索引擎抓取的内容进行针对性的优化。</p><h4 id=预渲染配置>预渲染配置</h4><p>通过 HtmlWebpackPlugin 配置项目 TWD：</p><pre><code class=language-js>const title = '我是标题...';
 const meta = {
-    keywords: '我是,关键词,...',
-    description: '我是描述...'
+  keywords: '我是,关键词,...',
+  description: '我是描述...'
 };
 
 module.exports = {
-    plugins: [
-        new HtmlWebpackPlugin({
-            entry: 'src/project/home/main.js',
-            template: 'public/main.html',
-            filename: 'index.html',
-            chunks: ['chunk-vendors', 'chunk-common', 'home'],
-            title,
-            meta
-        })
-    ]
+  plugins: [
+    new HtmlWebpackPlugin({
+      entry: 'src/project/home/main.js',
+      template: 'public/main.html',
+      filename: 'index.html',
+      chunks: ['chunk-vendors', 'chunk-common', 'home'],
+      title,
+      meta
+    })
+  ]
 };
-</code></pre><p>配置 main.js 触发预渲染事件：</p><pre><code class=language-javascript>new Vue({
-    el: '#app',
-    router,
-    store,
-    render: (h) =&gt; h(App),
-    mounted() {
-        document.dispatchEvent(new Event('render-event'));
-    }
+</code></pre><p>配置 main.js 触发预渲染事件：</p><pre><code class=language-js>new Vue({
+  el: '#app',
+  router,
+  store,
+  render: (h) =&gt; h(App),
+  mounted() {
+    document.dispatchEvent(new Event('render-event'));
+  }
 });
 </code></pre><p>预渲染完成之后，根结点会被替换掉；需要在项目根组件添加对应的 id，否则会报“Cannot find element: #xxx”错误：</p><pre><code class=language-html>&lt;template&gt;
-    &lt;div id=&quot;app&quot; class=&quot;app&quot;&gt;
-        &lt;top-header :isHome=&quot;true&quot; /&gt;
-        &lt;div class=&quot;router-view&quot;&gt;
-            &lt;transition name=&quot;rv&quot;&gt;
-                &lt;router-view /&gt;
-            &lt;/transition&gt;
-        &lt;/div&gt;
-        &lt;bottom-footer /&gt;
+  &lt;div id=&quot;app&quot; class=&quot;app&quot;&gt;
+    &lt;top-header :isHome=&quot;true&quot; /&gt;
+    &lt;div class=&quot;router-view&quot;&gt;
+      &lt;transition name=&quot;rv&quot;&gt;
+        &lt;router-view /&gt;
+      &lt;/transition&gt;
     &lt;/div&gt;
+    &lt;bottom-footer /&gt;
+  &lt;/div&gt;
 &lt;/template&gt;
-</code></pre><p>引入 PrerenderSPAPlugin 插件：</p><pre><code class=language-javascript>const PrerenderSPAPlugin = require('prerender-spa-plugin');
+</code></pre><p>引入 PrerenderSPAPlugin 插件：</p><pre><code class=language-js>const PrerenderSPAPlugin = require('prerender-spa-plugin');
 const Renderer = PrerenderSPAPlugin.PuppeteerRenderer;
 
 module.exports = {
-    plugins: [
-        // 在非开发环境下执行
-        !process.env.LOCAL_DEVELOP &amp;&amp;
-            new PrerenderSPAPlugin({
-                // 打包输出目录，也可以配置 outputDir 将预渲染文件输出到单独的目录
-                staticDir: path.join(__dirname, 'dist'),
-                // 对输出的 HTML 压缩配置（html-minifier）
-                minify: {
-                    collapseBooleanAttributes: true,
-                    removeEmptyAttributes: false,
-                    removeComments: true,
-                    minifyCSS: true,
-                    minifyJS: true
-                },
-                // 渲染器配置
-                renderer: new Renderer({
-                    // 挂载在 window 上属性
-                    injectProperty: '__PRERENDER__INJECTED__',
-                    // 挂载在 window.__PRERENDER__INJECTED__ 的对象
-                    inject: {
-                        hostname: prerenderHostname()
-                    },
-                    // 是否显示浏览器（多用于调试，开启之后部分打包环境会打包失败）
-                    headless: true,
-                    // 在预渲染之前等待的事件
-                    renderAfterTime: 500,
-                    // 最多同时渲染多少个路由
-                    maxConcurrentRoutes: 1,
-                    // 触发渲染的事件名称
-                    renderAfterDocumentEvent: 'render-event',
-                    // 浏览器运行参数
-                    args: ['--no-sandbox', '--disable-setuid-sandbox']
-                }),
-                // 请求代理配置
-                proxy: {
-                    '^/api/exp': {
-                        target: 'https://www.example.com'
-                    },
-                    changeOrigin: true
-                },
-                // 要预渲染的路由
-                routes: [
-                    '/',
-                    '/introduction/service-one',
-                    '/introduction/service-two',
-                    '/solution/way-one',
-                    '/solution/way-two',
-                    '/support/ask',
-                    '/about/us'
-                ]
-            })
-    ]
+  plugins: [
+    // 在非开发环境下执行
+    !process.env.LOCAL_DEVELOP &amp;&amp;
+      new PrerenderSPAPlugin({
+        // 打包输出目录，也可以配置 outputDir 将预渲染文件输出到单独的目录
+        staticDir: path.join(__dirname, 'dist'),
+        // 对输出的 HTML 压缩配置（html-minifier）
+        minify: {
+          collapseBooleanAttributes: true,
+          removeEmptyAttributes: false,
+          removeComments: true,
+          minifyCSS: true,
+          minifyJS: true
+        },
+        // 渲染器配置
+        renderer: new Renderer({
+          // 挂载在 window 上属性
+          injectProperty: '__PRERENDER__INJECTED__',
+          // 挂载在 window.__PRERENDER__INJECTED__ 的对象
+          inject: {
+            hostname: prerenderHostname()
+          },
+          // 是否显示浏览器（多用于调试，开启之后部分打包环境会打包失败）
+          headless: true,
+          // 在预渲染之前等待的事件
+          renderAfterTime: 500,
+          // 最多同时渲染多少个路由
+          maxConcurrentRoutes: 1,
+          // 触发渲染的事件名称
+          renderAfterDocumentEvent: 'render-event',
+          // 浏览器运行参数
+          args: ['--no-sandbox', '--disable-setuid-sandbox']
+        }),
+        // 请求代理配置
+        proxy: {
+          '^/api/exp': {
+            target: 'https://www.example.com'
+          },
+          changeOrigin: true
+        },
+        // 要预渲染的路由
+        routes: [
+          '/',
+          '/introduction/service-one',
+          '/introduction/service-two',
+          '/solution/way-one',
+          '/solution/way-two',
+          '/support/ask',
+          '/about/us'
+        ]
+      })
+  ]
 };
-</code></pre><p>为了 SEO，你可能需要 extract-text-webpack-plugin 将样式单独打包。</p><h4 id=prerenderspaplugin-逻辑>PrerenderSPAPlugin 逻辑</h4><pre><code class=language-javascript>function PrerenderSPAPlugin(...args) {
-    // 对入参做处理
-    this._options = args[0] || {};
+</code></pre><p>为了 SEO，你可能需要 extract-text-webpack-plugin 将样式单独打包。</p><h4 id=prerenderspaplugin-逻辑>PrerenderSPAPlugin 逻辑</h4><pre><code class=language-js>function PrerenderSPAPlugin(...args) {
+  // 对入参做处理
+  this._options = args[0] || {};
 }
 PrerenderSPAPlugin.prototype.apply((compiler) =&gt; {
-    // apply 方法在安装插件时，会被 Webpack 编译器调用一次，在异步操作完成之后调用 callback
-    const afterEmit = (compilation, callback) =&gt; {
-        // Prerenderer 会开启 express 服务器和 puppeteer 实例
-        const prender = new Prerenderer(this._options);
-        prender
-            .initialize()
-            // express 会代理静态目录，通过 puppeteer 访问页面并将页面保存
-            .then(() =&gt; prender.renderRoutes(this._options.routes || []))
-            .then((renderedRoutes) =&gt; {
-                /*[{
-                    originalRoute: route,
-                    route: await page.evaluate('window.location.pathname'),
-                    html: await page.content()
-                }...]*/
-                const isValid = renderedRoutes.every(
-                    (r) =&gt; typeof r === 'object'
-                );
-                if (isValid) {
-                    return renderedRoutes;
-                } else {
-                    throw new Error('...');
-                }
-            })
-            .then((renderedRoutes) =&gt; {
-                if (this._options.minify) {
-                    // minify...
-                    return renderedRoutes;
-                }
-                return renderedRoutes;
-            })
-            .then((renderedRoutes) =&gt;
-                Promise.all(
-                    renderedRoutes.map(
-                        (renderedRoute) =&gt;
-                            new Promise((resolve, reject) =&gt; {
-                                // write files...
-                                resolve();
-                            })
-                    )
-                )
-            )
-            .then(() =&gt; {
-                // 完成文件写入之后退出
-                prender.destory();
-                callback();
-            })
-            .catch((error) =&gt; {
-                prender.destory();
-                // 如果有报错，在编译过程抛出
-                compilation.errors.push(new Error(error));
-                callback();
-            });
-    };
-    const plugin = { name: 'PrerenderSPAPlugin' };
-    // 向编译器的钩子上注册异步方法，可以对当前编译实例（过程）做操作
-    compiler.hooks.afterEmit.tapAsync(plugin, afterEmit);
+  // apply 方法在安装插件时，会被 Webpack 编译器调用一次，在异步操作完成之后调用 callback
+  const afterEmit = (compilation, callback) =&gt; {
+    // Prerenderer 会开启 express 服务器和 puppeteer 实例
+    const prender = new Prerenderer(this._options);
+    prender
+      .initialize()
+      // express 会代理静态目录，通过 puppeteer 访问页面并将页面保存
+      .then(() =&gt; prender.renderRoutes(this._options.routes || []))
+      .then((renderedRoutes) =&gt; {
+        /*[{
+          originalRoute: route,
+          route: await page.evaluate('window.location.pathname'),
+          html: await page.content()
+        }...]*/
+        const isValid = renderedRoutes.every((r) =&gt; typeof r === 'object');
+        if (isValid) {
+          return renderedRoutes;
+        } else {
+          throw new Error('...');
+        }
+      })
+      .then((renderedRoutes) =&gt; {
+        if (this._options.minify) {
+          // minify...
+          return renderedRoutes;
+        }
+        return renderedRoutes;
+      })
+      .then((renderedRoutes) =&gt;
+        Promise.all(
+          renderedRoutes.map(
+            (renderedRoute) =&gt;
+              new Promise((resolve, reject) =&gt; {
+                // write files...
+                resolve();
+              })
+          )
+        )
+      )
+      .then(() =&gt; {
+        // 完成文件写入之后退出
+        prender.destory();
+        callback();
+      })
+      .catch((error) =&gt; {
+        prender.destory();
+        // 如果有报错，在编译过程抛出
+        compilation.errors.push(new Error(error));
+        callback();
+      });
+  };
+  const plugin = { name: 'PrerenderSPAPlugin' };
+  // 向编译器的钩子上注册异步方法，可以对当前编译实例（过程）做操作
+  compiler.hooks.afterEmit.tapAsync(plugin, afterEmit);
 });
 </code></pre><h2 id=两种文件>两种文件</h2><p>公司的 SEO 服务商让在服务器根目录放了几个“文件”，最有用的是两种是 Sitemap 和 robots。</p><p>Sitemap 是用来告诉蜘蛛网站上有哪些可供抓取的网页；Sitemap 可以是 XML、TXT、HTML 文件，其中包含了站点中的网址以及关于每个网址的元数据（更新时间、更新频率、重要程度、语言版本等），以便搜索引擎可以更加智能地抓取网站；Sitemap 并不能保证网页会被蜘蛛抓取，但可向蜘蛛提供一些提示以便网站被更有效地抓取：</p><pre><code class=language-xml>&lt;?xml version='1.0' encoding='UTF-8'?&gt;
 &lt;urlset&gt;

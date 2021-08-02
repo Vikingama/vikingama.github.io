@@ -1,36 +1,36 @@
 .doc_comments {
-    padding: 35px 0 45px;
-    border-top: 1px solid #f3f3f3;
-    color: #383838;
-    font-size: 14px;
+  padding: 35px 0 45px;
+  border-top: 1px solid #f3f3f3;
+  color: #383838;
+  font-size: 14px;
 }
 
 .doc_comments .comments_block_title {
-    color: #000000;
+  color: #000000;
 }
 
 .v .vwrap {
-    margin-top: 15px;
-    border-radius: unset;
+  margin-top: 15px;
+  border-radius: unset;
 }
 
 .v .veditor {
-    min-height: 4.75rem;
+  min-height: 4.75rem;
 }
 
 .v .vwrap .vheader .vinput {
-    border: none;
+  border: none;
 }
 
 .v .vbtn {
-    background-color: #000000;
-    border: none;
-    color: #ffffff;
+  background-color: #000000;
+  border: none;
+  color: #ffffff;
 }
 
 .v .vbtn:active,
 .v .vbtn:hover {
-    background-color: #303538;
-    border-color: #000000;
-    color: #ffffff;
+  background-color: #303538;
+  border-color: #000000;
+  color: #ffffff;
 }

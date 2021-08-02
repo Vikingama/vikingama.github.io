@@ -1,49 +1,49 @@
-<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no,user-scalable=no"><meta name=author content=馬腊咯稽><meta name=description content=站长平台项目总结><meta name=keywords content=React><link rel=canonical href=https://vikingama.github.io/posts/summary-of-station-platform/><link rel="shortcut icon" href=https://vikingama.github.io/images/favicon.ico><link rel=stylesheet href=https://vikingama.github.io/css/zozo.css><link rel=stylesheet href=https://vikingama.github.io/css/animate.css><link rel=stylesheet href=https://vikingama.github.io/css/highlight.css><link rel=stylesheet href=https://vikingama.github.io/css/remixicon.css><title>站长平台项目总结 &middot; 庙小妖风大 · 水浅王八多</title></head><body><div class="main animated"><div class="nav_container animated fadeInDown"><div class=site_nav id=site_nav><ul><li><a href=/>首页</a></li><li><a href=/posts/>归档</a></li><li><a href=/tags/>标签</a></li><li><a href=/inspires/>启发</a></li><li><a href=/about/>关于</a></li></ul></div><div class=menu_icon><a id=menu_icon><i class=remixicon-links-line></i></a></div></div><div class="header animated fadeInDown"><div class=site_title_container><div class=site_title><h1><a href=https://vikingama.github.io><img style=width:65px;height:auto;vertical-align:top src=https://vikingama.github.io/images/avatar.png></a></h1></div><div class=description><p class=sub_title>庙小妖风大<br>水浅王八多</p><div class=my_socials><a href=https://www.douban.com/people/nicknoonan title=douban target=_blank><i class=remixicon-douban-fill></i></a><a href=https://github.com/Vikingama title=github target=_blank><i class=remixicon-github-fill></i></a><a href=https://www.zhihu.com/people/vikingama title=zhihu target=_blank><i class=remixicon-zhihu-fill></i></a><a href=https://vikingama.github.io/index.xml type=application/rss+xml title=rss target=_blank><i class=remixicon-rss-fill></i></a></div></div></div></div><div class=content><div class=post_page><div class="post animated fadeInDown"><div class="post_title post_detail_title"><h2><a href=/posts/summary-of-station-platform/>站长平台项目总结</a></h2><span class=date>2019.07.07</span></div><div class="post_content markdown"><blockquote><p>这个月除了抠脚，还写了一个“花瓣站长平台”；总结一下遇到的坑。</p></blockquote><h3 id=git-大小写敏感问题>Git 大小写敏感问题</h3><p>部署到测试环境时一直打包失败；本地已经没有要提交代码了，但是终端提示文件引用路径错误，找不到对应文件。原来是 Git 忽略了对文件路径与文件名称大小写的检查；太扯了，第一次遇到。</p><p>解决方法：</p><ol><li>⌘ + shift + · 显示隐藏文件，找到项目根目录下的 .git 文件夹，里边有一个 config 文件，打开 config，将 ignorecase 的值修改为 false；</li><li>或者在终端输入 git config core.ignorecase false，回车。</li></ol><h3 id=配置-proxy-后报-invalid-host-header-错误>配置 proxy 后报 &quot;Invalid Host Header&quot; 错误</h3><p>对接过程中，为了和主站的登录状态保持同步，本地通过 nginx 代理，将项目运行地址指向了 &quot;u.huaban.com&quot;，但项目跑起来以后报 &quot;Invalid Host Header&quot; 错误。CRA 文档提到<a href=https://www.html.cn/create-react-app/docs/proxying-api-requests-in-development/>“进行远程开发时，将进行更严格的主机检查”</a>，文档也给了详细的解决办法。</p><p>在项目根目录新建 .env.development 文件，文件内容为：</p><pre><code class=language-javascript>HOST = u.huaban.com;
-</code></pre><h3 id=打包时禁止生成-map>打包时禁止生成 *.map</h3><p>SourceMap 可以方便我们在控制台对应用进行调试，但准备打包上线的项目，已经经过充分的测试，最重要的是 *.map 真的很大。</p><p>CRA 在打包时，默认会生成 .map，禁用方式很简单，编辑 package.json：</p><pre><code class=language-javascript>&quot;scripts&quot;: {
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no,user-scalable=no"><meta name=author content=馬腊咯稽><meta name=description content=站长平台项目总结><meta name=keywords content=React><link rel=canonical href=https://vikingama.github.io/posts/summary-of-station-platform/><link rel="shortcut icon" href=https://vikingama.github.io/images/favicon.ico><link rel=stylesheet href=https://vikingama.github.io/css/zozo.css><link rel=stylesheet href=https://vikingama.github.io/css/animate.css><link rel=stylesheet href=https://vikingama.github.io/css/highlight.css><link rel=stylesheet href=https://vikingama.github.io/css/remixicon.css><title>站长平台项目总结 &middot; 庙小妖风大 · 水浅王八多</title></head><body><div class="main animated"><div class="nav_container animated fadeInDown"><div class=site_nav id=site_nav><ul><li><a href=/>首页</a></li><li><a href=/posts/>归档</a></li><li><a href=/tags/>标签</a></li><li><a href=/inspires/>启发</a></li><li><a href=/about/>关于</a></li></ul></div><div class=menu_icon><a id=menu_icon><i class=remixicon-links-line></i></a></div></div><div class="header animated fadeInDown"><div class=site_title_container><div class=site_title><h1><a href=https://vikingama.github.io><img style=width:65px;height:auto;vertical-align:top src=https://vikingama.github.io/images/avatar.png></a></h1></div><div class=description><p class=sub_title>庙小妖风大<br>水浅王八多</p><div class=my_socials><a href=https://www.douban.com/people/nicknoonan title=douban target=_blank><i class=remixicon-douban-fill></i></a><a href=https://github.com/Vikingama title=github target=_blank><i class=remixicon-github-fill></i></a><a href=https://www.zhihu.com/people/vikingama title=zhihu target=_blank><i class=remixicon-zhihu-fill></i></a><a href=https://vikingama.github.io/index.xml type=application/rss+xml title=rss target=_blank><i class=remixicon-rss-fill></i></a></div></div></div></div><div class=content><div class=post_page><div class="post animated fadeInDown"><div class="post_title post_detail_title"><h2><a href=/posts/summary-of-station-platform/>站长平台项目总结</a></h2><span class=date>2019.07.07</span></div><div class="post_content markdown"><blockquote><p>这个月除了抠脚，还写了一个“花瓣站长平台”；总结一下遇到的坑。</p></blockquote><h3 id=git-大小写敏感问题>Git 大小写敏感问题</h3><p>部署到测试环境时一直打包失败；本地已经没有要提交代码了，但是终端提示文件引用路径错误，找不到对应文件。原来是 Git 忽略了对文件路径与文件名称大小写的检查；太扯了，第一次遇到。</p><p>解决方法：</p><ol><li>⌘ + shift + · 显示隐藏文件，找到项目根目录下的 .git 文件夹，里边有一个 config 文件，打开 config，将 ignorecase 的值修改为 false；</li><li>或者在终端输入 git config core.ignorecase false，回车。</li></ol><h3 id=配置-proxy-后报-invalid-host-header-错误>配置 proxy 后报 &quot;Invalid Host Header&quot; 错误</h3><p>对接过程中，为了和主站的登录状态保持同步，本地通过 nginx 代理，将项目运行地址指向了 &quot;u.huaban.com&quot;，但项目跑起来以后报 &quot;Invalid Host Header&quot; 错误。CRA 文档提到<a href=https://www.html.cn/create-react-app/docs/proxying-api-requests-in-development/>“进行远程开发时，将进行更严格的主机检查”</a>，文档也给了详细的解决办法。</p><p>在项目根目录新建 .env.development 文件，文件内容为：</p><pre><code class=language-js>HOST = u.huaban.com;
+</code></pre><h3 id=打包时禁止生成-map>打包时禁止生成 *.map</h3><p>SourceMap 可以方便我们在控制台对应用进行调试，但准备打包上线的项目，已经经过充分的测试，最重要的是 *.map 真的很大。</p><p>CRA 在打包时，默认会生成 .map，禁用方式很简单，编辑 package.json：</p><pre><code class=language-js>&quot;scripts&quot;: {
     ...
     &quot;build&quot;: &quot;GENERATE_SOURCEMAP=false react-app-rewired build&quot;,
     ...
 }
-</code></pre><h3 id=antdesign-按需引入并修改主题色>AntDesign 按需引入并修改主题色</h3><p>官方文档上有详细的说明，这里做一个备忘：</p><ul><li><p>安装以下依赖：</p><pre><code class=language-javascript>&quot;devDependencies&quot;: {
+</code></pre><h3 id=antdesign-按需引入并修改主题色>AntDesign 按需引入并修改主题色</h3><p>官方文档上有详细的说明，这里做一个备忘：</p><ul><li><p>安装以下依赖：</p><pre><code class=language-js>&quot;devDependencies&quot;: {
 &quot;babel-plugin-import&quot;: &quot;^1.12.0&quot;,
 &quot;customize-cra&quot;: &quot;^0.2.14&quot;,
 &quot;less&quot;: &quot;^3.9.0&quot;,
 &quot;less-loader&quot;: &quot;^5.0.0&quot;,
 &quot;react-app-rewired&quot;: &quot;^2.1.3&quot;
 }
-</code></pre></li><li><p>在项目根目录新建 config-overrides.js 文件，编辑文件内容：</p><pre><code class=language-javascript>const { override, fixBabelImports, addLessLoader } = require(&quot;customize-cra&quot;);
+</code></pre></li><li><p>在项目根目录新建 config-overrides.js 文件，编辑文件内容：</p><pre><code class=language-js>const { override, fixBabelImports, addLessLoader } = require('customize-cra');
 
 module.exports = override(
-fixBabelImports(&quot;import&quot;, {
-    libraryName: &quot;antd&quot;,
-    libraryDirectory: &quot;es&quot;,
-    style: true,
+fixBabelImports('import', {
+libraryName: 'antd',
+libraryDirectory: 'es',
+style: true
 }),
 addLessLoader({
-    javascriptEnabled: true,
-    modifyVars: { &quot;@primary-color&quot;: &quot;#ec414d&quot; },
+javascriptEnabled: true,
+modifyVars: { '@primary-color': '#ec414d' }
 })
 );
-</code></pre></li><li><p>编辑 package.json：</p><pre><code class=language-javascript>&quot;scripts&quot;: {
+</code></pre></li><li><p>编辑 package.json：</p><pre><code class=language-js>&quot;scripts&quot;: {
 &quot;start&quot;: &quot;react-app-rewired start&quot;,
 &quot;build&quot;: &quot;react-app-rewired build&quot;,
 &quot;test&quot;: &quot;react-app-rewired test&quot;,
 &quot;eject&quot;: &quot;react-scripts eject&quot;
 }
-</code></pre></li></ul><h3 id=查看项目打包后各个文件的具体构成>查看项目打包后各个文件的具体构成</h3><p>之前写 Vue 的时候，Vue-Cli 官方文档有提到过这个点；这次顺带发现了 BizCharts 没有按需引入的问题。</p><p><img src=/summary-of-station-platform/source-map.png alt="Local Image"></p><ul><li>npm install source-map-explorer -D 安装依赖；</li><li><p>修改 package.json:</p><pre><code class=language-javascript>&quot;scripts&quot;: {
+</code></pre></li></ul><h3 id=查看项目打包后各个文件的具体构成>查看项目打包后各个文件的具体构成</h3><p>之前写 Vue 的时候，Vue-Cli 官方文档有提到过这个点；这次顺带发现了 BizCharts 没有按需引入的问题。</p><p><img src=/summary-of-station-platform/source-map.png alt="Local Image"></p><ul><li>npm install source-map-explorer -D 安装依赖；</li><li><p>修改 package.json:</p><pre><code class=language-js>&quot;scripts&quot;: {
 ...
 &quot;analyze&quot;: &quot;source-map-explorer 'build/static/js/*.js'&quot;,
 ...
 &quot;build&quot;: &quot;GENERATE_SOURCEMAP=true react-app-rewired build&quot;,
 ...
 }
-</code></pre></li><li><p>打包后，执行 npm run analyze。</p></li></ul><h3 id=react-路由懒加载>React 路由懒加载</h3><p>无论是 Vue 还是 React，路由懒加载主要是利用 Webpack 对不同的文件引用方式有不同的打包策略；Webpack 文档对这一块有详细的说明，我使用了 react-loadable 插件：</p><pre><code class=language-javascript>import React from &quot;react&quot;;
-import Loadable from &quot;react-loadable&quot;;
-import Loading from &quot;../../components/Loading&quot;;
+</code></pre></li><li><p>打包后，执行 npm run analyze。</p></li></ul><h3 id=react-路由懒加载>React 路由懒加载</h3><p>无论是 Vue 还是 React，路由懒加载主要是利用 Webpack 对不同的文件引用方式有不同的打包策略；Webpack 文档对这一块有详细的说明，我使用了 react-loadable 插件：</p><pre><code class=language-js>import React from 'react';
+import Loadable from 'react-loadable';
+import Loading from '../../components/Loading';
 
 const LC = Loadable({
-    loader: () =&gt; import(&quot;./index&quot;), // 告诉 Webpack 这个文件异步加载
-    loading: Loading,
+  loader: () =&gt; import('./index'), // 告诉 Webpack 这个文件异步加载
+  loading: Loading
 });
 
 export default () =&gt; &lt;LC /&gt;;
