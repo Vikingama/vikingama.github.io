@@ -191,5 +191,81 @@ const App = () =&gt; (
     &lt;/Suspense&gt;
   &lt;/Router&gt;
 );
-</code></pre></div><div class=post_footer><div class=meta><div class=info><span class="field tags"><i class=remixicon-stack-line></i><a href=https://vikingama.github.io/tags/react/>React</a></span></div></div></div></div><div class=doc_comments><div class=comments_block_title>发表评论</div><div id=vcomments></div></div><link rel=stylesheet href=https://vikingama.github.io/css/comments.css><script src=/js/av.js></script><script src=/js/valine.js></script><script type=text/javascript>new Valine({el:'#vcomments',appId:'U06blUXOot4uJgfMu8I9xJXz-MdYXbMMI',appKey:'BnrXC06FJsvRNpr4aqb1HYPd',placeholder:'来都来了，不打个招呼吗？',visitor:'true',});</script></div></div><a id=back_to_top href=# class=back_to_top><span>△</span></a></div><footer class=footer><div class=powered_by><a href=https://zok.im/ target=_blank>Designed by <span class=jitters>Zeuk</span>,</a>
+</code></pre><h3 id=高阶组件>高阶组件</h3><p>高阶组件是参数为组件，返回值为新组件的函数；组件是将 props 转换为 UI，而高阶组件是将组件转换为另一个组件；高阶组件有两种：</p><ul><li><p>新组件<strong>包裹</strong>旧组件：</p><pre><code class=language-jsx>function enhancerOne(WrappedComponent) {
+class EnhancerComponent extends Component {
+  // ...
+  render() {
+    if (boolean) {
+      return null;
+    }
+    // 将 HOC 接受到的 props 传入被包裹的组件，还传入了一些新的 props
+    return (
+      &lt;&gt;
+        &lt;div style={{ fontSize: 16 }}&gt;
+          &lt;WrappedComponent {...this.props} {...otherProps} /&gt;
+        &lt;/div&gt;
+      &lt;/&gt;
+    );
+  }
+}
+EnhancerComponent.displayName = `EC-(${
+  WrappedComponent.displayName || WrappedComponent.name || 'Component'
+})`;
+return EnhancerComponent;
+}
+</code></pre></li><li><p>新组件<strong>继承</strong>旧组件：</p><pre><code class=language-jsx>function enhancerTwo(WrappedComponent) {
+return class EnhancerComponent extends WrappedComponent {
+  // 可以通过 super 访问到 WrappedComponent 中的各种变量和方法
+  render() {
+    if (boolean) {
+      return null;
+    }
+    return (
+      &lt;&gt;
+        &lt;div&gt;EnhancerComponent&lt;/div&gt;
+        {super.render()}
+      &lt;/&gt;
+    );
+  }
+};
+}
+</code></pre></li></ul><h3 id=组合模式>组合模式</h3><pre><code class=language-jsx>const TabItem = ({ active, children, onClick }) =&gt; {
+  const style = {
+    border: active ? '1px solid red' : 0,
+    color: active ? 'red' : 'green'
+  };
+
+  return (
+    &lt;h3 style={style} onClick={onClick}&gt;
+      {children}
+    &lt;/h3&gt;
+  );
+};
+class Tabs extends Component {
+  state = {
+    activeIndex: 0
+  };
+  render() {
+    const childrenEnhance = React.children
+      .toArray(this.props.children)
+      .map((child, index) =&gt; {
+        if (child.type) {
+          return React.cloneElement(child, {
+            active: this.state.activeIndex === index,
+            onClick: () =&gt; this.setState({ activeIndex: index })
+          });
+        } else {
+          return child;
+        }
+      });
+    // 不渲染原有的 children，改为渲染 childrenEnhance
+    return &lt;&gt;{childrenEnhance}&lt;/&gt;;
+  }
+}
+&lt;Tabs&gt;
+  &lt;TabItem&gt;One&lt;/TabItem&gt;
+  &lt;TabItem&gt;Two&lt;/TabItem&gt;
+  &lt;TabItem&gt;Three&lt;/TabItem&gt;
+&lt;/Tabs&gt;;
+</code></pre></div><div class=post_footer><div class=meta><div class=info><span class="field tags"><i class=remixicon-stack-line></i><a href=https://vikingama.github.io/tags/react/>React</a></span></div></div></div></div><div class=doc_comments><div class=comments_block_title>发表评论</div><div id=vcomments></div></div><link rel=stylesheet href=https://vikingama.github.io/css/comments.css><script src=/js/av.js></script><script src=/js/valine.js></script><script type=text/javascript>new Valine({el:'#vcomments',appId:'U06blUXOot4uJgfMu8I9xJXz-MdYXbMMI',appKey:'BnrXC06FJsvRNpr4aqb1HYPd',placeholder:'来都来了，不打个招呼吗？',visitor:'true',});</script></div></div><a id=back_to_top href=# class=back_to_top><span>△</span></a></div><footer class=footer><div class=powered_by><a href=https://github.com/varkai/hugo-theme-zozo/ target=_blank>Designed by <span class=jitters>Zeuk</span>,</a>
 <a href=https://www.gohugo.io/ target=_blank>Published with <span class=jitters>Hugo</span></a></div><div class=footer_slogan><span id=enter_time></span></div></footer><script src=https://vikingama.github.io/js/jquery.js></script><script src=https://vikingama.github.io/js/highlight.js></script><script src=https://vikingama.github.io/js/zozo.js></script><script>hljs.initHighlightingOnLoad();</script></body></html>

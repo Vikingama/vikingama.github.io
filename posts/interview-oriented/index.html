@@ -1,4 +1,78 @@
-<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no,user-scalable=no"><meta name=author content=馬腊咯稽><meta name=description content=面向面试编程><meta name=keywords content=面试><link rel=canonical href=https://vikingama.github.io/posts/interview-oriented/><link rel="shortcut icon" href=https://vikingama.github.io/images/favicon.ico><link rel=stylesheet href=https://vikingama.github.io/css/zozo.css><link rel=stylesheet href=https://vikingama.github.io/css/animate.css><link rel=stylesheet href=https://vikingama.github.io/css/highlight.css><link rel=stylesheet href=https://vikingama.github.io/css/remixicon.css><title>面向面试编程 &middot; 庙小妖风大 · 水浅王八多</title></head><body><div class="main animated"><div class="nav_container animated fadeInDown"><div class=site_nav id=site_nav><ul><li><a href=/>首页</a></li><li><a href=/posts/>归档</a></li><li><a href=/tags/>标签</a></li><li><a href=/inspires/>启发</a></li><li><a href=/about/>关于</a></li></ul></div><div class=menu_icon><a id=menu_icon><i class=remixicon-links-line></i></a></div></div><div class="header animated fadeInDown"><div class=site_title_container><div class=site_title><h1><a href=https://vikingama.github.io><img style=width:65px;height:auto;vertical-align:top src=https://vikingama.github.io/images/avatar.png></a></h1></div><div class=description><p class=sub_title>庙小妖风大<br>水浅王八多</p><div class=my_socials><a href=https://www.douban.com/people/nicknoonan title=douban target=_blank><i class=remixicon-douban-fill></i></a><a href=https://github.com/Vikingama title=github target=_blank><i class=remixicon-github-fill></i></a><a href=https://www.zhihu.com/people/vikingama title=zhihu target=_blank><i class=remixicon-zhihu-fill></i></a><a href=https://vikingama.github.io/index.xml type=application/rss+xml title=rss target=_blank><i class=remixicon-rss-fill></i></a></div></div></div></div><div class=content><div class=post_page><div class="post animated fadeInDown"><div class="post_title post_detail_title"><h2><a href=/posts/interview-oriented/>面向面试编程</a></h2><span class=date>2020.03.11</span></div><div class="post_content markdown"><blockquote><p>好烦刷面试题。</p></blockquote><h3 id=实现-call-bind-apply>实现 call、bind、apply</h3><pre><code class=language-js>Function.prototype.call = function (context) {
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no,user-scalable=no"><meta name=author content=馬腊咯稽><meta name=description content=面向面试编程><meta name=keywords content=面试><link rel=canonical href=https://vikingama.github.io/posts/interview-oriented/><link rel="shortcut icon" href=https://vikingama.github.io/images/favicon.ico><link rel=stylesheet href=https://vikingama.github.io/css/zozo.css><link rel=stylesheet href=https://vikingama.github.io/css/animate.css><link rel=stylesheet href=https://vikingama.github.io/css/highlight.css><link rel=stylesheet href=https://vikingama.github.io/css/remixicon.css><title>面向面试编程 &middot; 庙小妖风大 · 水浅王八多</title></head><body><div class="main animated"><div class="nav_container animated fadeInDown"><div class=site_nav id=site_nav><ul><li><a href=/>首页</a></li><li><a href=/posts/>归档</a></li><li><a href=/tags/>标签</a></li><li><a href=/inspires/>启发</a></li><li><a href=/about/>关于</a></li></ul></div><div class=menu_icon><a id=menu_icon><i class=remixicon-links-line></i></a></div></div><div class="header animated fadeInDown"><div class=site_title_container><div class=site_title><h1><a href=https://vikingama.github.io><img style=width:65px;height:auto;vertical-align:top src=https://vikingama.github.io/images/avatar.png></a></h1></div><div class=description><p class=sub_title>庙小妖风大<br>水浅王八多</p><div class=my_socials><a href=https://www.douban.com/people/nicknoonan title=douban target=_blank><i class=remixicon-douban-fill></i></a><a href=https://github.com/Vikingama title=github target=_blank><i class=remixicon-github-fill></i></a><a href=https://www.zhihu.com/people/vikingama title=zhihu target=_blank><i class=remixicon-zhihu-fill></i></a><a href=https://vikingama.github.io/index.xml type=application/rss+xml title=rss target=_blank><i class=remixicon-rss-fill></i></a></div></div></div></div><div class=content><div class=post_page><div class="post animated fadeInDown"><div class="post_title post_detail_title"><h2><a href=/posts/interview-oriented/>面向面试编程</a></h2><span class=date>2020.03.11</span></div><div class="post_content markdown"><blockquote><p>好烦刷面试题。</p></blockquote><h3 id=for-循环打印-0-9>for 循环打印 0-9</h3><pre><code class=language-js>for (var i = 0; i &lt; 10; i++) {
+  (function (i) {
+    setTimeout(() =&gt; {
+      console.log(i);
+    }, 1000);
+  })(i);
+}
+for (var i = 0; i &lt; 10; i++) {
+  setTimeout(
+    (i) =&gt; {
+      console.log(i);
+    },
+    1000,
+    i
+  );
+}
+for (var i = 0; i &lt; 10; i++) {
+  setTimeout(console.log(i), 1000);
+}
+for (var i = 0; i &lt; 10; i++) {
+  setTimeout(console.log.bind(null, i), 1000);
+}
+for (var i = 0; i &lt; 10; i++) {
+  try {
+    throw i;
+  } catch (i) {
+    setTimeout(() =&gt; {
+      console.log(i);
+    }, 1000);
+  }
+}
+for (let i = 0; i &lt; 10; i++) {
+  setTimeout(() =&gt; {
+    console.log(i);
+  }, 1000);
+}
+</code></pre><h3 id=proxy-实现数据绑定>Proxy 实现数据绑定</h3><pre><code class=language-html>&lt;body&gt;
+  &lt;input type=&quot;text&quot; id=&quot;model&quot; /&gt;
+  &lt;p id=&quot;word&quot;&gt;&lt;/p&gt;
+&lt;/body&gt;
+&lt;script&gt;
+  const inputEle = document.querySelector('#model');
+  const pEle = document.querySelector('#word');
+  const o1 = {};
+  const o2 = new Proxy(o1, {
+    get(target, key, receiver) {
+      console.log('get');
+      console.info(target);
+      console.info(key);
+      console.info(receiver);
+
+      return Reflect.get(target, key, receiver);
+    },
+    set(target, key, value, receiver) {
+      console.log('set');
+      console.info(target);
+      console.info(key);
+      console.info(value);
+      console.info(receiver);
+
+      if (key === 'text') {
+        inputEle.value = value;
+        pEle.innerText = value;
+      }
+
+      return Reflect.set(target, key, value, receiver);
+    }
+  });
+
+  inputEle.addEventListener('input', (e) =&gt; {
+    console.log(e);
+    o2.text = e.target.value;
+  });
+&lt;/script&gt;
+</code></pre><h3 id=实现-call-bind-apply>实现 call、bind、apply</h3><pre><code class=language-js>Function.prototype.call = function (context) {
   console.log(this); // 谁调用了 call 方法 =&gt; example
   console.log(context); // 传入的第一个参数 =&gt; eo
   console.log(arguments); // 传入的所有参数 =&gt; [eo, 1, 2, 3]
@@ -54,6 +128,25 @@ function example(...rest) {
 example.call(eo, 1, 2, 3);
 example.apply(eo, [4, 5, 6]);
 example.bind(eo, [7, 8, 9])();
+</code></pre><h3 id=实现-instanceof>实现 instanceof</h3><p>决定类型的是 prototype，而不是构造函数：</p><pre><code class=language-js>// instanceOf({}, Object);
+function instanceOf(L, R) {
+  if ((L === null) | (L === undefined)) {
+    return false;
+  }
+  L = Object.getPrototypeOf(L);
+  R = R.prototype;
+  while (true) {
+    if (L === R) {
+      return true;
+    }
+    L = Object.getPrototypeOf(L);
+  }
+}
+</code></pre><p>顺带，Symbol.toStringTag 属性可以影响 Object.prototype.toString 的结果：</p><pre><code class=language-js>const temp = {
+  [Symbol.toStringTag]: 'Hello'
+};
+const toString = Object.prototype.toString;
+console.log(toString.call(temp)); // [object Hello]
 </code></pre><h3 id=实现-flatten>实现 flatten</h3><pre><code class=language-js>var arr = [[1, 2, 2], [3, 4, 5, 5], [6, 7, 8, 9, [11, 12, [12, 13, [14]]]], 10];
 
 function flattenOne(arr) {
@@ -97,12 +190,41 @@ console.log(flattenTwo(arr));
 console.log(flattenThree(arr));
 console.log(flattenFour(arr));
 console.log(flattenFive(arr));
+</code></pre><h3 id=实现-map-使用-reduce>实现 map（使用 reduce）</h3><pre><code class=language-js>Array.prototype.implementMapUsingReduce = function (fn) {
+  const list = this;
+  return list.reduce((acc, cur, idx, src) =&gt; {
+    acc[idx] = fn(cur, idx, src);
+    return acc;
+  }, []);
+};
+const a = [1, 2, 3, 4].implementMapUsingReduce((a) =&gt; a + 1);
+const b = ['a', 'b', 'c'].implementMapUsingReduce((a) =&gt; a + '!');
+console.log(a); // [2, 3, 4, 5]
+console.log(b); // ['a!', 'b!', 'c!']
 </code></pre><h3 id=实现-new>实现 new</h3><pre><code class=language-js>function customNew() {
   const con = [].shift.call(arguments);
   const obj = Object.create(con.prototype);
   const temp = con.apply(obj, arguments);
 
   return temp instanceof con ? temp : obj;
+}
+</code></pre><h3 id=实现-setinterval-settimeout-使用-requestanimationframe>实现 setInterval/setTimeout（使用 requestAnimationFrame）</h3><pre><code class=language-js>function setInterval(cb, time) {
+  let getNow = () =&gt; Date.now();
+  let startTime = getNow();
+  let endTime = startTime;
+  let timer;
+  let loop = () =&gt; {
+    timer = window.requestAnimationFrame(loop);
+    let endTime = getNow();
+    if (endTime - startTime &gt; time) {
+      endTime = startTime = getNow();
+      cb(timer);
+      // setTimeout 放开这一行
+      // window.cancelAnimationFrame(timer)
+    }
+  };
+  timer = window.requestAnimationFrame(loop);
+  return timer;
 }
 </code></pre><h3 id=实现-sleep>实现 sleep</h3><pre><code class=language-js>async function sleep(time) {
   console.time('sleep');
@@ -113,6 +235,66 @@ console.log(flattenFive(arr));
 sleep(3000).then(() =&gt; {
   console.timeEnd('sleep');
 });
+</code></pre><h3 id=实现-lazyman-类>实现 LazyMan 类</h3><pre><code class=language-js>class LazyManClass {
+  constructor(name) {
+    this.name = name;
+    this.doSomething = [];
+
+    console.log(`Hi I am ${this.name}`);
+
+    setTimeout(() =&gt; {
+      this.next();
+    }, 0);
+  }
+  eat(food) {
+    const sth = ((food) =&gt; () =&gt; {
+      console.log(`I am eating ${food}`);
+      this.next();
+    })(food);
+
+    this.doSomething.push(sth);
+
+    return this;
+  }
+  sleep(time) {
+    const sth = ((time) =&gt; () =&gt; {
+      setTimeout(() =&gt; {
+        console.log(`等待了${time}秒...`);
+        this.next();
+      }, time * 1000);
+    })(time);
+
+    this.doSomething.push(sth);
+
+    return this;
+  }
+  sleepFirst(time) {
+    var sth = ((time) =&gt; () =&gt; {
+      setTimeout(() =&gt; {
+        console.log(`等待了${time}秒...`);
+        this.next();
+      }, time * 1000);
+    })(time);
+    // 将任务添加到最前边
+    this.doSomething.unshift(sth);
+
+    return this;
+  }
+  next() {
+    let doSth = this.doSomething.shift();
+    doSth &amp;&amp; doSth();
+  }
+}
+function LazyMan(name) {
+  return new LazyManClass(name);
+}
+
+LazyMan('Tony')
+  .eat('lunch')
+  .eat('dinner')
+  .sleepFirst(5)
+  .sleep(10)
+  .eat('junk food');
 </code></pre><h3 id=实现-object-assign>实现 Object.assign</h3><pre><code class=language-js>Object.defineProperty(Object, 'customAssign', {
   value(target) {
     if (!target) {
@@ -152,10 +334,114 @@ var b = {
 };
 
 console.log(Object.customAssign(b, a));
-</code></pre><h3 id=实现-promise-all-和-promise-race>实现 Promise.all 和 Promise.race</h3><pre><code class=language-js>Promise.myAll = function (ps) {
+</code></pre><h3 id=实现-promise>实现 Promise</h3><pre><code class=language-js>function MyPromise(executor) {
+  const self = this;
+  self.data = undefined;
+  self.status = 'pending';
+  self.onFulfilledCallbacks = [];
+  self.onRejectedCallbacks = [];
+  function fulfill(value) {
+    if (self.status !== 'pending') {
+      return;
+    }
+    self.status = 'fulfilled';
+    self.data = value;
+    for (let i = 0; i &lt; self.onFulfilledCallbacks.length; i++) {
+      self.onFulfilledCallbacks[i](value);
+    }
+  }
+  function reject(reason) {
+    if (self.status !== 'pending') {
+      return;
+    }
+    self.status = 'rejected';
+    self.data = reason;
+    for (let i = 0; i &lt; self.onRejectedCallbacks.length; i++) {
+      self.onRejectedCallbacks[i](reason);
+    }
+  }
+  try {
+    executor(fulfill, reject);
+  } catch (e) {
+    reject(e);
+  }
+}
+MyPromise.prototype.then = function (onFulFilled, onRejected) {
+  const self = this;
+  let promise = undefined;
+  onFulFilled =
+    typeof onFulFilled === 'function'
+      ? onFulFilled
+      : function (v) {
+          return v;
+        };
+  onRejected =
+    typeof onRejected === 'function'
+      ? onRejected
+      : function (e) {
+          throw e;
+        };
+  if (self.status === 'pending') {
+    promise = new MyPromise(function (fulfill, reject) {
+      self.onFulfilledCallbacks.push(function () {
+        try {
+          const temp = onFulFilled(self.data);
+          if (temp instanceof MyPromise) {
+            temp.then(fulfill, reject);
+          }
+          fulfill(temp);
+        } catch (e) {
+          reject(e);
+        }
+      });
+      self.onRejectedCallbacks.push(function () {
+        try {
+          const temp = onRejected(self.data);
+          if (temp instanceof MyPromise) {
+            temp.then(fulfill, reject);
+          }
+        } catch (e) {
+          reject(e);
+        }
+      });
+    });
+  }
+  if (self.status === 'fulfilled') {
+    promise = new MyPromise(function (fulfill, reject) {
+      try {
+        const temp = onFulfilled(self.data);
+        if (temp instanceof MyPromise) {
+          temp.then(fulfill, reject);
+        }
+        resolve(temp);
+      } catch (e) {
+        reject(e);
+      }
+    });
+  }
+  if (self.status === 'rejected') {
+    promise = new MyPromise(function (fulfill, reject) {
+      try {
+        const temp = onRejected(self.data);
+        if (temp instanceof MyPromise) {
+          temp.then(fulfill, reject);
+        }
+      } catch (e) {
+        reject(e);
+      }
+    });
+  }
+  return promise;
+};
+MyPromise.prototype.catch = function (onRejected) {
+  return this.then(null, onRejected);
+};
+</code></pre><h3 id=实现-promise-all-promise-race-promise-retry-和-promise-allsettled>实现 Promise.all、Promise.race、Promise.retry 和 Promise.allSettled</h3><pre><code class=language-js>Promise.myAll = (ps) =&gt; {
+  if (typeof ps[Symbol.iterator] !== 'function') {
+    return Promise.reject('arguments must be an iterator object');
+  }
   let resolvedList = Array(ps.length);
   let resolvedNum = 0;
-
   return new Promise((resolve, reject) =&gt; {
     ps.forEach((p, i) =&gt; {
       Promise.resolve(p)
@@ -170,12 +456,93 @@ console.log(Object.customAssign(b, a));
     });
   });
 };
-Promise.myRace = (ps) =&gt;
-  new Promise((resolve, reject) =&gt; {
+Promise.myRace = (ps) =&gt; {
+  if (typeof ps[Symbol.iterator] !== 'function') {
+    return Promise.reject('arguments must be an iterator object');
+  }
+  return new Promise((resolve, reject) =&gt; {
     ps.forEach((p) =&gt; {
       Promise.resolve(p).then(resolve).catch(reject);
     });
   });
+};
+Promise.myRetry = (p, time = 3) =&gt; {
+  return new Promise(async (resolve, reject) =&gt; {
+    while (time--) {
+      try {
+        const v = await p();
+        resolve(v);
+        break;
+      } catch (e) {
+        if (!time) {
+          reject(e);
+        }
+      }
+    }
+  });
+};
+Promise.myAllSettled = (ps) =&gt; {
+  if (typeof ps[Symbol.iterator] !== 'function') {
+    return Promise.reject('arguments must be an iterator object');
+  }
+  let tempList = Array(ps.length);
+  let tempNum = 0;
+  return new Promise((resolve, reject) =&gt; {
+    ps.forEach((p, i) =&gt; {
+      Promise.resolve(p)
+        .then((v) =&gt; {
+          tempList[i] = { status: 'fulfilled', value: v };
+          tempNum = tempNum + 1;
+          if (tempList.length === tempNum) {
+            resolve(tempList);
+          }
+        })
+        .catch((e) =&gt; {
+          tempList[i] = { status: 'rejected', reason: e };
+          tempNum = tempNum + 1;
+          if (tempList.length === tempNum) {
+            resolve(tempList);
+          }
+        });
+    });
+  });
+};
+</code></pre><h3 id=实现函数-compose>实现函数 compose</h3><pre><code class=language-js>function compose(...fns) {
+  let ctx = this;
+  let temp = null;
+  let length = fns.length;
+  return function fn(...args) {
+    temp = fns[length - 1].call(ctx, ...args);
+    if (length &gt; 1) {
+      length--;
+      return fn.call(ctx, temp);
+    } else {
+      return temp;
+    }
+  };
+}
+// 测试代码
+const a = (msg) =&gt; `${msg}a`;
+const b = (msg) =&gt; `${msg}b`;
+const c = (msg) =&gt; `${msg}c`;
+const f = compose(a, b, c);
+console.log(f('hello, ')); // hello, cba
+</code></pre><h3 id=实现深拷贝>实现深拷贝</h3><pre><code class=language-js>function deepClone(o, hash = new WeakMap()) {
+  if (o === null || o === undefined) return o;
+  if (o instanceof Date) return new Date(o);
+  if (o instanceof RegExp) return new RegExp(o);
+  if (typeof o !== 'object') return o;
+  // 对引用类型进行处理，WeakMap 解决循环引用
+  if (hash.get(o)) return hash.get(o);
+  let temp = new o.constructor();
+  hash.set(o, temp);
+  for (let k in o) {
+    if (o.hasOwnProperty(k)) {
+      temp[k] = deepClone(o[k], hash);
+    }
+  }
+  return temp;
+}
 </code></pre><h3 id=实现绑定-解绑和派发的事件类>实现绑定、解绑和派发的事件类</h3><pre><code class=language-js>class Event {
   constructor() {
     this.cache = {};
@@ -239,66 +606,32 @@ console.log(add(1)(2)); // 3
 console.log(add(1)(2)(3)); // 6
 console.log(add(1)(2)(3)(4)); // 10
 console.log(add(1)(2)(3)(4)(5)); // 15
-</code></pre><h3 id=实现一个-lazyman-类>实现一个 LazyMan 类</h3><pre><code class=language-js>class LazyManClass {
-  constructor(name) {
-    this.name = name;
-    this.doSomething = [];
-
-    console.log(`Hi I am ${this.name}`);
-
-    setTimeout(() =&gt; {
-      this.next();
-    }, 0);
+</code></pre><h3 id=实现两个非常大的数字-超出了-number-范围-的加法>实现两个非常大的数字（超出了 Number 范围）的加法</h3><pre><code class=language-js>function bigNumberSum(a, b) {
+  a = `${a}`;
+  b = `${b}`;
+  const padding = a.length - b.length;
+  if (padding &gt; 0) {
+    b = `${'0'.repeat(padding)}${b}`;
+  } else {
+    a = `${'0'.repeat(padding)}${a}`;
   }
-  eat(food) {
-    const sth = ((food) =&gt; () =&gt; {
-      console.log(`I am eating ${food}`);
-      this.next();
-    })(food);
-
-    this.doSomething.push(sth);
-
-    return this;
+  const temp = [];
+  let overTen = 0;
+  for (let i = a.length - 1; i &gt; -1; i--) {
+    let res = overTen + (a[i] - 0) + (b[i] - 0);
+    if (res &gt; 9) {
+      overTen = 1;
+    } else {
+      overTen = 0;
+    }
+    temp[i] = res % 10;
   }
-  sleep(time) {
-    const sth = ((time) =&gt; () =&gt; {
-      setTimeout(() =&gt; {
-        console.log(`等待了${time}秒...`);
-        this.next();
-      }, time * 1000);
-    })(time);
-
-    this.doSomething.push(sth);
-
-    return this;
+  if (overTen &gt; 0) {
+    temp.unshift(1);
   }
-  sleepFirst(time) {
-    var sth = ((time) =&gt; () =&gt; {
-      setTimeout(() =&gt; {
-        console.log(`等待了${time}秒...`);
-        this.next();
-      }, time * 1000);
-    })(time);
-    // 将任务添加到最前边
-    this.doSomething.unshift(sth);
-
-    return this;
-  }
-  next() {
-    let doSth = this.doSomething.shift();
-    doSth &amp;&amp; doSth();
-  }
+  return temp.join('');
 }
-function LazyMan(name) {
-  return new LazyManClass(name);
-}
-
-LazyMan('Tony')
-  .eat('lunch')
-  .eat('dinner')
-  .sleepFirst(5)
-  .sleep(10)
-  .eat('junk food');
+bigNumberSum(123456, 9);
 </code></pre><h3 id=复杂类型转换>复杂类型转换</h3><pre><code class=language-js>const example = {
   valueOf() {
     // 优先级次之
@@ -527,42 +860,6 @@ console.log(
       a.codePointAt(1) - b.codePointAt(1)
   )
 );
-</code></pre><h3 id=for-循环打印-0-9>for 循环打印 0-9</h3><pre><code class=language-js>for (var i = 0; i &lt; 10; i++) {
-  (function (i) {
-    setTimeout(() =&gt; {
-      console.log(i);
-    }, 1000);
-  })(i);
-}
-for (var i = 0; i &lt; 10; i++) {
-  setTimeout(
-    (i) =&gt; {
-      console.log(i);
-    },
-    1000,
-    i
-  );
-}
-for (var i = 0; i &lt; 10; i++) {
-  setTimeout(console.log(i), 1000);
-}
-for (var i = 0; i &lt; 10; i++) {
-  setTimeout(console.log.bind(null, i), 1000);
-}
-for (var i = 0; i &lt; 10; i++) {
-  try {
-    throw i;
-  } catch (i) {
-    setTimeout(() =&gt; {
-      console.log(i);
-    }, 1000);
-  }
-}
-for (let i = 0; i &lt; 10; i++) {
-  setTimeout(() =&gt; {
-    console.log(i);
-  }, 1000);
-}
 </code></pre><h3 id=冒泡排序>冒泡排序</h3><pre><code class=language-js>function randomArr(length) {
   let arr = [];
 
@@ -659,44 +956,6 @@ function fitStr(s, t) {
 
   return -1;
 }
-</code></pre><h3 id=proxy-实现数据绑定>Proxy 实现数据绑定</h3><pre><code class=language-html>&lt;body&gt;
-  &lt;input type=&quot;text&quot; id=&quot;model&quot; /&gt;
-  &lt;p id=&quot;word&quot;&gt;&lt;/p&gt;
-&lt;/body&gt;
-&lt;script&gt;
-  const inputEle = document.querySelector('#model');
-  const pEle = document.querySelector('#word');
-  const o1 = {};
-  const o2 = new Proxy(o1, {
-    get(target, key, receiver) {
-      console.log('get');
-      console.info(target);
-      console.info(key);
-      console.info(receiver);
-
-      return Reflect.get(target, key, receiver);
-    },
-    set(target, key, value, receiver) {
-      console.log('set');
-      console.info(target);
-      console.info(key);
-      console.info(value);
-      console.info(receiver);
-
-      if (key === 'text') {
-        inputEle.value = value;
-        pEle.innerText = value;
-      }
-
-      return Reflect.set(target, key, value, receiver);
-    }
-  });
-
-  inputEle.addEventListener('input', (e) =&gt; {
-    console.log(e);
-    o2.text = e.target.value;
-  });
-&lt;/script&gt;
 </code></pre><h3 id=旋转数组>旋转数组</h3><pre><code class=language-js>/*
   输入: [1, 2, 3, 4, 5, 6, 7] 和 k = 3
   输出: [5, 6, 7, 1, 2, 3, 4]
@@ -819,5 +1078,91 @@ function sortStr(str) {
   return temp;
 }
 console.log(sortStr('红蓝蓝黄红黄蓝红红黄红'));
-</code></pre><h5 id=参考-壹题汇总-https-muyiy-cn-question>参考：<a href=https://muyiy.cn/question/>壹题汇总</a></h5></div><div class=post_footer><div class=meta><div class=info><span class="field tags"><i class=remixicon-stack-line></i><a href=https://vikingama.github.io/tags/%E9%9D%A2%E8%AF%95/>面试</a></span></div></div></div></div><div class=doc_comments><div class=comments_block_title>发表评论</div><div id=vcomments></div></div><link rel=stylesheet href=https://vikingama.github.io/css/comments.css><script src=/js/av.js></script><script src=/js/valine.js></script><script type=text/javascript>new Valine({el:'#vcomments',appId:'U06blUXOot4uJgfMu8I9xJXz-MdYXbMMI',appKey:'BnrXC06FJsvRNpr4aqb1HYPd',placeholder:'来都来了，不打个招呼吗？',visitor:'true',});</script></div></div><a id=back_to_top href=# class=back_to_top><span>△</span></a></div><footer class=footer><div class=powered_by><a href=https://zok.im/ target=_blank>Designed by <span class=jitters>Zeuk</span>,</a>
+</code></pre><h5 id=参考-壹题汇总-https-muyiy-cn-question-每日进阶-https-www-pzijun-cn-blog>参考：<a href=https://muyiy.cn/question/>壹题汇总</a>、<a href=https://www.pzijun.cn/blog/>每日进阶</a></h5><h3 id=检验链表是否成环>检验链表是否成环</h3><pre><code class=language-js>function hasCycle(linkedList) {
+  // 分别取两个指针（快、慢），如果成环，那么快、慢指针一定会相遇
+  if (!linkedList.head) return false;
+  let fast = linkedList.head;
+  let slow = linkedList.head;
+  while (fast.next &amp;&amp; fast.next.next) {
+    slow = slow.next;
+    fast = fast.next.next;
+    if (fast === slow) {
+      break;
+    }
+  }
+  if (!fast) {
+    return false;
+  }
+  slow = linkedList.head;
+  while (slow !== fast) {
+    // 重新相遇的点就是入环节点
+    slow = slow.next;
+    fast = fast.next;
+  }
+  return slow;
+}
+</code></pre><h3 id=数据转换>数据转换</h3><pre><code class=language-js>function arr2Obj(arr) {
+  const temp = {};
+  dfs(arr, 0, temp);
+  return temp[-1];
+}
+function dfs(arr, index, depth) {
+  if (index + 1 &gt; arr.length) return;
+  const [i, v, j] = [arr[index], arr[index + 1], arr[index + 2]];
+  if (!depth[i - 1]) {
+    depth[i - 1] = {};
+  }
+  let next = {};
+  if (j === undefined || i &gt; j) {
+    next = null;
+  }
+  depth[i - 1][v] = next;
+  depth[i] = next;
+  dfs(arr, index + 2, depth);
+}
+arr2Obj([0, 'a', 1, 'b', 2, 'c', 3, 'e', 2, 'd', 1, 'x', 0, 'f']);
+</code></pre><h3 id=求解最长递增子序列>求解最长递增子序列</h3><ol><li>对数组进行遍历，依次求解长度为 i 时的最长递增子序列；</li><li>当 i 元素大于 i-1 元素时，添加 i 元素并更新最长子序列；</li><li>否则往前查找，直到找到一个比 i 小的元素；</li><li><p>然后插在该元素后面并更新对应的最长递增子序列。</p><pre><code class=language-js>// 让递增序列的差尽可能的小，从而可以获得更长的递增子序列；这是一种“贪心”思想
+const temp = [2, 1, 5, 3, 6, 4, 8, 9, 7];
+function getSequence(arr) {
+const p = arr.slice();
+const result = [0];
+let i, j, u, v, c;
+const len = arr.length;
+for (i = 0; i &lt; len; i++) {
+const arrI = arr[i];
+if (arrI !== 0) {
+  j = result[result.length - 1];
+  if (arr[j] &lt; arrI) {
+    p[i] = j;
+    result.push(i);
+    continue;
+  }
+  u = 0;
+  v = result.length - 1;
+  while (u &lt; v) {
+    c = ((u + v) / 2) | 0;
+    if (arr[result[c]] &lt; arrI) {
+      u = c + 1;
+    } else {
+      v = c;
+    }
+  }
+  if (arrI &lt; arr[result[u]]) {
+    if (u &gt; 0) {
+      p[i] = result[u - 1];
+    }
+    result[u] = i;
+  }
+}
+}
+u = result.length;
+v = result[u - 1];
+while (u-- &gt; 0) {
+result[u] = v;
+v = p[v];
+}
+return result;
+}
+console.log(getSequence(temp));
+</code></pre></li></ol></div><div class=post_footer><div class=meta><div class=info><span class="field tags"><i class=remixicon-stack-line></i><a href=https://vikingama.github.io/tags/%E9%9D%A2%E8%AF%95/>面试</a></span></div></div></div></div><div class=doc_comments><div class=comments_block_title>发表评论</div><div id=vcomments></div></div><link rel=stylesheet href=https://vikingama.github.io/css/comments.css><script src=/js/av.js></script><script src=/js/valine.js></script><script type=text/javascript>new Valine({el:'#vcomments',appId:'U06blUXOot4uJgfMu8I9xJXz-MdYXbMMI',appKey:'BnrXC06FJsvRNpr4aqb1HYPd',placeholder:'来都来了，不打个招呼吗？',visitor:'true',});</script></div></div><a id=back_to_top href=# class=back_to_top><span>△</span></a></div><footer class=footer><div class=powered_by><a href=https://github.com/varkai/hugo-theme-zozo/ target=_blank>Designed by <span class=jitters>Zeuk</span>,</a>
 <a href=https://www.gohugo.io/ target=_blank>Published with <span class=jitters>Hugo</span></a></div><div class=footer_slogan><span id=enter_time></span></div></footer><script src=https://vikingama.github.io/js/jquery.js></script><script src=https://vikingama.github.io/js/highlight.js></script><script src=https://vikingama.github.io/js/zozo.js></script><script>hljs.initHighlightingOnLoad();</script></body></html>

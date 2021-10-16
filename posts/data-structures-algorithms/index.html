@@ -1,0 +1,1073 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no,user-scalable=no"><meta name=author content=馬腊咯稽><meta name=description content=数据结构与算法学习笔记><meta name=keywords content=Algorithms><link rel=canonical href=https://vikingama.github.io/posts/data-structures-algorithms/><link rel="shortcut icon" href=https://vikingama.github.io/images/favicon.ico><link rel=stylesheet href=https://vikingama.github.io/css/zozo.css><link rel=stylesheet href=https://vikingama.github.io/css/animate.css><link rel=stylesheet href=https://vikingama.github.io/css/highlight.css><link rel=stylesheet href=https://vikingama.github.io/css/remixicon.css><title>数据结构与算法学习笔记 &middot; 庙小妖风大 · 水浅王八多</title></head><body><div class="main animated"><div class="nav_container animated fadeInDown"><div class=site_nav id=site_nav><ul><li><a href=/>首页</a></li><li><a href=/posts/>归档</a></li><li><a href=/tags/>标签</a></li><li><a href=/inspires/>启发</a></li><li><a href=/about/>关于</a></li></ul></div><div class=menu_icon><a id=menu_icon><i class=remixicon-links-line></i></a></div></div><div class="header animated fadeInDown"><div class=site_title_container><div class=site_title><h1><a href=https://vikingama.github.io><img style=width:65px;height:auto;vertical-align:top src=https://vikingama.github.io/images/avatar.png></a></h1></div><div class=description><p class=sub_title>庙小妖风大<br>水浅王八多</p><div class=my_socials><a href=https://www.douban.com/people/nicknoonan title=douban target=_blank><i class=remixicon-douban-fill></i></a><a href=https://github.com/Vikingama title=github target=_blank><i class=remixicon-github-fill></i></a><a href=https://www.zhihu.com/people/vikingama title=zhihu target=_blank><i class=remixicon-zhihu-fill></i></a><a href=https://vikingama.github.io/index.xml type=application/rss+xml title=rss target=_blank><i class=remixicon-rss-fill></i></a></div></div></div></div><div class=content><div class=post_page><div class="post animated fadeInDown"><div class="post_title post_detail_title"><h2><a href=/posts/data-structures-algorithms/>数据结构与算法学习笔记</a></h2><span class=date>2020.10.01</span></div><div class="post_content markdown"><blockquote><p>非科班出身的难民；AVL、红黑树、二叉堆、图，你们牛逼。</p></blockquote><h3 id=数组>数组</h3><p>数组存储一系列同一种数据类型的值；虽然在 JS 里，数组中可以保存不同类型的值，但大多数语言都没这个能力。</p><h6 id=注意>注意：</h6><ol><li>JS 中的数组继承自对象，内部是 key-value 的存储形式；key 为 0、1、2、3... 的字符串；</li><li>数组有两种模式：快速（fast）和缓慢（slow）;</li><li>快速的后备存储结构是 FixedArray（V8 实现的一个类似于数组的类，它表示一段固定长度的连续的内存）；</li><li>缓慢的后备存储结构是一个以数字为键的哈希表（根据键 key 而直接访问在内存存储位置的数据结构）；</li><li>ArrayBuffer 是可以按照需要分配连续内存的数组。</li></ol><h3 id=栈>栈</h3><p>栈是一种遵从<strong>后进先出</strong>（LIFO）原则的有序集合；新添加的元素都保存在栈顶，另一端就叫栈底。</p><p>基于数组的栈：方法的复杂度为 O(n)，操作基于数组的栈需要迭代整个数组。</p><pre><code class=language-js>class StackBasedOnArray {
+  constructor() {
+    this.temp = [];
+  }
+  push(item) {
+    // 添加到栈顶
+    this.temp.push(item);
+  }
+  pop() {
+    // 移除栈顶元素并返回该元素
+    return this.temp.pop();
+  }
+  peek() {
+    // 返回栈顶元素
+    return this.temp[this.temp.length - 1];
+  }
+  size() {
+    // 返回栈中元素数量
+    return this.temp.length;
+  }
+  clear() {
+    // 清空栈
+    this.temp = [];
+  }
+  isEmpty() {
+    // 返回栈是否为空
+    return this.temp.length === 0;
+  }
+}
+</code></pre><p>基于对象的栈：除了 push，其他方法复杂度为 O(1)。</p><pre><code class=language-js>class StackBasedOnObject {
+  constructor() {
+    this.count = 0;
+    this.temp = {};
+  }
+  push(item) {
+    // 添加到栈顶
+    this.temp[this.count] = item;
+    this.count++;
+  }
+  pop() {
+    // 移除栈顶元素并返回该元素
+    if (this.isEmpty()) {
+      return undefined;
+    }
+    this.count--;
+    const park = this.temp[this.count];
+    delete this.temp[this.count];
+    return park;
+  }
+  peek() {
+    // 返回栈顶元素
+    return this.isEmpty() ? undefined : this.temp[this.count - 1];
+  }
+  size() {
+    // 返回栈中元素数量
+    return this.count;
+  }
+  clear() {
+    // 清空栈
+    this.count = 0;
+    this.temp = {};
+  }
+  isEmpty() {
+    // 返回栈是否为空
+    return this.count === 0;
+  }
+}
+</code></pre><p>基于数组/对象实现的栈的内部数据得不到保护；理想情况下，用户只能通过我们暴露的方法对栈进行操作，所以有了基于 Map 的栈。</p><pre><code class=language-js>class StackBasedOnMap {
+  /**
+   * 这里使用 WeakMap 是因为它只能使用对象作为“键”
+   * 并且是弱引用，删除的“键”可以被垃圾回收。
+   */
+  static wm = new WeakMap();
+  constructor() {
+    const { wm } = this.constructor;
+    wm.set(this, []);
+  }
+  push(item) {
+    // 添加到栈顶
+    const { wm } = this.constructor;
+    const temp = wm.get(this);
+    temp.push(item);
+  }
+  pop() {
+    // 移除栈顶元素并返回该元素
+    const { wm } = this.constructor;
+    const temp = wm.get(this);
+    return temp.pop();
+  }
+  peek() {
+    // 返回栈顶元素
+    const { wm } = this.constructor;
+    const temp = wm.get(this);
+    return temp[temp.length - 1];
+  }
+  size() {
+    // 返回栈中元素数量
+    const { wm } = this.constructor;
+    const temp = wm.get(this);
+    return temp.length;
+  }
+  clear() {
+    // 清空栈
+    const { wm } = this.constructor;
+    wm.set(this, []);
+  }
+  isEmpty() {
+    // 返回栈是否为空
+    const { wm } = this.constructor;
+    const temp = wm.get(this);
+    return temp.length === 0;
+  }
+}
+</code></pre><h3 id=队列>队列</h3><p>队列是遵从<strong>先进先出</strong>（FIFO）原则的一组有序的项；队列在尾部添加新元素，并从顶部移除元素；最新添加的元素必须排在队列的末尾。</p><pre><code class=language-js>class Queue {
+  constructor() {
+    this.arrow = 0; // 指向头部第一个元素
+    this.tail = 0; // 指向尾部最后一个元素
+    this.temp = {};
+  }
+  enqueue(item) {
+    // 向队列尾部添加项
+    this.temp[this.tail] = item;
+    this.tail++;
+  }
+  dequeue() {
+    // 移除队列第一项并返回该项
+    if (this.isEmpty()) {
+      return undefined;
+    }
+    const park = this.temp[this.arrow];
+    delete this.temp[this.arrow];
+    this.arrow++;
+    return park;
+  }
+  peek() {
+    // 返回队列第一项
+    return this.temp[this.arrow];
+  }
+  size() {
+    // 返回队列包含的元素个数
+    return this.tail - this.arrow;
+  }
+  clear() {
+    this.arrow = 0;
+    this.tail = 0;
+    this.temp = {};
+  }
+  isEmpty() {
+    // 返回队列是否为空
+    return this.size() === 0;
+  }
+}
+</code></pre><h3 id=双端队列>双端队列</h3><p>双端队列是一种允许我们同时从前端和后端添加和移除元素的特殊队列（先进先出、后进先出）。</p><pre><code class=language-js>class DoubleEndedQueue {
+  constructor() {
+    this.arrow = 0;
+    this.tail = 0;
+    this.temp = {};
+  }
+  addFront(item) {
+    // 向队列头部添加
+    this.arrow--;
+    this.temp[this.arrow] = item;
+  }
+  removeFront() {
+    // 移除队列头部元素并返回]
+    if (this.isEmpty()) {
+      return undefined;
+    }
+    const park = this.temp[this.arrow];
+    delete this.temp[this.arrow];
+    this.arrow++;
+    return park;
+  }
+  peekFront() {
+    // 返回队列头部元素
+    return this.temp[this.arrow];
+  }
+  addBack(item) {
+    // 向队列尾部添加
+    this.temp[this.tail] = item;
+    this.tail++;
+  }
+  removeBack() {
+    // 移除队列尾部元素并返回
+    if (this.isEmpty()) {
+      return undefined;
+    }
+    this.tail--;
+    const park = this.temp[this.tail];
+    delete this.temp[this.tail];
+    return park;
+  }
+  peekBack() {
+    // 返回队列尾部元素
+    return this.temp[this.tail - 1];
+  }
+  size() {
+    // 返回队列包含的元素个数
+    return this.tail - this.arrow;
+  }
+  clear() {
+    this.arrow = 0;
+    this.tail = 0;
+    this.temp = {};
+  }
+  isEmpty() {
+    // 返回队列是否为空
+    return this.size() === 0;
+  }
+}
+</code></pre><h3 id=链表>链表</h3><p>链表是存储有序的元素集合；不同于数组，链表中的元素在内存中并不是连续放置的，每个元素由一个存储元素本身的节点和一个指向下一个元素的引用（指针/链接）组成；链表添加或移除元素的时候不需要移动其他元素。</p><p>在数组中，我们可以直接访问任何位置的任何元素；而要想访问链表中间的一个元素，则需要从起点（表头）开始迭代链表直到找到所需的元素。</p><pre><code class=language-js>// 比较是否相等
+function defaultEquals(a, b) {
+  return a === b;
+}
+// 链表中的项
+class Node {
+  constructor(value, next) {
+    this.value = value; // 当前项的值
+    this.next = next; // 指向下一个项的指针
+  }
+}
+// 链表
+class LinkedList {
+  constructor(equalsFn = defaultEquals) {
+    this.count = 0; // 链表元素数量
+    this.head = undefined; // 指向链表中的第一个元素
+    this.equalsFn = equalsFn;
+  }
+  push(item) {
+    // 向链表尾部添加元素
+    const node = new Node(item); // 新建元素
+    let current;
+    if (!this.head) {
+      // 如果链表不存在第一个元素
+      this.head = node; // item 设置为列表的第一个元素
+    } else {
+      // 获取列表的最后一项
+      current = this.head;
+      while (current.next) {
+        current = current.next;
+      }
+      current.next = node; // 将最后一项的指针指向该元素
+    }
+    this.count++;
+  }
+  insert(item, pos) {
+    // 在指定位置插入元素
+    if (pos &gt;= 0 &amp;&amp; pos &lt;= this.count) {
+      const node = new Node(item);
+      if (pos === 0) {
+        // 在头部插入元素
+        node.next = this.head; // 将新元素的指针指向原来的头部元素
+        this.head = node; // 将新元素设置为链表头部
+      } else {
+        let previous = this.getItemAt(pos - 1); // 获取待插入位置的前一个元素
+        let current = previous.next; // 获取待插入位置的元素
+        node.next = current; // 将新元素的指针指向该元素
+        previous.next = node; // 前一个位置的元素指针指向新元素
+      }
+      this.count++;
+      return item;
+    }
+    return false;
+  }
+  getItemAt(pos) {
+    // 返回特定位置的元素
+    if (pos &gt;= 0 &amp;&amp; pos &lt; this.count) {
+      let current = this.head;
+      for (let i = 0; i &lt; pos; i++) {
+        current = current.next;
+      }
+      return current;
+    }
+    return undefined;
+  }
+  remove(item) {
+    // 移除指定元素
+    const pos = this.indexOf(item);
+    return this.removeAt(pos);
+  }
+  removeAt(pos) {
+    // 移除指定位置的元素
+    if (pos &gt;= 0 &amp;&amp; pos &lt; this.count) {
+      let current = this.head;
+      if (pos === 0) {
+        // 如果要移除链表的第一个元素，只需要将 this.head 指向下一个元素即可
+        this.head = current.next;
+      } else {
+        // 移除的不是链表的第一个元素，需要获取移除元素的前一个元素和后一个元素
+        let previous = this.getItemAt(pos - 1);
+        current = previous.next;
+        previous.next = current.next; // 将前一个元素的指针指向下一个元素（跳过要移除的元素）
+      }
+      this.count--;
+      return current.value;
+    }
+    return undefined;
+  }
+  indexOf(item) {
+    // 返回元素在链表中的索引
+    let current = this.head;
+    for (let i = 0; i &lt; this.count; i++) {
+      if (this.equalsFn(item, current.value)) {
+        return i;
+      }
+      current = current.next;
+    }
+    return -1;
+  }
+  clear() {
+    this.count = 0;
+    this.head = undefined;
+  }
+  size() {
+    // 链表中的元素个数
+    return this.count;
+  }
+  isEmpty() {
+    // 链表是否为空
+    return this.size() === 0;
+  }
+  getHead() {
+    // 返回链表第一个元素
+    return this.head;
+  }
+  toString() {
+    // 返回链表字符串
+    if (this.head) {
+      let str = `${this.head.value}`;
+      let current = this.head.next;
+      for (let i = 0; i &lt; this.count; i++) {
+        str = `${str},${current.value}`;
+        current = current.next;
+      }
+      return str;
+    }
+    return '';
+  }
+}
+</code></pre><h3 id=双向链表>双向链表</h3><p>双向链表和普通链表的区别在于，双向链表中的每个节点有两个指针，分别指向前一个节点和后一个节点。</p><pre><code class=language-js>class DoublyNode extends Node {
+  constructor(value, next, prev) {
+    super(value, next);
+    this.prev = prev;
+  }
+}
+class DoublyLinkedList extends LinkedList {
+  constructor(equalsFn = defaultEquals) {
+    super(equalsFn);
+    this.tail = undefined; // 指向链表中的最后一个元素
+  }
+  push(item) {
+    const node = new DoublyNode(item);
+    if (!this.head) {
+      this.head = this.tail = node;
+    } else {
+      this.tail.next = node;
+      node.prev = this.tail;
+      this.tail = node;
+    }
+    this.count++;
+  }
+  insert(item, pos) {
+    if (pos &gt;= 0 &amp;&amp; pos &lt;= this.count) {
+      const node = new DoublyNode(item);
+      if (pos === 0) {
+        // 向链表首部插入元素
+        let current = this.head;
+        if (current) {
+          // 链表头部已经有元素
+          current.prev = node;
+          node.next = current;
+          this.head = node;
+        } else {
+          // 链表头部没有元素，此时链表为空
+          this.head = this.tail = node;
+        }
+      } else if (pos === this.count) {
+        // 向链表尾部插入元素
+        let current = this.tail;
+        current.next = node;
+        node.prev = current;
+        this.tail = node;
+      } else {
+        const previous = this.getItemAt(pos - 1); // node 的前一个元素
+        const current = previous.next; // node 的后一个元素
+        node.prev = previous;
+        node.next = current;
+        previous.next = node;
+        current.prev = node;
+      }
+      this.count++;
+      return item;
+    }
+    return false;
+  }
+  removeAt(pos) {
+    if (pos &gt;= 0 &amp;&amp; pos &lt; this.count) {
+      let current = this.head;
+      if (pos === 0) {
+        this.head = this.head.next;
+        if (this.count === 1) {
+          this.tail = undefined;
+        } else {
+          this.head.prev = undefined;
+        }
+      } else if (pos === this.count - 1) {
+        current = this.tail;
+        this.tail = this.tail.prev;
+        this.tail.next = undefined;
+      } else {
+        current = this.getItemAt(pos);
+        const prevNode = current.prev;
+        const nextNode = current.next;
+        prevNode.next = nextNode;
+        nextNode.prev = prevNode;
+      }
+      this.count--;
+      return current.value;
+    }
+    return undefined;
+  }
+  indexOf(item) {
+    let current = this.head;
+    let index = 0;
+    while (current) {
+      if (this.equalsFn(current.value, item)) {
+        return index;
+      }
+      index++;
+      current = current.next;
+    }
+    return -1;
+  }
+  clear() {
+    super.clear();
+    this.tail = undefined;
+  }
+  size() {
+    return this.count;
+  }
+  isEmpty() {
+    return this.count === 0;
+  }
+  getHead() {
+    return this.head;
+  }
+  getTail() {
+    return this.tail;
+  }
+  toString() {
+    if (this.head) {
+      let str = `${this.head.value}`;
+      let current = this.head.next;
+      while (current) {
+        str = `${str},${current.value}`;
+        current = current.next;
+      }
+      return str;
+    }
+    return '';
+  }
+}
+</code></pre><h3 id=循环链表>循环链表</h3><p>循环链表和链表的区别是：最后一个元素指向下一个元素的指针（tail.next）不是 undefined，而是指向第一个元素（head）。</p><pre><code class=language-js>class CircularLinkedList extends LinkedList {
+  constructor(equalsFn = defaultEquals) {
+    super(equalsFn);
+  }
+  push(item) {
+    const node = new Node(item);
+    if (!this.head) {
+      this.head = node;
+    } else {
+      let current = this.getItemAt(this.count - 1);
+      current.next = node;
+    }
+    node.prev = this.head;
+    this.count++;
+  }
+  insert(item, pos) {
+    if (pos &gt;= 0 &amp;&amp; pos &lt;= this.count) {
+      const node = new Node(item);
+      let current = this.head;
+      if (pos === 0) {
+        if (!current) {
+          this.head = node;
+          node.next = this.head;
+        } else {
+          node.next = current;
+          current = this.getItemAt(this.count);
+          this.head = node;
+          current.next = this.head;
+        }
+      } else {
+        const previous = this.getItemAt(this.count - 1);
+        node.next = previous.next;
+        previous.next = node;
+      }
+      this.count++;
+      return item;
+    }
+    return false;
+  }
+  removeAt(pos) {
+    if (pos &gt;= 0 &amp;&amp; pos &lt; this.count) {
+      let current = this.head;
+      if (pos === 0) {
+        if (this.count === 1) {
+          this.head = undefined;
+        } else {
+          const removed = this.head;
+          current = this.getItemAt(this.count - 1);
+          this.head = this.head.next;
+          current.next = this.head;
+          current = removed;
+        }
+      } else {
+        const previous = this.getItemAt(pos - 1);
+        current = previous.next;
+        previous.next = current.next;
+      }
+      this.count--;
+      return current.value;
+    }
+    return false;
+  }
+}
+</code></pre><h3 id=有序链表>有序链表</h3><p>有序链表是指保持元素有序的链表结构。</p><pre><code class=language-js>function defaultCompare(a, b) {
+  if (a === b) {
+    return 0;
+  }
+  return a &lt; b ? -1 : 1;
+}
+class SortedLinkedList extends LinkedList {
+  constructor(equalsFn, compareFn = defaultCompare) {
+    super(equalsFn);
+    this.compareFn = compareFn;
+  }
+  insert(item, pos) {
+    if (this.isEmpty()) {
+      return super.insert(element, 0);
+    }
+    pos = this.getPosNextSortedItem(item);
+    return super.insert(item, pos);
+  }
+  getPosNextSortedItem(item) {
+    let current = this.head;
+    let i = 0;
+    for (; i &lt; this.size() &amp;&amp; current; i++) {
+      const compare = this.compareFn(item, current.value);
+      if (compare === -1) {
+        return i;
+      }
+      current = current.next;
+    }
+    return i;
+  }
+}
+</code></pre><h3 id=集合>集合</h3><p>集合是由一组无序且唯一（即不能重复）的项组成的（就像一个既没有重复元素，也没有顺序概念的数组）。</p><pre><code class=language-js>class MySet {
+  constructor() {
+    // 同样的 key 不会有两个 value，所以这里使用对象
+    this.items = {};
+  }
+  add(item) {
+    // 添加新元素
+    if (this.has(item)) {
+      return false;
+    }
+    this.items[item] = item;
+    return item;
+  }
+  delete(item) {
+    // 移除指定元素
+    if (this.has(item)) {
+      delete this.items[item];
+      return item;
+    }
+    return false;
+  }
+  has(item) {
+    // 是否含有指定元素，这里不用 in 运算符是因为不应该去检查原型链
+    return Object.hasOwnProperty.call(this.items, item);
+  }
+  clear() {
+    // 清空集合
+    this.items = {};
+  }
+  size() {
+    // 返回集合中元素数量
+    return Object.keys(this.items).length;
+  }
+  values() {
+    // 返回包含集合中所有项的数组
+    return Object.values(this.items);
+  }
+  union(other) {
+    // 并集，你的和我的
+    const temp = new MySet();
+    this.values().forEach((item) =&gt; {
+      temp.add(item);
+    });
+    other.values().forEach((item) =&gt; {
+      temp.add(item);
+    });
+    return temp;
+  }
+  intersection(other) {
+    // 交集，你我共有的
+    const temp = new MySet();
+    this.values().forEach((item) =&gt; {
+      if (other.has(item)) {
+        // 在 other 同样存在的
+        temp.add(item);
+      }
+    });
+    return temp;
+  }
+  differential(other) {
+    // 差集，我的再减去你我共有的
+    const temp = new MySet();
+    this.values().forEach((item) =&gt; {
+      if (!other.has(item)) {
+        // 去除 other 集合中存在的
+        temp.add(item);
+      }
+    });
+    return temp;
+  }
+  isSubsetOf(other) {
+    // 是否是 other 的子集
+    if (this.size() &gt; other.size()) {
+      return false;
+    }
+    let temp = true;
+    this.values().every((item) =&gt; {
+      if (!other.has(item)) {
+        temp = false;
+        return false;
+      }
+      return true;
+    });
+    return temp;
+  }
+}
+</code></pre><h3 id=字典>字典</h3><p>字典和集合很相似，集合以[值，值]的形式存储元素，字典则是以[键，值]的形式来存储元素；字典也称作映射、符号表或关联数组。</p><pre><code class=language-js>function defaultToString(s) {
+  if (s === null) {
+    return 'NULL';
+  } else if (s == undefined) {
+    return 'UNDEFINED';
+  } else if (typeof s === 'string' || s instanceof String) {
+    return `${s}`;
+  }
+  return s.toString();
+}
+class ValuePair {
+  constructor(key, value) {
+    this.key = key;
+    this.value = value;
+  }
+  toString() {
+    return `[#${this.key}: ${this.value}]`;
+  }
+}
+class Dictionary {
+  constructor(toStr = defaultToString) {
+    this.toStr = toStr;
+    this.table = {}; // table[key] = {key, value}
+  }
+  set(key, value !== null) {
+    // 向字典中添加新元素
+    if (key &amp;&amp; value) {
+      this.table[this.toStr(key)] = new ValuePair(key, value);
+      return true;
+    }
+    return false;
+  }
+  remove(key) {
+    // 通过键移除对应的值
+    if (this.hasKey(key)) {
+      delete this.table[this.toStr(key)];
+      return true;
+    }
+    return false;
+  }
+  hasKey(key) {
+    // 键是否存在于字典中
+    return this.table[this.toStr(key)] !== null;
+  }
+  get(key) {
+    // 获取键对应的值
+    const valuePair = this.table[this.toStr(key)];
+    return valuePair ? valuePair.value : undefined;
+  }
+  clear() {
+    // 清空字典
+    this.table = {};
+  }
+  keyValues() {
+    // 返回[键，值]
+    return Object.values(this.table);
+  }
+  keys() {
+    // 返回包含所有键的数组
+    return this.keyValues().map((valuePair) =&gt; valuePair.key);
+  }
+  values() {
+    // 返回包含所有值的数组
+    return this.keyValues().map((valuePair) =&gt; valuePair.value);
+  }
+  size() {
+    // 返回字典包含值的数量
+    return this.keyValues().length;
+  }
+  forEach(cb) {
+    // 迭代字典键值对
+    this.keyValues().forEach((valuePair) =&gt; {
+      cb(valuePair.key, valuePair.value);
+    });
+  }
+  isEmpty() {
+    // 字典是否为空
+    return this.size() === 0;
+  }
+}
+</code></pre><h3 id=散列表-哈希表>散列表（哈希表）</h3><p><a href=https://oi-wiki.org/ds/hash/>散列表</a>是一种以 key-value 形式存储数据的数据结构；任意的 key 都唯一对应到内存中的某个位置，只需要输入查找的值 key，就可以快速地找到其对应的 value（哈希算法的作用就是尽可能快地在数据结构中找到一个值）；可以把哈希表理解为一种高级的数组，这种数组的下标可以是很大的整数，浮点数，字符串甚至结构体。</p><pre><code class=language-js>class HashMap {
+  constructor(toStr = defaultToString) {
+    this.toStr = toStr;
+    this.table = {};
+  }
+  put(key, value) {
+    if (key &amp;&amp; value) {
+      const pos = this.hashCode(key);
+      this.table[pos] = new ValuePair(key, value);
+      return true;
+    }
+    return false;
+  }
+  get(key) {
+    /**
+     * 在 Dictionary 类中，我们将 valuePair 保存在 table 的 key 属性中（在它被转化为字符串之后）；
+     * 在 HashTable 类中，我们由 key 生成一个 hash 数，并将 valuePair 保存在 hash 位置。
+     */
+    const valuePair = this.table[this.hashCode(key)];
+    return valuePair ? valuePair.value : undefined;
+  }
+  remove(key) {
+    const hashKey = this.hashCode(key);
+    const valuePair = this.table[hashkey];
+    if (valuePair) {
+      // this.table[hashKey] = null 酱紫也可以
+      delete this.table[hashKey];
+      return true;
+    }
+    return false;
+  }
+  hashCode(key) {
+    // 散列函数，将参数转换为哈希值
+    if (typeof key === 'number') {
+      return key;
+    }
+    let tableKey = this.toStr(key);
+    let hash = 0;
+    for (let i = 0; i &lt; tableKey.length; i++) {
+      // 这种算法容易造成冲突，解决方法有：分离链接、线性探查和双散列法
+      hash += tableKey.charCodeAt(i); // 字符对应的 UTF-16 代码单元
+    }
+    // 规避操作数超过数值变量最大表示范围的风险
+    return hash % 37; // 这里不一定非要是 37，可以是任意整数
+  }
+  enhancedHashCode(key) {
+    let tableKey = this.toStr(key);
+    let hash = 5381; // 一个质数
+    for (let i = 0; i &lt; tableKey.length; i++) {
+      // djb2 算法可以降低冲突风险，但不能彻底消除冲突
+      hash = hash * 33 + tableKey.charCodeAt(i);
+    }
+    return hash % 1013; // 1013 代表随机质数
+  }
+  clear() {
+    this.table = {};
+  }
+  size() {
+    return Object.keys(this.table).length;
+  }
+  isEmpty() {
+    return this.size() === 0;
+  }
+  toString() {
+    if (this.isEmpty()) {
+      return '';
+    }
+    const keys = Object.keys(this.table);
+    let temp = `{${keys[0]} =&gt; ${this.table[keys[0]].toString()}}`;
+    for (let i = 1; i &lt; keys.length; i++) {
+      temp = `${temp},{${keys[i]} =&gt; ${this.table[keys[i]].toString()}}`;
+    }
+    return temp;
+  }
+}
+</code></pre><h6 id=注意-1>注意：</h6><p>哈希表中的 key 是通过哈希算法，不同的 key 有可能会有相同哈希值；这种情况我们叫做<strong>冲突</strong>，解决方法有：</p><ul><li>分离链接法，为散列表的每一个位置创建一个链表并将元素存储在里面；</li><li>线性探查法，添加新元素的时候，如果索引为 pos 的位置已经被占据了，就尝试 pos+1 的位置；如果 pos+1 的位置也被占据了，就尝试 pos+2 的位置，以此类推，直到在散列表中找到一个空闲的位置。</li></ul><h3 id=二叉搜索树>二叉搜索树</h3><p>树是一种分层数据的抽象模型。一个树结构包含一系列存在父子关系的节点；每个节点都有一个父节点（除了根节点）以及零个或多个子节点。位于树顶部的节点叫作根节点，至少有一个子节点的节点称为内部节点，没有子元素的节点称为外部节点或叶节点。节点的深度取决于它的祖先节点的数量（有几个祖先节点深度就是几）。</p><p>二叉树中的节点最多只能有两个子节点：一个是左侧子节点，另一个是右侧子节点；二叉搜索树（BST）是二叉树的一种，但是<strong>只允许</strong>你在左侧节点存储（比父节点）小的值，在右侧节点存储（比父节点）大的值。</p><pre><code class=language-js>const Compare = {
+  LESS_THAN: -1,
+  BIGGER_THAN: 1,
+  EQUALS: 0
+};
+function defaultCompare(a, b) {
+  if (a === b) {
+    return Compare.EQUALS;
+  }
+  return a &lt; b ? Compare.LESS_THAN : Compare.BIGGER_THAN;
+}
+// 节点
+class Node {
+  constructor(key) {
+    // 节点值（键）
+    this.key = key;
+    // 对左侧节点的引用
+    this.left = null;
+    // 对右侧节点的引用
+    this.right = null;
+  }
+}
+class BinarySearchTree {
+  constructor(compare = defaultCompare) {
+    this.compare = compare; // 比较函数
+    this.root = null; // 根节点
+  }
+  insert(key) {
+    // 插入节点
+    if (!this.root) {
+      this.root = new Node(key);
+    } else {
+      this.insertNode(this.root, key);
+    }
+  }
+  insertNode(node, newKey) {
+    const newNode = new Node(newKey);
+    if (this.compare(newKey, node.key) === Compare.LESS_THAN) {
+      // 待插入节点比父节点小，放在左侧
+      if (node.left === null) {
+        // 父节点左侧有坑了？
+        node.left = newNode;
+      } else {
+        // 父节点左侧的坑已经有萝卜了？接着往下一层找坑
+        this.insertNode(node.left, newKey);
+      }
+    } else {
+      // 待插入节点比父节点大，放在右侧
+      if (node.right === null) {
+        // 父节点右侧有坑了？
+        node.right = newNode;
+      } else {
+        // 父节点右侧的坑已经有萝卜了？接着往下一层找坑
+        this.insertNode(node.right, newKey);
+      }
+    }
+  }
+  search(key) {
+    // 搜索节点
+    this.searchNode(this.root, key);
+  }
+  searchNode(node, searchKey) {
+    // 这个过程有点像夹逼准则
+    if (!node) {
+      return false;
+    }
+    if (this.compare(searchKey, node.key) === Compare.LESS_THAN) {
+      // 搜索节点比当前节点小，递归的往左侧搜索
+      return this.searchNode(node.left, searchKey);
+    } else if (this.compare(searchKey, node.key) === Compare.BIGGER_THAN) {
+      // 搜索节点比当前节点大，递归的往右侧搜索
+      return this.searchNode(node.right, searchKey);
+    } else {
+      // 搜索节点等于当前节点
+      return node;
+    }
+  }
+  remove(key) {
+    // 移除节点，this.root = 的原因是可能会移除整棵树中的子树或者整棵树
+    this.root = removeNode(this.root, key);
+  }
+  removeNode(node, removeKey) {
+    if (!node) {
+      return null;
+    }
+    if (this.compare(removeKey, node.key) === Compare.LESS_THAN) {
+      // 待删除节点比当前检测节点小
+      node.left = this.removeNode(node.left, removeKey);
+      return node;
+    } else if (this.compare(removeKey, node.key) === Compare.BIGGER_THAN) {
+      // 待删除节点比当前检测节点大
+      node.right = this.removeNode(node.right, removeKey);
+      return node;
+    } else {
+      if (!node.left &amp;&amp; !node.right) {
+        // 待删除节点没有子节点
+        node = null; // 移除叶节点
+        return node; // 并返回，将父节点的对应指针设为 null
+      }
+      if (!node.left &amp;&amp; node.right) {
+        // 待删除节点没有左子节点
+        node = node.right; // 用右子节点替换待删除的节点
+        return node;
+      }
+      if (node.left &amp;&amp; !node.right) {
+        // 待删除节点没有右子节点
+        node = node.left; // 用左子节点替换待删除的节点
+        return node;
+      }
+      // 左右节点都有的情况下
+      const aux = this.minNode(node.right); // 找到右边子树中最小的节点
+      node.key = aux.key; // 用找到的节点替换待删除节点
+      node.right = this.removeNode(node.right, aux.key); // 并且把右边子树中找到的那个节点删除
+      return node;
+    }
+  }
+  max() {
+    // 返回键最大的节点（最大值在最右）
+    return this.maxNode(this.root);
+  }
+  maxNode(node) {
+    let current = node;
+    while (current &amp;&amp; current.right) {
+      current = current.right;
+    }
+    return current;
+  }
+  min() {
+    // 返回键最小的节点（最小值在最左）
+    return this.minNode(this.root);
+  }
+  minNode(node) {
+    let current = node;
+    while (current &amp;&amp; current.left) {
+      current = current.left;
+    }
+    return current;
+  }
+}
+</code></pre><p>遍历是指访问树的每个节点并对它们进行某种操作的过程；访问树的所有节点有三种方式：中序、先序和后序。</p><p>先序遍历：以优先于后代节点的顺序访问每个节点的。</p><pre><code class=language-js>class BinarySearchTree {
+  // ...
+  preOrderTraverse(cb) {
+    // 通过先序遍历（以优先于后代节点的顺序访问每个节点）方式遍历所有节点
+    this.preOrderTraverseNode(this.root, cb);
+  }
+  preOrderTraverseNode(node, cb) {
+    if (node) {
+      cb(node.key); // 优于后代，先访问自身
+      this.preOrderTraverseNode(node.left, cb); // 再访问左侧子节点
+      this.preOrderTraverseNode(node.right, cb); // 后访问右侧子节点
+    }
+  }
+  // ...
+}
+</code></pre><p>中序遍历：一种以<strong>上行顺序</strong>访问 BST 所有节点的遍历方式，也就是以从最小到最大的顺序
+访问所有节点。中序遍历的一种应用就是对树进行排序操作。</p><pre><code class=language-js>class BinarySearchTree {
+  // ...
+  inOrderTraverse(cb) {
+    // 通过中序遍历（以从最小到最大的顺序访问所有节点）方式遍历所有节点
+    this.inOrderTraverseNode(this.root, cb);
+  }
+  inOrderTraverseNode(node, cb) {
+    if (node) {
+      this.inOrderTraverseNode(node.left, cb); // 先左（小）
+      cb(node.key);
+      this.inOrderTraverseNode(node.right, cb); // 后右（大）
+    }
+  }
+  // ...
+}
+</code></pre><p>后序遍历：先访问节点的后代节点，再访问节点本身。</p><pre><code class=language-js>class BinarySearchTree {
+  // ...
+  postOrderTraverse(cb) {
+    // 通过后序遍历（先访问节点的后代节点，再访问节点本身）方式遍历所有节点
+    this.postOrderTraverseNode(this.root, cb);
+  }
+  postOrderTraverseNode(node, cb) {
+    if (node) {
+      this.preOrderTraverseNode(node.left, cb); // 先访问左侧子节点
+      this.preOrderTraverseNode(node.right, cb); // 再访问右侧子节点
+      cb(node.key); // 最后访问自身
+    }
+  }
+  // ...
+}
+</code></pre><h3 id=时间-空间复杂度>时间/空间复杂度</h3><p>复杂度表示了一种增长趋势；大 O 表示法表示的是时间/空间复杂度和参数的关系。</p><p>常用的时间复杂度：</p><ul><li>O(1)：和参数无关，比如加减乘除等基本运算；</li><li>O(n)：复杂度与参数呈线性关系，比如循环；</li><li>O(n²)：比如两个循环进行嵌套；</li><li>O(logN)、O(nlogN)、O(n^k)...</li></ul><p>常用的空间复杂度：</p><ul><li>O(1)：比如简单的赋值操作；</li><li>O(n)：比如对长度为 n 的数组进行循环；</li><li>O(n²)：比如进行二维矩阵的计算。</li></ul><h3 id=排序>排序</h3><p>冒泡排序，复杂度 O(n²)：</p><ul><li>依次比较相邻的两个数，如果不符合排序规则，则调换两个数的位置；</li><li><p>再对最后一位以外的数组，重复前面的过程，直至全部排序完成。</p><pre><code class=language-js>function bubbleSort(array) {
+const arr = array.concat();
+const length = arr.length;
+for (let i = 0; i &lt; length; i++) {
+for (let j = 0; j &lt; length - i - 1; j++) {
+  // 每一轮都要进行前一项和后一项的对比
+  if (arr[j] &gt; arr[j + 1]) {
+    // 如果前一项比后一项，交换顺序
+    [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
+  }
+}
+}
+return arr;
+}
+</code></pre></li></ul><p>选择排序，复杂度 O(n²)：</p><pre><code class=language-js>function selectSort(array) {
+  const arr = array.concat();
+  const length = arr.length;
+  let minIndex = 0;
+  for (let i = 0; i &lt; length - 1; i++) {
+    // 每一轮排序都会将该轮的最小值排到正确的位置，直至剩下最后一个位置
+    minIndex = i; // 假设最小值的索引为 i
+    for (let j = i; j &lt; length; j++) {
+      if (arr[minIndex] &gt; arr[j]) {
+        minIndex = j; // 重新设置最小值的索引
+      }
+    }
+    if (minIndex !== i) {
+      // 最小值的索引有变，交换 minIndex 与 i 顺序
+      [arr[i], arr[minIndex]] = [arr[minIndex], arr[i]];
+    }
+  }
+  return arr;
+}
+</code></pre><p>插入排序，从前到后一次处理未排好序的元素，对于每个元素，我们将它与之前排好序的元素进行比较，找到对应位置并插入（时间复杂度：O(n²)，空间复杂度：O(1)）：</p><pre><code class=language-js>function insertionSort(array) {
+  const arr = array.concat();
+  const length = arr.length;
+  for (let i = 1; i &lt; length; i++) {
+    const current = arr[i]; // 从第二个元素开始
+    let j = i - 1; // 从当前元素向前扫描
+    while (j &gt;= 0 &amp;&amp; arr[j] &gt; current) {
+      // “当前元素”的索引之前存在比“当前元素”大的元素
+      arr[j + 1] = arr[j];
+      j--;
+      arr[j + 1] = current;
+    }
+  }
+  return arr;
+}
+</code></pre><p>快速排序，一种分治算法，大问题化小，小问题化了；选取一个目标元素，将目标元素放到正确的位置；根据排好序的元素，将数组切为两个数组，用相同的方法，在没有排好序的范围使用相同的操作（时间复杂度：O(n²)，平均时间复杂度：O(nlogN)；空间复杂度：O(n)，平均空间复杂度：O(logN)）：</p><ul><li>对于当前数组，选取一个元素为基准数（位置随便）；</li><li>将所有比基准数小的元素排到基准数之前，比基准数大的元素排到基准数之后；</li><li>当基准数被放到准确的位置之后，根据基准数位置，将数组分为前后两个子数组；</li><li><p>对子数组进行 1-3 的递归操作，直到子数组的长度小于等于 1 为止。</p><pre><code class=language-js>function quickSort(array) {
+if (array.length &lt;= 1) return array;
+let pivotIndex = Math.floor(array.length / 2);
+let pivot = array.splice(pivotIndex, 1)[0];
+let left = [];
+let right = [];
+array.forEach((item) =&gt; {
+if (item &lt; pivot) {
+  left.push(item);
+} else {
+  right.push(item);
+}
+});
+return quickSort(left).concat([pivot], quickSort(right));
+}
+</code></pre></li></ul><p>归并排序，将一个数组分为两个子数组，通过递归将数组切分到只剩下一个元素为止；然后将每个子数组中的元素排序后合并，通过不断合并数组，最后会拿到一个排好序的大数组（时间复杂度：O(nlogN)，空间复杂度：O(n)）：</p><pre><code class=language-js>function merge(arr1, arr2) {
+  // arr* 是两个已经按升序排列好的数组
+  const result = [];
+  let index1 = 0;
+  let index2 = 0;
+  while (index1 &lt; arr1.length &amp;&amp; index2 &lt; arr2.length) {
+    const temp1 = arr1[index1];
+    const temp2 = arr2[index2];
+    if (temp1 &lt; temp2) {
+      result.push(temp1);
+      index1++;
+    } else {
+      result.push(temp2);
+      index2++;
+    }
+  }
+  // 将剩余的部分拼上去（到这一步 index1 肯定等于 arr1.length 或者 index2 肯定等于 arr2.length）
+  return result.concat(arr1.slice(index1)).concat(arr2.slice(index2));
+}
+function mergeSort(array) {
+  if (array.length &lt;= 1) return array;
+  const middleIndex = Math.floor(array.length / 2);
+  const leftArr = array.slice(0, middleIndex);
+  const rightArr = array.slice(middleIndex);
+  return merge(mergeSort(leftArr), mergeSort(rightArr));
+}
+</code></pre></div><div class=post_footer><div class=meta><div class=info><span class="field tags"><i class=remixicon-stack-line></i><a href=https://vikingama.github.io/tags/algorithms/>Algorithms</a></span></div></div></div></div><div class=doc_comments><div class=comments_block_title>发表评论</div><div id=vcomments></div></div><link rel=stylesheet href=https://vikingama.github.io/css/comments.css><script src=/js/av.js></script><script src=/js/valine.js></script><script type=text/javascript>new Valine({el:'#vcomments',appId:'U06blUXOot4uJgfMu8I9xJXz-MdYXbMMI',appKey:'BnrXC06FJsvRNpr4aqb1HYPd',placeholder:'来都来了，不打个招呼吗？',visitor:'true',});</script></div></div><a id=back_to_top href=# class=back_to_top><span>△</span></a></div><footer class=footer><div class=powered_by><a href=https://github.com/varkai/hugo-theme-zozo/ target=_blank>Designed by <span class=jitters>Zeuk</span>,</a>
+<a href=https://www.gohugo.io/ target=_blank>Published with <span class=jitters>Hugo</span></a></div><div class=footer_slogan><span id=enter_time></span></div></footer><script src=https://vikingama.github.io/js/jquery.js></script><script src=https://vikingama.github.io/js/highlight.js></script><script src=https://vikingama.github.io/js/zozo.js></script><script>hljs.initHighlightingOnLoad();</script></body></html>

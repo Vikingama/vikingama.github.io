@@ -268,6 +268,13 @@ a:active {
   letter-spacing: 1px;
   line-height: 28px;
   text-decoration: none;
+  transition: all 0.3s;
+}
+
+.post .post_title a:hover {
+  background: linear-gradient(-90deg, #ff9100 0%, #f10366 50%, #6173ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .post .post_title span {
