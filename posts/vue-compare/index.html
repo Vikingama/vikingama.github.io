@@ -1,0 +1,4131 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no,user-scalable=no"><meta name=author content=馬腊咯稽><meta name=description content="Vue 2.x/3.x 比较"><meta name=keywords content=Vue><link rel=canonical href=https://vikingama.github.io/posts/vue-compare/><link rel="shortcut icon" href=https://vikingama.github.io/images/favicon.ico><link rel=stylesheet href=https://vikingama.github.io/css/zozo.css><link rel=stylesheet href=https://vikingama.github.io/css/animate.css><link rel=stylesheet href=https://vikingama.github.io/css/highlight.css><link rel=stylesheet href=https://vikingama.github.io/css/remixicon.css><title>Vue 2.x/3.x 比较 &middot; 庙小妖风大 · 水浅王八多</title></head><body><div class="main animated"><div class="nav_container animated fadeInDown"><div class=site_nav id=site_nav><ul><li><a href=/>首页</a></li><li><a href=/posts/>归档</a></li><li><a href=/tags/>标签</a></li><li><a href=/inspires/>启发</a></li><li><a href=/about/>关于</a></li></ul></div><div class=menu_icon><a id=menu_icon><i class=remixicon-links-line></i></a></div></div><div class="header animated fadeInDown"><div class=site_title_container><div class=site_title><h1><a href=https://vikingama.github.io><img style=width:65px;height:auto;vertical-align:top src=https://vikingama.github.io/images/avatar.png></a></h1></div><div class=description><p class=sub_title>庙小妖风大<br>水浅王八多</p><div class=my_socials><a href=https://www.douban.com/people/nicknoonan title=douban target=_blank><i class=remixicon-douban-fill></i></a><a href=https://github.com/Vikingama title=github target=_blank><i class=remixicon-github-fill></i></a><a href=https://www.zhihu.com/people/vikingama title=zhihu target=_blank><i class=remixicon-zhihu-fill></i></a><a href=https://vikingama.github.io/index.xml type=application/rss+xml title=rss target=_blank><i class=remixicon-rss-fill></i></a></div></div></div></div><div class=content><div class=post_page><div class="post animated fadeInDown"><div class="post_title post_detail_title"><h2><a href=/posts/vue-compare/>Vue 2.x/3.x 比较</a></h2><span class=date>2021.10.24</span></div><div class="post_content markdown"><blockquote><p>最近在看 Vue 源码，顺手做下笔记。</p></blockquote><h3 id=相同点与不同点>相同点与不同点</h3><p>2.x 与 3.x 的实现原理相同，都是：数据变化 -&gt; 自动执行 render -&gt; 得到最新的 VDOM -&gt; 对比新旧 VDOM -&gt; 更新 DOM。</p><p>2.x 与 3.x 的不同点：</p><ul><li>项目结构采用 monorepo 的管理方式，每个功能都是一个独立的包，每个包都可以单独使用，方便 tree-shaking；</li><li>数据劫持优化，Object.defineProperty 被 Proxy 取代，实现了对 Map、Set、WeakMap、WeakSet 的支持；</li><li>编译优化，相比于 2.x 的静态提升，3.x 又引入了 blockTree、cacheHandler；</li><li>删除了 filter、inline-template 等不常使用的功能的支持。</li></ul><h3 id=响应式原理-2-x>响应式原理 2.x</h3><p>Dep 用来存放订阅者（watcher）的对象；每个 Dep 实例都存在于<strong>对象每个属性对应的 getter/setter 所在的闭包里</strong>（外边访问不到）并且都有唯一的 id。</p><pre><code class=language-ts>export default class Dep {
+  static target;
+  constructor() {
+    this.id = uid++;
+    this.subs = []; // 存放着 watchers（订阅者）
+  }
+  addSub(sub) {
+    this.subs.push(sub); // 将 watcher 添加到列表（一般由 watcher 调用）
+  }
+  removeSub(sub) {
+    remove(this.subs, sub); // 从列表移除 watcher
+  }
+  depend() {
+    if (Dep.target) {
+      /**
+       * 调用 watcher 的 addDep 方法
+       * watcher 会调用 dep.addSub 把它自己加到 subs 里
+       * 同时，watcher 会把当前 dep 记录下来
+       */
+      Dep.target.addDep(this);
+    }
+  }
+  notify() {
+    // 浅复制一份“订阅者列表”
+    const subs = this.subs.slice();
+    for (let i = 0, l = subs.length; i &lt; l; i++) {
+      // 触发 watcher.update，告诉它们“数据变了”
+      subs[i].update();
+    }
+  }
+}
+/**
+ * 用来指向某个正在被求值的 watcher
+ * 这个是全局唯一的变量
+ * 因为某个时间点，仅有一个 watcher 可以被求值
+ */
+Dep.target = null;
+/**
+ * 由于 Vue 的更新粒度是组件级的，每个组件（render 函数）对应一个 watcher
+ * 组件嵌套成树就映射为 render 的调用栈，对应的 watcher 也就保存在“栈”里
+ */
+const targetStack = [];
+// 收集依赖之前调用
+export function pushTarget(target: ?Watcher) {
+  targetStack.push(target);
+  Dep.target = target;
+}
+// 收集依赖完成调用
+export function popTarget() {
+  targetStack.pop();
+  // 恢复上一个 Dep.target
+  Dep.target = targetStack[targetStack.length - 1];
+}
+</code></pre><p>Watcher 实例被称作依赖（收集起来）或者订阅者，它<strong>观察/订阅了</strong>数据变动；数据的 getter 被触发时，watcher 会被收集起来；数据的 setter 被调用时，watcher 会触发相应的副作用函数：</p><ul><li>在 mountComponent 中会 new Watcher(...) 作为组件的 renderWatcher；同时在组件 update 时，会调用 watcher.before 来触发 beforeUpdate 钩子；</li><li>每次调用 vm.$watch 或者组件的 watchOptions 都会 new Watcher(...)；</li><li>组件的 computedOptions 也会 new Watcher(...)。</li></ul><p>&nbsp;</p><pre><code class=language-ts>/**
+ * 对于 vm.$watch('a.b.c', function () {}, {...})
+ * 只需要把 watcher 添加到 a.b.c 的订阅者列表中去
+ * 每个组件实例、computed、watch 都对应一个 watcher
+ * 组件在初始化的时候会 new 一个 watcher
+ */
+export default class Watcher {
+  /**
+   * 每个响应式数据都有自己的 Dep 列表（这个存在于闭包中）；
+   * 保存着所有依赖于“此数据”的“订阅者”。
+   * 每当访问数据，会触发数据的 getter ；
+   * 将全局唯一变量 Dep.target 添加到自己的 dep 列表。
+   * 每当数据变化，会触发数据的 setter；
+   * setter 会通知所有“订阅者”（调用 watcher 的 update）。
+   * 每个 watcher 都维护了一份 dep 列表；
+   * 当 watcher 销毁时，需要告诉这些“dep”，
+   * 把自己删掉（数据再发生变化，别通知我了）。
+   */
+  constructor(
+    vm, // 组建实例
+    expOrFn, // a.b.c || () =&gt; a.b.c
+    cb, // 副作用回调函数
+    options, // computed || deep || lazy
+    isRenderWatcher // 是否是组件 watcher
+  ) {
+    this.vm = vm;
+    if (isRenderWatcher) {
+      // 如果是组件 renderWatcher，就把自己保存在 vm._watcher 属性上
+      vm._watcher = this;
+    }
+    // vm._watchers 是一个数组，保存着组件的 renderWatcher、computedWatchers 和 watchWatchers
+    vm._watchers.push(this);
+    if (options) {
+      this.deep = !!options.deep; // deep: true || false
+      this.user = !!options.user; // 是否是 watchWatcher
+      this.lazy = !!options.lazy; // 是否是 computedWatcher
+      this.sync = !!options.sync; // immediate: true || false
+      this.before = options.before; // watcher.run 执行之前先要执行的逻辑
+    } else {
+      this.deep = this.user = this.lazy = this.sync = false;
+    }
+    this.cb = cb; // 保存回调
+    this.id = ++uid; // 批处理用的，唯一的标识
+    this.active = true; // watcher 是否存活，teardown 之后被置为 false
+    this.dirty = this.lazy; // 是否是 computedWatcher
+    /**
+     * 为什么会有 deps、newDeps、depIds、newDepIds？
+     * 假设 vm.$watch(() =&gt; vm.a ? vm.b : vm.c, () =&gt; {...})
+     * 上一次收集的依赖和这一次收集的依赖可能不一样（取决于 vm.a 的值）
+     * 当 vm.a 为 true 时，收集的依赖为 vm.a、vm.b
+     * 当 vm.a 为 false 时，收集的依赖为 vm.a、vm.c
+     * 此时 vm.b 再变化，就不会触发 watcher
+     */
+    this.deps = [];
+    this.newDeps = [];
+    this.depIds = new Set();
+    this.newDepIds = new Set();
+    this.expression = expOrFn.toString(); // 为了方便报错提示
+    /**
+     * 解析 expOrFn 为 getter，有两种形式：
+     * 1. 属性路径：a.b.c 指向的数据会被 watcher 观察
+     * 2. 函数：function () {
+     *      函数里访问的所有数据会被 watcher 观察
+     *      任何数据变化都会通知 watcher
+     * }
+     */
+    if (typeof expOrFn === 'function') {
+      this.getter = expOrFn;
+    } else {
+      /**
+       * 将点语法转换为函数调用：
+       * a.b.c 转换为 () =&gt; a.b.c
+       */
+      this.getter = parsePath(expOrFn);
+      if (!this.getter) {
+        this.getter = noop;
+        console.warn('...');
+      }
+    }
+    // 如果不是 computedWatcher，则在实例化的过程中对 getter 求值，作为 prevValue
+    this.value = this.lazy ? undefined : this.get();
+  }
+  // 对 getter 求值并重新出发依赖收集
+  get() {
+    /**
+     * 将 Dep.target 设置为“当前 watcher 实例”
+     * 并将“当前 watcher 实例”推进 targetStack
+     * 方便“响应式数据”将本实例添加到对应的依赖列表里
+     */
+    let value;
+    pushTarget(this);
+    const vm = this.vm;
+    try {
+      value = this.getter.call(vm, vm); // 从组件实例中获取数据
+    } catch (e) {
+      if (this.user) {
+        handleError(`getter for watcher &quot;${this.expression}&quot;`);
+      } else {
+        throw e;
+      }
+    } finally {
+      /**
+       * 如果要深层监听数据变化的话
+       * 递归的触发每个属性的 getter
+       * 将 watcher 添加到他们的依赖列表里
+       */
+      if (this.deep) {
+        traverse(value);
+      }
+      // 恢复上一个 Dep.target 的值
+      popTarget();
+      // 清理依赖
+      this.cleanupDeps();
+    }
+    return value;
+  }
+  // 调用 dep.addSub(watcher)，把“自己”添加进去
+  addDep(dep) {
+    const id = dep.id;
+    if (!this.newDepIds.has(id)) {
+      this.newDepIds.add(id);
+      this.newDeps.push(dep);
+      if (!this.depIds.has(id)) {
+        dep.addSub(this);
+      }
+    }
+  }
+  /**
+   * watcher 告诉所有“收集了自己作为依赖”的依赖列表
+   * “我要销毁了，把我移除吧”
+   */
+  teardown() {
+    if (this.active) {
+      // 同时也将自己从组件的 _watchers 里移除
+      if (!this.vm._isBeingDestroyed) {
+        remove(this.vm._watchers, this);
+      }
+      let i = this.deps.length;
+      while (i--) {
+        this.deps[i].removeSub(this);
+      }
+      // 完成销毁
+      this.active = false;
+    }
+  }
+  // 清理依赖
+  cleanupDeps() {
+    let i = this.deps.length;
+    while (i--) {
+      const dep = this.deps[i];
+      if (!this.newDepIds.has(dep.id)) {
+        dep.removeSub(this);
+      }
+    }
+    let tmp = this.depIds;
+    this.depIds = this.newDepIds;
+    this.newDepIds = tmp;
+    this.newDepIds.clear();
+    tmp = this.deps;
+    this.deps = this.newDeps;
+    this.newDeps = tmp;
+    this.newDeps.length = 0;
+  }
+  // 调用 watcher.addDep(dep)
+  depend() {
+    let i = this.deps.length;
+    while (i--) {
+      this.deps[i].depend();
+    }
+  }
+  // 当数据变化，会被调用的 update “通知方法”，通知订阅者“数据变化了”
+  update() {
+    if (this.lazy) {
+      /**
+       * 如果是 computed，将 watcher 标记为“脏”的
+       * 当访问 computed 的值时，会在 computedGetter 里调用 watcher.evaluate 求值
+       */
+      this.dirty = true;
+    } else if (this.sync) {
+      // 立即调用 run 方法，重新求值并执行回调
+      this.run();
+    } else {
+      // 把 watcher 加入异步队列
+      queueWatcher(this);
+    }
+  }
+  /**
+   * watcher 接收到通知后，如果实例没被销毁
+   * 重新访问 getter 获取最新值
+   * 如果数据和之前的不一样
+   * 或者数据是对象或数组
+   * 或者开启了深层监听
+   * 说明数据变化了
+   * 需要执行回调
+   */
+  run() {
+    if (this.active) {
+      const value = this.get();
+      if (value !== this.value || isObject(value) || this.deep) {
+        const oldValue = this.value;
+        this.value = value;
+        // 将新/旧值都传给回调
+        this.cb.call(this.vm, value, oldValue);
+      }
+    }
+  }
+  // 给 computed 惰性求值的
+  evaluate() {
+    this.value = this.get();
+    this.dirty = false;
+  }
+}
+</code></pre><p>&nbsp;</p><p>defineReactive 通过调用 Object.defineProperty 将 o[k（可配置属性）] 转化为 getter/setter（访问器属性）的形式，并在闭包内实例化了一个 Dep，用于依赖收集：</p><ul><li>初始化依赖注入时，会调用 defineReactive(vm, key, (resolveInject(vm.$options.inject, vm))[key])；</li><li>初始化渲染函数时，会调用 defineReactive(vm, '$attrs/\$listeners', ...)；</li><li>初始化 props 时，会调用 defineReactive(props, key, value)；</li><li>作为 Vue.util.defineReactive 工具函数使用；</li><li>每次调用 vm.$set 都会调用 defineReactive；</li><li>new Observer() 会调用 defineReactive。</li></ul><p>&nbsp;</p><pre><code class=language-ts>// 将 obj[key] 转换为 getter/setters 形式
+export function defineReactive(obj, key, val, customSetter, shallow) {
+  const property = Object.getOwnPropertyDescriptor(obj, key);
+  if (property &amp;&amp; property.configurable === false) {
+    return;
+  }
+  const dep = new Dep();
+  // 如果之前设置过 getter/setter，先将他们保存下来
+  const getter = property &amp;&amp; property.get;
+  const setter = property &amp;&amp; property.set;
+  if ((!getter || setter) &amp;&amp; arguments.length === 2) {
+    val = obj[key];
+  }
+  // 如果要深层转换并且 val 是复杂数据的话，递归调用 observe
+  let childOb = !shallow &amp;&amp; observe(val); // val.__ob__ || undefined
+  Object.defineProperty(obj, key, {
+    enumerable: true,
+    configurable: true,
+    get: function reactiveGetter() {
+      /**
+       * 收集依赖：
+       * watcher 的 getter 被调用之前会执行 pushTarget
+       * 将 Dep.target 设置为 watcher，并把自身 push 到 targetStack
+       * 调用 dep.depend，进而调用 watcher.addDep 方法
+       * 最终，watcher 被收集到 dep.subs 里，dep 被 push 到 watcher.dep 里
+       */
+      const value = getter ? getter.call(obj) : val;
+      if (Dep.target) {
+        dep.depend();
+        if (childOb) {
+          childOb.dep.depend();
+          if (Array.isArray(value)) {
+            dependArray(value);
+          }
+        }
+      }
+      // 返回给 watcher
+      return value;
+    },
+    set: function reactiveSetter(newVal) {
+      const value = getter ? getter.call(obj) : val;
+      // 对 newVal 和 value 进行浅比较，没变化就返回
+      if (newVal === value || (newVal !== newVal &amp;&amp; value !== value)) {
+        return;
+      }
+      if (customSetter) {
+        // 自定义 setter（比如，computed 可以自定义 setter）
+        customSetter();
+      }
+      // 只读属性，直接返回
+      if (getter &amp;&amp; !setter) return;
+      if (setter) {
+        setter.call(obj, newVal);
+      } else {
+        val = newVal;
+      }
+      childOb = !shallow &amp;&amp; observe(newVal);
+      /**
+       * 通知“订阅者”：
+       * dep.notify 会循环 dep.subs，调用每个 watcher.update
+       * watcher 接到通知，会根据“配置”执行相应动作
+       */
+      dep.notify();
+    }
+  });
+}
+// 收集数组元素上的依赖关系，因为无法对数组元素的访问做拦截
+function dependArray(value) {
+  for (let e, i = 0, l = value.length; i &lt; l; i++) {
+    e = value[i];
+    e &amp;&amp; e.__ob__ &amp;&amp; e.__ob__.dep.depend();
+    if (Array.isArray(e)) {
+      // 递归调用
+      dependArray(e);
+    }
+  }
+}
+</code></pre><p>&nbsp;</p><p>observe(value) 会返回一个 Observer 实例（对 value 的观察者），这个实例挂载在 value.__ob__ 上，而且是单例的；同时，观察者对象的 value 指向被观察对象，形成循环引用；observe(value) 会通过判断 value 类型，将其转化为响应式对象/数组：</p><ul><li>作为 Vue.observable 工具函数使用（返回的对象是响应式的，可直接用于 Vue  渲染）；</li><li>在初始化组件状态时，会调用 observe(vm.$options.data)；</li><li>需要深层响应的场景，会递归调用 observe。</li></ul><p>&nbsp;</p><pre><code class=language-ts>// 为“值”创建观察者实例的工厂函数
+export function observe(value, asRootData) {
+  // value 不能是 VNode，也不能是 Vue 组建实例
+  if (!isObject(value) || value instanceof VNode) {
+    return;
+  }
+  let ob;
+  if (hasOwn(value, '__ob__') &amp;&amp; value.__ob__ instanceof Observer) {
+    // 观察者实例保存在 __ob__ 属性上
+    ob = value.__ob__;
+  } else if (
+    shouldObserve &amp;&amp;
+    (Array.isArray(value) || isPlainObject(value)) &amp;&amp;
+    Object.isExtensible(value) &amp;&amp;
+    !value._isVue
+  ) {
+    ob = new Observer(value);
+  }
+  if (asRootData &amp;&amp; ob) {
+    ob.vmCount++;
+  }
+  return ob;
+}
+/**
+ * 对数组部分方法进行遮蔽（不涉及 Array.prototype 的修改）
+ * 这也表明了为什么 arr[i] = j、arr.length = 0 不会触发更新
+ */
+const arrayProto = Array.prototype;
+export const arrayMethods = Object.create(arrayProto);
+['push', 'pop', 'shift', 'unshift', 'splice', 'sort', 'reverse'].forEach(
+  function (method) {
+    // 将原来的方法保存在闭包里
+    const original = arrayProto[method];
+    def(arrayMethods, method, function mutator(...args) {
+      // 缓存正常操作的结果
+      const result = original.apply(this, args);
+      const ob = this.__ob__;
+      let inserted;
+      switch (method) {
+        case 'push':
+        case 'unshift':
+          inserted = args;
+          break;
+        case 'splice':
+          inserted = args.slice(2);
+          break;
+      }
+      // 先单独对新插入的数据进行“观察”
+      if (inserted) ob.observeArray(inserted);
+      // 通知“订阅者”
+      ob.dep.notify();
+      return result;
+    });
+  }
+);
+export class Observer {
+  constructor(value) {
+    // 保存订阅了 value 本身的 watcher
+    this.dep = new Dep();
+    this.value = value;
+    // 将此对象作为 rootData 的 Vue 实例数量
+    this.vmCount = 0;
+    // 将 observer 保存到 __ob__ 属性上
+    def(value, '__ob__', this);
+    if (Array.isArray(value)) {
+      // 对于数组，重写原型链上的数组操作方法
+      value.__proto__ = arrayMethods;
+      // 并对数组的子元素依次调用 observe
+      this.observeArray(value);
+    } else {
+      // 对于对象，遍历 value，将其可枚举属性转换为 getter/setter 形式
+      this.walk(value);
+    }
+  }
+  walk(obj) {
+    const keys = Object.keys(obj);
+    for (let i = 0; i &lt; keys.length; i++) {
+      defineReactive(obj, keys[i]);
+    }
+  }
+  observeArray(items) {
+    for (let i = 0, l = items.length; i &lt; l; i++) {
+      observe(items[i]);
+    }
+  }
+}
+</code></pre><p>&nbsp;</p><p>在 beforeMount 和 mounted 钩子之间（mountComponent），会初始化组件 watcher（renderWatcher）；renderWatcher 保存在 vm._watcher（一个组件仅有一个 renderWatcher），同时还保存在 vm._watchers 数组里（存放着组件涉及到的所有 watcher，比如 computed、watch 等）。renderWatcher 的 getter 为 updateComponent，当调用 vm._render 时，会触发所有在渲染函数中用到的数据的 getter（会执行 updateComponent.call(vm, vm)）。函数访问到的数据的 getter 会把 renderWatcher 添加到自己的 dep.subs 列表中；当数据变化，响应式数据 setter 被触发，dep.notify 将调用 watcher.update，将执行 queueWatcher 把 watcher 添加到更新队列，更新队列会在合适的时候调用 watcher.run 触发页面更新（生成 VNode，再 patch 到 DOM，过程中会经历 diff）。</p><h3 id=响应式原理-3-x>响应式原理 3.x</h3><p>createReactiveObject 用来将普通对象（Object、Array、Map、Set、WeakMap、WeakSet）通过 Proxy + handlers 代理为响应式数据：</p><ol><li><strong>reactive</strong> = createReactiveObject(target, false, <strong>mutableHandlers</strong>, <strong>mutableCollectionHandlers</strong>)</li><li><strong>shallowReactive</strong> = createReactiveObject(target, false, <strong>shallowReactiveHandlers</strong>, <strong>shallowCollectionHandlers</strong>)</li><li><strong>readonly</strong> = createReactiveObject(target, true, <strong>readonlyHandlers</strong>, <strong>readonlyCollectionHandlers</strong>)</li><li><strong>shallowReadonly</strong> = createReactiveObject(target, true, <strong>shallowReadonlyHandlers</strong>, <strong>readonlyCollectionHandlers</strong>)</li></ol><p>&nbsp;</p><pre><code class=language-ts>export const reactiveMap = new WeakMap&lt;Target, any&gt;();
+export const readonlyMap = new WeakMap&lt;Target, any&gt;();
+function createReactiveObject(
+  target: Target,
+  isReadonly: boolean,
+  baseHandlers: ProxyHandler&lt;any&gt;,
+  collectionHandlers: ProxyHandler&lt;any&gt;
+) {
+  // 只有 Object、Array、Map、Set、WeakMap、WeakSet 才可以转换为响应式数据
+  if (!isObject(target)) {
+    return target;
+  }
+  // target 已经不是原始数据，直接返回
+  if (target.__v_raw &amp;&amp; !(isReadonly &amp;&amp; target.__v_isReactive)) {
+    return target;
+  }
+  // target 已经存在于 readonlyMap 或 reactiveMap 中
+  const proxyMap = isReadonly ? readonlyMap : ;
+  const existingProxy = proxyMap.get(target);
+  if (existingProxy) {
+    return existingProxy;
+  }
+  // const targetType = getTargetType(target)
+  // if (targetType === TargetType.INVALID) {
+  //   return target
+  // }
+  if (target.__v_skip || !Object.isExtensible(target)) {
+    return target;
+  }
+  // 只有 Object、Array、Map、Set、WeakMap、WeakSet 才可以
+  const toRawType = (v) =&gt; Object.prototype.toString.call(v).slice(8, -1);
+  if (targetTypeMap(toRawType(value)) === TargetType.INVALID) {
+    return target;
+  }
+  // 返回一个 proxy
+  const proxy = new Proxy(
+    target,
+    /**
+     * Object、Array 使用 baseHandlers
+     * Map、Set、WeakMap、WeakSet 使用 collectionHandlers
+     */
+    targetType === TargetType.COLLECTION ? collectionHandlers : baseHandlers
+  );
+  proxyMap.set(target, proxy); // 保存一下
+  return proxy;
+}
+</code></pre><p>reactive 用来创建原始对象的响应式副本，这种转换是深层的，reactive 会影响所有嵌套属性。</p><pre><code class=language-ts>export function reactive(target) {
+  // readonly 数据直接返回
+  if (target &amp;&amp; target.__v_isReadonly) {
+    return target;
+  }
+  return createReactiveObject(
+    target,
+    false,
+    {
+      get(target, key, receiver) {
+        if (key === '__v_isReactive') {
+          return true;
+        } else if (key === '__v_isReadonly') {
+          return false;
+        } else if (key === '__v_raw' &amp;&amp; receiver === reactiveMap.get(target)) {
+          // 无论是 readonly 还是 reactive，访问 __v_raw 都能得到原始数据
+          return target;
+        }
+        const targetIsArray = isArray(target);
+        // 如果 target 是数组，key 是 arrayInstrumentations 的一个属性
+        if (targetIsArray &amp;&amp; hasOwn(arrayInstrumentations, key)) {
+          // arrayInstrumentations 包含了对数组方法的劫持
+          return Reflect.get(arrayInstrumentations, key, receiver);
+        }
+        // 保存正常的结果
+        const res = Reflect.get(target, key, receiver);
+        // 如果 key 是内建 Symbol 或者是 __proto__/__v_isRef，不需要依赖收集，直接返回
+        if (
+          isSymbol(key)
+            ? builtInSymbols.has(key)
+            : key === `__proto__` || key === `__v_isRef`
+        ) {
+          return res;
+        }
+        track(target, 'get', key);
+        if (isRef(res)) {
+          // 如果 target 是一个数组且 key 是一个整数，就不应该把 res 自动展开
+          const shouldUnwrap = !(targetIsArray &amp;&amp; isIntegerKey(key));
+          return shouldUnwrap ? res.value : res;
+        }
+        if (isObject(res)) {
+          // 把返回值也 proxy 一下；惰性 proxy，访问到了再 reactive(res)
+          return reactive(res);
+        }
+        return res;
+      },
+      set(target, key, value, receiver) {
+        const oldValue = target[key];
+        value = toRaw(value);
+        // 如果 target 不是数组，旧值为 ref，新值不为 ref
+        if (!isArray(target) &amp;&amp; isRef(oldValue) &amp;&amp; !isRef(value)) {
+          // 更新旧值的 value 为新值
+          oldValue.value = value;
+          return true;
+        }
+        const hadKey =
+          // 如果 target 为数组，并且 key 为整数
+          isArray(target) &amp;&amp; isIntegerKey(key)
+            ? Number(key) &lt; target.length
+            : hasOwn(target, key);
+        const result = Reflect.set(target, key, value, receiver);
+        // 如果 target 是原始原型链中的某项内容，则不要触发
+        if (target === toRaw(receiver)) {
+          if (!hadKey) {
+            // key 不存在，add 行为
+            trigger(target, 'add', key, value);
+          } else if (hasChanged(value, oldValue)) {
+            // 新旧值不同，set 行为
+            trigger(target, 'set', key, value, oldValue);
+          }
+        }
+        return result;
+      },
+      has(target, key) {
+        const result = Reflect.has(target, key);
+        if (!isSymbol(key) || !builtInSymbols.has(key)) {
+          track(target, 'has', key);
+        }
+        return result;
+      },
+      deleteProperty(target, key) {
+        const hadKey = hasOwn(target, key);
+        const oldValue = (target as any)[key];
+        const result = Reflect.deleteProperty(target, key);
+        if (result &amp;&amp; hadKey) {
+          // key 本就存在，才可能有 delete 行为
+          trigger(target, 'delete', key, undefined, oldValue);
+        }
+        return result;
+      },
+      ownKeys(target) {
+        // 依赖收集
+        track(target, 'iterate', isArray(target) ? 'length' : ITERATE_KEY);
+        return Reflect.ownKeys(target);
+      }
+    },
+    // Map、Set、WeakMap、WeakSet
+    {
+      get(target, key, receiver) {
+        if (key === '__v_isReactive') {
+          return true;
+        } else if (key === '__v_isReadonly') {
+          return false;
+        } else if (key === '__v_raw') {
+          return target;
+        }
+        return Reflect.get(
+          hasOwn(mutableInstrumentations, key) &amp;&amp; key in target
+            ? mutableInstrumentations
+            : target,
+          key,
+          receiver
+        );
+      }
+    }
+  );
+}
+</code></pre><p>readonly 用来创建原始对象的只读副本，这种转换同样是深层的，readonly 会影响所有嵌套属性。</p><pre><code class=language-ts>export function readonly(target) {
+  return createReactiveObject(
+    target,
+    true,
+    // Object、Array
+    {
+      get(target, key, receiver) {
+        if (key === '__v_isReactive') {
+          return false;
+        } else if (key === '__v_isReadonly') {
+          return true;
+        } else if (key === '__v_raw' &amp;&amp; receiver === readonlyMap.get(target)) {
+          return target;
+        }
+        const targetIsArray = isArray(target);
+        const res = Reflect.get(target, key, receiver);
+        if (
+          isSymbol(key)
+            ? builtInSymbols.has(key)
+            : key === `__proto__` || key === `__v_isRef`
+        ) {
+          return res;
+        }
+        if (isRef(res)) {
+          // 如果 target 是一个数组且 key 是一个整数，就不应该把 res 自动展开
+          const shouldUnwrap = !targetIsArray || !isIntegerKey(key);
+          return shouldUnwrap ? res.value : res;
+        }
+        // 把返回值也 proxy 一下；惰性 proxy，访问到了再 readonly(res)
+        if (isObject(res)) return readonly(res);
+        return res;
+      },
+      set(target, key) {
+        console.warn('target is readonly');
+        return true;
+      },
+      deleteProperty(target, key) {
+        console.warn('target is readonly');
+        return true;
+      }
+    },
+    // Map、Set、WeakMap、WeakSet
+    {
+      get(target, key, receiver) {
+        if (key === '__v_isReactive') {
+          return !true;
+        } else if (key === '__v_isReadonly') {
+          return true;
+        } else if (key === '__v_raw') {
+          return target;
+        }
+        return Reflect.get(
+          hasOwn(readonlyInstrumentations, key) &amp;&amp; key in target
+            ? readonlyInstrumentations
+            : target,
+          key,
+          receiver
+        );
+      }
+    }
+  );
+}
+</code></pre><p>createRef 用来将基本类型的值转换为包装类型；ref、shallowRef 都会通过它来转换数据。</p><pre><code class=language-ts>function createRef(rawValue, shallow = false) {
+  if (rawValue &amp;&amp; rawValue.__v_isRef === true) {
+    return rawValue; // 已经是包装类型，就别来凑热闹了
+  }
+  return new RefImpl(rawValue, shallow);
+}
+class RefImpl&lt;T&gt; {
+  private _value: T;
+  public readonly __v_isRef = true;
+  constructor(private _rawValue: T, public readonly _shallow = false) {
+    this._value = _shallow
+      ? _rawValue
+      : isObject(_rawValue)
+      ? reactive(_rawValue)
+      : _rawValue;
+  }
+  get value() {
+    track(toRaw(this), 'get', 'value');
+    return this._value;
+  }
+  set value(newVal) {
+    if (hasChanged(toRaw(newVal), this._rawValue)) {
+      this._rawValue = newVal;
+      this._value = this._shallow ? newVal : convert(newVal);
+      trigger(toRaw(this), 'set', 'value', newVal);
+    }
+  }
+}
+</code></pre><p>ref 接受一个内部值并返回一个响应式且可变的 ref 对象；ref 对象具有指向内部值的单个属性 .value。</p><pre><code class=language-ts>export function ref(value) {
+  return createRef(value);
+}
+</code></pre><p>track 和 trigger 用于依赖收集和在依赖变动时触发副作用。</p><pre><code class=language-ts>// 追踪类型
+export const enum TrackOpTypes {
+  GET = 'get',
+  HAS = 'has',
+  ITERATE = 'iterate'
+}
+// 触发类型
+export const enum TriggerOpTypes {
+  SET = 'set',
+  ADD = 'add',
+  DELETE = 'delete',
+  CLEAR = 'clear'
+}
+// 依赖列表（2.x Array =&gt; 3.x Set）
+type Dep = Set&lt;ReactiveEffect&gt;;
+// key 对应的依赖列表 [[[key, dep]],...]
+type KeyToDepMap = Map&lt;any, Dep&gt;;
+let shouldTrack = true;
+let activeEffect: ReactiveEffect | undefined;
+const trackStack: boolean[] = [];
+/**
+ * target 的 key 对应的依赖列表，储存着 target -&gt; key -&gt; dep 的联系
+ * 为什么不用 Map 而用 WeakMap？
+ * 1. Map（WeakMap）内部有两个数组，分别存 key 和 value；所以在 Map（WeakMap）内部，key 和 value 并没有真正建立联系；
+ * 2. Map 的 key 和内存地址绑定，外部引用的消失不会影响绑定关系；WeakMap 内部对 key 的引用都是弱引用，不会阻止垃圾回收；
+ * 3. Map 的 key 可以为任意类型，WeakMap 的 key 只能为对象；
+ * 4. Map 可以被遍历，WeakMap 不能被遍历。
+ * 这里使用 WeakMap 可以使内存及时被释放。
+ * 同理 Set 和 WeakSet 的区别如下：
+ * 1. WeakSet 的成员都是弱引用；
+ * 2. WeakSet 的成员都是对象；
+ * 3. WeakSet 不能遍历。
+ */
+const targetMap = new WeakMap&lt;any, KeyToDepMap&gt;();
+export const ITERATE_KEY = Symbol('');
+export const MAP_KEY_ITERATE_KEY = Symbol('');
+/**
+ * 暂停追踪，使用场景：
+ * 1. 在对数组执行一些可能间接改变 length 属性的操作（push、pop、shift、unshift、splice）；
+ * 2. 在生命周期函数里暂停追踪，因为可能会触发潜在的 effect；
+ * 3. 调用 applyOptions 之前（兼容 2.x 语法）；
+ * 4. 调用内置的 warn 时；
+ * 5. 调用 setup 之前；
+ */
+export function pauseTracking() {
+  trackStack.push(shouldTrack);
+  shouldTrack = false;
+}
+// 开始追踪
+export function enableTracking() {
+  trackStack.push(shouldTrack);
+  shouldTrack = true;
+}
+// 重置到上一步
+export function resetTracking() {
+  const last = trackStack.pop();
+  shouldTrack = last === undefined ? true : last;
+}
+/**
+ * 收集 activeEffect（在对数据进行 get、has、iterate 操作时）：
+ * 每次 track，就是把当前激活的副作用函数 activeEffect 作为依赖；
+ * 然后收集到 target 相关的 depsMap 对应 key 下的依赖集合 dep 中。
+ */
+export function track(target: object, type: TrackOpTypes, key: unknown) {
+  // 没有 activeEffect，旧先不 track
+  if (!shouldTrack || activeEffect === undefined) {
+    return;
+  }
+  /**
+   * targetMap 是一个 WeakMap；
+   * targetMap.get(target) 是一个 Map
+   * 保存着 target 的每个 key 对应的 effects（很像 2.x 里的 watcher，保存在 Set 里）
+   * targetMap = {
+   *    [target]: {
+   *        [key]: [effect1, effect2, effect3,...],
+   *        ...
+   *    },
+   *    ...
+   * }
+   */
+  let depsMap = targetMap.get(target);
+  if (!depsMap) {
+    targetMap.set(target, (depsMap = new Map()));
+  }
+  let dep = depsMap.get(key);
+  if (!dep) {
+    depsMap.set(key, (dep = new Set()));
+  }
+  if (!dep.has(activeEffect)) {
+    dep.add(activeEffect); // 没有就添加
+    activeEffect.deps.push(dep); // activeEffect 在自己 deps 里也保存一份
+  }
+}
+// 触发收集到的 effects（在对数据进行 set、add、delete、clear 操作时）
+export function trigger(
+  target: object,
+  type: TriggerOpTypes,
+  key?: unknown,
+  newValue?: unknown,
+  oldValue?: unknown,
+  oldTarget?: Map&lt;unknown, unknown&gt; | Set&lt;unknown&gt;
+) {
+  const depsMap = targetMap.get(target);
+  // target 没有被 track 过
+  if (!depsMap) return;
+  const effects = new Set&lt;ReactiveEffect&gt;();
+  // 将 effectsToAdd 按条件添加到 effects 里
+  const add = (effectsToAdd: Set&lt;ReactiveEffect&gt; | undefined) =&gt; {
+    if (effectsToAdd) {
+      effectsToAdd.forEach((effect) =&gt; {
+        if (effect !== activeEffect || effect.allowRecurse) {
+          effects.add(effect);
+        }
+      });
+    }
+  };
+  if (type === 'clear') {
+    // Map/Set 要被清空，触发 target 下的所有 effects
+    depsMap.forEach(add);
+  } else if (key === 'length' &amp;&amp; isArray(target)) {
+    // 触发数组“长度变化”对应的 effect
+    depsMap.forEach((dep, k) =&gt; {
+      // 遍历的时候，k 为 0、1、2、3、...、length
+      if (k === 'length' || k &gt;= newValue) {
+        // target['length'] 和 target[newValue～k] 对应的 effects 都要加去
+        add(dep);
+      }
+    });
+  } else {
+    // 处理 SET | ADD | DELETE
+    if (key !== void 0) {
+      // key 不为 undefined 的情况
+      add(depsMap.get(key));
+    }
+    // 处理 ADD | DELETE | Map.SET 的 iteration key
+    switch (type) {
+      case 'add':
+        if (!isArray(target)) {
+          add(depsMap.get(ITERATE_KEY));
+          if (isMap(target)) {
+            add(depsMap.get(MAP_KEY_ITERATE_KEY));
+          }
+        } else if (isIntegerKey(key)) {
+          // 数组 length 改变
+          add(depsMap.get('length'));
+        }
+        break;
+      case 'delete':
+        if (!isArray(target)) {
+          add(depsMap.get(ITERATE_KEY));
+          if (isMap(target)) {
+            add(depsMap.get(MAP_KEY_ITERATE_KEY));
+          }
+        }
+        break;
+      case 'set':
+        if (isMap(target)) {
+          add(depsMap.get(ITERATE_KEY));
+        }
+        break;
+    }
+  }
+  // 循环 effects 调用 track 收集的 effect
+  effects.forEach((effect: ReactiveEffect) =&gt; {
+    if (effect.options.scheduler) {
+      effect.options.scheduler(effect);
+    } else {
+      effect();
+    }
+  });
+}
+</code></pre><p>effect 很像之前的 watcher；作为代理数据的订阅者，当对数据进行 get、has、iterate 操作，effect 会被收集起来；当对数据进行 set、add、delete、clear 操作，对应的 effect 会被调用。</p><pre><code class=language-ts>let uid = 0;
+const effectStack: ReactiveEffect[] = [];
+export interface ReactiveEffect&lt;T = any&gt; {
+  (): T; // ReactiveEffect 可调用
+  _isEffect: true; // ReactiveEffect._isEffect = true
+  active: boolean; // ReactiveEffect.active = false
+  allowRecurse: boolean; // ReactiveEffect.allowRecurse = true
+  deps: Array&lt;Dep&gt;; // ReactiveEffect.deps = []
+  id: number; // ReactiveEffect.id = 123
+  options: ReactiveEffectOptions; // ReactiveEffect.options = {}
+  raw: () =&gt; T; // ReactiveEffect.raw = ReactiveEffect
+}
+export interface ReactiveEffectOptions {
+  allowRecurse?: boolean;
+  lazy?: boolean;
+  onStop?: () =&gt; void;
+  scheduler?: (job: ReactiveEffect) =&gt; void;
+}
+/**
+ * 将 fn（普通副作用）转换为 ReactiveEffect（自动副作用），场景如下：
+ * 1. setupRenderEffect 中，instance.update = effect(function componentEffect() {...})
+ * 2. computed 中，this._value = (effect(getter, {}))()
+ * 3. watch 中，newValue = (effect(getter, {}))()
+ */
+export function effect(fn, options = {}) {
+  if (fn &amp;&amp; fn._isEffect === true) {
+    fn = fn.raw;
+  }
+  const effect = createReactiveEffect(fn, options);
+  // 如果不是 computed，先运行一下，触发对 fn 里使用到的数据的操作
+  if (!options.lazy) {
+    effect();
+  }
+  return effect;
+}
+function createReactiveEffect&lt;T = any&gt;(
+  fn: () =&gt; T,
+  options: ReactiveEffectOptions
+): ReactiveEffect&lt;T&gt; {
+  const effect = function reactiveEffect(): unknown {
+    if (!effect.active) {
+      return options.scheduler ? undefined : fn();
+    }
+    if (!effectStack.includes(effect)) {
+      cleanup(effect);
+      try {
+        enableTracking();
+        effectStack.push(effect);
+        // 将自身设置为 activeEffect，方便 track 对自己进行追踪
+        activeEffect = effect;
+        // 每次调用 effect，都会执行 fn
+        return fn();
+      } finally {
+        // 收集完了之后，就重置为收集之前的状态
+        effectStack.pop();
+        resetTracking();
+        activeEffect = effectStack[effectStack.length - 1];
+      }
+    }
+  } as ReactiveEffect;
+  effect._isEffect = true;
+  effect.active = true;
+  effect.allowRecurse = !!options.allowRecurse;
+  effect.deps = [];
+  effect.id = uid++;
+  effect.options = options;
+  effect.raw = fn;
+  return effect;
+}
+// 清除 effect
+function cleanup(effect: ReactiveEffect) {
+  // 每个 effect 都保存了“自己是谁的订阅者”
+  const { deps } = effect;
+  if (deps.length) {
+    for (let i = 0; i &lt; deps.length; i++) {
+      // 通知他们，把自己删掉；如果再更新的话，不要通知我
+      deps[i].delete(effect);
+    }
+    // 清空 effect.deps
+    deps.length = 0;
+  }
+}
+/**
+ * 终止 effect，使用场景如下：
+ * 1. watcher 返回的函数中，用于取消 watcher 的 effect
+ * 2. unmountComponent 时，用于清除组件的 effect
+ */
+export function stop(effect: ReactiveEffect) {
+  if (effect.active) {
+    cleanup(effect);
+    if (effect.options.onStop) {
+      effect.options.onStop();
+    }
+    effect.active = false;
+  }
+}
+</code></pre><h3 id=异步队列-2-x>异步队列 2.x</h3><p>queueWatcher 在 watcher.update 方法内调用，用来将 watcher 推入队列（缓冲在一个事件循环内的所有数据变化）。</p><pre><code class=language-ts>export function queueWatcher(watcher: Watcher) {
+  // 获取 watcher 的唯一的 id
+  const id = watcher.id;
+  if (has[id] == null) {
+    // 同一个 watcher 被多次 update，也只进入队列一次
+    has[id] = true;
+    if (!flushing) {
+      queue.push(watcher);
+    } else {
+      // 如果正在清空队列，将新来的 watcher 添加到合适的位置
+      let i = queue.length - 1;
+      while (i &gt; index &amp;&amp; queue[i].id &gt; watcher.id) {
+        i--;
+      }
+      queue.splice(i + 1, 0, watcher);
+    }
+    if (!waiting) {
+      waiting = true;
+      // 在下个事件循环就清空队列并执行所有 watcher 回调
+      nextTick(flushSchedulerQueue);
+    }
+  }
+}
+</code></pre><p>flushSchedulerQueue 刷新/清空队列，调用 watcher.run 执行副作用；完成 watcher 调用之后，调用组件 activated/updated 钩子函数</p><pre><code class=language-ts>function flushSchedulerQueue() {
+  currentFlushTimestamp = Date.now();
+  flushing = true;
+  let watcher, id;
+  /**
+   * 在清空之前，先按照 id 进行排序：
+   * 1. 组件更新/渲染总是先父后子（父组件先创建）
+   * 2. vm.$watch 比 renderWatch 先运行（因为 vm.$watch 先创建）
+   * 3. 在父组件 watcher 运行期间，如果子组件被销毁，他的 watcher 会被跳过（watcher.active = false）
+   */
+  queue.sort((a, b) =&gt; a.id - b.id);
+  // 不要缓存队列长度，因为随时可能会变
+  for (index = 0; index &lt; queue.length; index++) {
+    watcher = queue[index];
+    if (watcher.before) {
+      // 2.x 里唯一用到的地方是 callHook(vm, 'beforeUpdate')
+      watcher.before();
+    }
+    id = watcher.id;
+    has[id] = null;
+    watcher.run();
+    if (has[id] != null) {
+      circular[id] = (circular[id] || 0) + 1;
+      if (circular[id] &gt; 100) {
+        // 判断时候死循环
+        break;
+      }
+    }
+  }
+  // 在重置状态之前保留队列的副本
+  const activatedQueue = activatedChildren.slice();
+  const updatedQueue = queue.slice();
+  resetSchedulerState(); // 重置队列状态
+  callActivatedHooks(activatedQueue); // callHook(vm, 'activated')
+  callUpdatedHooks(updatedQueue); // callHook(vm, 'updated')
+}
+</code></pre><h3 id=异步队列-3-x>异步队列 3.x</h3><pre><code class=language-ts>/**
+ * 一共有三种队列：preFlushCbs、queue、postFlushCbs
+ * 1. preFlushCbs，清空 queue 之前执行的回调队列（渲染之前需要的任务）
+ * 2. queue，“组件渲染”任务队列
+ * 3. postFlushCbs，清空 queue 之后执行的回调队列（渲染之后需要的任务）
+ * 每次刷新（flush）的过程：清空 preFlushCbs -&gt; 清空 queue -&gt; 清空 postFlushCbs
+ */
+export interface SchedulerJob {
+  (): void;
+  id?: number; // 唯一的 jobID，仅在 RAWEffect（例如，组件渲染）上出现
+  /**
+   * 是否允许 job 递归触发自身
+   * 默认情况下，一个 job 不能触发自身
+   * 因为一些内建方法的调用（例如，Array.prototype.push）会导致无限循环
+   * 只有在“组件更新函数”和“watch 回调”的情况下，这个选项才可以为 true
+   * 组件更新可能会导致子组件的 props 更新，进而触发子组件的“flush: pre”的 watch 回调
+   * 如果这个回调修改了父组件依赖的“状态”
+   */
+  allowRecurse?: boolean;
+}
+export type SchedulerCb = Function &amp; { id?: number };
+export type SchedulerCbs = SchedulerCb | SchedulerCb[];
+type CountMap = Map&lt;SchedulerJob | SchedulerCb, number&gt;;
+
+let isFlushing = false; // 是否正在刷新
+let isFlushPending = false; // 是否正在等待刷新
+// 还未被执行的 pre/post 任务，如果当前 tick 正在 flushPreCbs/flushPostCbs 的时候，有新的任务进来，会被添加到这个数组中
+const pendingPreFlushCbs: SchedulerCb[] = [];
+const pendingPostFlushCbs: SchedulerCb[] = [];
+// 正在被执行的任务，此时如果 pendingPreFlushCbs/pendingPostFlushCbs 中有新的任务进来的时候，会被合并到这个队列中被继续执行
+let activePreFlushCbs: SchedulerCb[] | null = null;
+let activePostFlushCbs: SchedulerCb[] | null = null;
+let preFlushIndex = 0;
+let postFlushIndex = 0;
+
+let currentFlushPromise: Promise&lt;void&gt; | null = null;
+let currentPreFlushParentJob: SchedulerJob | null = null;
+const resolvedPromise: Promise&lt;any&gt; = Promise.resolve();
+// 在下个事件循环刷新 job 队列
+function queueFlush() {
+  // 在没有刷新队列和没有等待刷新队列的情况下，进入「刷新 job 队列」任务
+  if (!isFlushing &amp;&amp; !isFlushPending) {
+    isFlushPending = true; // 正在等待刷新
+    currentFlushPromise = resolvedPromise.then(flushJobs);
+  }
+}
+let flushIndex = 0;
+// 异步渲染任务队列
+const queue: SchedulerJob[] = [];
+/**
+ * 渲染任务入列：
+ * 1. 强制组件重新渲染：vm.$forceUpdate: i =&gt; () =&gt; queueJob(i.update)
+ * 2. 强制父组件重新渲染：queueJob(instance.parent.update)
+ */
+export function queueJob(job: SchedulerJob) {
+  /**
+   * 重复数据消除搜索使用 Array.include 的 startIndex 参数
+   * 判断队列中是否已有该 job，没有才会添加到任务队列中，防止任务重新执行
+   * 默认情况下，搜索索引包含正在运行的当前 job，因此它无法再次递归触发自身
+   */
+  if (
+    (!queue.length ||
+      !queue.includes(
+        job,
+        isFlushing &amp;&amp; job.allowRecurse ? flushIndex + 1 : flushIndex
+      )) &amp;&amp;
+    job !== currentPreFlushParentJob
+  ) {
+    // 就把 job 加入队列
+    queue.push(job);
+    // 并且在下个事件循环“刷新 job 队列”
+    queueFlush();
+  }
+}
+// 将失效的 job 从队列中剔除（主要用来避免子组件重新渲染）
+export function invalidateJob(job: SchedulerJob) {
+  const i = queue.indexOf(job);
+  if (i &gt; -1) {
+    queue.splice(i, 1);
+  }
+}
+// 刷新 job 队列
+function flushJobs(seen?: CountMap) {
+  isFlushPending = false;
+  isFlushing = true; // 队列正在刷新
+  flushPreFlushCbs(seen); // 刷新前置回调队列
+  /**
+   * 刷新队列前，先排序；确保：
+   * 1. 组件的更新顺序是由父到子（父比子先创建，renderEffect 的优先级也应该如此）
+   * 2. 如果组件在父级更新之后被卸载了，他就可以跳过更新
+   */
+  queue.sort((a, b) =&gt; getId(a) - getId(b));
+  try {
+    // 循环 job 队列
+    for (flushIndex = 0; flushIndex &lt; queue.length; flushIndex++) {
+      const job = queue[flushIndex];
+      if (job) {
+        // 将 job 放到 try...catch... 里执行
+        callWithErrorHandling(job, null, ErrorCodes.SCHEDULER);
+      }
+    }
+  } finally {
+    flushIndex = 0;
+    queue.length = 0;
+    flushPostFlushCbs(seen); // 刷新后置回调队列
+    isFlushing = false;
+    currentFlushPromise = null;
+    // 回调可能将新的 job 添加到了 job 队列，那就再次刷新 job 队列
+    if (queue.length || pendingPostFlushCbs.length) {
+      flushJobs(seen);
+    }
+  }
+}
+// 将回调函数加入队列
+function queueCb(
+  cb: SchedulerCbs,
+  activeQueue: SchedulerCb[] | null, // 激活的队列？
+  pendingQueue: SchedulerCb[], // 等待的队列？
+  index: number
+) {
+  // 向 pendingQueue 添加回调
+  if (!isArray(cb)) {
+    if (
+      !activeQueue ||
+      !activeQueue.includes(
+        cb,
+        (cb as SchedulerJob).allowRecurse ? index + 1 : index
+      )
+    ) {
+      pendingQueue.push(cb);
+    }
+  } else {
+    pendingQueue.push(...cb);
+  }
+  queueFlush();
+}
+// 将「渲染之“前”要执行的回调」入列（flash: pre）
+export function queuePreFlushCb(cb: SchedulerCb) {
+  queueCb(cb, activePreFlushCbs, pendingPreFlushCbs, preFlushIndex);
+}
+// 将「渲染之“后”要执行的回调」入列
+export function queuePostFlushCb(cb: SchedulerCbs) {
+  queueCb(cb, activePostFlushCbs, pendingPostFlushCbs, postFlushIndex);
+}
+/**
+ * 刷新「渲染之“前”要执行的回调」
+ * 渲染更新之前，触发因为 props 更新而运行的 watcher（flash: pre）
+ */
+export function flushPreFlushCbs(
+  seen?: CountMap,
+  parentJob: SchedulerJob | null = null
+) {
+  if (pendingPreFlushCbs.length) {
+    currentPreFlushParentJob = parentJob;
+    activePreFlushCbs = [...new Set(pendingPreFlushCbs)];
+    pendingPreFlushCbs.length = 0;
+    for (
+      preFlushIndex = 0;
+      preFlushIndex &lt; activePreFlushCbs.length;
+      preFlushIndex++
+    ) {
+      activePreFlushCbs[preFlushIndex]();
+    }
+    activePreFlushCbs = null;
+    preFlushIndex = 0;
+    currentPreFlushParentJob = null;
+    // 递归刷新，直到耗尽为止
+    flushPreFlushCbs(seen, parentJob);
+  }
+}
+// 刷新「渲染之“后”要执行的回调」
+export function flushPostFlushCbs(seen?: CountMap) {
+  if (pendingPostFlushCbs.length) {
+    const deduped = [...new Set(pendingPostFlushCbs)];
+    pendingPostFlushCbs.length = 0;
+    if (activePostFlushCbs) {
+      activePostFlushCbs.push(...deduped);
+      return;
+    }
+    activePostFlushCbs = deduped;
+    activePostFlushCbs.sort((a, b) =&gt; getId(a) - getId(b));
+    for (
+      postFlushIndex = 0;
+      postFlushIndex &lt; activePostFlushCbs.length;
+      postFlushIndex++
+    ) {
+      activePostFlushCbs[postFlushIndex]();
+    }
+    activePostFlushCbs = null;
+    postFlushIndex = 0;
+  }
+}
+</code></pre><h3 id=依赖注入-2-x>依赖注入 2.x</h3><pre><code class=language-ts>/**
+ * 在 Vue 初始化的过程中（Vue.prototype._init）
+ * 先会调用 initInjections(vm) 再调用 initProvide(vm)
+ * 1. Reflect.ownKeys/Object.keys 获取 inject 配置的 keys
+ * 2. inject[keys[i]].from 获取对应的 provideKey
+ * 3. 通过 vm.$parent 向上查找组件
+ * 4. 直到 vm._provided &amp;&amp; hasOwn(vm._provided, provideKey)
+ * 5. 取出 vm._provided[provideKey] 的值或者 inject[key].default 的值
+ * 6. 得到所有 inject 对应的值之后，调用 defineReactive 将其变为响应式
+ */
+export function initProvide(vm: Component) {
+  // 获取 provide 配置
+  const provide = vm.$options.provide;
+  if (provide) {
+    // 兼容 provide 的两种写法
+    vm._provided = typeof provide === 'function' ? provide.call(vm) : provide;
+  }
+}
+export function initInjections(vm: Component) {
+  // 解析 inject 获取结果
+  const result = resolveInject(vm.$options.inject, vm);
+  if (result) {
+    toggleObserving(false);
+    Object.keys(result).forEach((key) =&gt; {
+      defineReactive(vm, key, result[key]);
+    });
+    toggleObserving(true);
+  }
+}
+export function resolveInject(inject: any, vm: Component): ?Object {
+  if (inject) {
+    const result = Object.create(null);
+    /**
+     * Reflect.ownKeys 自身可枚举属性 + 自身不可枚举属性 + Symbol 属性 + length
+     * for...in... 自身可枚举属性 + 原型链
+     * Object.keys 自身可枚举属性
+     */
+    const keys = hasSymbol ? Reflect.ownKeys(inject) : Object.keys(inject);
+    for (let i = 0; i &lt; keys.length; i++) {
+      const key = keys[i]; // 获取注入的 key
+      if (key === '__ob__') continue; // 跳过 __ob__
+      const provideKey = inject[key].from; // 对应 provider 的 key
+      let source = vm;
+      while (source) {
+        // 通过 $parent 向上查找
+        if (source._provided &amp;&amp; hasOwn(source._provided, provideKey)) {
+          result[key] = source._provided[provideKey];
+          break;
+        }
+        source = source.$parent;
+      }
+      // 没有找到？
+      if (!source) {
+        // 如果有默认值，使用默认值
+        if ('default' in inject[key]) {
+          const provideDefault = inject[key].default;
+          result[key] =
+            typeof provideDefault === 'function'
+              ? provideDefault.call(vm)
+              : provideDefault;
+        } else {
+          // 否则报错
+          warn(`Injection &quot;${key}&quot; not found`, vm);
+        }
+      }
+    }
+    return result;
+  }
+}
+</code></pre><h3 id=依赖注入-3-x>依赖注入 3.x</h3><pre><code class=language-ts>export function provide(key, value) {
+  if (!currentInstance) {
+    warn(`provide() 只能在用在 setup() 里`);
+  } else {
+    let provides = currentInstance.provides;
+    /**
+     * 默认，实例会继承父级的 provides 对象
+     * 但是在组件需要 provide 值的时候
+     * 组件会基于父级的 provides（作为原型）创建自己的 provides
+     * 这样，在“Inject”的时候，我们可以简单地查找来自“直接父级”的注入，并让原型链来完成这项工作
+     */
+    const parentProvides =
+      currentInstance.parent &amp;&amp; currentInstance.parent.provides; // 找到父级的 provides
+    if (parentProvides === provides) {
+      // 基于父级的 povides 创建自己的 provides
+      provides = currentInstance.provides = Object.create(parentProvides);
+    }
+    provides[key] = value;
+  }
+}
+export function inject(
+  key: InjectionKey&lt;any&gt; | string,
+  defaultValue?: unknown,
+  treatDefaultAsFactory = false
+) {
+  // 找到离自己最近的父组件的 provides 或着 vnode 的上下文
+  const instance = currentInstance || currentRenderingInstance;
+  if (instance) {
+    const provides =
+      instance.parent == null
+        ? instance.vnode.appContext &amp;&amp; instance.vnode.appContext.provides
+        : instance.parent.provides;
+    // 在 provies 里找到 inject 对应的 key 的值，返回即可
+    if (provides &amp;&amp; (key as string | symbol) in provides) {
+      return provides[key as string];
+    } else if (arguments.length &gt; 1) {
+      // 找不到的情况下，使用默认值
+      return treatDefaultAsFactory &amp;&amp; isFunction(defaultValue)
+        ? defaultValue()
+        : defaultValue;
+    } else {
+      warn(`找不到`);
+    }
+  } else {
+    warn(`inject() 只能在用在 setup() 里`);
+  }
+}
+</code></pre><h3 id=事件系统-2-x>事件系统 2.x</h3><p>Vue 的事件分为两种：一种是绑定在原生元素上或者通过 .native 修饰符绑定在组件上的原生事件；一种是绑定在组件上的自定义事件。在将 template 字符串转化为 AST 的过程中，parseHTML 的 start 阶段会调用 processAttrs（preTransformNode -&gt; processElement -&gt; processAttrs）解析元素字符串上的属性；最终，addHandler 会对事件绑定做处理、parseModifiers 会解析事件修饰符。</p><pre><code class=language-ts>export function addHandler(
+  el: ASTElement, // 绑定元素
+  name: string, // 事件名称
+  value: string, // 事件处理方法（handleClick 或者 handleClick('hello', $event) 或者 () =&gt; {...}）
+  modifiers: ?ASTModifiers, // 事件修饰符（对象形式的）
+  important?: boolean,
+  warn?: ?Function, // console.warn
+  range?: Range,
+  dynamic?: boolean
+) {
+  modifiers = modifiers || emptyObject;
+  if (warn &amp;&amp; modifiers.prevent &amp;&amp; modifiers.passive) {
+    warn('passive 和 prevent 修饰符不能用在一起');
+  }
+  // 标准化 click.right 和 click.middle
+  if (modifiers.right) {
+    if (dynamic) {
+      name = `(${name})==='click'?'contextmenu':(${name})`;
+    } else if (name === 'click') {
+      name = 'contextmenu';
+      delete modifiers.right;
+    }
+  } else if (modifiers.middle) {
+    if (dynamic) {
+      name = `(${name})==='click'?'mouseup':(${name})`;
+    } else if (name === 'click') {
+      name = 'mouseup';
+    }
+  }
+  // 修饰符并入 name
+  if (modifiers.capture) {
+    delete modifiers.capture;
+    name = dynamic ? `_p(${name},&quot;!&quot;)` : `!${name}`;
+  }
+  if (modifiers.once) {
+    delete modifiers.once;
+    name = dynamic ? `_p(${name},&quot;~&quot;)` : `~${name}`;
+  }
+  if (modifiers.passive) {
+    delete modifiers.passive;
+    name = dynamic ? `_p(${name},&quot;&amp;&quot;)` : `&amp;${name}`;
+  }
+  let events;
+  if (modifiers.native) {
+    delete modifiers.native;
+    // 组件节点上的原生事件
+    events = el.nativeEvents || (el.nativeEvents = {});
+  } else {
+    // DOM 元素节点上的事件、组件节点上的自定义事件
+    events = el.events || (el.events = {});
+  }
+  const newHandler: any = rangeSetItem({ value: value.trim(), dynamic }, range);
+  if (modifiers !== emptyObject) {
+    newHandler.modifiers = modifiers;
+  }
+  const handlers = events[name];
+  if (Array.isArray(handlers)) {
+    // 重要的往前加，不重要的往后加？？？
+    important ? handlers.unshift(newHandler) : handlers.push(newHandler);
+  } else if (handlers) {
+    events[name] = important ? [newHandler, handlers] : [handlers, newHandler];
+  } else {
+    events[name] = newHandler;
+  }
+  el.plain = false;
+}
+// 用于解析修饰符给 addHandler
+function parseModifiers(name: string): Object | void {
+  const match = name.match(modifierRE);
+  if (match) {
+    const ret = {};
+    match.forEach((m) =&gt; {
+      ret[m.slice(1)] = true;
+    });
+    // { prevent: true, native: false, ...}
+    return ret;
+  }
+}
+</code></pre><p>生成 render 函数的过程（codegen）中，genData 会借助 genHandlers 对 AST 节点上的 events 和 nativeEvents 属性生成 data 数据。</p><pre><code class=language-ts>// 键盘事件的键值修饰符对应的键码
+const keyCodes = {
+  esc: 27,
+  tab: 9,
+  enter: 13,
+  space: 32,
+  up: 38,
+  left: 37,
+  right: 39,
+  down: 40,
+  delete: [8, 46]
+};
+// 键盘事件的键值修饰符对应的别名
+const keyNames = {
+  esc: ['Esc', 'Escape'],
+  tab: 'Tab',
+  enter: 'Enter',
+  space: [' ', 'Spacebar'],
+  up: ['Up', 'ArrowUp'],
+  left: ['Left', 'ArrowLeft'],
+  right: ['Right', 'ArrowRight'],
+  down: ['Down', 'ArrowDown'],
+  delete: ['Backspace', 'Delete', 'Del']
+};
+/**
+ * 阻止事件监听执行的修饰符需要“显式”返回 null
+ * 这样我们就可以确定是否删除 .once 的事件监听
+ * 除了原生的修饰符，其余通过条件是否返回 null
+ */
+const genGuard = (condition) =&gt; `if(${condition})return null;`;
+const modifierCode = {
+  stop: '$event.stopPropagation();',
+  prevent: '$event.preventDefault();',
+  self: genGuard(`$event.target !== $event.currentTarget`),
+  ctrl: genGuard(`!$event.ctrlKey`),
+  shift: genGuard(`!$event.shiftKey`),
+  alt: genGuard(`!$event.altKey`),
+  meta: genGuard(`!$event.metaKey`),
+  left: genGuard(`'button' in $event &amp;&amp; $event.button !== 0`),
+  middle: genGuard(`'button' in $event &amp;&amp; $event.button !== 1`),
+  right: genGuard(`'button' in $event &amp;&amp; $event.button !== 2`)
+};
+// 构建事件处理器
+export function genHandlers(
+  events: ASTElementHandlers,
+  isNative: boolean
+): string {
+  // 是否是原生事件处理
+  const prefix = isNative ? 'nativeOn:' : 'on:';
+  let staticHandlers = ``;
+  let dynamicHandlers = ``;
+  for (const name in events) {
+    const handlerCode = genHandler(events[name]);
+    if (events[name] &amp;&amp; events[name].dynamic) {
+      dynamicHandlers += `${name},${handlerCode},`;
+    } else {
+      staticHandlers += `&quot;${name}&quot;:${handlerCode},`;
+    }
+  }
+  staticHandlers = `{${staticHandlers.slice(0, -1)}}`;
+  if (dynamicHandlers) {
+    return prefix + `_d(${staticHandlers},[${dynamicHandlers.slice(0, -1)}])`;
+  } else {
+    return prefix + staticHandlers;
+  }
+}
+function genHandler(handler): string {
+  // 事件处理器不存在，返回空函数
+  if (!handler) {
+    return 'function(){}';
+  }
+  // 数组？递归调用，循环拼接
+  if (Array.isArray(handler)) {
+    return `[${handler.map((handler) =&gt; genHandler(handler)).join(',')}]`;
+  }
+  const isMethodPath = simplePathRE.test(handler.value); // 是否是 methods 里的方法
+  const isFunctionExpression = fnExpRE.test(handler.value); // 是否是函数表达式（function(){} 或者 () =&gt; {}）
+  const isFunctionInvocation = simplePathRE.test(
+    handler.value.replace(fnInvokeRE, '')
+  ); // 是否是函数调用
+  if (!handler.modifiers) {
+    // 不含修饰符的
+    if (isMethodPath || isFunctionExpression) {
+      return handler.value;
+    }
+    /**
+     * 如果是函数调用，例如：v-click=&quot;handleClick('hello', $event)&quot;
+     * 要将其封装成函数表达式，外表套一层 function($event){...}
+     */
+    return `function($event){${
+      isFunctionInvocation ? `return ${handler.value}` : handler.value
+    }}`;
+  } else {
+    // 含有修饰符
+    let code = '';
+    let genModifierCode = '';
+    const keys = [];
+    for (const key in handler.modifiers) {
+      if (modifierCode[key]) {
+        // 如果是存在于 modifierCode 的修饰符
+        genModifierCode += modifierCode[key];
+        if (keyCodes[key]) {
+          // 如果是同时存在于 keyCodes 的修饰符（left、right 是两者的交集）
+          keys.push(key);
+        }
+      } else if (key === 'exact') {
+        // 对于 exact 修饰符（控制由精确的系统修饰符组合触发的事件，仅当...才触发...）
+        const modifiers: ASTModifiers = handler.modifiers;
+        genModifierCode += genGuard(
+          ['ctrl', 'shift', 'alt', 'meta']
+            .filter((keyModifier) =&gt; !modifiers[keyModifier])
+            .map((keyModifier) =&gt; `$event.${keyModifier}Key`)
+            .join('||')
+        );
+      } else {
+        // 其他修饰符，统统推入数组里
+        keys.push(key);
+      }
+    }
+    // 若 keys 里有修饰符，确保键过滤仅仅匹配键盘事件？？？
+    if (keys.length) {
+      code += genKeyFilter(keys);
+    }
+    // 确保在键过滤之后执行诸如 prevent 和 stop 之类的修饰符
+    if (genModifierCode) {
+      code += genModifierCode;
+    }
+    const handlerCode = isMethodPath
+      ? `return ${handler.value}.apply(null, arguments)`
+      : isFunctionExpression
+      ? `return (${handler.value}).apply(null, arguments)`
+      : isFunctionInvocation
+      ? `return ${handler.value}`
+      : handler.value;
+    return `function($event){${code}${handlerCode}}`;
+  }
+}
+</code></pre><p>原生事件是在 patch（VNode -&gt; DOM）的过程中实现的，在 DOM 的创建和更新阶段均会调用 updateDOMListeners。</p><pre><code class=language-ts>let target: any;
+const useMicrotaskFix = isUsingMicroTask &amp;&amp; !(isFF &amp;&amp; Number(isFF[1]) &lt;= 53);
+/**
+ * 规范化只能在运行时确定的 v-model 事件 token
+ * 将 v-model 事件放在数组中的第一个很重要
+ * 因为关键是要确保在用户附加的处理程序之前调用 v-model 回调
+ */
+function normalizeEvents(on) {
+  if (isDef(on[RANGE_TOKEN])) {
+    // IE input[type=range] 仅支持 change
+    const event = isIE ? 'change' : 'input';
+    on[event] = [].concat(on[RANGE_TOKEN], on[event] || []);
+    delete on[RANGE_TOKEN];
+  }
+  if (isDef(on[CHECKBOX_RADIO_TOKEN])) {
+    on.change = [].concat(on[CHECKBOX_RADIO_TOKEN], on.change || []);
+    delete on[CHECKBOX_RADIO_TOKEN];
+  }
+}
+// 创建 once 修饰符的 handler
+function createOnceHandler(event, handler, capture) {
+  const _target = target; // 在闭包里保存当前的事件目标元素
+  return function onceHandler() {
+    const res = handler.apply(null, arguments);
+    if (res !== null) {
+      remove(event, onceHandler, capture, _target);
+    }
+  };
+}
+// 添加事件绑定
+function add(
+  name: string,
+  handler: Function,
+  capture: boolean,
+  passive: boolean
+) {
+  /**
+   * 如果当前运行时环境支持微任务并且火狐版本&lt;=53
+   * 内部元素点击事件触发 patch、外层元素的事件处理函数在 patch 期间又被触发
+   * 原因是浏览器在事件冒泡期间触发了微任务
+   * 解决方法是在绑定处理程序的时候，存一个时间戳；
+   * 当事件触发时 event.timeStamp 大于之前的事件戳时，handler 才能被触发
+   */
+  if (useMicrotaskFix) {
+    const attachedTimestamp = currentFlushTimestamp; // 记录一个时间
+    const original = handler; // 原始的事件回调
+    handler = original._wrapper = function (e) {
+      if (
+        // 如果没有冒泡，就没这个 bug，直接触发回调
+        e.target === e.currentTarget ||
+        // 在 handler 被绑定之后，事件才能被触发
+        e.timeStamp &gt;= attachedTimestamp ||
+        // 为 iOS 填坑
+        e.timeStamp &lt;= 0 ||
+        // 为 electron/nw.js 填坑
+        e.target.ownerDocument !== document
+      ) {
+        return original.apply(this, arguments);
+      }
+    };
+  }
+  target.addEventListener(
+    name,
+    handler,
+    supportsPassive ? { capture, passive } : capture
+  );
+}
+// 移除事件绑定
+function remove(
+  name: string,
+  handler: Function,
+  capture: boolean,
+  _target?: HTMLElement
+) {
+  (_target || target).removeEventListener(
+    name,
+    handler._wrapper || handler,
+    capture
+  );
+}
+// 在创建和更新 DOM 时，有用到
+function updateDOMListeners(oldVnode: VNodeWithData, vnode: VNodeWithData) {
+  if (isUndef(oldVnode.data.on) &amp;&amp; isUndef(vnode.data.on)) {
+    return; // 如果新旧节点都没有事件绑定，什么也不做
+  }
+  const on = vnode.data.on || {}; // 新的事件绑定
+  const oldOn = oldVnode.data.on || {}; // 旧的事件绑定
+  target = vnode.elm; // 事件目标
+  normalizeEvents(on); // on[RANGE_TOKEN]、on[CHECKBOX_RADIO_TOKEN] 替换为 on['change']
+  updateListeners(on, oldOn, add, remove, createOnceHandler, vnode.context);
+  target = undefined;
+}
+export default {
+  create: updateDOMListeners,
+  update: updateDOMListeners
+};
+// 把 fns 放在 try...catch... 里调用
+export function createFnInvoker(fns: Function | Array&lt;Function&gt;, vm): Function {
+  function invoker() {
+    const fns = invoker.fns;
+    if (Array.isArray(fns)) {
+      const cloned = fns.slice();
+      for (let i = 0; i &lt; cloned.length; i++) {
+        invokeWithErrorHandling(cloned[i], null, arguments, vm, `v-on handler`);
+      }
+    } else {
+      return invokeWithErrorHandling(fns, null, arguments, vm, `v-on handler`);
+    }
+  }
+  invoker.fns = fns;
+  return invoker;
+}
+// 对新绑定的事件和已绑定的事件做 diff
+export function updateListeners(
+  on: Object,
+  oldOn: Object,
+  add: Function,
+  remove: Function,
+  createOnceHandler: Function,
+  vm: Component
+) {
+  let name, def, cur, old, event;
+  for (name in on) {
+    // 循环新的
+    def = cur = on[name];
+    old = oldOn[name];
+    event = normalizeEvent(name); // 将 &amp;~!name 转换为 {name, once, capture, passive}
+    if (isUndef(cur)) {
+      // 非法的 handler 呀！！！
+    } else if (isUndef(old)) {
+      if (isUndef(cur.fns)) {
+        cur = on[name] = createFnInvoker(cur, vm);
+      }
+      if (isTrue(event.once)) {
+        cur = on[name] = createOnceHandler(event.name, cur, event.capture);
+      }
+      // 新的里面有，旧的里面没有，add 上
+      add(event.name, cur, event.capture, event.passive, event.params);
+    } else if (cur !== old) {
+      // 新旧都有，更新旧的就好
+      old.fns = cur;
+      on[name] = old;
+    }
+  }
+  for (name in oldOn) {
+    // 循环旧的，在新的里面不存在的 remove 掉
+    if (isUndef(on[name])) {
+      event = normalizeEvent(name); // 将 &amp;~!name 转换为 {name, once, capture, passive}
+      remove(event.name, oldOn[name], event.capture);
+    }
+  }
+}
+</code></pre><p>自定义事件是通过 eventsMixin 在初始化 Vue 构造函数的阶段向原型上添加方法实现的。</p><pre><code class=language-ts>export function eventsMixin(Vue) {
+  const hookRE = /^hook:/;
+  // 事件监听
+  Vue.prototype.$on = function (event, fn: Function): Component {
+    const vm: Component = this;
+    if (Array.isArray(event)) {
+      // 同一回调可以对应多个事件
+      for (let i = 0, l = event.length; i &lt; l; i++) {
+        vm.$on(event[i], fn);
+      }
+    } else {
+      // 同一事件可以对应多个回调
+      (vm._events[event] || (vm._events[event] = [])).push(fn);
+      // @hook:beforeDestory=&quot;() =&gt; {...}&quot;
+      if (hookRE.test(event)) {
+        vm._hasHookEvent = true;
+      }
+    }
+    return vm;
+  };
+  // 监听一次
+  Vue.prototype.$once = function (event, fn: Function): Component {
+    const vm: Component = this;
+    // 在执行回调的时候，取消事件绑定
+    function on() {
+      vm.$off(event, on);
+      fn.apply(vm, arguments);
+    }
+    on.fn = fn;
+    vm.$on(event, on);
+    return vm;
+  };
+  // 移除监听
+  Vue.prototype.$off = function (event, fn?: Function): Component {
+    const vm: Component = this;
+    // 可以酱紫？vm.$off() 可以解除所有事件绑定？
+    if (!arguments.length) {
+      vm._events = Object.create(null);
+      return vm;
+    }
+    if (Array.isArray(event)) {
+      for (let i = 0, l = event.length; i &lt; l; i++) {
+        vm.$off(event[i], fn);
+      }
+      return vm;
+    }
+    const cbs = vm._events[event];
+    if (!cbs) {
+      return vm;
+    }
+    // vm.$off(event) 可以清空 event 对应的回调
+    if (!fn) {
+      vm._events[event] = null;
+      return vm;
+    }
+    // vm.$off(event, fn) 需要使用循环（从后往前）匹配来移除事件监听
+    let cb;
+    let i = cbs.length;
+    while (i--) {
+      cb = cbs[i];
+      if (cb === fn || cb.fn === fn) {
+        cbs.splice(i, 1);
+        break;
+      }
+    }
+    return vm;
+  };
+  // 事件触发
+  Vue.prototype.$emit = function (event: string): Component {
+    const vm: Component = this;
+    let cbs = vm._events[event];
+    if (cbs) {
+      cbs = cbs.length &gt; 1 ? toArray(cbs) : cbs;
+      const args = toArray(arguments, 1);
+      const info = `event handler for &quot;${event}&quot;`;
+      for (let i = 0, l = cbs.length; i &lt; l; i++) {
+        invokeWithErrorHandling(cbs[i], vm, args, vm, info);
+      }
+    }
+    return vm;
+  };
+}
+</code></pre><h3 id=事件系统-3-x>事件系统 3.x</h3><pre><code class=language-ts>interface Invoker extends EventListener {
+  value: EventValue
+  attached: number
+}
+type EventValue = Function | Function[]
+/**
+ * 浏览器的事件事件戳有两种：
+ * 一种是相对于页面加载完成的事件戳；一种是 UTC
+ * 这里要统一事件戳计算方式
+ */
+let _getNow: = Date.now
+if (
+  typeof document !== 'undefined' &amp;&amp;
+  _getNow() &gt; document.createEvent('Event').timeStamp
+) {
+  _getNow = () =&gt; performance.now()
+}
+let cachedNow: number = 0
+const p = Promise.resolve()
+const reset = () =&gt; {
+  cachedNow = 0
+}
+const getNow = () =&gt; cachedNow || (p.then(reset), (cachedNow = _getNow()))
+export function addEventListener(
+  el: Element,
+  event: string,
+  handler: EventListener,
+  options?: EventListenerOptions
+) {
+  el.addEventListener(event, handler, options)
+}
+export function removeEventListener(
+  el: Element,
+  event: string,
+  handler: EventListener,
+  options?: EventListenerOptions
+) {
+  el.removeEventListener(event, handler, options)
+}
+// 更新 DOM 更新前后的事件绑定
+export function patchEvent(
+  el: Element &amp; { _vei?: Record&lt;string, Invoker | undefined&gt; }, // 绑定的元素
+  rawName: string, // 事件名+修饰符
+  prevValue: EventValue | null, // 更新前绑定的事件处理程序
+  nextValue: EventValue | null, // 更新后绑定的事件处理程序
+  instance: ComponentInternalInstance | null = null
+) {
+  // vei = vue event invokers（事件调用者？？？）
+  const invokers = el._vei || (el._vei = {})
+  const existingInvoker = invokers[rawName]
+  if (nextValue &amp;&amp; existingInvoker) {
+    // 存在新的处理程序而且旧的也存在
+    existingInvoker.value = nextValue
+  } else {
+    const [name, options] = parseName(rawName)
+    if (nextValue) {
+      // 只有新的没有旧的，添加
+      const invoker = (invokers[rawName] = createInvoker(nextValue, instance))
+      addEventListener(el, name, invoker, options)
+    } else if (existingInvoker) {
+      // 只有旧的没有新的，移除
+      removeEventListener(el, name, existingInvoker, options)
+      invokers[rawName] = undefined
+    }
+  }
+}
+// 将 click.once.passive 转化为 [click, {once: true, capture: true}]
+const optionsModifierRE = /(?:Once|Passive|Capture)$/
+function parseName(name: string): [string, EventListenerOptions | undefined] {
+  let options: EventListenerOptions | undefined
+  if (optionsModifierRE.test(name)) {
+    options = {}
+    let m
+    while ((m = name.match(optionsModifierRE))) {
+      name = name.slice(0, name.length - m[0].length)
+      ;(options as any)[m[0].toLowerCase()] = true
+      options
+    }
+  }
+  return [name.slice(2).toLowerCase(), options]
+}
+function createInvoker(
+  initialValue: EventValue,
+  instance: ComponentInternalInstance | null
+) {
+  const invoker: Invoker = (e: Event) =&gt; {
+    const timeStamp = e.timeStamp || _getNow()
+    if (timeStamp &gt;= invoker.attached - 1) {
+      callWithAsyncErrorHandling(
+        patchStopImmediatePropagation(e, invoker.value),
+        instance,
+        ErrorCodes.NATIVE_EVENT_HANDLER,
+        [e]
+      )
+    }
+  }
+  invoker.value = initialValue
+  invoker.attached = getNow()
+  return invoker
+}
+/**
+ * stopImmediatePropagation：阻止监听同一事件的其他事件监听器被调用
+ * stopPropagation：阻止捕获和冒泡阶段中当前事件的进一步传播
+ */
+function patchStopImmediatePropagation(
+  e: Event,
+  value: EventValue
+): EventValue {
+  if (isArray(value)) {
+    const originalStop = e.stopImmediatePropagation
+    e.stopImmediatePropagation = () =&gt; {
+      originalStop.call(e)
+      ;(e as any)._stopped = true
+    }
+    return value.map(fn =&gt; (e: Event) =&gt; !(e as any)._stopped &amp;&amp; fn(e))
+  } else {
+    return value
+  }
+}
+
+</code></pre><h3 id=生命周期-2-x>生命周期 2.x</h3><p>所有生命周期，都是通过 callHook 调用的。</p><pre><code class=language-ts>export function callHook(vm: Component, hook: string) {
+  pushTarget();
+  const handlers = vm.$options[hook]; // 找到钩子函数
+  const info = `${hook} hook`;
+  if (handlers) {
+    for (let i = 0, j = handlers.length; i &lt; j; i++) {
+      // 如果是 mixin/extend，handlers 有可能是数组
+      invokeWithErrorHandling(handlers[i], vm, null, vm, info);
+    }
+  }
+  if (vm._hasHookEvent) {
+    /**
+     * 如果有 vm.$on('hook:xxx', () =&gt; {})
+     * vm._hasHookEvent 会被置为 true
+     * 需要用 $emit 调用
+     */
+    vm.$emit('hook:' + hook);
+  }
+  popTarget();
+}
+</code></pre><p>Vue 是一个构造函数，在被 new 之前，需要经过初始化和混入操作。</p><pre><code class=language-ts>function Vue(options) {
+  if (!(this instanceof Vue)) {
+    warn('Vue 只能被 new 操作符调用');
+  }
+  this._init(options);
+}
+// Vue.prototype._init = ...
+initMixin(Vue);
+/**
+ * Vue.prototype.$data = ...
+ * Vue.prototype.$props = ...
+ * Vue.prototype.$set = ...
+ * Vue.prototype.$delete = ...
+ * Vue.prototype.$watch = ...
+ */
+stateMixin(Vue);
+/**
+ * Vue.prototype.$on = ...
+ * Vue.prototype.$once = ...
+ * Vue.prototype.$off = ...
+ * Vue.prototype.$emit = ...
+ */
+eventsMixin(Vue);
+/**
+ * Vue.prototype._update = ...
+ * Vue.prototype.$forceUpdate = ...
+ * Vue.prototype.$destroy = ...
+ */
+lifecycleMixin(Vue);
+/**
+ * Vue.prototype.$nextTick = ...
+ * Vue.prototype._render = ...
+ *
+ */
+renderMixin(Vue);
+export default Vue;
+export function initMixin(Vue: Class&lt;Component&gt;) {
+  Vue.prototype._init = function (options?: Object) {
+    const vm: Component = this;
+    let startTag, endTag;
+    vm._uid = uid++; // 每个实例唯一的
+    vm._isVue = true; // 不要 observe 我
+    // 合并 options
+    if (options &amp;&amp; options._isComponent) {
+      initInternalComponent(vm, options);
+    } else {
+      vm.$options = mergeOptions(
+        resolveConstructorOptions(vm.constructor),
+        options || {},
+        vm
+      );
+    }
+    vm._renderProxy = vm;
+    vm._self = vm; // 我自己就是我自己
+    initLifecycle(vm); // 初始化属性，定位非抽象父级
+    initEvents(vm); // 更新父级给自己绑定的事件
+    initRender(vm); // 处理插槽的渲染上下文
+    callHook(vm, 'beforeCreate');
+    initInjections(vm); // 在解析 data/props 之前先解析 injections
+    initState(vm); // 按顺序初始化 props、methods、data、computed、watch
+    initProvide(vm); // 在解析 data/props 之后先解析 provide
+    callHook(vm, 'created');
+    if (vm.$options.el) {
+      vm.$mount(vm.$options.el); // 挂载，调用 mountComponent
+    }
+  };
+}
+</code></pre><p>created 钩子调用之后，会判断 vm.$options.el 是否存在，接着会调用 mountComponent。</p><pre><code class=language-ts>Vue.prototype.$mount = function (
+  el?: string | Element,
+  hydrating?: boolean
+): Component {
+  el = el &amp;&amp; inBrowser ? query(el) : undefined;
+  return mountComponent(this, el, hydrating);
+};
+export function mountComponent(
+  vm: Component,
+  el: ?Element,
+  hydrating?: boolean
+): Component {
+  vm.$el = el;
+  if (!vm.$options.render) {
+    vm.$options.render = createEmptyVNode;
+  }
+  callHook(vm, 'beforeMount'); // 找到挂载点，render 准备好渲染的内容之后，调用“beforeMount”
+  let updateComponent = () =&gt; {
+    vm._update(vm._render(), hydrating);
+  };
+  // renderWatcher 被 render 用到的变量的 getter 收集
+  new Watcher(
+    vm,
+    updateComponent,
+    noop,
+    {
+      before() {
+        /**
+         * flushSchedulerQueue 的时候会执行这个函数
+         * 在 watcher.before 之前执行
+         * 如果组件已经挂载，则执行‘beforeUpdate’
+         */
+        if (vm._isMounted &amp;&amp; !vm._isDestroyed) {
+          callHook(vm, 'beforeUpdate');
+        }
+      }
+    },
+    true /* isRenderWatcher */
+  );
+  // renderWatcher 初始化完成之后，调用“mounted”
+  if (vm.$vnode == null) {
+    vm._isMounted = true;
+    callHook(vm, 'mounted');
+  }
+  return vm;
+}
+</code></pre><p>updated 钩子会在前边总结的“异步队列”里调用；下面来看 destroy。</p><pre><code class=language-ts>Vue.prototype.$destroy = function () {
+  const vm: Component = this;
+  if (vm._isBeingDestroyed) {
+    // 如果组件正在销毁，别往下走了
+    return;
+  }
+  // 进入销毁流程
+  callHook(vm, 'beforeDestroy');
+  vm._isBeingDestroyed = true;
+  const parent = vm.$parent;
+  if (parent &amp;&amp; !parent._isBeingDestroyed &amp;&amp; !vm.$options.abstract) {
+    // 如果父级没有销毁，将自己从父级的子组件中删除
+    remove(parent.$children, vm);
+  }
+  // 销毁 renderWatcher
+  if (vm._watcher) {
+    vm._watcher.teardown();
+  }
+  // 销毁 computedWatchers 和 其他的 watchers
+  let i = vm._watchers.length;
+  while (i--) {
+    vm._watchers[i].teardown();
+  }
+  // 移除 observer
+  if (vm._data.__ob__) {
+    vm._data.__ob__.vmCount--;
+  }
+  // 我死了
+  vm._isDestroyed = true;
+  // 将组件对应的 VNode 置为 null
+  vm.__patch__(vm._vnode, null);
+  // 我真的死了
+  callHook(vm, 'destroyed');
+  // 移除所有事件绑定
+  vm.$off();
+  if (vm.$el) {
+    vm.$el.__vue__ = null;
+  }
+  if (vm.$vnode) {
+    vm.$vnode.parent = null;
+  }
+};
+</code></pre><h3 id=生命周期-3-x>生命周期 3.x</h3><pre><code class=language-ts>export const enum LifecycleHooks {
+  BEFORE_CREATE = 'bc',
+  CREATED = 'c',
+  BEFORE_MOUNT = 'bm',
+  MOUNTED = 'm',
+  BEFORE_UPDATE = 'bu',
+  UPDATED = 'u',
+  BEFORE_UNMOUNT = 'bum',
+  UNMOUNTED = 'um',
+  DEACTIVATED = 'da',
+  ACTIVATED = 'a',
+  RENDER_TRIGGERED = 'rtg',
+  RENDER_TRACKED = 'rtc',
+  ERROR_CAPTURED = 'ec'
+}
+export const createHook = (lifecycle) =&gt; (hook, target) =&gt;
+  injectHook(lifecycle, hook, target);
+export function injectHook(
+  type: LifecycleHooks,
+  hook: Function &amp; { __weh?: Function },
+  target: ComponentInternalInstance | null = currentInstance,
+  prepend: boolean = false
+): Function | undefined {
+  if (target) {
+    const hooks = target[type] || (target[type] = []); // 保存着实例对应的钩子函数的数组
+    // __weh 的意思是“带有错误处理的”，
+    const wrappedHook =
+      hook.__weh ||
+      (hook.__weh = (...args: unknown[]) =&gt; {
+        if (target.isUnmounted) {
+          return;
+        }
+        pauseTracking(); // 在 Hook 中禁用依赖收集
+        /**
+         * 在 Hook 调用期间，设置 currentInstance 为 target
+         * 只有当用户做了一些 funky 操作，这条假设（钩子不会同步触发其他钩子）才不成立
+         */
+        setCurrentInstance(target);
+        const res = callWithAsyncErrorHandling(hook, target, type, args);
+        setCurrentInstance(null); // 释放 currentInstance
+        resetTracking(); // 恢复依赖收集
+        return res;
+      });
+    if (prepend) {
+      hooks.unshift(wrappedHook);
+    } else {
+      hooks.push(wrappedHook);
+    }
+    return wrappedHook;
+  }
+}
+// 在 setup 内部，没有 beforeCreate 和 created 钩子；setup 充当了这两个钩子的角色
+export const onBeforeMount = createHook(LifecycleHooks.BEFORE_MOUNT);
+export const onMounted = createHook(LifecycleHooks.MOUNTED);
+export const onBeforeUpdate = createHook(LifecycleHooks.BEFORE_UPDATE);
+export const onUpdated = createHook(LifecycleHooks.UPDATED);
+export const onBeforeUnmount = createHook(LifecycleHooks.BEFORE_UNMOUNT);
+export const onUnmounted = createHook(LifecycleHooks.UNMOUNTED);
+// 酱紫写，是为了区分 ErrorCapturedHook 与普通 Hook 的不同
+export type ErrorCapturedHook = (
+  err: unknown,
+  instance: ComponentPublicInstance | null,
+  info: string
+) =&gt; boolean | void;
+export const onErrorCaptured = (hook, target) =&gt; {
+  injectHook(LifecycleHooks.ERROR_CAPTURED, hook, target);
+};
+</code></pre><p>在 setup 内部，没有 beforeCreate 和 created 钩子；setup 充当了这两个钩子的角色。对于 Options API，beforeCreate 和 created 继续存在；组件在 mountComponent 时会调用 setupComponent，最终会调用 applyOptions 将 options API 和 composition API 进行合并。</p><pre><code class=language-ts>export function applyOptions(
+  instance: ComponentInternalInstance,
+  options: ComponentOptions,
+  deferredData: DataFn[] = [],
+  deferredWatch: ComponentWatchOptions[] = [],
+  deferredProvide: (Data | Function)[] = [],
+  asMixin: boolean = false
+) {
+  // 在明确了上下文和 this 之后，应用“GlobalMixins”之前会调用“beforeCreate”
+  if (!asMixin) {
+    isInBeforeCreate = true;
+    callSyncHook(
+      'beforeCreate',
+      LifecycleHooks.BEFORE_CREATE,
+      options,
+      instance,
+      globalMixins
+    );
+    isInBeforeCreate = false;
+    // 应用 GlobalMixins
+  }
+  // 应用 extendsOptions
+  // 应用 mixins
+  // 处理 injectOptions
+  // 合并 methods
+  // 处理 dataOptions
+  // 处理 computedOptions
+  // 处理 watchOptions
+  // 处理 provideOptions
+  if (!asMixin) {
+    callSyncHook(
+      'created',
+      LifecycleHooks.CREATED,
+      options,
+      instance,
+      globalMixins
+    );
+  }
+  // 处理 lifecycleOptions
+}
+function callSyncHook(
+  name: 'beforeCreate' | 'created',
+  type: LifecycleHooks,
+  options: ComponentOptions,
+  instance: ComponentInternalInstance,
+  globalMixins: ComponentOptions[]
+) {
+  // 循环 globalMixins 的深度，循环调用 mixins[i][name]
+  callHookFromMixins(name, type, globalMixins, instance);
+  const { extends: base, mixins } = options;
+  if (base) {
+    // 递归调用 base[name]
+    callHookFromExtends(name, type, base, instance);
+  }
+  if (mixins) {
+    // 循环 mixins 的深度，循环调用 mixins[i][name]
+    callHookFromMixins(name, type, mixins, instance);
+  }
+  // 调用自身的 beforeCreate 或 created
+  const selfHook = options[name];
+  if (selfHook) {
+    callWithAsyncErrorHandling(selfHook.bind(instance.proxy!), instance, type);
+  }
+}
+</code></pre><p>onActivated 和 onDeactivated 会通过 registerKeepAliveHook 进行注册。</p><pre><code class=language-ts>export function onActivated(hook, target) {
+  registerKeepAliveHook(hook, LifecycleHooks.ACTIVATED, target);
+}
+export function onDeactivated(hook, target) {
+  registerKeepAliveHook(hook, LifecycleHooks.DEACTIVATED, target);
+}
+function registerKeepAliveHook(
+  hook: Function &amp; { __wdc?: Function },
+  type: LifecycleHooks,
+  target: ComponentInternalInstance | null = currentInstance
+) {
+  // __wdc 的意思是“带有失活检查的”，这玩意，调度器会删除重复的钩子
+  const wrappedHook =
+    hook.__wdc ||
+    (hook.__wdc = () =&gt; {
+      // 仅当目标实例不在 deactivated 状态中时才触发 Hook
+      let current: ComponentInternalInstance | null = target;
+      while (current) {
+        if (current.isDeactivated) {
+          return;
+        }
+        current = current.parent;
+      }
+      hook();
+    });
+  injectHook(type, wrappedHook, target);
+  /**
+   * 除了在目标实例上注册它之外
+   * 向上遍历父链，并将其注册到‘are keep-alive roots’的所有祖先实例上
+   * 这避免了在调用这些钩子时需要遍历整个组件树，更重要的是，避免了跟踪数组中的子组件
+   */
+  if (target) {
+    let current = target.parent;
+    while (current &amp;&amp; current.parent) {
+      if (isKeepAlive(current.parent.vnode)) {
+        injectToKeepAliveRoot(wrappedHook, type, target, current);
+      }
+      current = current.parent;
+    }
+  }
+}
+</code></pre><h3 id=computed-2-x>computed 2.x</h3><p>computed 是定义在 vm 上的特殊 getter，computedWatcher 在创建的时候会将 dirty 和 lazy 属性设置为 true；当 computed 的值被访问，触发 getter，computedGetter 会调用 watcher.evaluate 进行求值。</p><pre><code class=language-ts>export function initState (vm: Component) {
+  // ...
+  if (opts.computed) initComputed(vm, opts.computed)
+  // ...
+}
+// 在 initState 过程中会调用 initComputed(vm, opts.computed)
+function initComputed(vm, computed) {
+  // 实例的 computed 创建的 watcher 都保存在 vm._computedWatchers
+  const watchers = (vm._computedWatchers = Object.create(null));
+  // 循环组件内3 computed 配置
+  for (const key in computed) {
+    /**
+     * computed 有两种形式：
+     * 1. a: () =&gt; someValue
+     * 2. b: { get:..., set:... }
+     * 最终，都会转化为 getter/setter
+     */
+    const userDef = computed[key];
+    const getter = typeof userDef === 'function' ? userDef : userDef.get;
+    if (getter == null) {
+      warn('没有 getter？开什么玩笑');
+    }
+    // 为计算属性创建 watcher
+    watchers[key] = new Watcher(vm, getter || noop, noop, { lazy: true });
+    // 判断 computed 属性是否和 vm.$data、vm.$options.methods、vm.$options.props 冲突
+    if (!(key in vm)) {
+      defineComputed(vm, key, userDef);
+    } else {
+      // 冲突的话，错抱起来
+      if (key in vm.$data) {
+        warn(`already defined in data`);
+      } else if (vm.$options.props &amp;&amp; key in vm.$options.props) {
+        warn(`already defined as a prop`);
+      } else if (vm.$options.methods &amp;&amp; key in vm.$options.methods) {
+        warn(`already defined as a method`);
+      }
+    }
+  }
+}
+export function defineComputed(target, key, userDef) {
+  userDef.get = typeof userDef === 'function' ? userDef : userDef.get;
+  Object.defineProperty(target, key, {
+    get: createComputedGetter(key)
+    set: userDef.set || noop
+  });
+}
+function createComputedGetter(key) {
+  return function computedGetter() {
+    const watcher = this._computedWatchers &amp;&amp; this._computedWatchers[key];
+    if (watcher) {
+      if (watcher.dirty) {
+        // 用到再求值
+        watcher.evaluate();
+      }
+      if (Dep.target) {
+        watcher.depend();
+      }
+      return watcher.value;
+    }
+  };
+}
+</code></pre><h3 id=computed-3-x>computed 3.x</h3><pre><code class=language-ts>class ComputedRefImpl&lt;T&gt; {
+  private _value!: T;
+  private _dirty = true;
+  public readonly __v_isRef = true; // computed 是一个 ref
+  public readonly effect: ReactiveEffect&lt;T&gt;;
+  public readonly [ReactiveFlags.IS_READONLY]: boolean;
+  constructor(
+    getter: ComputedGetter&lt;T&gt;,
+    private readonly _setter: ComputedSetter&lt;T&gt;,
+    isReadonly: boolean
+  ) {
+    this.effect = effect(getter, {
+      lazy: true,
+      scheduler: () =&gt; {
+        if (!this._dirty) {
+          // 数据“脏”了
+          this._dirty = true;
+          // 派发通知，通知运行访问该计算属性的 activeEffect
+          trigger(toRaw(this), 'set', 'value');
+        }
+      }
+    });
+    this['__v_isReadonly'] = isReadonly;
+  }
+  get value() {
+    /**
+     * 渲染开始时，computedGetter 被触发，renderEffect 会被收集到依赖里
+     * 因为 computedGetter 访问了（依赖了）“别的数据”
+     * 所以，computedEffect 会被”自身依赖的数据“收集
+     * 当“别的数据”更新，会调用 computedScheduler，将 _dirty 设置为 true
+     * 当执行到 trigger 时，renderEffect 又会重新触发 computedGetter
+     * 有点“牵一发而动全身”的意思
+     */
+    if (this._dirty) {
+      // 值是通过调用 effect 获得的
+      this._value = this.effect();
+      // 当被外界 get 之后，数据不再“脏”了
+      this._dirty = false;
+    }
+    // 依赖收集，收集运行访问该计算属性的 activeEffect
+    track(toRaw(this), 'get', 'value');
+    return this._value;
+  }
+  set value(newValue: T) {
+    this._setter(newValue);
+  }
+}
+// 处理两种参数形式
+export function computed&lt;T&gt;(
+  getterOrOptions: ComputedGetter&lt;T&gt; | WritableComputedOptions&lt;T&gt;
+) {
+  let getter: ComputedGetter&lt;T&gt;;
+  let setter: ComputedSetter&lt;T&gt;;
+  // 标准化参数
+  if (isFunction(getterOrOptions)) {
+    getter = getterOrOptions;
+    setter = NOOP;
+  } else {
+    getter = getterOrOptions.get;
+    setter = getterOrOptions.set;
+  }
+  // 返回 computed 对象
+  return new ComputedRefImpl(
+    getter,
+    setter,
+    isFunction(getterOrOptions) || !getterOrOptions.set
+  ) as any;
+}
+</code></pre><h3 id=keep-alive-2-x>keep-alive 2.x</h3><pre><code class=language-ts>// 获取组件 name
+function getComponentName(opts: ?VNodeComponentOptions): ?string {
+  return opts &amp;&amp; (opts.Ctor.options.name || opts.tag);
+}
+// name 是否匹配 pattern
+function matches(pattern, name) {
+  if (Array.isArray(pattern)) {
+    return pattern.indexOf(name) &gt; -1;
+  } else if (typeof pattern === 'string') {
+    return pattern.split(',').indexOf(name) &gt; -1;
+  } else if (isRegExp(pattern)) {
+    return pattern.test(name);
+  }
+  return false;
+}
+type CacheEntry = {
+  componentInstance: Component;
+  name: ?string;
+  tag: ?string;
+};
+type CacheEntryMap = { [key: string]: ?CacheEntry };
+// 清理缓存
+function pruneCache(keepAliveInstance: any, filter: Function) {
+  const { cache, keys, _vnode } = keepAliveInstance;
+  for (const key in cache) {
+    const entry = cache[key];
+    if (entry) {
+      const { name } = entry;
+      if (name &amp;&amp; !filter(name)) {
+        pruneCacheEntry(cache, key, keys, _vnode);
+      }
+    }
+  }
+}
+// 清理缓存入口
+function pruneCacheEntry(
+  cache: CacheEntryMap,
+  key: string,
+  keys: Array&lt;string&gt;,
+  current?: VNode
+) {
+  const entry = cache[key];
+  if (entry &amp;&amp; (!current || entry.tag !== current.tag)) {
+    entry.componentInstance.$destroy();
+  }
+  cache[key] = null;
+  remove(keys, key);
+}
+const patternTypes: Array&lt;Function&gt; = [String, RegExp, Array];
+// &lt;keep-alive :include=&quot;xxx&quot; :exclude=&quot;yyy&quot; :max=&quot;zzz&quot;&gt;
+export default {
+  name: 'keep-alive',
+  abstract: true, // 抽象组件（在组件实例建立父子关系的时候会被忽略）
+  props: {
+    include: patternTypes,
+    exclude: patternTypes,
+    max: [String, Number]
+  },
+  methods: {
+    // 仅在 render 执行过后才执行（mounted/updated）
+    cacheVNode() {
+      const { cache, keys, vnodeToCache, keyToCache } = this;
+      if (vnodeToCache) {
+        const { tag, componentInstance, componentOptions } = vnodeToCache;
+        // 将 vnode 中的 名称、tag、实例缓存起来
+        cache[keyToCache] = {
+          name: getComponentName(componentOptions),
+          tag,
+          componentInstance
+        };
+        keys.push(keyToCache);
+        // 清理老旧的缓存
+        if (this.max &amp;&amp; keys.length &gt; parseInt(this.max)) {
+          pruneCacheEntry(cache, keys[0], keys, this._vnode);
+        }
+        this.vnodeToCache = null;
+      }
+    }
+  },
+  created() {
+    this.cache = Object.create(null); // 缓存 VNode
+    this.keys = []; // 缓存中的 key
+  },
+  destroyed() {
+    // 清空缓存
+    for (const key in this.cache) {
+      /**
+       * 找到要删除的组件实例并调用 destory 钩子
+       * 从缓存中删除 key 对应的缓存
+       * 从 keys 中删除 key
+       */
+      pruneCacheEntry(this.cache, key, this.keys);
+    }
+  },
+  mounted() {
+    this.cacheVNode();
+    // 监听黑白名单
+    this.$watch('include', (val) =&gt; {
+      pruneCache(this, (name) =&gt; matches(val, name));
+    });
+    this.$watch('exclude', (val) =&gt; {
+      pruneCache(this, (name) =&gt; !matches(val, name));
+    });
+  },
+  updated() {
+    this.cacheVNode();
+  },
+  render() {
+    const slot = this.$slots.default;
+    /**
+     * 处理默认插槽的第一个子组件
+     * 所以常和 component 和 router-view 一起使用
+     */
+    const vnode: VNode = getFirstComponentChild(slot);
+    const componentOptions = vnode &amp;&amp; vnode.componentOptions;
+    if (componentOptions) {
+      // 获取 VNode 对应的组件名称
+      const name: ?string = getComponentName(componentOptions);
+      const { include, exclude } = this;
+      // 组件名称不在白名单（include）内或者在黑名单（exclude）内
+      if (
+        (include &amp;&amp; (!name || !matches(include, name))) ||
+        (exclude &amp;&amp; name &amp;&amp; matches(exclude, name))
+      ) {
+        return vnode; // 直接返回
+      }
+      const { cache, keys } = this;
+      // 想办法拼凑一个独一无二的 key
+      const key =
+        vnode.key == null
+          ? componentOptions.Ctor.cid +
+            (componentOptions.tag ? `::${componentOptions.tag}` : '')
+          : vnode.key;
+      /**
+       * 如果命中缓存，VNode 的组件实例从缓存里取，并调整 key 的顺序（放在最后一个）
+       * 调整 key 的原因是，keys[0] 对应的 key 一定是很久没用的缓存对应的 key
+       */
+      if (cache[key]) {
+        vnode.componentInstance = cache[key].componentInstance;
+        remove(keys, key);
+        keys.push(key);
+      } else {
+        // 没有缓存的话，设置缓存
+        this.vnodeToCache = vnode;
+        this.keyToCache = key;
+      }
+      /**
+       * 对于 keepAlive 标识的组件，被缓存组件初次渲染时会走正常流程（因为 VNode.componentInstance 为空）
+       * 当组件切换，命中缓存时；被缓存组件实例存在，会直接返回；不会执行 created、mounted 等钩子，而是执行 activated
+       * 对应的也不会执行 destory，而是会执行 deactivate 钩子
+       */
+      vnode.data.keepAlive = true;
+    }
+    // 通过插槽渲染组件
+    return vnode || (slot &amp;&amp; slot[0]);
+  }
+};
+</code></pre><h3 id=keep-alive-3-x>keep-alive 3.x</h3><p>在 <a href=https://sfc.vuejs.org/>SFC Playground</a> 中查看 keep-alive 编译后的 render 函数。</p><pre><code class=language-ts>const __sfc__ = {};
+function render(_ctx, _cache) {
+  const _component_comp_a = _resolveComponent('comp-a');
+  const _component_comp_b = _resolveComponent('comp-b');
+  return (
+    _openBlock(),
+    _createBlock(
+      _KeepAlive,
+      null,
+      [
+        _ctx.flag
+          ? (_openBlock(), _createBlock(_component_comp_a, { key: 0 }))
+          : (_openBlock(), _createBlock(_component_comp_b, { key: 1 }))
+      ],
+      1024
+    )
+  );
+}
+__sfc__.render = render;
+__sfc__.__file = 'App.vue';
+export default __sfc__;
+</code></pre><p>实现 keep-alive 的关键 API 是 _KeepAlive；其缓存原则是“如果经常被访问，则能够快速命中；而不常被访问，则在不满足条件的情况下被释放”。</p><pre><code class=language-ts>type Cache = Map&lt;CacheKey, VNode&gt;; // 缓存结构
+type Keys = Set&lt;CacheKey&gt;; // 保存缓存 key 值
+const KeepAliveImpl = {
+  name: `KeepAlive`,
+  // 用于渲染器内部特殊处理的标记
+  __isKeepAlive: true,
+  inheritRef: true,
+  props: {
+    include: [String, RegExp, Array],
+    exclude: [String, RegExp, Array],
+    max: [String, Number]
+  },
+  setup(props: KeepAliveProps, { slots }: SetupContext) {
+    const instance = getCurrentInstance()!;
+    const parentSuspense = instance.suspense;
+    const keys: Keys = new Set();
+    const cache: Cache = new Map();
+    let current: VNode | null = null;
+    /**
+     * KeepAlive 通过在其内部传递 ctx 与实例化的渲染器通信
+     * KeepAlive 实例公开 activate/deactivate 的实现
+     * 这么做的目的就是避免在 renderer 直接引入 KeepAlive
+     * 实现 tree-shaking
+     */
+    const sharedContext = instance.ctx as KeepAliveContext;
+    const {
+      renderer: {
+        p: patch,
+        m: move,
+        um: _unmount,
+        o: { createElement }
+      }
+    } = sharedContext;
+    const storageContainer = createElement('div');
+    sharedContext.activate = (vnode, container, anchor, isSVG, optimized) =&gt; {
+      const instance = vnode.component!;
+      move(vnode, container, anchor, MoveType.ENTER, parentSuspense);
+      // 万一 props 变了
+      patch(
+        instance.vnode,
+        vnode,
+        container,
+        anchor,
+        instance,
+        parentSuspense,
+        isSVG,
+        optimized
+      );
+      queuePostRenderEffect(() =&gt; {
+        instance.isDeactivated = false;
+        if (instance.a) {
+          invokeArrayFns(instance.a);
+        }
+        const vnodeHook = vnode.props &amp;&amp; vnode.props.onVnodeMounted;
+        if (vnodeHook) {
+          invokeVNodeHook(vnodeHook, instance.parent, vnode);
+        }
+      }, parentSuspense);
+    };
+    sharedContext.deactivate = (vnode: VNode) =&gt; {
+      const instance = vnode.component!;
+      // 仅仅移除 DOM，没有卸载
+      move(vnode, storageContainer, null, MoveType.LEAVE, parentSuspense);
+      queuePostRenderEffect(() =&gt; {
+        if (instance.da) {
+          invokeArrayFns(instance.da);
+        }
+        const vnodeHook = vnode.props &amp;&amp; vnode.props.onVnodeUnmounted;
+        if (vnodeHook) {
+          invokeVNodeHook(vnodeHook, instance.parent, vnode);
+        }
+        instance.isDeactivated = true;
+      }, parentSuspense);
+    };
+    function unmount(vnode: VNode) {
+      resetShapeFlag(vnode);
+      _unmount(vnode, instance, parentSuspense);
+    }
+    function pruneCache(filter?: (name: string) =&gt; boolean) {
+      cache.forEach((vnode, key) =&gt; {
+        const name = getComponentName(vnode.type as ConcreteComponent);
+        if (name &amp;&amp; (!filter || !filter(name))) {
+          pruneCacheEntry(key);
+        }
+      });
+    }
+    function pruneCacheEntry(key: CacheKey) {
+      const cached = cache.get(key) as VNode;
+      if (!current || cached.type !== current.type) {
+        unmount(cached);
+      } else if (current) {
+        // 当前已激活的实例不再 kept-alive
+        resetShapeFlag(current);
+      }
+      cache.delete(key);
+      keys.delete(key);
+    }
+    // prop 变化，对缓存进行修剪
+    watch(
+      () =&gt; [props.include, props.exclude],
+      ([include, exclude]) =&gt; {
+        include &amp;&amp; pruneCache((name) =&gt; matches(include, name));
+        exclude &amp;&amp; pruneCache((name) =&gt; !matches(exclude, name));
+      },
+      { flush: 'post', deep: true }
+    );
+    let pendingCacheKey: CacheKey | null = null;
+    const cacheSubtree = () =&gt; {
+      if (pendingCacheKey != null) {
+        cache.set(pendingCacheKey, getInnerChild(instance.subTree));
+      }
+    };
+    // 渲染/更新完成之后，缓存子树
+    onMounted(cacheSubtree);
+    onUpdated(cacheSubtree);
+    onBeforeUnmount(() =&gt; {
+      cache.forEach((cached) =&gt; {
+        const { subTree, suspense } = instance;
+        const vnode = getInnerChild(subTree);
+        if (cached.type === vnode.type) {
+          resetShapeFlag(vnode);
+          // 触发 deactivated 钩子
+          const da = vnode.component!.da;
+          da &amp;&amp; queuePostRenderEffect(da, suspense);
+          return;
+        }
+        unmount(cached);
+      });
+    });
+    // KeepAlive 的渲染函数
+    return () =&gt; {
+      pendingCacheKey = null;
+      if (!slots.default) {
+        return null;
+      }
+      // 拿到 KeepAlive 包裹的子组件
+      const children = slots.default();
+      // KeepAlive 是抽象组件，它本身不渲染成实体节点，而是渲染它的第一个子节点
+      const rawVNode = children[0];
+      if (children.length &gt; 1) {
+        console.warn('KeepAlive 应该只包含一个子组件');
+        current = null;
+        return children;
+      } else if (
+        !isVNode(rawVNode) ||
+        (!(rawVNode.shapeFlag &amp; ShapeFlags.STATEFUL_COMPONENT) &amp;&amp;
+          !(rawVNode.shapeFlag &amp; ShapeFlags.SUSPENSE))
+      ) {
+        current = null;
+        return rawVNode;
+      }
+      let vnode = getInnerChild(rawVNode);
+      const comp = vnode.type as ConcreteComponent;
+      const name = getComponentName(comp);
+      // 缓存控制
+      const { include, exclude, max } = props;
+      if (
+        (include &amp;&amp; (!name || !matches(include, name))) ||
+        (exclude &amp;&amp; name &amp;&amp; matches(exclude, name))
+      ) {
+        // 直接返回
+        current = vnode;
+        return rawVNode;
+      }
+      const key = vnode.key == null ? comp : vnode.key;
+      // 获取缓存
+      const cachedVNode = cache.get(key);
+      // 如果重复使用 VNode，则克隆它；因为我们将对其进行修改
+      if (vnode.el) {
+        vnode = cloneVNode(vnode);
+        if (rawVNode.shapeFlag &amp; ShapeFlags.SUSPENSE) {
+          rawVNode.ssContent = vnode;
+        }
+      }
+      pendingCacheKey = key;
+      if (cachedVNode) {
+        // 缓存存在
+        vnode.el = cachedVNode.el;
+        vnode.component = cachedVNode.component;
+        if (vnode.transition) {
+          setTransitionHooks(vnode, vnode.transition!);
+        }
+        // 避免 VNode 节点作为新节点被挂载
+        vnode.shapeFlag |= ShapeFlags.COMPONENT_KEPT_ALIVE;
+        // 删除再添加，是为了？？？让 key 排在靠后的位置
+        keys.delete(key);
+        keys.add(key);
+      } else {
+        // 缓存不存在
+        keys.add(key);
+        // 舍弃最早的缓存
+        if (max &amp;&amp; keys.size &gt; parseInt(max as string, 10)) {
+          pruneCacheEntry(keys.values().next().value);
+        }
+      }
+      // 避免 VNode 被卸载，给组件打上 tag
+      vnode.shapeFlag |= ShapeFlags.COMPONENT_SHOULD_KEEP_ALIVE;
+      current = vnode;
+      return rawVNode;
+    };
+  }
+};
+export const KeepAlive = KeepAliveImpl as any as {
+  __isKeepAlive: true;
+  new (): {
+    $props: VNodeProps &amp; KeepAliveProps;
+  };
+};
+</code></pre><h3 id=nexttick-2-x>nextTick 2.x</h3><pre><code class=language-ts>Vue.prototype.$nextTick = function (fn) {
+  return nextTick(fn, this);
+};
+Vue.nextTick = nextTick;
+const callbacks = [];
+let pending = false;
+let timerFunc;
+// 执行 callbacks 里所有的回调函数
+function flushCallbacks() {
+  pending = false;
+  const copies = callbacks.slice(0);
+  callbacks.length = 0;
+  for (let i = 0; i &lt; copies.length; i++) {
+    copies[i]();
+  }
+}
+if (typeof Promise !== 'undefined' &amp;&amp; isNative(Promise)) {
+  const p = Promise.resolve();
+  timerFunc = () =&gt; {
+    p.then(flushCallbacks);
+    if (isIOS) setTimeout(noop);
+  };
+  isUsingMicroTask = true;
+} else if (
+  !isIE &amp;&amp;
+  typeof MutationObserver !== 'undefined' &amp;&amp;
+  (isNative(MutationObserver) ||
+    MutationObserver.toString() === '[object MutationObserverConstructor]')
+) {
+  let counter = 1;
+  const observer = new MutationObserver(flushCallbacks);
+  const textNode = document.createTextNode(String(counter));
+  observer.observe(textNode, {
+    characterData: true
+  });
+  timerFunc = () =&gt; {
+    counter = (counter + 1) % 2;
+    textNode.data = String(counter);
+  };
+  isUsingMicroTask = true;
+} else if (typeof setImmediate !== 'undefined' &amp;&amp; isNative(setImmediate)) {
+  timerFunc = () =&gt; {
+    setImmediate(flushCallbacks);
+  };
+} else {
+  timerFunc = () =&gt; {
+    setTimeout(flushCallbacks, 0);
+  };
+}
+/**
+ * $nextTick 有三种调用方式：
+ * 1. $nextTick(cb)
+ * 2. $nextTick.then(cb)
+ * 3. async $nextTick()
+ */
+export function nextTick(cb, ctx) {
+  let _resolve;
+  callbacks.push(() =&gt; {
+    if (cb) {
+      try {
+        cb.call(ctx);
+      } catch (e) {
+        handleError(e, ctx, 'nextTick');
+      }
+    } else if (_resolve) {
+      // _resolve 将 ctx 传递给 then 里边的 cb
+      _resolve(ctx);
+    }
+  });
+  if (!pending) {
+    pending = true;
+    /**
+     * timerFunc 有四种运行 flushCallbacks 的方式：
+     * 1. Promise（微任务）
+     * 2. MutationObserver（微任务）
+     * 3. setImmediate（宏任务）
+     * 4. setTimeout（宏任务）
+     */
+    timerFunc();
+  }
+  if (!cb &amp;&amp; typeof Promise !== 'undefined') {
+    return new Promise((resolve) =&gt; {
+      // 当调用 _resolve 时，会走 then(cb)
+      _resolve = resolve;
+    });
+  }
+}
+</code></pre><h3 id=nexttick-3-x>nextTick 3.x</h3><pre><code class=language-ts>const resolvedPromise: Promise&lt;any&gt; = Promise.resolve();
+let currentFlushPromise: Promise&lt;void&gt; | null = null;
+// nextTick 的实现就是 promise
+export function nextTick(
+  this: ComponentPublicInstance | void,
+  fn?: () =&gt; void
+): Promise&lt;void&gt; {
+  const p = currentFlushPromise || resolvedPromise;
+  return fn ? p.then(this ? fn.bind(this) : fn) : p;
+}
+$nextTick: i =&gt; nextTick.bind(i.proxy!),
+</code></pre><h3 id=vnode-2-x>vnode 2.x</h3><pre><code class=language-ts>/**
+ * 调用场景：
+ * 1. createComponent 中 new VNode(...)
+ * 2. _createElement 中
+ *    如果是注册的组件，调用 createComponent
+ *    如果是 HTML 元素，new VNode(...)
+ *    如果是位置元素，new VNode(...)
+ * 3. 创建空节点，emptyNode = new VNode('', {}, [])
+ * 4. 创建文本节点，new VNode(undefined, undefined, undefined, String(val))
+ * 5. cloneVNode，源码就在下面
+ */
+export default class VNode {
+  constructor(
+    tag,
+    data,
+    children,
+    text,
+    elm,
+    context,
+    componentOptions,
+    asyncFactory
+  ) {
+    this.tag = tag; // `vue-component-${Ctor.cid}${name ? `-${name}` : ''}`,
+    this.data = data;
+    this.children = children;
+    this.text = text;
+    this.elm = elm;
+    this.ns = undefined; // 命名空间
+    this.context = context; // 渲染组件的作用域
+    this.fnContext = undefined; // 函数节点的上下文
+    this.fnOptions = undefined; // SSR 缓存相关
+    this.fnScopeId = undefined; // 函数作用域 ID 支持
+    this.key = data &amp;&amp; data.key;
+    this.componentOptions = componentOptions;
+    this.componentInstance = undefined; // 组件实例
+    /**
+     * vm.$options.parent：子组件渲染执行 vm.__patch__ 时当前活跃的组件实例，也就是子组件实例的父组件实例
+     * vm.$parent：组件实例的第一个“非抽象”的父组件实例
+     * vnode.parent：组件占位 vnode，不会出现在 DOM
+     */
+    this.parent = undefined;
+    this.raw = false; // 是否包含原生 HTML？
+    this.isStatic = false; // 是否是静态提升节点
+    this.isRootInsert = true; // 进入 transition 检查所必需的
+    this.isComment = false; // 是否是空的注释占位符？
+    this.isCloned = false; // 是否是克隆节点？
+    this.isOnce = false; // 是否是 v-once 节点？
+    this.asyncFactory = asyncFactory; // 异步组件工厂函数
+    this.asyncMeta = undefined;
+    this.isAsyncPlaceholder = false;
+  }
+}
+// 创建空白 VNode
+export const createEmptyVNode = (text = '') =&gt; {
+  const node = new VNode();
+  node.text = text;
+  node.isComment = true;
+  return node;
+};
+// 创建文本 VNode
+export function createTextVNode(val) {
+  return new VNode(undefined, undefined, undefined, String(val));
+}
+/**
+ * 适用于静态节点和插槽节点，因为他们可能被多个 render 重用
+ * 当 DOM 操作依赖它们的 elm 引用时，克隆它们可以避免错误
+ */
+export function cloneVNode(vnode) {
+  const cloned = new VNode(
+    vnode.tag,
+    vnode.data,
+    vnode.children &amp;&amp; vnode.children.slice(),
+    vnode.text,
+    vnode.elm,
+    vnode.context,
+    vnode.componentOptions,
+    vnode.asyncFactory
+  );
+  cloned.ns = vnode.ns;
+  cloned.isStatic = vnode.isStatic;
+  cloned.key = vnode.key;
+  cloned.isComment = vnode.isComment;
+  cloned.fnContext = vnode.fnContext;
+  cloned.fnOptions = vnode.fnOptions;
+  cloned.fnScopeId = vnode.fnScopeId;
+  cloned.asyncMeta = vnode.asyncMeta;
+  cloned.isCloned = true;
+  return cloned;
+}
+</code></pre><h3 id=vnode-3-x>vnode 3.x</h3><pre><code class=language-ts>function _createVNode(
+  type: VNodeTypes | ClassComponent | typeof NULL_DYNAMIC_COMPONENT,
+  props: (Data &amp; VNodeProps) | null = null,
+  children: unknown = null,
+  patchFlag: number = 0,
+  dynamicProps: string[] | null = null,
+  isBlockNode = false
+): VNode {
+  if (!type || type === NULL_DYNAMIC_COMPONENT) {
+    if (!type) {
+      warn(`非法 type 类型: ${type}.`);
+    }
+    type = Comment;
+  }
+  if (isVNode(type)) {
+    /**
+     * &lt;component :is=&quot;vnode&quot;/&gt;，这种情况下，createVNode接受一个存在的 VNode
+     * 在克隆前后时，合并 VNode 的 ref
+     */
+    const cloned = cloneVNode(type, props, true /* mergeRef: true */);
+    if (children) {
+      normalizeChildren(cloned, children);
+    }
+    return cloned;
+  }
+  // 规范化类组件
+  if (isClassComponent(type)) {
+    type = type.__vccOpts;
+  }
+  // 规范化 class 和 style
+  if (props) {
+    // 响应式/代理 props，在修改之前应该先克隆
+    if (isProxy(props) || '__vInternal' in props) {
+      props = extend({}, props); // Object.assign
+    }
+    let { class: klass, style } = props;
+    if (klass &amp;&amp; !isString(klass)) {
+      // {...class}/[...class] =&gt; &quot;...class&quot;
+      props.class = normalizeClass(klass);
+    }
+    if (isObject(style)) {
+      if (isProxy(style) &amp;&amp; !isArray(style)) {
+        style = extend({}, style);
+      }
+      // unknown =&gt; {}
+      props.style = normalizeStyle(style);
+    }
+  }
+  // 将 VNode 类型信息编码为位图
+  const shapeFlag = isString(type)
+    ? ShapeFlags.ELEMENT
+    : __FEATURE_SUSPENSE__ &amp;&amp; isSuspense(type)
+    ? ShapeFlags.SUSPENSE
+    : isTeleport(type)
+    ? ShapeFlags.TELEPORT
+    : isObject(type)
+    ? ShapeFlags.STATEFUL_COMPONENT
+    : isFunction(type)
+    ? ShapeFlags.FUNCTIONAL_COMPONENT
+    : 0;
+  if (shapeFlag &amp; ShapeFlags.STATEFUL_COMPONENT &amp;&amp; isProxy(type)) {
+    type = toRaw(type);
+  }
+  // 创建 VNode
+  const vnode: VNode = {
+    __v_isVNode: true,
+    __v_skip: true,
+    type,
+    props,
+    key: props &amp;&amp; normalizeKey(props),
+    ref: props &amp;&amp; normalizeRef(props),
+    scopeId: currentScopeId,
+    children: null,
+    component: null,
+    suspense: null,
+    ssContent: null,
+    ssFallback: null,
+    dirs: null,
+    transition: null,
+    el: null,
+    anchor: null,
+    target: null,
+    targetAnchor: null,
+    staticCount: 0,
+    shapeFlag,
+    patchFlag,
+    dynamicProps,
+    dynamicChildren: null,
+    appContext: null
+  };
+  // vnode.key 不能为 NaN
+  if (vnode.key !== vnode.key) {
+    warn(`VNode created with invalid key (NaN). VNode type:`, vnode.type);
+  }
+  // 标准化子节点，把不同数据类型的 children 转成数组或者文本类型
+  normalizeChildren(vnode, children);
+  if (__FEATURE_SUSPENSE__ &amp;&amp; shapeFlag &amp; ShapeFlags.SUSPENSE) {
+    const { content, fallback } = normalizeSuspenseChildren(vnode);
+    vnode.ssContent = content;
+    vnode.ssFallback = fallback;
+  }
+  // 添加动态 VNode 到 currentBlock 中
+  if (
+    shouldTrack &gt; 0 &amp;&amp;
+    // 避免块节点跟踪自身
+    !isBlockNode &amp;&amp;
+    // 具有当前父块
+    currentBlock &amp;&amp;
+    /**
+     * 存在 patchFlag 表示此节点需要在更新时修补；
+     * 组件节点也应始终进行修补；因为，即使组件不需要更新，
+     * 它需要将实例持久化到下一个 VNode，以便以后可以正确卸载？？？
+     */
+    (patchFlag &gt; 0 || shapeFlag &amp; ShapeFlags.COMPONENT) &amp;&amp;
+    patchFlag !== PatchFlags.HYDRATE_EVENTS
+  ) {
+    /**
+     * 如果 VNode 是一个动态节点，则添加到 currentBlock 中
+     * block 的目的就是收集动态 VNode
+     * 在 patch 阶段，更新粒度由原来的组件缩小为 block
+     * 仅仅对比动态节点，静态节点得以提升，优化性能
+     */
+    currentBlock.push(vnode);
+  }
+  return vnode;
+}
+</code></pre><h3 id=v-model-2-x>v-model 2.x</h3><pre><code class=language-ts>let warn;
+// 某些情况下，使用什么事件是由运行时决定的
+export const RANGE_TOKEN = '__r';
+export const CHECKBOX_RADIO_TOKEN = '__c';
+export default function model(
+  el: ASTElement,
+  dir: ASTDirective,
+  _warn: Function
+): ?boolean {
+  warn = _warn;
+  const tag = el.tag;
+  const type = el.attrsMap.type;
+  const value = dir.value;
+  const modifiers = dir.modifiers;
+  if (tag === 'input' &amp;&amp; type === 'file') {
+    warn(
+      'file input 不能用 v-model，因为他的 value 是只读的；请用 v-on:change 替代'
+    );
+  }
+  if (el.component) {
+    // 组件上的 v-model 不需要额外的运行时
+    genComponentModel(el, value, modifiers);
+    return false;
+  } else if (tag === 'select') {
+    // &lt;select v-model=&quot;value&quot;/&gt;
+    genSelect(el, value, modifiers);
+  } else if (tag === 'input' &amp;&amp; type === 'checkbox') {
+    // &lt;input type=&quot;checkbox&quot; v-model=&quot;value&quot;/&gt;
+    genCheckboxModel(el, value, modifiers);
+  } else if (tag === 'input' &amp;&amp; type === 'radio') {
+    // &lt;input type=&quot;radio&quot; v-model=&quot;value&quot;/&gt;
+    genRadioModel(el, value, modifiers);
+  } else if (tag === 'input' || tag === 'textarea') {
+    // &lt;input type=&quot;textarea&quot; v-model=&quot;value&quot;/&gt;
+    genDefaultModel(el, value, modifiers);
+  } else if (!config.isReservedTag(tag)) {
+    // 既非 HTML 也非 SVG
+    genComponentModel(el, value, modifiers);
+    return false;
+  } else if (process.env.NODE_ENV !== 'production') {
+    warn(`v-model is not supported on this element type`);
+  }
+  return true;
+}
+/**
+ * &lt;input type=&quot;checkbox&quot; v-model=&quot;value&quot;/&gt;
+ * &lt;input type=&quot;checkbox&quot; :checked=&quot;value&quot; @change=&quot;v=&gt;value=v&quot;/&gt;
+ */
+function genCheckboxModel(
+  el: ASTElement,
+  value: string,
+  modifiers: ?ASTModifiers
+) {
+  const number = modifiers &amp;&amp; modifiers.number;
+  const valueBinding = getBindingAttr(el, 'value') || 'null';
+  const trueValueBinding = getBindingAttr(el, 'true-value') || 'true';
+  const falseValueBinding = getBindingAttr(el, 'false-value') || 'false';
+  addProp(
+    el,
+    'checked',
+    `Array.isArray(${value})` +
+      `?_i(${value},${valueBinding})&gt;-1` +
+      (trueValueBinding === 'true'
+        ? `:(${value})`
+        : `:_q(${value},${trueValueBinding})`)
+  );
+  addHandler(
+    el,
+    'change',
+    `var $$a=${value},` +
+      '$$el=$event.target,' +
+      `$$c=$$el.checked?(${trueValueBinding}):(${falseValueBinding});` +
+      'if(Array.isArray($$a)){' +
+      `var $$v=${number ? '_n(' + valueBinding + ')' : valueBinding},` +
+      '$$i=_i($$a,$$v);' +
+      `if($$el.checked){$$i&lt;0&amp;&amp;(${genAssignmentCode(
+        value,
+        '$$a.concat([$$v])'
+      )})}` +
+      `else{$$i&gt;-1&amp;&amp;(${genAssignmentCode(
+        value,
+        '$$a.slice(0,$$i).concat($$a.slice($$i+1))'
+      )})}` +
+      `}else{${genAssignmentCode(value, '$$c')}}`,
+    null,
+    true
+  );
+}
+/**
+ * &lt;input type=&quot;radio&quot; v-model=&quot;value&quot;/&gt;
+ * &lt;input type=&quot;checkbox&quot; :checked=&quot;value&quot; @change=&quot;v=&gt;value=v&quot;/&gt;
+ */
+function genRadioModel(
+  el: ASTElement,
+  value: string,
+  modifiers: ?ASTModifiers
+) {
+  const number = modifiers &amp;&amp; modifiers.number;
+  let valueBinding = getBindingAttr(el, 'value') || 'null';
+  valueBinding = number ? `_n(${valueBinding})` : valueBinding;
+  addProp(el, 'checked', `_q(${value},${valueBinding})`);
+  addHandler(el, 'change', genAssignmentCode(value, valueBinding), null, true);
+}
+/**
+ * &lt;select v-model=&quot;value&quot;/&gt;
+ * &lt;select :value=&quot;value&quot; @change=&quot;v=&gt;value=v&quot;/&gt;
+ */
+function genSelect(el: ASTElement, value: string, modifiers: ?ASTModifiers) {
+  const number = modifiers &amp;&amp; modifiers.number;
+  const selectedVal =
+    `Array.prototype.filter` +
+    `.call($event.target.options,function(o){return o.selected})` +
+    `.map(function(o){var val = &quot;_value&quot; in o ? o._value : o.value;` +
+    `return ${number ? '_n(val)' : 'val'}})`;
+  const assignment =
+    '$event.target.multiple ? $$selectedVal : $$selectedVal[0]';
+  let code = `var $$selectedVal = ${selectedVal};`;
+  code = `${code} ${genAssignmentCode(value, assignment)}`;
+  addHandler(el, 'change', code, null, true);
+}
+// 默认情况：&lt;component :value=&quot;value&quot; @[change|input|blur]=&quot;v=&gt;value=v&quot;&gt;
+function genDefaultModel(
+  el: ASTElement,
+  value: string,
+  modifiers: ?ASTModifiers
+): ?boolean {
+  const type = el.attrsMap.type;
+  const { lazy, number, trim } = modifiers || {};
+  const needCompositionGuard = !lazy &amp;&amp; type !== 'range';
+  const event = lazy ? 'change' : type === 'range' ? RANGE_TOKEN : 'input';
+  let valueExpression = '$event.target.value';
+  if (trim) {
+    valueExpression = `$event.target.value.trim()`;
+  }
+  if (number) {
+    valueExpression = `_n(${valueExpression})`;
+  }
+  let code = genAssignmentCode(value, valueExpression);
+  if (needCompositionGuard) {
+    code = `if($event.target.composing)return;${code}`;
+  }
+  addProp(el, 'value', `(${value})`);
+  addHandler(el, event, code, null, true);
+  if (trim || number) {
+    addHandler(el, 'blur', '$forceUpdate()');
+  }
+}
+</code></pre><h3 id=v-model-3-x>v-model 3.x</h3><p>原生表单元素编译生成的 render 函数如下：</p><pre><code class=language-ts>const __sfc__ = {};
+function render(_ctx, _cache) {
+  return _withDirectives(
+    (_openBlock(),
+    _createBlock(
+      'input',
+      {
+        'onUpdate:modelValue':
+          // 对事件处理进行缓存
+          _cache[1] || (_cache[1] = ($event) =&gt; (_ctx.name = $event)),
+        type: 'text'
+      },
+      null,
+      512
+    )),
+    // 给 VNode 添加 vModelText 指令
+    [[_vModelText, _ctx.name]]
+  );
+}
+__sfc__.render = render;
+__sfc__.__file = 'App.vue';
+export default __sfc__;
+</code></pre><p>其中 _withDirectives 是用来给 VNode 添加指令的（不止局限于 v-model）。</p><pre><code class=language-ts>// 给 VNode 添加指令
+export function withDirectives&lt;T extends VNode&gt;(
+  vnode: T,
+  directives: DirectiveArguments
+): T {
+  // 当前渲染实例
+  const internalInstance = currentRenderingInstance;
+  if (internalInstance === null) {
+    warn(`withDirectives 只能运行在 render 函数里`);
+    return vnode;
+  }
+  const instance = internalInstance.proxy;
+  const bindings: DirectiveBinding[] = vnode.dirs || (vnode.dirs = []);
+  for (let i = 0; i &lt; directives.length; i++) {
+    let [dir, value, arg, modifiers = {}] = directives[i];
+    if (isFunction(dir)) {
+      dir = {
+        mounted: dir,
+        updated: dir
+      } as ObjectDirective;
+    }
+    // 向 VNode.dirs 添加指令
+    bindings.push({
+      dir,
+      instance,
+      value,
+      oldValue: void 0,
+      arg,
+      modifiers
+    });
+  }
+  return vnode;
+}
+</code></pre><p>对于 v-model 指令来说，它由 vModelText、vModelCheckbox、vModelRadio、vModelSelect、vModelDynamic 共同组成，分别处理不同的情况。</p><pre><code class=language-ts>type AssignerFn = (value: any) =&gt; void;
+type ModelDirective&lt;T&gt; = ObjectDirective&lt;T &amp; { _assign: AssignerFn }&gt;;
+const getModelAssigner = (vnode: VNode): AssignerFn =&gt; {
+  const fn = vnode.props!['onUpdate:modelValue'];
+  return isArray(fn) ? (value) =&gt; invokeArrayFns(fn, value) : fn;
+};
+function onCompositionStart(e: Event) {
+  (e.target as any).composing = true;
+}
+function onCompositionEnd(e: Event) {
+  const target = e.target as any;
+  if (target.composing) {
+    target.composing = false;
+    trigger(target, 'input');
+  }
+}
+function trigger(el: HTMLElement, type: string) {
+  const e = document.createEvent('HTMLEvents');
+  e.initEvent(type, true, true);
+  el.dispatchEvent(e);
+}
+/**
+ * v-model 运行时直接导出为 vnode 钩子，如果没用 v-model 就可以 tree-shaking
+ * 对于 type=&quot;text&quot; 或者 type=&quot;number&quot;
+ */
+export const vModelText: ModelDirective&lt;
+  HTMLInputElement | HTMLTextAreaElement
+&gt; = {
+  created(el, { modifiers: { lazy, trim, number } }, vnode) {
+    el._assign = getModelAssigner(vnode);
+    const castToNumber = number || el.type === 'number';
+    // 如果有 lazy 修饰符，用 change 替换 input
+    addEventListener(el, lazy ? 'change' : 'input', (e) =&gt; {
+      // 整个事件流程还没出发完成（比如，一个非英文输入法在输入的过程中，会触发多个事件）
+      if ((e.target as any).composing) return;
+      let domValue: string | number = el.value;
+      if (trim) {
+        domValue = domValue.trim();
+      } else if (castToNumber) {
+        domValue = toNumber(domValue);
+      }
+      el._assign(domValue);
+    });
+    if (trim) {
+      addEventListener(el, 'change', () =&gt; {
+        el.value = el.value.trim();
+      });
+    }
+    if (!lazy) {
+      // 中文输入法的输入过程是 compositionstart -&gt; input（多次） -&gt; compositionend
+      addEventListener(el, 'compositionstart', onCompositionStart);
+      addEventListener(el, 'compositionend', onCompositionEnd);
+      addEventListener(el, 'change', onCompositionEnd);
+    }
+  },
+  // type=&quot;range&quot; 在挂载的时候根据 min/max 设置初始值
+  mounted(el, { value }) {
+    el.value = value == null ? '' : value;
+  },
+  beforeUpdate(el, { value, modifiers: { trim, number } }, vnode) {
+    el._assign = getModelAssigner(vnode);
+    // 不要清空未解析的文字
+    if ((el as any).composing) return;
+    if (document.activeElement === el) {
+      if (trim &amp;&amp; el.value.trim() === value) {
+        return;
+      }
+      if ((number || el.type === 'number') &amp;&amp; toNumber(el.value) === value) {
+        return;
+      }
+    }
+    const newValue = value == null ? '' : value;
+    if (el.value !== newValue) {
+      el.value = newValue;
+    }
+  }
+};
+// 对于 type=&quot;checkbox&quot;
+export const vModelCheckbox: ModelDirective&lt;HTMLInputElement&gt; = {
+  created(el, _, vnode) {
+    el._assign = getModelAssigner(vnode);
+    addEventListener(el, 'change', () =&gt; {
+      const modelValue = (el as any)._modelValue;
+      const elementValue = getValue(el);
+      const checked = el.checked;
+      const assign = el._assign;
+      if (isArray(modelValue)) {
+        const index = looseIndexOf(modelValue, elementValue);
+        const found = index !== -1;
+        if (checked &amp;&amp; !found) {
+          assign(modelValue.concat(elementValue));
+        } else if (!checked &amp;&amp; found) {
+          const filtered = [...modelValue];
+          filtered.splice(index, 1);
+          assign(filtered);
+        }
+      } else if (isSet(modelValue)) {
+        const cloned = new Set(modelValue);
+        if (checked) {
+          cloned.add(elementValue);
+        } else {
+          cloned.delete(elementValue);
+        }
+        assign(cloned);
+      } else {
+        assign(getCheckboxValue(el, checked));
+      }
+    });
+  },
+  // 挂载的时候，设置初始 checked
+  mounted: setChecked,
+  beforeUpdate(el, binding, vnode) {
+    el._assign = getModelAssigner(vnode);
+    setChecked(el, binding, vnode);
+  }
+};
+// 对于 type=&quot;radio&quot;
+export const vModelRadio: ModelDirective&lt;HTMLInputElement&gt; = {
+  created(el, { value }, vnode) {
+    el.checked = looseEqual(value, vnode.props!.value);
+    el._assign = getModelAssigner(vnode);
+    addEventListener(el, 'change', () =&gt; {
+      el._assign(getValue(el));
+    });
+  },
+  beforeUpdate(el, { value, oldValue }, vnode) {
+    el._assign = getModelAssigner(vnode);
+    if (value !== oldValue) {
+      el.checked = looseEqual(value, vnode.props!.value);
+    }
+  }
+};
+// 对于 select-options
+export const vModelSelect: ModelDirective&lt;HTMLSelectElement&gt; = {
+  created(el, { value, modifiers: { number } }, vnode) {
+    const isSetModel = isSet(value);
+    addEventListener(el, 'change', () =&gt; {
+      const selectedVal = Array.prototype.filter
+        .call(el.options, (o: HTMLOptionElement) =&gt; o.selected)
+        .map((o: HTMLOptionElement) =&gt;
+          number ? toNumber(getValue(o)) : getValue(o)
+        );
+      el._assign(
+        el.multiple
+          ? isSetModel
+            ? new Set(selectedVal)
+            : selectedVal
+          : selectedVal[0]
+      );
+    });
+    el._assign = getModelAssigner(vnode);
+  },
+  mounted(el, { value }) {
+    setSelected(el, value);
+  },
+  beforeUpdate(el, _binding, vnode) {
+    el._assign = getModelAssigner(vnode);
+  },
+  updated(el, { value }) {
+    setSelected(el, value);
+  }
+};
+// 对于动态 v-model
+export const vModelDynamic: ObjectDirective&lt;
+  HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+&gt; = {
+  created(el, binding, vnode) {
+    callModelHook(el, binding, vnode, null, 'created');
+  },
+  mounted(el, binding, vnode) {
+    callModelHook(el, binding, vnode, null, 'mounted');
+  },
+  beforeUpdate(el, binding, vnode, prevVNode) {
+    callModelHook(el, binding, vnode, prevVNode, 'beforeUpdate');
+  },
+  updated(el, binding, vnode, prevVNode) {
+    callModelHook(el, binding, vnode, prevVNode, 'updated');
+  }
+};
+function callModelHook(
+  el: HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement,
+  binding: DirectiveBinding,
+  vnode: VNode,
+  prevVNode: VNode | null,
+  hook: keyof ObjectDirective
+) {
+  let modelToUse: ObjectDirective;
+  switch (el.tagName) {
+    case 'SELECT':
+      modelToUse = vModelSelect;
+      break;
+    case 'TEXTAREA':
+      modelToUse = vModelText;
+      break;
+    default:
+      switch (vnode.props &amp;&amp; vnode.props.type) {
+        case 'checkbox':
+          modelToUse = vModelCheckbox;
+          break;
+        case 'radio':
+          modelToUse = vModelRadio;
+          break;
+        default:
+          modelToUse = vModelText;
+      }
+  }
+  const fn = modelToUse[hook] as DirectiveHook;
+  fn &amp;&amp; fn(el, binding, vnode, prevVNode);
+}
+</code></pre><p>对于自定义元素/组件，编译生成的 render 函数如下：</p><pre><code class=language-ts>const __sfc__ = {};
+function render(_ctx, _cache) {
+  const _component_el_input = _resolveComponent('el-input');
+  return (
+    _openBlock(),
+    _createBlock(
+      _component_el_input,
+      {
+        text: _ctx.searchText,
+        'onUpdate:text':
+          _cache[1] ||
+          (_cache[1] = ($event) =&gt; {
+            _ctx.searchText = $event;
+          })
+      },
+      null,
+      8 /* PROPS */,
+      ['text']
+    )
+  );
+}
+__sfc__.render = render;
+__sfc__.__file = 'App.vue';
+export default __sfc__;
+</code></pre><p>v-model 直接被编译成了 v-bind:text=&quot;searchText&quot;、onUpdate:text=&quot;v=&gt;searchText=v&quot;，对于 v-model 事件的派发：</p><pre><code class=language-ts>export function emit(
+  instance: ComponentInternalInstance,
+  event: string,
+  ...rawArgs: any[]
+) {
+  let args = rawArgs;
+  const props = instance.vnode.props || {};
+  const isModelListener = event.startsWith('update:');
+  // 从参数中获取并应用装饰器
+  const modelArg = isModelListener &amp;&amp; event.slice(7);
+  if (modelArg &amp;&amp; modelArg in props) {
+    const modifiersKey = `${
+      modelArg === 'modelValue' ? 'model' : modelArg
+    }Modifiers`;
+    const { number, trim } = props[modifiersKey] || {};
+    if (trim) {
+      args = rawArgs.map((a) =&gt; a.trim());
+    } else if (number) {
+      args = rawArgs.map(toNumber);
+    }
+  }
+  // 将事件名转换为驼峰格式
+  let handlerName = toHandlerKey(camelize(event));
+  let handler = props[handlerName];
+  // 对于 v-model 的 update:xxx 事件，还会触发等效的 a-b-c 处理函数
+  if (!handler &amp;&amp; isModelListener) {
+    handlerName = toHandlerKey(hyphenate(event));
+    handler = props[handlerName];
+  }
+  // 调用 handler
+  if (handler) {
+    callWithAsyncErrorHandling(
+      handler,
+      instance,
+      ErrorCodes.COMPONENT_EVENT_HANDLER,
+      args
+    );
+  }
+  // 仅调用一次
+  const onceHandler = props[handlerName + `Once`];
+  if (onceHandler) {
+    if (!instance.emitted) {
+      (instance.emitted = {} as Record&lt;string, boolean&gt;)[handlerName] = true;
+    } else if (instance.emitted[handlerName]) {
+      return;
+    }
+    callWithAsyncErrorHandling(
+      onceHandler,
+      instance,
+      ErrorCodes.COMPONENT_EVENT_HANDLER,
+      args
+    );
+  }
+}
+</code></pre><h3 id=watch-2-x>watch 2.x</h3><pre><code class=language-ts>// 在 initState 的过程中会判断组件 options 有没有 watch 要处理
+export function initState(vm: Component) {
+  // ...
+  if (opts.watch &amp;&amp; opts.watch !== nativeWatch) {
+    initWatch(vm, opts.watch);
+  }
+}
+function initWatch(vm: Component, watch: Object) {
+  for (const key in watch) {
+    const handler = watch[key];
+    // 如果对一个 getter 注册了多个 watcher，这些 watcher 的 handler 会拼成一个数组
+    if (Array.isArray(handler)) {
+      for (let i = 0; i &lt; handler.length; i++) {
+        // 循环创建 watcher
+        createWatcher(vm, key, handler[i]);
+      }
+    } else {
+      createWatcher(vm, key, handler);
+    }
+  }
+}
+function createWatcher(
+  vm: Component,
+  expOrFn: string | Function,
+  handler: any,
+  options?: Object
+) {
+  // {..., handler, ...}
+  if (isPlainObject(handler)) {
+    options = handler;
+    handler = handler.handler;
+  }
+  // 去 methods 找 handler
+  if (typeof handler === 'string') {
+    handler = vm[handler];
+  }
+  // 调用 this.$watch
+  return vm.$watch(expOrFn, handler, options);
+}
+export function stateMixin(Vue: Class&lt;Component&gt;) {
+  // ...
+  Vue.prototype.$watch = function (
+    expOrFn: string | Function,
+    cb: any,
+    options?: Object
+  ): Function {
+    const vm: Component = this;
+    if (isPlainObject(cb)) {
+      return createWatcher(vm, expOrFn, cb, options);
+    }
+    options = options || {};
+    options.user = true; // this.$watch 这种调用方式的 user 均为 true
+    const watcher = new Watcher(vm, expOrFn, cb, options);
+    if (options.immediate) {
+      const info = `callback for immediate watcher &quot;${watcher.expression}&quot;`;
+      pushTarget();
+      invokeWithErrorHandling(cb, vm, [watcher.value], vm, info);
+      popTarget();
+    }
+    return function unwatchFn() {
+      watcher.teardown();
+    };
+  };
+}
+</code></pre><h3 id=watch-3-x>watch 3.x</h3><p>watch 需要侦听特定的数据源，并在单独的回调函数中（惰性）执行副作用；watchEffect 立即执行传入的一个函数，同时响应式追踪其依赖，并在其依赖变更时重新运行该函数。</p><pre><code class=language-ts>// watchers 在未定义初始值时触发的初始值
+const INITIAL_WATCHER_VALUE = {};
+/**
+ * watch(() =&gt; state.count, (count, prevCount, onInvalidate) =&gt; {...}, {...})
+ * Vue 不会自动生成 getter
+ * 由用户指定
+ */
+export function watch(source, cb, options) {
+  return doWatch(source, cb, options);
+}
+/**
+ * watchEffect((onInvalidate) =&gt; {...}, {...})
+ * Vue 会自动追踪 fn 依赖 instance 中的数据
+ * 也就是自动生成 getter
+ */
+export function watchEffect(fn, options) {
+  return doWatch(fn, null, options);
+}
+// 最终实现
+function doWatch(
+  source,
+  cb,
+  { immediate, deep, flush, onTrack, onTrigger } = {},
+  instance = currentInstance
+) {
+  if (!cb) {
+    if (immediate !== undefined) {
+      warn('只有 cb 有值的时候，才支持 immediate');
+    }
+    if (deep !== undefined) {
+      warn('只有 cb 有值的时候，才支持 deep');
+    }
+  }
+  let getter: () =&gt; any;
+  let forceTrigger = false;
+  if (isRef(source)) {
+    getter = () =&gt; source.value;
+    forceTrigger = !!source._shallow;
+  } else if (isReactive(source)) {
+    // 如果 source 为 reactive，自动 deep
+    getter = () =&gt; source;
+    deep = true;
+  } else if (isArray(source)) {
+    // 如果 source 为数组
+    getter = () =&gt;
+      source.map((s) =&gt; {
+        if (isRef(s)) {
+          return s.value;
+        } else if (isReactive(s)) {
+          return traverse(s);
+        } else if (isFunction(s)) {
+          return callWithErrorHandling(s, instance, ErrorCodes.WATCH_GETTER);
+        }
+      });
+  } else if (isFunction(source)) {
+    if (cb) {
+      // watch
+      getter = () =&gt;
+        callWithErrorHandling(source, instance, ErrorCodes.WATCH_GETTER);
+    } else {
+      // watchEffect
+      getter = () =&gt; {
+        if (instance &amp;&amp; instance.isUnmounted) {
+          return;
+        }
+        if (cleanup) {
+          cleanup();
+        }
+        return callWithErrorHandling(
+          source,
+          instance,
+          ErrorCodes.WATCH_CALLBACK,
+          [onInvalidate]
+        );
+      };
+    }
+  } else {
+    getter = NOOP;
+  }
+  if (cb &amp;&amp; deep) {
+    // 深度遍历 getter 值
+    const baseGetter = getter;
+    getter = () =&gt; traverse(baseGetter());
+  }
+  // 用来注册清理失效时的回调
+  let cleanup: () =&gt; void;
+  const onInvalidate: InvalidateCbRegistrator = (fn: () =&gt; void) =&gt; {
+    cleanup = runner.options.onStop = () =&gt; {
+      callWithErrorHandling(fn, instance, ErrorCodes.WATCH_CLEANUP);
+    };
+  };
+  // 初始值是：[] 或 {}
+  let oldValue = isArray(source) ? [] : INITIAL_WATCHER_VALUE;
+  const job: SchedulerJob = () =&gt; {
+    if (!runner.active) {
+      return;
+    }
+    if (cb) {
+      // 求最新值并执行回调
+      const newValue = runner();
+      if (deep || forceTrigger || hasChanged(newValue, oldValue)) {
+        // 执行 cb 之前，先清除上一次运行回调的“垃圾”
+        if (cleanup) {
+          cleanup();
+        }
+        callWithAsyncErrorHandling(cb, instance, ErrorCodes.WATCH_CALLBACK, [
+          newValue,
+          oldValue === INITIAL_WATCHER_VALUE ? undefined : oldValue,
+          onInvalidate
+        ]);
+        oldValue = newValue; // 新值变旧值
+      }
+    } else {
+      runner(); // 求最新值
+    }
+  };
+  // 将 job 标记为 watcher 的回调，以便 scheduler 知道允许它自触发？？？
+  job.allowRecurse = !!cb;
+  /**
+   * watch 的 flush 选项：
+   * 1. pre，默认值，回调应该在渲染前被调用，允许回调在模板运行前更新了其他值，回调缓存在 preFlushCbs
+   * 2. post，将回调推迟到渲染之后的，回调缓存在 postFlushCbs
+   * 3. sync，一旦值发生了变化，回调将被同步调用
+   */
+  let scheduler: ReactiveEffectOptions['scheduler'];
+  if (flush === 'sync') {
+    scheduler = job;
+  } else if (flush === 'post') {
+    scheduler = () =&gt; queuePostRenderEffect(job, instance &amp;&amp; instance.suspense);
+  } else {
+    scheduler = () =&gt; {
+      if (!instance || instance.isMounted) {
+        // 如果实例不存在或者实例已经挂载
+        queuePreFlushCb(job);
+      } else {
+        // 实例存在但是还没挂载，同步执行就好
+        job();
+      }
+    };
+  }
+  // 求值函数，getter 会被转换为 ReactiveEffect，getter 被调用的过程中，会进行依赖收集
+  const runner = effect(getter, {
+    lazy: true,
+    onTrack,
+    onTrigger,
+    scheduler
+  });
+  if (instance) {
+    (instance.effects || (instance.effects = [])).push(runner);
+  }
+  if (cb) {
+    if (immediate) {
+      job();
+    } else {
+      oldValue = runner();
+    }
+  } else if (flush === 'post') {
+    queuePostRenderEffect(runner, instance &amp;&amp; instance.suspense);
+  } else {
+    runner();
+  }
+  return () =&gt; {
+    stop(runner);
+    if (instance) {
+      remove(instance.effects!, runner);
+    }
+  };
+}
+// vm.$watch
+export function instanceWatch(
+  this: ComponentInternalInstance,
+  source: string | Function,
+  cb: WatchCallback,
+  options?: WatchOptions
+): WatchStopHandle {
+  const publicThis = this.proxy as any;
+  const getter = isString(source)
+    ? () =&gt; publicThis[source]
+    : source.bind(publicThis);
+  return doWatch(getter, cb.bind(publicThis), options, this);
+}
+</code></pre><h3 id=slot-2-x>slot 2.x</h3><p>运行时对插槽的处理。</p><pre><code class=language-ts>export function processElement(element, options) {
+  // ...
+  processSlotContent(element);
+  processSlotOutlet(element);
+  // ...
+  return element;
+}
+/**
+ * 处理“作为插槽传递给”组件的内容
+ * &lt;template slot=&quot;xxx&quot;&gt;
+ * &lt;div slot-scope=&quot;xxx&quot;&gt;
+ */
+function processSlotContent(el) {
+  let slotScope;
+  if (el.tag === 'template') {
+    slotScope = getAndRemoveAttr(el, 'scope');
+    el.slotScope = slotScope || getAndRemoveAttr(el, 'slot-scope');
+  } else if ((slotScope = getAndRemoveAttr(el, 'slot-scope'))) {
+    el.slotScope = slotScope;
+  }
+  // slot=&quot;xxx&quot;
+  const slotTarget = getBindingAttr(el, 'slot');
+  if (slotTarget) {
+    el.slotTarget = slotTarget === '&quot;&quot;' ? '&quot;default&quot;' : slotTarget;
+    el.slotTargetDynamic = !!(
+      el.attrsMap[':slot'] || el.attrsMap['v-bind:slot']
+    );
+    // 将插槽保存为本机 Shadow DOM Compat（仅适用于非作用域插槽）
+    if (el.tag !== 'template' &amp;&amp; !el.slotScope) {
+      addAttr(el, 'slot', slotTarget, getRawBindingAttr(el, 'slot'));
+    }
+  }
+  if (el.tag === 'template') {
+    const slotBinding = getAndRemoveAttrByRegex(el, slotRE);
+    if (slotBinding) {
+      const { name, dynamic } = getSlotName(slotBinding);
+      el.slotTarget = name;
+      el.slotTargetDynamic = dynamic;
+      el.slotScope = slotBinding.value || emptySlotScopeToken;
+    }
+  } else {
+    const slotBinding = getAndRemoveAttrByRegex(el, slotRE);
+    if (slotBinding) {
+      const slots = el.scopedSlots || (el.scopedSlots = {});
+      const { name, dynamic } = getSlotName(slotBinding);
+      const slotContainer = (slots[name] = createASTElement(
+        'template',
+        [],
+        el
+      ));
+      slotContainer.slotTarget = name;
+      slotContainer.slotTargetDynamic = dynamic;
+      slotContainer.children = el.children.filter((c) =&gt; {
+        if (!c.slotScope) {
+          c.parent = slotContainer;
+          return true;
+        }
+      });
+      slotContainer.slotScope = slotBinding.value || emptySlotScopeToken;
+      el.children = [];
+      el.plain = false;
+    }
+  }
+}
+// 处理 &lt;slot/&gt;
+function processSlotOutlet(el) {
+  if (el.tag === 'slot') {
+    el.slotName = getBindingAttr(el, 'name');
+    if (el.key) {
+      warn('&lt;slot&gt; 没有 key 属性');
+    }
+  }
+}
+// 获取具名插槽名称
+function getSlotName(binding) {
+  let name = binding.name.replace(slotRE, '');
+  if (!name) {
+    if (binding.name[0] !== '#') {
+      name = 'default';
+    } else {
+      warn('v-slot 简写语法应带上插槽名称');
+    }
+  } // 是否是动态插槽名
+  return dynamicArgRE.test(name)
+    ? { name: name.slice(1, -1), dynamic: true }
+    : { name: `&quot;${name}&quot;`, dynamic: false };
+}
+</code></pre><p>编译器对插槽的处理。</p><pre><code class=language-ts>function genScopedSlots(el, slots, state) {
+  /**
+   * 默认情况下，作用域插槽被认为是稳定的；当父组件更新时，仅有作用域插槽的子组件可以跳过更新
+   * 但是在一些诸如“动态具名插槽”、“在插槽上使用 v-if/v-for”的情况，我们必须放弃这种优化
+   */
+  let needsForceUpdate =
+    el.for || // 组件上使用 v-for
+    Object.keys(slots).some((key) =&gt; {
+      const slot = slots[key];
+      return (
+        slot.slotTargetDynamic || // 动态插槽
+        slot.if || // v-if
+        slot.for || // v-for
+        containsSlotChild(slot) // 插槽的子孙节点存在 slot
+      );
+    });
+  let needsKey = !!el.if;
+  if (!needsForceUpdate) {
+    let parent = el.parent;
+    while (parent) {
+      if (
+        (parent.slotScope &amp;&amp; parent.slotScope !== emptySlotScopeToken) ||
+        parent.for
+      ) {
+        needsForceUpdate = true;
+        break;
+      }
+      if (parent.if) {
+        needsKey = true;
+      }
+      parent = parent.parent;
+    }
+  }
+  const generatedSlots = Object.keys(slots)
+    .map((key) =&gt; genScopedSlot(slots[key], state))
+    .join(',');
+  return `scopedSlots:_u([${generatedSlots}]${
+    needsForceUpdate ? `,null,true` : ``
+  }${
+    !needsForceUpdate &amp;&amp; needsKey ? `,null,false,${hash(generatedSlots)}` : ``
+  })`;
+}
+function genScopedSlot(el, state) {
+  const isLegacySyntax = el.attrsMap['slot-scope'];
+  if (el.if &amp;&amp; !el.ifProcessed &amp;&amp; !isLegacySyntax) {
+    return genIf(el, state, genScopedSlot, `null`);
+  }
+  if (el.for &amp;&amp; !el.forProcessed) {
+    return genFor(el, state, genScopedSlot);
+  }
+  const slotScope =
+    el.slotScope === emptySlotScopeToken ? `` : String(el.slotScope);
+  const fn =
+    `function(${slotScope}){` +
+    `return ${
+      el.tag === 'template'
+        ? el.if &amp;&amp; isLegacySyntax
+          ? `(${el.if})?${genChildren(el, state) || 'undefined'}:undefined`
+          : genChildren(el, state) || 'undefined'
+        : genElement(el, state)
+    }}`;
+  const reverseProxy = slotScope ? `` : `,proxy:true`;
+  return `{key:${el.slotTarget || `&quot;default&quot;`},fn:${fn}${reverseProxy}}`;
+}
+function genSlot(el, state) {
+  const slotName = el.slotName || '&quot;default&quot;';
+  const children = genChildren(el, state);
+  let res = `_t(${slotName}${
+    children ? `,function(){return ${children}}` : ''
+  }`;
+  const attrs =
+    el.attrs || el.dynamicAttrs
+      ? genProps(
+          (el.attrs || []).concat(el.dynamicAttrs || []).map((attr) =&gt; ({
+            name: camelize(attr.name),
+            value: attr.value,
+            dynamic: attr.dynamic
+          }))
+        )
+      : null;
+  const bind = el.attrsMap['v-bind'];
+  if ((attrs || bind) &amp;&amp; !children) {
+    res += `,null`;
+  }
+  if (attrs) {
+    res += `,${attrs}`;
+  }
+  if (bind) {
+    res += `${attrs ? '' : ',null'},${bind}`;
+  }
+  return res + ')';
+}
+</code></pre><h3 id=slot-3-x>slot 3.x</h3><p>插槽的使用方法如下：</p><pre><code class=language-vue>&lt;template name=&quot;App&quot;&gt;
+  &lt;layout&gt;
+    &lt;template #header=&quot;{ title }&quot;&gt;
+      标题：
+      &lt;h1&gt;{{ title }}&lt;/h1&gt;
+    &lt;/template&gt;
+    &lt;template #default=&quot;{ content }&quot;&gt;
+      内容：
+      &lt;main&gt;{{ content }}&lt;/main&gt;
+    &lt;/template&gt;
+    &lt;template #footer=&quot;{ copyright }&quot;&gt;
+      版权：&lt;a&gt;{{ copyright }}&lt;/a&gt;
+    &lt;/template&gt;
+  &lt;/layout&gt;
+&lt;/template&gt;
+&lt;template name=&quot;Layout&quot;&gt;
+  &lt;div class=&quot;layout&quot;&gt;
+    &lt;slot name=&quot;header&quot;&gt;默认标题&lt;/slot&gt;
+    &lt;slot&gt;默认内容&lt;/slot&gt;
+    &lt;slot name=&quot;footer&quot;&gt;默认版权&lt;/slot&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+</code></pre><p>上述代码编译成 render 函数之后的代码：</p><pre><code class=language-ts>// App.vue
+{
+  const __sfc__ = {};
+  const _hoisted_1 = /*#__PURE__*/ _createTextVNode(' 标题：');
+  const _hoisted_2 = /*#__PURE__*/ _createTextVNode(' 内容：');
+  const _hoisted_3 = /*#__PURE__*/ _createTextVNode(' 版权：');
+  function render(_ctx, _cache) {
+    const _component_layout = _resolveComponent('layout');
+    return (
+      _openBlock(),
+      _createBlock(_component_layout, null, {
+        header: _withCtx(({ title }) =&gt; [
+          _hoisted_1,
+          _createVNode('h1', null, _toDisplayString(title), 1 /* TEXT */)
+        ]),
+        default: _withCtx(({ content }) =&gt; [
+          _hoisted_2,
+          _createVNode('main', null, _toDisplayString(content), 1 /* TEXT */)
+        ]),
+        footer: _withCtx(({ copyright }) =&gt; [
+          _hoisted_3,
+          _createVNode('a', null, _toDisplayString(copyright), 1 /* TEXT */)
+        ]),
+        _: 1 /* STABLE */
+      })
+    );
+  }
+  __sfc__.render = render;
+  __sfc__.__file = 'App.vue';
+  export default __sfc__;
+}
+// Layout.vue
+{
+  const __sfc__ = {};
+  const _hoisted_1 = { class: 'layout' };
+  const _hoisted_2 = /*#__PURE__*/ _createTextVNode('默认标题');
+  const _hoisted_3 = /*#__PURE__*/ _createTextVNode('默认内容');
+  const _hoisted_4 = /*#__PURE__*/ _createTextVNode('默认版权');
+  function render(_ctx, _cache) {
+    return (
+      _openBlock(),
+      _createBlock('div', _hoisted_1, [
+        _renderSlot(_ctx.$slots, 'header', {}, () =&gt; [_hoisted_2]),
+        _renderSlot(_ctx.$slots, 'default', {}, () =&gt; [_hoisted_3]),
+        _renderSlot(_ctx.$slots, 'footer', {}, () =&gt; [_hoisted_4])
+      ])
+    );
+  }
+  __sfc__.render = render;
+  __sfc__.__file = 'Layout.vue';
+  export default __sfc__;
+}
+</code></pre><p>由此可见 _withCtx 的作用是将子组件上下文传递给存在于父组件插槽内容的。</p><pre><code class=language-ts>export function withCtx(
+  fn: Slot,
+  ctx: ComponentInternalInstance | null = currentRenderingInstance
+) {
+  if (!ctx) return fn;
+  const renderFnWithContext = (...args: any[]) =&gt; {
+    // 如果用户在 template 表达式里调用编译后的插槽函数，会扰乱块跟踪；所以使用一个空块？？？
+    if (!isRenderingCompiledSlot) {
+      openBlock(true);
+    }
+    const owner = currentRenderingInstance;
+    setCurrentRenderingInstance(ctx);
+    const res = fn(...args);
+    setCurrentRenderingInstance(owner);
+    if (!isRenderingCompiledSlot) {
+      closeBlock();
+    }
+    return res;
+  };
+  renderFnWithContext._c = true;
+  return renderFnWithContext;
+}
+</code></pre><p>toDisplayString 的作用是：在父组件渲染阶段，插入子组件插槽部分的 DOM 是不能渲染的，需要通过某种方式保留下来，等到子组件渲染的时候再渲染。</p><pre><code class=language-ts>export const toDisplayString = (val: unknown): string =&gt; {
+  return val == null
+    ? ''
+    : isObject(val)
+    ? JSON.stringify(
+        val,
+        (_key: string, val: any) =&gt; {
+          if (isMap(val)) {
+            return {
+              [`Map(${val.size})`]: [...val.entries()].reduce(
+                (entries, [key, val]) =&gt; {
+                  (entries as any)[`${key} =&gt;`] = val;
+                  return entries;
+                },
+                {}
+              )
+            };
+          } else if (isSet(val)) {
+            return {
+              [`Set(${val.size})`]: [...val.values()]
+            };
+          } else if (isObject(val) &amp;&amp; !isArray(val) &amp;&amp; !isPlainObject(val)) {
+            return String(val);
+          }
+          return val;
+        },
+        2
+      )
+    : String(val);
+};
+</code></pre><p>子组件使用 renderSlot 渲染插入的内容。</p><pre><code class=language-ts>export function renderSlot(
+  slots: Slots,
+  name: string,
+  props: Data = {},
+  fallback?: () =&gt; VNodeArrayChildren
+): VNode {
+  let slot = slots[name];
+  if (slot &amp;&amp; slot.length &gt; 1) {
+    slot = () =&gt; [];
+  }
+  /**
+   * 默认情况下，编译的插槽禁用块跟踪，以避免手动调用干扰基于模板的块跟踪
+   * 但在“renderSlot”中，我们可以确定它是基于模板所以我们可以强制启用它
+   */
+  isRenderingCompiledSlot++;
+  openBlock();
+  const validSlotContent = slot &amp;&amp; ensureValidVNode(slot(props));
+  const rendered = createBlock(
+    Fragment,
+    { key: props.key || `_${name}` },
+    validSlotContent || (fallback ? fallback() : []),
+    validSlotContent &amp;&amp; (slots as RawSlots)._ === SlotFlags.STABLE
+      ? PatchFlags.STABLE_FRAGMENT
+      : PatchFlags.BAIL
+  );
+  isRenderingCompiledSlot--;
+  return rendered;
+}
+</code></pre></div><div class=post_footer><div class=meta><div class=info><span class="field tags"><i class=remixicon-stack-line></i><a href=https://vikingama.github.io/tags/vue/>Vue</a></span></div></div></div></div><div class=doc_comments><div class=comments_block_title>发表评论</div><div id=vcomments></div></div><link rel=stylesheet href=https://vikingama.github.io/css/comments.css><script src=/js/av.js></script><script src=/js/valine.js></script><script type=text/javascript>new Valine({el:'#vcomments',appId:'U06blUXOot4uJgfMu8I9xJXz-MdYXbMMI',appKey:'BnrXC06FJsvRNpr4aqb1HYPd',placeholder:'来都来了，不打个招呼吗？',visitor:'true',});</script></div></div><a id=back_to_top href=# class=back_to_top><span>△</span></a></div><footer class=footer><div class=powered_by><a href=https://github.com/varkai/hugo-theme-zozo/ target=_blank>Designed by <span class=jitters>Zeuk</span>,</a>
+<a href=https://www.gohugo.io/ target=_blank>Published with <span class=jitters>Hugo</span></a></div><div class=footer_slogan><span id=enter_time></span></div></footer><script src=https://vikingama.github.io/js/jquery.js></script><script src=https://vikingama.github.io/js/highlight.js></script><script src=https://vikingama.github.io/js/zozo.js></script><script>hljs.initHighlightingOnLoad();</script></body></html>
