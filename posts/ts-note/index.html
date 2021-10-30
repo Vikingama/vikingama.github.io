@@ -1,4 +1,4 @@
-<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no,user-scalable=no"><meta name=author content=馬腊咯稽><meta name=description content="TypeScript 复习总结（一）"><meta name=keywords content=TS><link rel=canonical href=https://vikingama.github.io/posts/ts-note/><link rel="shortcut icon" href=https://vikingama.github.io/images/favicon.ico><link rel=stylesheet href=https://vikingama.github.io/css/zozo.css><link rel=stylesheet href=https://vikingama.github.io/css/animate.css><link rel=stylesheet href=https://vikingama.github.io/css/highlight.css><link rel=stylesheet href=https://vikingama.github.io/css/remixicon.css><title>TypeScript 复习总结（一） &middot; 庙小妖风大 · 水浅王八多</title></head><body><div class="main animated"><div class="nav_container animated fadeInDown"><div class=site_nav id=site_nav><ul><li><a href=/>首页</a></li><li><a href=/posts/>归档</a></li><li><a href=/inspires/>启发</a></li><li><a href=/command/>命令</a></li><li><a href=/about/>关于</a></li></ul></div><div class=menu_icon><a id=menu_icon><i class=remixicon-links-line></i></a></div></div><div class="header animated fadeInDown"><div class=site_title_container><div class=site_title><h1><a href=https://vikingama.github.io><img style=width:65px;height:auto;vertical-align:top src=https://vikingama.github.io/images/avatar.png></a></h1></div><div class=description><p class=sub_title>庙小妖风大<br>水浅王八多</p><div class=my_socials><a href=https://www.douban.com/people/nicknoonan title=douban target=_blank><i class=remixicon-douban-fill></i></a><a href=https://github.com/Vikingama title=github target=_blank><i class=remixicon-github-fill></i></a><a href=https://www.zhihu.com/people/vikingama title=zhihu target=_blank><i class=remixicon-zhihu-fill></i></a><a href=https://vikingama.github.io/index.xml type=application/rss+xml title=rss target=_blank><i class=remixicon-rss-fill></i></a></div></div></div></div><div class=content><div class=post_page><div class="post animated fadeInDown"><div class="post_title post_detail_title"><h2><a href=/posts/ts-note/>TypeScript 复习总结（一）</a></h2><span class=date>2020.02.08</span></div><div class="post_content markdown"><blockquote><p>虽说已经写过 TS 项目了，但写的代码还是很初级，我太南了。</p></blockquote><h3 id=原始类型-一-boolean-number-string-void-undefined-null-symbol-bigint>原始类型（一）：boolean、number、string、void、undefined、null、symbol、bigint</h3><pre><code class=language-ts>// 不是 Boolean，否则会被认为是布尔对象
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no,user-scalable=no"><meta name=author content=馬腊咯稽><meta name=description content="TypeScript 复习总结（一）"><meta name=keywords content=TS><link rel=canonical href=https://vikingama.github.io/posts/ts-note/><link rel="shortcut icon" href=https://vikingama.github.io/images/favicon.ico><link rel=stylesheet href=https://vikingama.github.io/css/zozo.css><link rel=stylesheet href=https://vikingama.github.io/css/animate.css><link rel=stylesheet href=https://vikingama.github.io/css/highlight.css><link rel=stylesheet href=https://vikingama.github.io/css/remixicon.css><title>TypeScript 复习总结（一） &middot; 庙小妖风大 · 水浅王八多</title></head><body><div class="main animated"><div class="nav_container animated fadeInDown"><div class=site_nav id=site_nav><ul><li><a href=/>首页</a></li><li><a href=/posts/>归档</a></li><li><a href=/inspires/>启发</a></li><li><a href=/command/>命令</a></li><li><a href=/about/>关于</a></li></ul></div><div class=menu_icon><a id=menu_icon><i class=remixicon-links-line></i></a></div></div><div class="header animated fadeInDown"><div class=site_title_container><div class=site_title><h1><a href=https://vikingama.github.io><img style=width:65px;height:auto;vertical-align:top src=https://vikingama.github.io/images/avatar.png></a></h1></div><div class=description><p class=sub_title>庙小妖风大<br>水浅王八多</p><div class=my_socials><a href=https://www.douban.com/people/nicknoonan title=douban target=_blank><i class=remixicon-douban-fill></i></a><a href=https://github.com/Vikingama title=github target=_blank><i class=remixicon-github-fill></i></a><a href=https://weibo.com/vikingx title=weibo target=_blank><i class=remixicon-weibo-fill></i></a><a href=https://www.zhihu.com/people/vikingama title=zhihu target=_blank><i class=remixicon-zhihu-fill></i></a><a href=https://vikingama.github.io/index.xml type=application/rss+xml title=rss target=_blank><i class=remixicon-rss-fill></i></a></div></div></div></div><div class=content><div class=post_page><div class="post animated fadeInDown"><div class="post_title post_detail_title"><h2><a href=/posts/ts-note/>TypeScript 复习总结（一）</a></h2><span class=date>2020.02.08</span></div><div class="post_content markdown"><blockquote><p>虽说已经写过 TS 项目了，但写的代码还是很初级，我太南了。</p></blockquote><h3 id=原始类型-一-boolean-number-string-void-undefined-null-symbol-bigint>原始类型（一）：boolean、number、string、void、undefined、null、symbol、bigint</h3><pre><code class=language-ts>// 不是 Boolean，否则会被认为是布尔对象
 const isOk: boolean = true;
 // 十进制、十六进制、二进制都是 number 类型
 const num: number = 666;
@@ -24,10 +24,10 @@ anyType.foo.bar; // pass
 anyType[0][1]; // pass
 new anyType(); // pass
 anyType(); // pass
-/*
-  unknown 是 any 类型对应的安全类型
-  当 unknown 类型被确定是某个类型之前，不能被进行任何操作比如实例化、函数执行等
-*/
+/**
+ * unknown 类型的值可以被赋值给任何类型
+ * 当 unknown 类型被确定是某个类型之后，可以被进行任何操作比如实例化、函数执行等
+ */
 let unknownType: unknown;
 unknownType = 'hahasha';
 unknownType = false;
@@ -248,10 +248,10 @@ interface Config {
 interface VIPUser extends User {
   broadcast: () =&gt; void;
 }
-</code></pre><h3 id=类>类</h3><pre><code class=language-ts>/*
-  抽象类：其它派生类的基类，不同于接口，它可以包含成员的实现细节
-  abstract 关键字是用于定义抽象类和在抽象类内部定义抽象方法
-*/
+</code></pre><h3 id=类>类</h3><pre><code class=language-ts>/**
+ * 抽象类：其它派生类的基类，不同于接口，它可以包含成员的实现细节
+ * abstract 关键字是用于定义抽象类和在抽象类内部定义抽象方法
+ */
 abstract class Animal {
   abstract makeSound(): void;
   move(): void {
@@ -267,11 +267,11 @@ class Cat extends Animal {
 const tom = new Cat();
 cat.makeSound(); // miao
 cat.move(); // move
-/*
-  访问限定符：public（默认）、private、protected
-  当成员被设置为 private 之后, 被此限定符修饰的成员是只可以被类的内部访问
-  当成员被设置为 protected 之后, 被此限定符修饰的成员是只可以被类的内部以及类的子类访问
-*/
+/**
+ * 访问限定符：public（默认）、private、protected
+ * 当成员被设置为 private 之后, 被此限定符修饰的成员是只可以被类的内部访问
+ * 当成员被设置为 protected 之后, 被此限定符修饰的成员是只可以被类的内部以及类的子类访问
+ */
 class Car {
   protected run() {
     console.log('启动...');
@@ -287,12 +287,12 @@ const gtr = new GTR();
 car.run(); // fault
 gtr.init(); // 启动...
 gtr.run(); // falut
-/*
-  接口与类的区别：
-  interface 是仅存在于 TS 上下文中的一种虚拟结构，TS 依赖接口用于类型检查，编译为 JS 后，接口将会被移除
-  class 作为 TS 的一种变量类型存在于上下文之中，class 可以提供，变量、方法等的具体实现方式等，它的作用不仅仅是约束数据结构
-  class 和 interface 都可以用来约束数据的结构，但是频繁使用 class 会使程序的性能受到影响
-*/
+/**
+ * 接口与类的区别：
+ * interface 是仅存在于 TS 上下文中的一种虚拟结构，TS 依赖接口用于类型检查，编译为 JS 后，接口将会被移除
+ * class 作为 TS 的一种变量类型存在于上下文之中，class 可以提供，变量、方法等的具体实现方式等，它的作用不仅仅是约束数据结构
+ * class 和 interface 都可以用来约束数据的结构，但是频繁使用 class 会使程序的性能受到影响
+ */
 </code></pre><h3 id=函数>函数</h3><pre><code class=language-ts>// TS 可以感知到函数的返回值是 number 类型
 const add = (a: number, b: number) =&gt; a + b;
 const decline: (a: number, b?: number) =&gt; number = (a, b) =&gt; a - (b ? b : 0);
@@ -480,21 +480,21 @@ type Tree&lt;T&gt; = {
   left: Tree&lt;T&gt;;
   right: Tree&lt;T&gt;;
 };
-/*
-  interface 只能用于定义对象类型，而 type 还可以定义交叉、联合、原始类型等
-  interface 可以实现接口的 extends 和 implements
-  interface 可以实现接口合并声明
-*/
+/**
+ * interface 只能用于定义对象类型，而 type 还可以定义交叉、联合、原始类型等
+ * interface 可以实现接口的 extends 和 implements
+ * interface 可以实现接口合并声明
+ */
 type Alias = { num: number };
 interface Interface {
   num: number;
 }
 declare function aliased(arg: Alias): Alias;
 declare function interfaced(arg: Interface): Interface;
-</code></pre><h3 id=可辨识联合类型>可辨识联合类型</h3><pre><code class=language-ts>/*
-  字面量：真值字面量类型、数字字面量类型、枚举字面量类型、大整数字面量类型、字符串字面量类型
-  字面量类型要和实际的值的字面量一一对应
-*/
+</code></pre><h3 id=可辨识联合类型>可辨识联合类型</h3><pre><code class=language-ts>/**
+ * 字面量：真值字面量类型、数字字面量类型、枚举字面量类型、大整数字面量类型、字符串字面量类型
+ * 字面量类型要和实际的值的字面量一一对应
+ */
 const a: 2333 = 2333; // pass
 const b: 0x1919n = 6425n; // pass
 const c: 'xiaomuzhu' = 'xiaomuzhu'; // pass
@@ -531,8 +531,7 @@ const UserReducer = (userAction: UserAction) =&gt; {
       break;
   }
 };
-</code></pre><h3 id=装饰器-在多个不同的类之间共享或者扩展一些方法或行为-而不是去直接修改它本身>装饰器：在多个不同的类之间共享或者扩展一些方法或行为，而不是去直接修改它本身</h3><p>JS 需要配合 babel-plugin-transform-decorators-legacy，TS 需要配合 experimentalDecorators 选项
-装饰器本质上是一个函数，@expression 其实是一个语法糖, @expression 求值后必须也是一个函数，它会在运行时被调用，被装饰的声明信息做为参数传入</p><pre><code class=language-ts>// 类装饰器
+</code></pre><h3 id=装饰器-在多个不同的类之间共享或者扩展一些方法或行为-而不是去直接修改它本身>装饰器：在多个不同的类之间共享或者扩展一些方法或行为，而不是去直接修改它本身</h3><p>JS 需要配合 babel-plugin-transform-decorators-legacy，TS 需要配合 experimentalDecorators 选项。</p><p>装饰器本质上是一个函数，@expression 其实是一个语法糖，@expression 求值后必须也是一个函数，它会在运行时被调用，被装饰的声明信息做为参数传入。</p><pre><code class=language-ts>// 类装饰器
 function addAge(constructor: Function) {
   constructor.prototype.age = 18;
 }
@@ -572,19 +571,19 @@ const xmz = new Person();
 xmz.say = function () {
   return 'hello';
 };
-/*
-  target: Person { say: [Function] }
-  propKey: say
-  descriptor: {&quot;writable&quot;:true,&quot;enumerable&quot;:true,&quot;configurable&quot;:true}
-
-  target: [Function: Person] { run: [Function] }
-  propKey: run
-  descriptor: {&quot;writable&quot;:true,&quot;enumerable&quot;:true,&quot;configurable&quot;:true}
-
-  xmz.say = function() {
-        ^
-  TypeError: Cannot assign to read only property 'say' of object '#&lt;Person&gt;'
-*/
+/**
+ * target: Person { say: [Function] }
+ * propKey: say
+ * descriptor: {&quot;writable&quot;:true,&quot;enumerable&quot;:true,&quot;configurable&quot;:true}
+ *
+ * target: [Function: Person] { run: [Function] }
+ * propKey: run
+ * descriptor: {&quot;writable&quot;:true,&quot;enumerable&quot;:true,&quot;configurable&quot;:true}
+ *
+ * xmz.say = function() {
+ *      ^
+ * TypeError: Cannot assign to read only property 'say' of object '#&lt;Person&gt;'
+ */
 // 参数装饰器
 function logPara(target: object, propKey: string, index: number) {
   // Person { greet: [Function] } greet 1
@@ -612,10 +611,10 @@ function isString(test: any): test is string {
 }
 function example(foo: number | string) {
   if (isString(foo)) {
-    /*
-        如果将 test is string 修改为 boolean 将报错
-        类型 string|number 上不存在 length 属性
-
+    /**
+     * 如果将 test is string 修改为 boolean 将报错
+     * 类型 string|number 上不存在 length 属性
+     */
     console.log(foo.length);
   }
 }

@@ -1,10 +1,10 @@
-<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no,user-scalable=no"><meta name=author content=馬腊咯稽><meta name=description content="重读《深入浅出 Node.js》"><meta name=keywords content=Node.js><link rel=canonical href=https://vikingama.github.io/posts/node-learn-notes/><link rel="shortcut icon" href=https://vikingama.github.io/images/favicon.ico><link rel=stylesheet href=https://vikingama.github.io/css/zozo.css><link rel=stylesheet href=https://vikingama.github.io/css/animate.css><link rel=stylesheet href=https://vikingama.github.io/css/highlight.css><link rel=stylesheet href=https://vikingama.github.io/css/remixicon.css><title>重读《深入浅出 Node.js》 &middot; 庙小妖风大 · 水浅王八多</title></head><body><div class="main animated"><div class="nav_container animated fadeInDown"><div class=site_nav id=site_nav><ul><li><a href=/>首页</a></li><li><a href=/posts/>归档</a></li><li><a href=/inspires/>启发</a></li><li><a href=/command/>命令</a></li><li><a href=/about/>关于</a></li></ul></div><div class=menu_icon><a id=menu_icon><i class=remixicon-links-line></i></a></div></div><div class="header animated fadeInDown"><div class=site_title_container><div class=site_title><h1><a href=https://vikingama.github.io><img style=width:65px;height:auto;vertical-align:top src=https://vikingama.github.io/images/avatar.png></a></h1></div><div class=description><p class=sub_title>庙小妖风大<br>水浅王八多</p><div class=my_socials><a href=https://www.douban.com/people/nicknoonan title=douban target=_blank><i class=remixicon-douban-fill></i></a><a href=https://github.com/Vikingama title=github target=_blank><i class=remixicon-github-fill></i></a><a href=https://www.zhihu.com/people/vikingama title=zhihu target=_blank><i class=remixicon-zhihu-fill></i></a><a href=https://vikingama.github.io/index.xml type=application/rss+xml title=rss target=_blank><i class=remixicon-rss-fill></i></a></div></div></div></div><div class=content><div class=post_page><div class="post animated fadeInDown"><div class="post_title post_detail_title"><h2><a href=/posts/node-learn-notes/>重读《深入浅出 Node.js》</a></h2><span class=date>2020.08.02</span></div><div class="post_content markdown"><blockquote><p>一直在学 Node，从来没有成功过。</p></blockquote><h3 id=node-简介>Node 简介</h3><p><img src=/node-learn-notes/node-chrome.png alt="Local Image"></p><p>Node 的结构与 Chrome 十分相似，它们都是基于事件驱动的异步架构，浏览器通过事件驱动来服务界面上的交互，Node 通过事件驱动来服务 I/O；作为后端 JS 的运行平台，Node 没有改写语言本身的任何特性，它将前端中广泛运用的思想迁移到了服务器端。</p><p><img src=/node-learn-notes/libuv.png alt="Local Image"></p><p>Node 特点：异步输入输出、回调函数、单线程、基于 libuv 实现跨平台。</p><h3 id=模块化>模块化</h3><p>Node 中模块分为两类：核心模块和文件模块；核心模块在 Node 启动时被直接加载进内存中，文件模块则是在运行时动态加载。Node 对引入过的模块都会进行缓存，同浏览器缓存文件一样，不同的是 Node 缓存的是编译和执行之后的对象。</p><p>Node 在对 JS 模块编译的过程中对文件内容进行了头尾包装，这样每个模块文件之间都进行了作用域隔离。包装之后的代码会通过原生模块的 runInThisContext 方法执行，返回一个 function 对象。</p><pre><code class=language-js>(function (exports, require, module, __filename, __dirname) {
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no,user-scalable=no"><meta name=author content=馬腊咯稽><meta name=description content="重读《深入浅出 Node.js》"><meta name=keywords content=Node.js><link rel=canonical href=https://vikingama.github.io/posts/node-learn-notes/><link rel="shortcut icon" href=https://vikingama.github.io/images/favicon.ico><link rel=stylesheet href=https://vikingama.github.io/css/zozo.css><link rel=stylesheet href=https://vikingama.github.io/css/animate.css><link rel=stylesheet href=https://vikingama.github.io/css/highlight.css><link rel=stylesheet href=https://vikingama.github.io/css/remixicon.css><title>重读《深入浅出 Node.js》 &middot; 庙小妖风大 · 水浅王八多</title></head><body><div class="main animated"><div class="nav_container animated fadeInDown"><div class=site_nav id=site_nav><ul><li><a href=/>首页</a></li><li><a href=/posts/>归档</a></li><li><a href=/inspires/>启发</a></li><li><a href=/command/>命令</a></li><li><a href=/about/>关于</a></li></ul></div><div class=menu_icon><a id=menu_icon><i class=remixicon-links-line></i></a></div></div><div class="header animated fadeInDown"><div class=site_title_container><div class=site_title><h1><a href=https://vikingama.github.io><img style=width:65px;height:auto;vertical-align:top src=https://vikingama.github.io/images/avatar.png></a></h1></div><div class=description><p class=sub_title>庙小妖风大<br>水浅王八多</p><div class=my_socials><a href=https://www.douban.com/people/nicknoonan title=douban target=_blank><i class=remixicon-douban-fill></i></a><a href=https://github.com/Vikingama title=github target=_blank><i class=remixicon-github-fill></i></a><a href=https://weibo.com/vikingx title=weibo target=_blank><i class=remixicon-weibo-fill></i></a><a href=https://www.zhihu.com/people/vikingama title=zhihu target=_blank><i class=remixicon-zhihu-fill></i></a><a href=https://vikingama.github.io/index.xml type=application/rss+xml title=rss target=_blank><i class=remixicon-rss-fill></i></a></div></div></div></div><div class=content><div class=post_page><div class="post animated fadeInDown"><div class="post_title post_detail_title"><h2><a href=/posts/node-learn-notes/>重读《深入浅出 Node.js》</a></h2><span class=date>2020.08.02</span></div><div class="post_content markdown"><blockquote><p>一直在学 Node，从来没有成功过。</p></blockquote><h3 id=node-简介>Node 简介</h3><p><img src=/node-learn-notes/node-chrome.png alt="Local Image"></p><p>Node 的结构与 Chrome 十分相似，它们都是基于事件驱动的异步架构，浏览器通过事件驱动来服务界面上的交互，Node 通过事件驱动来服务 I/O；作为后端 JS 的运行平台，Node 没有改写语言本身的任何特性，它将前端中广泛运用的思想迁移到了服务器端。</p><p><img src=/node-learn-notes/libuv.png alt="Local Image"></p><p>Node 特点：异步输入输出、回调函数、单线程、基于 libuv 实现跨平台。</p><h3 id=模块化>模块化</h3><p>Node 中模块分为两类：核心模块和文件模块；核心模块在 Node 启动时被直接加载进内存中，文件模块则是在运行时动态加载。Node 对引入过的模块都会进行缓存，同浏览器缓存文件一样，不同的是 Node 缓存的是编译和执行之后的对象。</p><p>Node 在对 JS 模块编译的过程中对文件内容进行了头尾包装，这样每个模块文件之间都进行了作用域隔离。包装之后的代码会通过原生模块的 runInThisContext 方法执行，返回一个 function 对象。</p><pre><code class=language-js>(function (exports, require, module, __filename, __dirname) {
   var math = require('math');
   exports.area = function (radius) {
     return Math.PI * radius * radius;
   };
 });
-</code></pre><p>Node 对 C/C++模块调用 process.dlopen 进行加载和执行，，dlopen 方法在 Windows 和 *nix 平台下分别有不同的实现，通过 libuv 兼容层进行了封装。</p><p>Node 在对 JSON 文件编译时，利用 fs 模块同步读取 JSON 文件的内容之后，调用 JSON.parse 得到对象，然后将它赋给模块对象的 exports，以供外部调用。</p><p>Node 最初采用的是 CommonJS 规范，从 v13.2 版本开始，Node 默认支持 ES6 模块；ES6 的模块规范和 CommonJS 规范的差别在于：</p><ol><li>CommonJS 模块输出的是一个值的拷贝，ES6 模块输出的是值的引用；</li><li>CommonJS 模块是运行时加载，ES6 模块是编译时输出接口；</li><li>CommonJS 模块的顶层 this 指向当前模块，ES6 模块中，顶层的 this 指向 undefined；</li><li>ES6 模块中不存在：arguments、require、module、exports、__filename、__dirname。</li></ol><p>CommonJS 加载的是一个对象，该对象只有在脚本运行完才会生成；而 ES6 模块不是对象，它的对外接口只是一种静态定义，在代码静态解析阶段就会生成，Webpack 的 TreeShaking 就利用了 ES6 模块可以静态分析的特点。</p><p>Node 要求 ES6 模块采用 .mjs 文件扩展名；Node 遇到 .mjs 文件，就认为它是 ES6 模块，默认启用严格模式；如果不希望将后缀名改成 .mjs，可以在项目的 package.json 文件中，指定 type 字段为 module；如果这时还要使用 CommonJS 模块，那么需要将 CommonJS 脚本的后缀名都改成 .cjs。</p><p>总之，.mjs 文件总是以 ES6 模块加载，.cjs 文件总是以 CommonJS 模块加载，.js 文件的加载取决于 package.json 里面 type 字段的设置。</p><h3 id=异步-i-o>异步 I/O</h3><p><img src=/node-learn-notes/async-io.png alt="Local Image"></p><p>Node 利用单线程，远离多线程死锁、状态同步等问题；利用异步 I/O，让单线程远离阻塞，以更好地使用 CPU。为了弥补单线程无法利用多核 CPU 的缺点，Node 提供了子进程，子进程可以通过工作进程高效地利用 CPU。</p><p><img src=/node-learn-notes/perfect-io.png alt="Local Image"></p><p>操作系统内核对于 I/O 只有两种方式：阻塞与非阻塞；阻塞 I/O 的一个特点是调用之后一定要等到系统内核层面完成所有操作后，调用才结束。非阻塞 I/O 则不带数据直接返回，返回之后，CPU 的时间片可以用来处理其他事务，性能提升是明显的；但由于完整的 I/O 并没有完成，立即返回的并不是业务层期望的数据，而仅仅是当前调用的状态；为了获取完整的数据，应用程序需要重复调用 I/O 操作来确认是否完成。</p><p><img src=/node-learn-notes/true-io.png alt="Local Image"></p><p>由于 Windows 平台和 *nix 平台的差异，Node 提供了 libuv 作为抽象封装层，使得所有平台兼容性的判断都由这一层来完成，并保证上层的 Node 与下层的自定义线程池及 IOCP 之间各自独立。Node 在编译期间会判断平台条件，选择性编译 *nix 目录或是 win 目录下的源文件到目标程序中。</p><p><img src=/node-learn-notes/base-libuv.png alt="Local Image"></p><p>事件循环、观察者、请求对象、I/O 线程池这四者共同构成了异步 I/O 模型的基本要素。事实上，在 Node 中， 除了 JS 是单线程外，Node 自身其实是多线程的；除了用户代码无法并行执行外，所有的 I/O（磁盘 I/O 和网络 I/O 等）则是可以并行的。</p><p><img src=/node-learn-notes/whole-io.png alt="Local Image"></p><h3 id=事件循环>事件循环</h3><p>事件循环对观察者的检查是有先后顺序的，process.nextTick 属于 idle 观察者，setImmediate 属于 check 观察者。在每一个轮循环检查中，idle 观察者先于 I/O 观察者，I/O 观察者先于 check 观察者。</p><p>process.nextTick 的回调函数保存在一个数组中，setImmediate 的结果则是保存在链表中；在行为上，process.nextTick 在每轮循环中会将数组中的回调函数全部执行完，而 setImmediate 在每轮循环中执行链表中的一个回调函数。</p><pre><code class=language-js>console.log('start');
+</code></pre><p>Node 对 C/C++模块调用 process.dlopen 进行加载和执行，，dlopen 方法在 Windows 和 *nix 平台下分别有不同的实现，通过 libuv 兼容层进行了封装。</p><p>Node 在对 JSON 文件编译时，利用 fs 模块同步读取 JSON 文件的内容之后，调用 JSON.parse 得到对象，然后将它赋给模块对象的 exports，以供外部调用。</p><p>Node 最初采用的是 CommonJS 规范，从 v13.2 版本开始，Node 默认支持 ES6 模块；ES6 的模块规范和 CommonJS 规范的差别在于：</p><ol><li>CommonJS 模块输出的是一个值的拷贝，ES6 模块输出的是值的引用；</li><li>CommonJS 模块是运行时加载，ES6 模块是编译时输出接口；</li><li>CommonJS 模块的顶层 this 指向当前模块，ES6 模块中，顶层的 this 指向 undefined；</li><li>ES6 模块中不存在：arguments、require、module、exports、__filename、__dirname。</li></ol><p>CommonJS 加载的是一个对象，该对象只有在脚本运行完才会生成；而 ES6 模块不是对象，它的对外接口只是一种静态定义，在代码静态解析阶段就会生成，Webpack 的 TreeShaking 就利用了 ES6 模块可以静态分析的特点。</p><p>Node 要求 ES6 模块采用 .mjs 文件扩展名；Node 遇到 .mjs 文件，就认为它是 ES6 模块，默认启用严格模式；如果不希望将后缀名改成 .mjs，可以在项目的 package.json 文件中，指定 type 字段为 module；如果这时还要使用 CommonJS 模块，那么需要将 CommonJS 脚本的后缀名都改成 .cjs。</p><p>总之，.mjs 文件总是以 ES6 模块加载，.cjs 文件总是以 CommonJS 模块加载，.js 文件的加载取决于 package.json 里面 type 字段的设置。</p><h3 id=异步-i-o>异步 I/O</h3><p><img src=/node-learn-notes/async-io.png alt="Local Image"></p><p>Node 利用单线程，远离多线程死锁、状态同步等问题；利用异步 I/O，让单线程远离阻塞，以更好地使用 CPU。为了弥补单线程无法利用多核 CPU 的缺点，Node 提供了子进程，子进程可以通过工作进程高效地利用 CPU。</p><p><img src=/node-learn-notes/perfect-io.png alt="Local Image"></p><p>操作系统内核对于 I/O 只有两种方式：阻塞与非阻塞；阻塞 I/O 的一个特点是调用之后一定要等到系统内核层面完成所有操作后，调用才结束。非阻塞 I/O 则不带数据直接返回，返回之后，CPU 的时间片可以用来处理其他事务，性能提升是明显的；但由于完整的 I/O 并没有完成，立即返回的并不是业务层期望的数据，而仅仅是当前调用的状态；为了获取完整的数据，应用程序需要重复调用 I/O 操作来确认是否完成。</p><p><img src=/node-learn-notes/true-io.png alt="Local Image"></p><p>由于 Windows 平台和 *nix 平台的差异，Node 提供了 libuv 作为抽象封装层，使得所有平台兼容性的判断都由这一层来完成，并保证上层的 Node 与下层的自定义线程池及 IOCP 之间各自独立。Node 在编译期间会判断平台条件，选择性编译 *nix 目录或是 win 目录下的源文件到目标程序中。</p><p><img src=/node-learn-notes/base-libuv.png alt="Local Image"></p><p>事件循环、观察者、请求对象、I/O 线程池这四者共同构成了异步 I/O 模型的基本要素。事实上，在 Node 中，除了 JS 是单线程外，Node 自身其实是多线程的；除了用户代码无法并行执行外，所有的 I/O（磁盘 I/O 和网络 I/O 等）则是可以并行的。</p><p><img src=/node-learn-notes/whole-io.png alt="Local Image"></p><h3 id=事件循环>事件循环</h3><p>事件循环对观察者的检查是有先后顺序的，process.nextTick 属于 idle 观察者，setImmediate 属于 check 观察者。在每一个轮循环检查中，idle 观察者先于 I/O 观察者，I/O 观察者先于 check 观察者。</p><p>process.nextTick 的回调函数保存在一个数组中，setImmediate 的结果则是保存在链表中；在行为上，process.nextTick 在每轮循环中会将数组中的回调函数全部执行完，而 setImmediate 在每轮循环中执行链表中的一个回调函数。</p><pre><code class=language-js>console.log('start');
 setTimeout(function () {
   console.log('setTimeout one');
 }, 0);
@@ -198,22 +198,22 @@ res.on('end', function () {
   var str = iconv.decode(buf, 'utf8');
   console.log(str);
 });
-</code></pre><h3 id=cookie>Cookie</h3><p>HTTP 是一个无状态的协议，Cookie 用来记录服务器与客户端之间的状态；Cookie 的处理分为如下几步：</p><ul><li>服务器向客户端发送 Cookie；</li><li>浏览器将 Cookie 保存；</li><li><p>每次发生请求都会将 Cookie 发向服务器。</p><pre><code class=language-js>// Cookie 格式是 key1=value2;key2=value2 形式的
+</code></pre><h3 id=cookie>Cookie</h3><p>HTTP 是一个无状态的协议，Cookie 用来记录服务器与客户端之间的状态；Cookie 的处理分为如下几步：</p><ul><li>服务器向客户端发送 Cookie；</li><li>浏览器将 Cookie 保存；</li><li>每次发生请求都会将 Cookie 发向服务器。</li></ul><p>&nbsp;</p><pre><code class=language-js>// Cookie 格式是 key1=value2;key2=value2 形式的
 function parseCookie(cookie) {
-if (!cookie) {
-return;
+  if (!cookie) {
+    return;
+  }
+  const entries = cookie.split(';');
+  const temp = {};
+  entries.forEach((item) =&gt; {
+    const arr = item.split('=');
+    const key = arr[0].trim();
+    const value = arr[1] || '';
+    temp[key] = value;
+  });
+  return temp;
 }
-const entries = cookie.split(';');
-const temp = {};
-entries.forEach((item) =&gt; {
-const arr = item.split('=');
-const key = arr[0].trim();
-const value = arr[1] || '';
-temp[key] = value;
-});
-return temp;
-}
-</code></pre></li></ul><h3 id=session>Session</h3><p>Session 只保留在服务器端，数据的安全性得到一定的保障，数据也无须在每次请求中都被传递；如何将客户端和服务器中的 Session 对应呢：</p><ul><li>基于 Cookie 来实现用户和数据的映射；</li><li>通过查询字符串来实现客户端和服务器数据的对应。</li></ul><p>一旦服务器端启用了 Session，它将约定一个键值作为 Session 口令；将 Session 口令放在 Cookie 中；如果用户请求 Cookie 中没有携带口令，它就会为之生成一个值，这个值是唯一且不重复的值，并设定超时时间；如果口令被篹改，客户端就丢失了与 Session 的映射关系，也无法修改服务器端存在的数据了。</p><pre><code class=language-js>const EXPIRES = 20 * 60 * 1000;
+</code></pre><h3 id=session>Session</h3><p>Session 只保留在服务器端，数据的安全性得到一定的保障，数据也无须在每次请求中都被传递；如何将客户端和服务器中的 Session 对应呢：</p><ul><li>基于 Cookie 来实现用户和数据的映射；</li><li>通过查询字符串来实现客户端和服务器数据的对应。</li></ul><p>一旦服务器端启用了 Session，它将约定一个键值作为 Session 口令；将 Session 口令放在 Cookie 中；如果用户请求 Cookie 中没有携带口令，它就会为之生成一个值，这个值是唯一且不重复的值，并设定超时时间；如果口令被篹改，客户端就丢失了与 Session 的映射关系，也无法修改服务器端存在的数据了。</p><pre><code class=language-js>const EXPIRES = 20 * 60 * 1000;
 const sessions = {}; // 将所有 Session 保存在内存中，会有性能问题
 const key = 'session_id';
 // 生成 Session
@@ -309,37 +309,37 @@ app.put('/pages/:id', routes.pages.update);
 app.del('/pages/:id', routes.pages.remove);
 
 modules.exports = app;
-</code></pre><h3 id=中间件>中间件</h3><p>中间件的行为比较类似 Java 中的过滤器，在进入具体的业务处理之前，先让过滤器处理一些与业务无关的技术细节；由于 Node 异步的原因，我们需要提供一种机制，在当前中间件处理完成后，通知下一个中间件执行：</p><p><img src=/node-learn-notes/middleware-model.png alt="Local Image"></p><p>中间件往往先于业务逻辑执行，为了让业务逻辑提早执行，中间件的编写和使用需要注意两点：</p><ul><li>编写高效的中间件：尽早调用 next 执行后续逻辑、缓存需要重复计算的结果、避免不必要的计算（比如『报文体解析』对于 GET 是不必要的）；</li><li><p>合理利用路由，避免不必要的中间件执行。</p><pre><code class=language-js>function staticFile(req, res, next) {
-const pathname = url.parse(req.url).pathname;
-fs.readFile(path.join(ROOT, pathname), (err, file) =&gt; {
-    if (err) {
-        return next(err);
-    }
-    res.writeHead(200);
-    res.end(file);
-});
+</code></pre><h3 id=中间件>中间件</h3><p>中间件的行为比较类似 Java 中的过滤器，在进入具体的业务处理之前，先让过滤器处理一些与业务无关的技术细节；由于 Node 异步的原因，我们需要提供一种机制，在当前中间件处理完成后，通知下一个中间件执行：</p><p><img src=/node-learn-notes/middleware-model.png alt="Local Image"></p><p>中间件往往先于业务逻辑执行，为了让业务逻辑提早执行，中间件的编写和使用需要注意两点：</p><ul><li>编写高效的中间件：尽早调用 next 执行后续逻辑、缓存需要重复计算的结果、避免不必要的计算（比如『报文体解析』对于 GET 是不必要的）；</li><li>合理利用路由，避免不必要的中间件执行。</li></ul><p>&nbsp;</p><pre><code class=language-js>function staticFile(req, res, next) {
+    const pathname = url.parse(req.url).pathname;
+    fs.readFile(path.join(ROOT, pathname), (err, file) =&gt; {
+        if (err) {
+            return next(err);
+        }
+        res.writeHead(200);
+        res.end(file);
+    });
 }
 functon xmlMiddleware(req,res,next){
-if(!req.is(&quot;xml&quot;)){
-    return next()
-}
-let body = &quot;&quot;;
-req.on(&quot;data&quot;,str=&gt;{
-    body+=str;
-})
-req.on(&quot;end&quot;,()=&gt;{
-    req.body = xml2json.toJson(body.toString(),{
-        object:true,
-        sanitize:false
+    if(!req.is(&quot;xml&quot;)){
+        return next()
+    }
+    let body = &quot;&quot;;
+    req.on(&quot;data&quot;,str=&gt;{
+        body+=str;
     })
-    next();
-})
+    req.on(&quot;end&quot;,()=&gt;{
+        req.body = xml2json.toJson(body.toString(),{
+            object:true,
+            sanitize:false
+        })
+        next();
+    })
 }
 // 对所有路径都会使用中间件
 app.use(staticFile);
 // 仅对静态目录使用中间件，提升匹配效率
 app.use('/public/xml', xmlMiddleware);
-</code></pre></li></ul><h3 id=响应客户端>响应客户端</h3><p>服务器端响应的报文，最终都要被客户端处理；服务器端的响应从一定程度上决定或指示了客户端该如何处理响应的内容；在内容响应的过程中，响应报头中的 Content-* 字段会告知客户端响应的内容信息：</p><pre><code>内容以 gzip 编码
+</code></pre><h3 id=响应客户端>响应客户端</h3><p>服务器端响应的报文，最终都要被客户端处理；服务器端的响应从一定程度上决定或指示了客户端该如何处理响应的内容；在内容响应的过程中，响应报头中的 Content-* 字段会告知客户端响应的内容信息：</p><pre><code>内容以 gzip 编码
 Content-Encoding: gzip
 内容长度为 21170 个字节
 Content-Length: 21170
@@ -422,12 +422,12 @@ http
     res.end('i am worker');
   })
   .listen(Math.round((1 + Math.random()) * 1000), '127.0.0.1');
-</code></pre><p>运行 node master.js 将会复制多个 Node 进程；主进程仅负责调度或管理工作进程，工作进程负责具体的业务处理。</p><p><img src=/node-learn-notes/child-process.png alt="Local Image"></p><p>child_process 模块给予 Node 随意创建子进程的能力；它提供了 4 个方法用于创建子进程：</p><ul><li>child_process.spawn 使用给定的命令衍生新的进程，并传入 args 中的命令行参数（默认为空数组）；</li><li>child_process.fork 是 child_process.spawn 的特例，专门用于衍生新的进程；与 child_process.spawn 一样返回 ChildProcess 对象；返回的 ChildProcess 会内置额外的通信通道，允许消息在父进程和子进程之间来回传递；</li><li>child_process.exec 与 child_process.spawn 不同的是其接口不同，它有一个回调函数获知子进程的状况；</li><li><p>child_process.execFile 类似于 child_process.exec 但默认情况下不会衍生 shell；比 child_process.exec 稍微更高效。</p><pre><code class=language-js>var cp = require('child_process');
+</code></pre><p>运行 node master.js 将会复制多个 Node 进程；主进程仅负责调度或管理工作进程，工作进程负责具体的业务处理。</p><p><img src=/node-learn-notes/child-process.png alt="Local Image"></p><p>child_process 模块给予 Node 随意创建子进程的能力；它提供了 4 个方法用于创建子进程：</p><ul><li>child_process.spawn 使用给定的命令衍生新的进程，并传入 args 中的命令行参数（默认为空数组）；</li><li>child_process.fork 是 child_process.spawn 的特例，专门用于衍生新的进程；与 child_process.spawn 一样返回 ChildProcess 对象；返回的 ChildProcess 会内置额外的通信通道，允许消息在父进程和子进程之间来回传递；</li><li>child_process.exec 与 child_process.spawn 不同的是其接口不同，它有一个回调函数获知子进程的状况；</li><li>child_process.execFile 类似于 child_process.exec 但默认情况下不会衍生 shell；比 child_process.exec 稍微更高效。</li></ul><p>&nbsp;</p><pre><code class=language-js>var cp = require('child_process');
 cp.spawn('node', ['worker.js']);
 cp.fork('./worker.js');
 cp.exec('node worker.js', function (err, stdout, stderr) {});
 cp.execFile('worker.js', function (err, stdout, stderr) {});
-</code></pre></li></ul><p>父子进程之间会创建 IPC 通道进行通信：</p><pre><code class=language-js>// parent
+</code></pre><p>父子进程之间会创建 IPC 通道进行通信：</p><pre><code class=language-js>// parent
 const cp = require('child_process');
 const sub = cp.fork(__dirname + '/sub.js');
 sub.on('message', (m) =&gt; {

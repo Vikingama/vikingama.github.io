@@ -1,4 +1,4 @@
-<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no,user-scalable=no"><meta name=author content=馬腊咯稽><meta name=description content="React 复习笔记（中）"><meta name=keywords content=React><link rel=canonical href=https://vikingama.github.io/posts/react-hook/><link rel="shortcut icon" href=https://vikingama.github.io/images/favicon.ico><link rel=stylesheet href=https://vikingama.github.io/css/zozo.css><link rel=stylesheet href=https://vikingama.github.io/css/animate.css><link rel=stylesheet href=https://vikingama.github.io/css/highlight.css><link rel=stylesheet href=https://vikingama.github.io/css/remixicon.css><title>React 复习笔记（中） &middot; 庙小妖风大 · 水浅王八多</title></head><body><div class="main animated"><div class="nav_container animated fadeInDown"><div class=site_nav id=site_nav><ul><li><a href=/>首页</a></li><li><a href=/posts/>归档</a></li><li><a href=/inspires/>启发</a></li><li><a href=/command/>命令</a></li><li><a href=/about/>关于</a></li></ul></div><div class=menu_icon><a id=menu_icon><i class=remixicon-links-line></i></a></div></div><div class="header animated fadeInDown"><div class=site_title_container><div class=site_title><h1><a href=https://vikingama.github.io><img style=width:65px;height:auto;vertical-align:top src=https://vikingama.github.io/images/avatar.png></a></h1></div><div class=description><p class=sub_title>庙小妖风大<br>水浅王八多</p><div class=my_socials><a href=https://www.douban.com/people/nicknoonan title=douban target=_blank><i class=remixicon-douban-fill></i></a><a href=https://github.com/Vikingama title=github target=_blank><i class=remixicon-github-fill></i></a><a href=https://www.zhihu.com/people/vikingama title=zhihu target=_blank><i class=remixicon-zhihu-fill></i></a><a href=https://vikingama.github.io/index.xml type=application/rss+xml title=rss target=_blank><i class=remixicon-rss-fill></i></a></div></div></div></div><div class=content><div class=post_page><div class="post animated fadeInDown"><div class="post_title post_detail_title"><h2><a href=/posts/react-hook/>React 复习笔记（中）</a></h2><span class=date>2020.02.27</span></div><div class="post_content markdown"><blockquote><p>Hook 是一些可以让你在函数组件里“钩入” state 及生命周期等特性的函数。</p></blockquote><h3 id=hook-产生的动机>Hook 产生的动机</h3><ul><li>代码层次更清晰；在类组件中，共属于一个功能的代码分散在各个钩子函数中；</li><li>更好的<strong>状态逻辑</strong>复用，renderProps 和高阶组件不是那么<strong>好用</strong>；</li><li>干掉 this。</li></ul><h3 id=hook-使用规则>Hook 使用规则</h3><ul><li>只能在最外层调用 Hook；不要在循环、条件判断或者子函数中调用（React 靠的是 Hook 调用的顺·序来确定哪个 state 对应哪个 useState）；</li><li>只在函数组件中调用 Hook。</li></ul><h3 id=usestate>useState</h3><p>state 只在组件首次渲染的时候被创建；在下一次重新渲染时，useState 返回给我们当前的 state。如果初始 state 需要通过复杂计算获得，则可以传入一个函数，在函数中计算并返回初始的 state。</p><pre><code class=language-jsx>const [state, setState] = useState(() =&gt; someExpensiveComputation(props));
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no,user-scalable=no"><meta name=author content=馬腊咯稽><meta name=description content="React 复习笔记（中）"><meta name=keywords content=React><link rel=canonical href=https://vikingama.github.io/posts/react-hook/><link rel="shortcut icon" href=https://vikingama.github.io/images/favicon.ico><link rel=stylesheet href=https://vikingama.github.io/css/zozo.css><link rel=stylesheet href=https://vikingama.github.io/css/animate.css><link rel=stylesheet href=https://vikingama.github.io/css/highlight.css><link rel=stylesheet href=https://vikingama.github.io/css/remixicon.css><title>React 复习笔记（中） &middot; 庙小妖风大 · 水浅王八多</title></head><body><div class="main animated"><div class="nav_container animated fadeInDown"><div class=site_nav id=site_nav><ul><li><a href=/>首页</a></li><li><a href=/posts/>归档</a></li><li><a href=/inspires/>启发</a></li><li><a href=/command/>命令</a></li><li><a href=/about/>关于</a></li></ul></div><div class=menu_icon><a id=menu_icon><i class=remixicon-links-line></i></a></div></div><div class="header animated fadeInDown"><div class=site_title_container><div class=site_title><h1><a href=https://vikingama.github.io><img style=width:65px;height:auto;vertical-align:top src=https://vikingama.github.io/images/avatar.png></a></h1></div><div class=description><p class=sub_title>庙小妖风大<br>水浅王八多</p><div class=my_socials><a href=https://www.douban.com/people/nicknoonan title=douban target=_blank><i class=remixicon-douban-fill></i></a><a href=https://github.com/Vikingama title=github target=_blank><i class=remixicon-github-fill></i></a><a href=https://weibo.com/vikingx title=weibo target=_blank><i class=remixicon-weibo-fill></i></a><a href=https://www.zhihu.com/people/vikingama title=zhihu target=_blank><i class=remixicon-zhihu-fill></i></a><a href=https://vikingama.github.io/index.xml type=application/rss+xml title=rss target=_blank><i class=remixicon-rss-fill></i></a></div></div></div></div><div class=content><div class=post_page><div class="post animated fadeInDown"><div class="post_title post_detail_title"><h2><a href=/posts/react-hook/>React 复习笔记（中）</a></h2><span class=date>2020.02.27</span></div><div class="post_content markdown"><blockquote><p>Hook 是一些可以让你在函数组件里“钩入” state 及生命周期等特性的函数。</p></blockquote><h3 id=hook-产生的动机>Hook 产生的动机</h3><ul><li>代码层次更清晰；在类组件中，共属于一个功能的代码分散在各个钩子函数中；</li><li>更好的<strong>状态逻辑</strong>复用，renderProps 和高阶组件不是那么<strong>好用</strong>；</li><li>干掉 this。</li></ul><h3 id=hook-使用规则>Hook 使用规则</h3><ul><li>只能在最外层调用 Hook；不要在循环、条件判断或者子函数中调用（Hook 靠的是调用顺序来确定哪个 state 对应哪个 useState）；</li><li>只在函数组件中调用 Hook。</li></ul><h3 id=usestate>useState</h3><p>state 只在组件首次渲染的时候被创建；在下一次重新渲染时，useState 返回给我们当前的 state。如果初始 state 需要通过复杂计算获得，则可以传入一个函数，在函数中计算并返回初始的 state。</p><pre><code class=language-jsx>const [state, setState] = useState(() =&gt; someExpensiveComputation(props));
 </code></pre><p>在初始渲染期间，state 与传入的 initialState 值相同；setState 函数用于更新 state，它接收一个新的 state 值并将组件的一次重新渲染加入队列。</p><pre><code class=language-jsx>function Counter({ initialCount }) {
   // initialState 参数只会在组件的初始渲染中起作用，后续渲染时会被忽略
   const [count, setCount] = useState(initialCount);
@@ -32,7 +32,7 @@
   // 只有当 props.source 改变后才会重新创建订阅
   [props.source]
 );
-</code></pre><h3 id=usecontext>useContext</h3><p>接收一个 context 对象（React.createContext 的返回值）并返回该 context 的当前值；当前的 context 值由上层组件中距离当前组件最近的 <mycontext.provider>的 value 决定。当组件上层最近的 <mycontext.provider>更新时，该 Hook 会触发重渲染，并使用最新传递的 value 值。即使祖先使用 React.memo、React.PureComponent 或 shouldComponentUpdate，也会在组件本身使用 useContext 时重新渲染。</p><pre><code class=language-jsx>const themes = {
+</code></pre><h3 id=usecontext>useContext</h3><p>接收一个 context 对象（React.createContext 的返回值）并返回该 context 的当前值；当前的 context 值由上层组件中距离当前组件最近的 &lt;MyContext.Provider&gt;\ 的 value 决定。当组件上层最近的 &lt;MyContext.Provider&gt;\ 更新时，该 Hook 会触发重渲染，并使用最新传递的 value 值。即使祖先使用 React.memo、React.PureComponent 或 shouldComponentUpdate，也会在组件本身使用 useContext 时重新渲染。</p><pre><code class=language-jsx>const themes = {
   light: {
     foreground: '#000',
     background: '#eee'
@@ -118,61 +118,61 @@ const Form = () =&gt; {
     &lt;/form&gt;
   );
 };
-</code></pre><h6 id=注意-如果通过-createcontext-将-usereducer-的-state-和-dispatch-当作-value-传递下去-你甚至可以得到一个简单的-redux>注意：如果通过 createContext 将 useReducer 的 state 和 dispatch 当作 value 传递下去；你甚至可以得到一个简单的 redux。</h6><h3 id=usecallback-usememo>useCallback &amp; useMemo</h3><p>Memo 是一种优化技术，大体上就是缓存昂贵计算的值并在相同输入的情况下直接返回缓存值；useCallback 用来缓存函数的引用，useMemo 用来缓存计算数据的引用。</p><pre><code class=language-jsx>/*
-  在 a 和 b 的变量值不变的情况下，即使组件重新渲染，memoCallback 的引用不变
-  useCallback 的第一个入参函数会被缓存，从而达到渲染性能优化的目的
-*/
+</code></pre><h6 id=注意-如果通过-createcontext-将-usereducer-的-state-和-dispatch-当作-value-传递下去-你甚至可以得到一个简单的-redux>注意：如果通过 createContext 将 useReducer 的 state 和 dispatch 当作 value 传递下去；你甚至可以得到一个简单的 redux。</h6><h3 id=usecallback-usememo>useCallback &amp; useMemo</h3><p>Memo 是一种优化技术，大体上就是缓存昂贵计算的值并在相同输入的情况下直接返回缓存值；useCallback 用来缓存函数的引用，useMemo 用来缓存计算数据的引用。</p><pre><code class=language-jsx>/**
+ * 在 a 和 b 的变量值不变的情况下，即使组件重新渲染，memoCallback 的引用不变
+ * useCallback 的第一个入参函数会被缓存，从而达到渲染性能优化的目的
+ */
 const memoCallback = useCallback(() =&gt; {
   // ...
   doSomething(a, b);
   // ...
 }, [a, b]);
-/*
-  在 a 和 b 的变量值不变的情况下，memoValue 的值/引用不变
-  useMemo 函数的第一个入参函数不会被执行，从而达到节省计算量的目的
-*/
+/**
+ * 在 a 和 b 的变量值不变的情况下，memoValue 的值/引用不变
+ * useMemo 函数的第一个入参函数不会被执行，从而达到节省计算量的目的
+ */
 const memoValue = useMemo(() =&gt; computeExpensiveValue(a, b), [a, b]);
-</code></pre><p>具体使用场景：</p><ol><li>当复合数据（函数也是一种）存在于 useEffect 的依赖数组中，同时当前 useEffect 中有触发组件重新渲染的逻辑；则需要将数据用 useMemo | useCallback 包裹，否则会导致组件无限循环渲染。(1 === 1，{} !=== {}) ；</li><li><p>父组件重新渲染会导致子组件重新渲染，当子组件使用 React.memo 包裹时（仅当 props 改变才会出触发重新渲染），如果复合数据不使用 useMemo | useCallback 包裹，会导致 React.memo 失效。</p><pre><code class=language-jsx>// 获取上一次指定的值
+</code></pre><p>具体使用场景：</p><ol><li>当复合数据（函数也是一种）存在于 useEffect 的依赖数组中，同时当前 useEffect 中有触发组件重新渲染的逻辑；则需要将数据用 useMemo | useCallback 包裹，否则会导致组件无限循环渲染。(1 === 1，{} !=== {}) ；</li><li>父组件重新渲染会导致子组件重新渲染，当子组件使用 React.memo 包裹时（仅当 props 改变才会出触发重新渲染），如果复合数据不使用 useMemo | useCallback 包裹，会导致 React.memo 失效。</li></ol><p>&nbsp;</p><pre><code class=language-jsx>// 获取上一次指定的值
 const usePrevValue = (value) =&gt; {
-const ref = useRef();
-useEffect(() =&gt; {
-ref.current = value;
-});
-return ref.current;
+  const ref = useRef();
+  useEffect(() =&gt; {
+    ref.current = value;
+  });
+  return ref.current;
 };
 const App = ({ name }) =&gt; {
-const [count, setCount] = useState(0);
-/*
-每次组件重新渲染，handleCount 都是重新创建的新函数；
-将 handleCount 作为 props 传递给其他组件时，
-会导致 PureComponent、React.memo 等相关优化失效
-*/
-const handleCount = () =&gt; {
-setCount((count) =&gt; count + 1);
+  const [count, setCount] = useState(0);
+  /**
+   * 每次组件重新渲染，handleCount 都是重新创建的新函数；
+   * 将 handleCount 作为 props 传递给其他组件时，
+   * 会导致 PureComponent、React.memo 等相关优化失效
+   */
+  const handleCount = () =&gt; {
+    setCount((count) =&gt; count + 1);
+  };
+  // useCallback 将传入的函数永久缓存了起来
+  const memoHandleCount = useCallback(() =&gt; {
+    setCount((count) =&gt; count + 1);
+  }, []);
+  const prevHandleCount = usePrevValue(handleCount);
+  const memoPrevHandleCount = usePrevValue(memoHandleCount);
+  console.log(prevHandleCount === handleCount); // false
+  console.log(memoPrevHandleCount === memoHandleCount); // true
+  // 将性能消耗比较大的计算缓存起来，只有 name 改变时会重新计算，count 改变不会进行重新计算
+  const memoArray = useMomo(() =&gt; {
+    return Array(999)
+      .fill(name)
+      .map((v) =&gt; v.toUpperCase());
+  }, [name]);
+  return (
+    &lt;div&gt;
+      &lt;span&gt;{name}&lt;/span&gt;
+      &lt;span&gt;{count}&lt;/span&gt;
+      &lt;button onClick={handleCount}&gt;AddOne&lt;/button&gt;
+    &lt;/div&gt;
+  );
 };
-// useCallback 将传入的函数永久缓存了起来
-const memoHandleCount = useCallback(() =&gt; {
-setCount((count) =&gt; count + 1);
-}, []);
-const prevHandleCount = usePrevValue(handleCount);
-const memoPrevHandleCount = usePrevValue(memoHandleCount);
-console.log(prevHandleCount === handleCount); // false
-console.log(memoPrevHandleCount === memoHandleCount); // true
-// 将性能消耗比较大的计算缓存起来，只有 name 改变时会重新计算，count 改变不会进行重新计算
-const memoArray = useMomo(() =&gt; {
-return Array(999)
-  .fill(name)
-  .map((v) =&gt; v.toUpperCase());
-}, [name]);
-return (
-&lt;div&gt;
-  &lt;span&gt;{name}&lt;/span&gt;
-  &lt;span&gt;{count}&lt;/span&gt;
-  &lt;button onClick={handleCount}&gt;AddOne&lt;/button&gt;
-&lt;/div&gt;
-);
-};
-</code></pre></li></ol><h6 id=注意-如果-usecallback-usememo-缓存的-函数-值-不依赖组建内部的变量-可以将-函数-值-提到组件外部-酱紫-不使用-usecallback-usememo-可以达到相同的效果>注意：如果 useCallback/useMemo 缓存的<strong>函数/值</strong>不依赖组建内部的变量，可以将<strong>函数/值</strong>提到组件外部；酱紫，不使用 useCallback/useMemo 可以达到相同的效果。</h6><h3 id=useref>useRef</h3><p>useRef 返回一个可变的 ref 对象，其 .current 属性被初始化为传入的参数 initialValue；返回的 ref 对象在组件的整个生命周期内保持不变。</p><pre><code class=language-jsx>const TextInputWithFocusButton = () =&gt; {
+</code></pre><h6 id=注意-如果-usecallback-usememo-缓存的-函数-值-不依赖组建内部的变量-可以将-函数-值-提到组件外部-酱紫-不使用-usecallback-usememo-可以达到相同的效果>注意：如果 useCallback/useMemo 缓存的<strong>函数/值</strong>不依赖组建内部的变量，可以将<strong>函数/值</strong>提到组件外部；酱紫，不使用 useCallback/useMemo 可以达到相同的效果。</h6><h3 id=useref>useRef</h3><p>useRef 返回一个可变的 ref 对象，其 .current 属性被初始化为传入的参数 initialValue；返回的 ref 对象在组件的整个生命周期内保持不变。</p><pre><code class=language-jsx>const TextInputWithFocusButton = () =&gt; {
   const inputEl = useRef(null);
   const onButtonClick = () =&gt; {
     // `current` 指向已挂载到 DOM 上的文本输入元素
