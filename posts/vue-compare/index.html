@@ -70,7 +70,7 @@ export default class Watcher {
    * 把自己删掉（数据再发生变化，别通知我了）。
    */
   constructor(
-    vm, // 组建实例
+    vm, // 组件实例
     expOrFn, // a.b.c || () =&gt; a.b.c
     cb, // 副作用回调函数
     options, // computed || deep || lazy
@@ -138,7 +138,7 @@ export default class Watcher {
     /**
      * 将 Dep.target 设置为“当前 watcher 实例”
      * 并将“当前 watcher 实例”推进 targetStack
-     * 方便“响应式数据”将本实例添加到对应的依赖列表里
+     * 方便“响应式数据”将本 watcher 添加到对应的依赖列表里
      */
     let value;
     pushTarget(this);
@@ -342,7 +342,7 @@ function dependArray(value) {
 }
 </code></pre><p>&nbsp;</p><p>observe(value) 会返回一个 Observer 实例（对 value 的观察者），这个实例挂载在 value.__ob__ 上，而且是单例的；同时，观察者对象的 value 指向被观察对象，形成循环引用；observe(value) 会通过判断 value 类型，将其转化为响应式对象/数组：</p><ul><li>作为 Vue.observable 工具函数使用（返回的对象是响应式的，可直接用于 Vue  渲染）；</li><li>在初始化组件状态时，会调用 observe(vm.$options.data)；</li><li>需要深层响应的场景，会递归调用 observe。</li></ul><p>&nbsp;</p><pre><code class=language-ts>// 为“值”创建观察者实例的工厂函数
 export function observe(value, asRootData) {
-  // value 不能是 VNode，也不能是 Vue 组建实例
+  // value 不能是 VNode，也不能是 Vue 组件实例
   if (!isObject(value) || value instanceof VNode) {
     return;
   }
@@ -426,7 +426,7 @@ export class Observer {
     }
   }
 }
-</code></pre><p>&nbsp;</p><p>在 beforeMount 和 mounted 钩子之间（mountComponent），会初始化组件 watcher（renderWatcher）；renderWatcher 保存在 vm._watcher（一个组件仅有一个 renderWatcher），同时还保存在 vm._watchers 数组里（存放着组件涉及到的所有 watcher，比如 computed、watch 等）。renderWatcher 的 getter 为 updateComponent，当调用 vm._render 时，会触发所有在渲染函数中用到的数据的 getter（会执行 updateComponent.call(vm, vm)）。函数访问到的数据的 getter 会把 renderWatcher 添加到自己的 dep.subs 列表中；当数据变化，响应式数据 setter 被触发，dep.notify 将调用 watcher.update，将执行 queueWatcher 把 watcher 添加到更新队列，更新队列会在合适的时候调用 watcher.run 触发页面更新（生成 VNode，再 patch 到 DOM，过程中会经历 diff）。</p><h3 id=响应式原理-3-x>响应式原理 3.x</h3><p>createReactiveObject 用来将普通对象（Object、Array、Map、Set、WeakMap、WeakSet）通过 Proxy + handlers 代理为响应式数据：</p><ol><li><strong>reactive</strong> = createReactiveObject(target, false, <strong>mutableHandlers</strong>, <strong>mutableCollectionHandlers</strong>)</li><li><strong>shallowReactive</strong> = createReactiveObject(target, false, <strong>shallowReactiveHandlers</strong>, <strong>shallowCollectionHandlers</strong>)</li><li><strong>readonly</strong> = createReactiveObject(target, true, <strong>readonlyHandlers</strong>, <strong>readonlyCollectionHandlers</strong>)</li><li><strong>shallowReadonly</strong> = createReactiveObject(target, true, <strong>shallowReadonlyHandlers</strong>, <strong>readonlyCollectionHandlers</strong>)</li></ol><p>&nbsp;</p><pre><code class=language-ts>export const reactiveMap = new WeakMap&lt;Target, any&gt;();
+</code></pre><p>&nbsp;</p><p>在 beforeMount 和 mounted 钩子之间（mountComponent），会初始化组件 watcher（renderWatcher）；renderWatcher 保存在 vm._watcher（一个组件仅有一个 renderWatcher），同时还保存在 vm._watchers 数组里（存放着组件涉及到的所有 watcher，比如 computed、watch 等）。renderWatcher 的 getter 为 updateComponent，当调用 vm._render 时，会触发所有在渲染函数中用到的数据的 getter（会执行 updateComponent.call(vm, vm)）。函数访问到的数据的 getter 会把 renderWatcher 添加到自己的 dep.subs 列表中；当数据变化，响应式数据 setter 被触发，dep.notify 将调用 watcher.update，将执行 queueWatcher 把 watcher 添加到更新队列，更新队列会在合适的时候调用 watcher.run 触发页面更新（生成 VNode，再 patch 到 DOM，过程中会经历 diff）。</p><h3 id=响应式原理-3-x>响应式原理 3.x</h3><p>createReactiveObject 用来将普通对象（Object、Array、Map、Set、WeakMap、WeakSet）通过 Proxy + handlers 代理为响应式数据：</p><ol><li>reactive 对应的 handler：<strong>mutableHandlers</strong>, <strong>mutableCollectionHandlers</strong>；</li><li>shallowReactive 对应的 handler：<strong>shallowReactiveHandlers</strong>, <strong>shallowCollectionHandlers</strong>；</li><li>readonly 对应的 handler：<strong>readonlyHandlers</strong>, <strong>readonlyCollectionHandlers</strong>；</li><li>shallowReadonly 对应的 handler：<strong>shallowReadonlyHandlers</strong>, <strong>readonlyCollectionHandlers</strong>。</li></ol><p>&nbsp;</p><pre><code class=language-ts>export const reactiveMap = new WeakMap&lt;Target, any&gt;();
 export const readonlyMap = new WeakMap&lt;Target, any&gt;();
 function createReactiveObject(
   target: Target,
@@ -443,7 +443,7 @@ function createReactiveObject(
     return target;
   }
   // target 已经存在于 readonlyMap 或 reactiveMap 中
-  const proxyMap = isReadonly ? readonlyMap : ;
+  const proxyMap = isReadonly ? readonlyMap : reactiveMap;
   const existingProxy = proxyMap.get(target);
   if (existingProxy) {
     return existingProxy;
@@ -746,7 +746,7 @@ export function resetTracking() {
  * 然后收集到 target 相关的 depsMap 对应 key 下的依赖集合 dep 中。
  */
 export function track(target: object, type: TrackOpTypes, key: unknown) {
-  // 没有 activeEffect，旧先不 track
+  // 没有 activeEffect，就先不 track
   if (!shouldTrack || activeEffect === undefined) {
     return;
   }
@@ -1276,7 +1276,6 @@ export function resolveInject(inject: any, vm: Component): ?Object {
     let provides = currentInstance.provides;
     /**
      * 默认，实例会继承父级的 provides 对象
-     * 但是在组件需要 provide 值的时候
      * 组件会基于父级的 provides（作为原型）创建自己的 provides
      * 这样，在“Inject”的时候，我们可以简单地查找来自“直接父级”的注入，并让原型链来完成这项工作
      */
@@ -2241,7 +2240,7 @@ function registerKeepAliveHook(
 function initComputed(vm, computed) {
   // 实例的 computed 创建的 watcher 都保存在 vm._computedWatchers
   const watchers = (vm._computedWatchers = Object.create(null));
-  // 循环组件内3 computed 配置
+  // 循环组件内 computed 配置
   for (const key in computed) {
     /**
      * computed 有两种形式：
@@ -2711,7 +2710,7 @@ Vue.prototype._update = function (vnode: VNode, hydrating?: boolean) {
 };
 /**
  * patch 在做什么？
- * 1. vnode 不存在，oldVnode 存在，销毁组件
+ * 1. vnode 不存在，oldVnode 存在，销毁旧节点
  * 2. vnode 存在：
  *      2.1 oldVnode 不存在，组件首次渲染
  *      2.2 oldVnode 存在：
@@ -4574,9 +4573,9 @@ $nextTick: i =&gt; nextTick.bind(i.proxy!),
  * 调用场景：
  * 1. createComponent 中 new VNode(...)
  * 2. _createElement 中
- *    如果是注册的组件，调用 createComponent
- *    如果是 HTML 元素，new VNode(...)
- *    如果是位置元素，new VNode(...)
+ *      如果是注册的组件，调用 createComponent
+ *      如果是 HTML 元素，new VNode(...)
+ *      如果是未知元素，new VNode(...)
  * 3. 创建空节点，emptyNode = new VNode('', {}, [])
  * 4. 创建文本节点，new VNode(undefined, undefined, undefined, String(val))
  * 5. cloneVNode，源码就在下面
@@ -5698,7 +5697,7 @@ function genSlot(el, state) {
   }
   return res + ')';
 }
-</code></pre><h3 id=slot-3-x>slot 3.x</h3><p>插槽的使用方法如下：</p><pre><code class=language-vue>&lt;template name=&quot;App&quot;&gt;
+</code></pre><h3 id=slot-3-x>slot 3.x</h3><p>插槽的使用方法如下：</p><pre><code class=language-html>&lt;template name=&quot;App&quot;&gt;
   &lt;layout&gt;
     &lt;template #header=&quot;{ title }&quot;&gt;
       标题：
@@ -5709,7 +5708,8 @@ function genSlot(el, state) {
       &lt;main&gt;{{ content }}&lt;/main&gt;
     &lt;/template&gt;
     &lt;template #footer=&quot;{ copyright }&quot;&gt;
-      版权：&lt;a&gt;{{ copyright }}&lt;/a&gt;
+      版权：
+      &lt;a&gt;{{ copyright }}&lt;/a&gt;
     &lt;/template&gt;
   &lt;/layout&gt;
 &lt;/template&gt;

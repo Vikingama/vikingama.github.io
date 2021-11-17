@@ -1,4 +1,4 @@
-<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no,user-scalable=no"><meta name=author content=馬腊咯稽><meta name=description content="React 复习笔记（下/更新中）"><meta name=keywords content=React><link rel=canonical href=https://vikingama.github.io/posts/react-design/><link rel="shortcut icon" href=https://vikingama.github.io/images/favicon.ico><link rel=stylesheet href=https://vikingama.github.io/css/zozo.css><link rel=stylesheet href=https://vikingama.github.io/css/animate.css><link rel=stylesheet href=https://vikingama.github.io/css/highlight.css><link rel=stylesheet href=https://vikingama.github.io/css/remixicon.css><title>React 复习笔记（下/更新中） &middot; 庙小妖风大 · 水浅王八多</title></head><body><div class="main animated"><div class="nav_container animated fadeInDown"><div class=site_nav id=site_nav><ul><li><a href=/>首页</a></li><li><a href=/posts/>归档</a></li><li><a href=/inspires/>启发</a></li><li><a href=/command/>命令</a></li><li><a href=/about/>关于</a></li></ul></div><div class=menu_icon><a id=menu_icon><i class=remixicon-links-line></i></a></div></div><div class="header animated fadeInDown"><div class=site_title_container><div class=site_title><h1><a href=https://vikingama.github.io><img style=width:65px;height:auto;vertical-align:top src=https://vikingama.github.io/images/avatar.png></a></h1></div><div class=description><p class=sub_title>庙小妖风大<br>水浅王八多</p><div class=my_socials><a href=https://www.douban.com/people/nicknoonan title=douban target=_blank><i class=remixicon-douban-fill></i></a><a href=https://github.com/Vikingama title=github target=_blank><i class=remixicon-github-fill></i></a><a href=https://weibo.com/vikingx title=weibo target=_blank><i class=remixicon-weibo-fill></i></a><a href=https://www.zhihu.com/people/vikingama title=zhihu target=_blank><i class=remixicon-zhihu-fill></i></a><a href=https://vikingama.github.io/index.xml type=application/rss+xml title=rss target=_blank><i class=remixicon-rss-fill></i></a></div></div></div></div><div class=content><div class=post_page><div class="post animated fadeInDown"><div class="post_title post_detail_title"><h2><a href=/posts/react-design/>React 复习笔记（下/更新中）</a></h2><span class=date>2021.10.10</span></div><div class="post_content markdown"><blockquote><p>本来是总结开发用到的模式的；时隔一年半，好死不死看了<a href=https://react.iamkasong.com/>卡神的文章</a>，改的面目全非。</p></blockquote><h3 id=调用-reactdom-render-发生了什么>调用 ReactDOM.render 发生了什么？</h3><ol><li>确定应用渲染方式；</li><li>创建 fiberRoot 和 rootFiberNode，并将两者用指针指向彼此；</li><li>向 rootFiberNode 绑定自身的更新队列；</li><li>清空 container 里的内容；</li><li>向 container 绑定原生事件；</li><li>将 render 的第三个参数的 this 指向应用实例并调用；</li><li>初始化完成后，创建 update，并将 fiber 对应的组件作为 payload；</li><li>将 update 与 fiberNode 相关联，fiberNode 对应的 update 组成循环链表；</li><li>调用 scheduleUpdateOnFiber 开始渲染工作。</li></ol><p>&nbsp;</p><pre><code class=language-ts>// ReactDOM 的渲染模式
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no,user-scalable=no"><meta name=author content=馬腊咯稽><meta name=description content="React 复习笔记（下）"><meta name=keywords content=React><link rel=canonical href=https://vikingama.github.io/posts/react-design/><link rel="shortcut icon" href=https://vikingama.github.io/images/favicon.ico><link rel=stylesheet href=https://vikingama.github.io/css/zozo.css><link rel=stylesheet href=https://vikingama.github.io/css/animate.css><link rel=stylesheet href=https://vikingama.github.io/css/highlight.css><link rel=stylesheet href=https://vikingama.github.io/css/remixicon.css><title>React 复习笔记（下） &middot; 庙小妖风大 · 水浅王八多</title></head><body><div class="main animated"><div class="nav_container animated fadeInDown"><div class=site_nav id=site_nav><ul><li><a href=/>首页</a></li><li><a href=/posts/>归档</a></li><li><a href=/inspires/>启发</a></li><li><a href=/command/>命令</a></li><li><a href=/about/>关于</a></li></ul></div><div class=menu_icon><a id=menu_icon><i class=remixicon-links-line></i></a></div></div><div class="header animated fadeInDown"><div class=site_title_container><div class=site_title><h1><a href=https://vikingama.github.io><img style=width:65px;height:auto;vertical-align:top src=https://vikingama.github.io/images/avatar.png></a></h1></div><div class=description><p class=sub_title>庙小妖风大<br>水浅王八多</p><div class=my_socials><a href=https://www.douban.com/people/nicknoonan title=douban target=_blank><i class=remixicon-douban-fill></i></a><a href=https://github.com/Vikingama title=github target=_blank><i class=remixicon-github-fill></i></a><a href=https://weibo.com/vikingx title=weibo target=_blank><i class=remixicon-weibo-fill></i></a><a href=https://www.zhihu.com/people/vikingama title=zhihu target=_blank><i class=remixicon-zhihu-fill></i></a><a href=https://vikingama.github.io/index.xml type=application/rss+xml title=rss target=_blank><i class=remixicon-rss-fill></i></a></div></div></div></div><div class=content><div class=post_page><div class="post animated fadeInDown"><div class="post_title post_detail_title"><h2><a href=/posts/react-design/>React 复习笔记（下）</a></h2><span class=date>2021.10.10</span></div><div class="post_content markdown"><blockquote><p>本来是总结开发用到的模式的；时隔一年半，好死不死看了<a href=https://react.iamkasong.com/>卡神的文章</a>，改的面目全非。</p></blockquote><h3 id=调用-reactdom-render-发生了什么>调用 ReactDOM.render 发生了什么？</h3><ol><li>确定应用渲染方式；</li><li>创建 fiberRoot 和 rootFiberNode，并将两者用指针指向彼此；</li><li>向 rootFiberNode 绑定自身的更新队列；</li><li>清空 container 里的内容；</li><li>向 container 绑定原生事件；</li><li>将 render 的第三个参数的 this 指向应用实例并调用；</li><li>初始化完成后，创建 update，并将 fiber 对应的组件作为 payload；</li><li>将 update 与 fiberNode 相关联，fiberNode 对应的 update 组成循环链表；</li><li>调用 scheduleUpdateOnFiber 开始渲染工作。</li></ol><p>&nbsp;</p><pre><code class=language-ts>// ReactDOM 的渲染模式
 export type RootTag = 0 | 1 | 2;
 export const LegacyRoot = 0; // ReactDOM.createLegacyRoot
 export const BlockingRoot = 1; // ReactDOM.createBlockingRoot
@@ -181,14 +181,13 @@ export function createFiberRoot(
     memoizedState: null,
     dependencies: null,
     /**
-     * mode 有五种模式：
+     * mode 有六种模式：
      * 0b00000 NoMode             普通模式
      * 0b00001 StrictMode         严格模式
      * 0b00010 BlockingMode       块模式
      * 0b00100 ConcurrentMode     并发模式
      * 0b01000 ProfileMode        性能测试模式
      * 0b10000 DebugTracingMode   Debug 模式
-     *
      */
     mode: NoMode | ConcurrentMode | BlockingMode | StrictMode,
     flags: NoFlags,
@@ -215,7 +214,7 @@ export function createFiberRoot(
   };
   return root;
 }
-// 创建更新安排渲染
+// 创建更新，安排渲染
 export function updateContainer(
   element: ReactNodeList,
   container: OpaqueRoot,
@@ -262,7 +261,7 @@ export function updateContainer(
   lane: Lane,
   eventTime: number
 ) {
-  // 检查是否有嵌套更新，如果嵌套超过50层，终止调度
+  // 检查是否有嵌套更新，如果嵌套超过 50 层，终止调度
   checkForNestedUpdates();
   // 标记从 fiberNode 到 fiberRoot 的更新时间
   const root = markUpdateLaneFromFiberToRoot(fiber, lane);
@@ -301,7 +300,7 @@ export function updateContainer(
       schedulePendingInteractions(root, lane);
       /**
        * 一种边缘情况：在 batchedUpdates 内部，
-       * ReactDOM.render 渲染的 root 节点挂载应该是同步的
+       * ReactDOM.render 渲染的 root 节点挂载应该是同步的，
        * 而布局更新应该推迟到批处理结束
        */
       performSyncWorkOnRoot(root);
@@ -345,7 +344,7 @@ export function updateContainer(
    */
   mostRecentlyUpdatedRoot = root;
 }
-</code></pre><p>未完待续...</p><h3 id=scheduler-任务调度>scheduler（任务调度）</h3><p>对任务按照优先级进行调度（高优先级的任务打断低优先级的任务的执行），所有任务保存在最小堆中（方便取出优先级最高的任务）。</p><ul><li>调度任务的入口：</li></ul><p>&nbsp;</p><pre><code class=language-ts>function unstable_scheduleCallback(priorityLevel, callback, options) {
+</code></pre><h3 id=scheduler-任务调度>scheduler（任务调度）</h3><p>对任务按照优先级进行调度（高优先级的任务打断低优先级的任务的执行），所有任务保存在最小堆中（方便取出优先级最高的任务）。</p><ul><li>调度任务的入口：</li></ul><p>&nbsp;</p><pre><code class=language-ts>function unstable_scheduleCallback(priorityLevel, callback, options) {
   var currentTime = getCurrentTime();
   var startTime;
   // 根据 option 计算任务最早开始时间（任务不能早于这个时间运行）
@@ -418,13 +417,7 @@ export function updateContainer(
   }
   return newTask;
 }
-</code></pre><p>&nbsp;</p><ul><li>任务优先级：</li></ul><p>&nbsp;</p><pre><code class=language-ts>export const NoPriority = 0;
-export const ImmediatePriority = 1;
-export const UserBlockingPriority = 2;
-export const NormalPriority = 3;
-export const LowPriority = 4;
-export const IdlePriority = 5;
-</code></pre><h3 id=reconciler-render-阶段>reconciler（render 阶段）</h3><p>通过组件返回的 React 元素和 current 树构建 workInProgress 树，找出前后变化并打上<strong>标记</strong>，将所有变化收集到 effectList 链表（链表对异步友好的；链表在循环时不用每次都进入递归函数，重新生成什么执行上下文，变量对象，激活对象，性能比递归好）里。</p><ul><li><p>current 与 workInProgress：</p><ul><li>在 React 应用中最多会同时存在两棵 fiber 树，current 树对应当前渲染完成的视图；当状态更新后会在内存中构建 workInProgress 树；</li><li>当 fiberRoot 的 current 指针指向 workInProgress 时，workInProgress 树也就成为了 current 树；</li><li>每次状态更新都会在内存中构建 workInProgress 树，应用通过 current 与 workInProgress 的替换完成更新；</li><li>current 树的节点与 workInProgress 树的节点通过自身 alternate 指向对方。</li></ul></li><li><p>应用 mount（首次渲染）时：</p><ul><li>首次执行 ReactDOM.render 会创建 fiberRoot（应用根节点）和 rootFiber（组件树根节点）；</li><li>fiberRoot 有两个指针，current 指向 current 树，finishedWork 指向 workInProgress 树；</li><li>多次调用 ReactDOM.render 渲染不同的组件树，他们会拥有不同的 rootFiber；但是 fiberRoot 只有一个；</li><li>fiberRoot 的 current 指针会指向当前页面上已渲染内容对应 fiber 树（current）；</li><li>首次渲染时页面没有内容，current 树为空；接下来会在内存中创建 fiberNode，构成 workInProgress；</li><li>workInProgress 会在 commit 阶段同步渲染到视图中。</li></ul></li><li><p>应用 update（状态变化）时：</p><ul><li>应用重新进入 render 阶段，调用组件 render 方法，重新构建 workInProgress；</li><li>workInProgress 会和当前的 current 进行比较，并在需要改变的节点打上<strong>标记</strong>；</li><li>根据收集到的标记，更新视图。</li></ul></li></ul><h3 id=renderer-commit-阶段>renderer（commit 阶段）</h3><p>遍历 effectList，将 effect 更新到视图上（ReactArt、ReactDOM、ReactNative）；这个阶段是同步的，不能被打断：</p><ul><li>beforeMutation（渲染前）：遍历 effectList 并调用 commitBeforeMutationEffects；调用 getSnapshotBeforeUpdate；异步调用 useEffect：</li></ul><p>&nbsp;</p><pre><code class=language-ts>function commitRoot(root) {
+</code></pre><h3 id=reconciler-render-阶段>reconciler（render 阶段）</h3><p>通过组件返回的 React 元素和 current 树构建 workInProgress 树，找出前后变化并打上<strong>标记</strong>，将所有变化收集到 effectList 链表（链表对异步友好的；链表在循环时不用每次都进入递归函数，重新生成执行上下文，变量对象，激活对象，性能比递归好）里。</p><ul><li><p>current 与 workInProgress：</p><ul><li>在 React 应用中最多会同时存在两棵 fiber 树，current 树对应当前渲染完成的视图；当状态更新后会在内存中构建 workInProgress 树；</li><li>当 fiberRoot 的 current 指针指向 workInProgress 时，workInProgress 树也就成为了 current 树；</li><li>每次状态更新都会在内存中构建 workInProgress 树，应用通过 current 与 workInProgress 的替换完成更新；</li><li>current 树的节点与 workInProgress 树的节点通过自身 alternate 指向对方。</li></ul></li><li><p>应用 mount（首次渲染）时：</p><ul><li>首次执行 ReactDOM.render 会创建 fiberRoot（应用根节点）和 rootFiber（组件树根节点）；</li><li>fiberRoot 有两个指针，current 指向 current 树，finishedWork 指向 workInProgress 树；</li><li>多次调用 ReactDOM.render 渲染不同的组件树，他们会拥有不同的 rootFiber；但是 fiberRoot 只有一个；</li><li>fiberRoot 的 current 指针会指向当前页面上已渲染内容对应 fiber 树（current）；</li><li>首次渲染时页面没有内容，current 树为空；接下来会在内存中创建 fiberNode，构成 workInProgress；</li><li>workInProgress 会在 commit 阶段同步渲染到视图中。</li></ul></li><li><p>应用 update（状态变化）时：</p><ul><li>应用重新进入 render 阶段，调用组件 render 方法，重新构建 workInProgress；</li><li>workInProgress 会和当前的 current 进行比较，并在需要改变的节点打上<strong>标记</strong>；</li><li>根据收集到的标记，更新视图。</li></ul></li></ul><h3 id=renderer-commit-阶段>renderer（commit 阶段）</h3><p>遍历 effectList，将 effect 更新到视图上（ReactArt、ReactDOM、ReactNative）；这个阶段是同步的，不能被打断：</p><ul><li>beforeMutation（渲染前）：遍历 effectList 并调用 commitBeforeMutationEffects；调用 getSnapshotBeforeUpdate；异步调用 useEffect：</li></ul><p>&nbsp;</p><pre><code class=language-ts>function commitRoot(root) {
   const renderPriorityLevel = getCurrentPriorityLevel();
   runWithPriority(
     ImmediateSchedulerPriority,
@@ -956,8 +949,8 @@ function FiberNode(
   this.index = 0;
   // 保存本次更新造成的状态改变相关信息
   this.pendingProps = pendingProps; // 新的 props
-  this.memoizedProps = null; // 经过所有流程处理后的新props
-  this.memoizedState = null; // 经过所有流程处理后的新state
+  this.memoizedProps = null; // 经过所有流程处理后的新 props
+  this.memoizedState = null; // 经过所有流程处理后的新 state
   this.updateQueue = null; // 更新队列，存放着将要触发的更新
   this.dependencies = null;
   // 保存本次更新会造成的 DOM 操作，需要在 commit 阶段应用到视图上
@@ -1145,7 +1138,7 @@ function workLoopConcurrent() {
     /**
      * update 阶段，diff 两棵树上的 fiberNode
      * reconcileChildFibers 会生成带有 effectTag 属性的 fiberNode
-     * 如果当前的 current 子节点与和 workInProgress 中的相同
+     * 如果当前的 current 子节点和 workInProgress 中的相同
      * 这说明我们还没有开始对这些子节点进行任何操作
      * 所以，我们使用克隆算法来创建所有 chidren
      */
@@ -1238,7 +1231,7 @@ export const Deletion = /*                     */ 0b000000000000001000;
     // ...
   }
 }
-</code></pre><p>&nbsp;</p><ul><li>effectList：除了构建 workInProgress，completeUnitOfWork 还会将所有存在 effectTag 中的 fiberNode 保存在 effectList 单向链表中；在 commit 阶段，只需要遍历 effectList，执行所有 effect 就好。</li></ul><p>&nbsp;</p><pre><code class=language-pre>                      nextEffect        nextEffect
+</code></pre><p>&nbsp;</p><ul><li>effectList：除了构建 workInProgress，completeUnitOfWork 还会将所有存在 effectTag 中的 fiberNode 保存在 effectList 单向链表中；在 commit 阶段，只需要遍历 effectList，执行所有 effect 就好。</li></ul><p>&nbsp;</p><pre><code class=language-markdown>                      nextEffect        nextEffect
 rootFiber.firstEffect ----------&gt; fiber ----------&gt; fiber ----------&gt; ...
 </code></pre><p>render 阶段之后 fiberRoot 会被传递给 commitRoot，进入 commit 阶段。</p><h3 id=组件类型>组件类型</h3><pre><code class=language-ts>// 有状态组件
 export const ClassComponent = 1;
@@ -1353,7 +1346,7 @@ enqueueSetState(inst, payload, callback) {
 }
 </code></pre><p>&nbsp;</p><ul><li><p>legacy 模式：</p><pre><code class=language-jsx>ReactDOM.render(&lt;App /&gt;, rootNode);
 </code></pre><ul><li>在同步操作中，setState 是异步的；</li><li>在异步操作中，setState 是同步的；</li><li>创建的任务/更新均为同样的优先级。</li></ul></li><li><p>concurrent 模式：</p><pre><code class=language-jsx>ReactDOM.createRoot(rootNode).render(&lt;App /&gt;);
-</code></pre><ul><li>更急迫的更新可以“<strong>中断</strong>”已经开始的渲染；</li><li>创建的任务/更新有不同的优先级；</li><li>渲染过程可以被打断；</li><li>setState 是异步。</li></ul></li></ul><h3 id=生命周期>生命周期</h3><p>reconciler 阶段（render 阶段）；生成新的 fiber 树并收集本次<strong>要更新</strong>的点；对应的钩子为：</p><ul><li>constructor</li><li>static getDerivedStateFromProps</li><li>static getDerivedStateFromError（发生错误的组件不会触发自身的钩子）</li><li>shouldComponentUpdate</li><li>render</li></ul><p>commit 阶段（renderer 阶段）；将<strong>要更新</strong>的点 patch 到 DOM 上并切换 fiber 树；对应的钩子为：</p><ul><li>getSnapshotBeforeUpdate</li><li>componentDidMount</li><li>componentDidUpdate</li><li>componentDidCatch（发生错误的组件不会触发自身的钩子）</li><li>componentWillUnmount</li></ul><p><img src=/react-design/lifecycle.png alt="Local Image"></p><p><a href=https://zhuanlan.zhihu.com/p/37095662#为什么要对生命周期钩子大换血>为什么要对生命周期钩子大换血？（来自“司徒正美”）</a></p><p>组件在挂载过程中会调三次钩子（constructor、componentWillMount、render），组件在更新过程中会调四次钩子（componentWillReceiveProps、shouldUpdate、componentWillUpdate），总不能每个方法都用 try...catch...包起来，这样会性能很差。而 constructor、render 是不可避免的，于是对三个 willXXX 动刀了。</p><p>在早期版本中，componentWillMount 与 componentWillReceiveProps 会做内部优化，执行多次 setState 都会延后到 render 时进行合并处理。因此用户就肆意 setState 了。这些 willXXX 还可以让用户任意操作 DOM。操作 DOM 会可能 reflow，这是官方不愿意看到的。于是官方推出了 getDerivedStateFromProps，让你在 render 设置新 state，你主要返回一个新对象，它就主动帮你 setState。由于这是一个静态方法，你不能操作 instance，这就阻止了你多次操作 setState。由于没有 instance，也就没有 instance.refs.xxx，你也没有机会操作 DOM 了。这样一来，getDerivedStateFromProps 的逻辑应该会很简单，这样就不会出错，不会出错，就不会打断 DFS 过程。</p><p>getDerivedStateFromProps 取代了原来的 componentWillMount 与 componentWillReceiveProps 方法，而 componentWillUpdate 本来就是可有可无，以前完全是为了对称好看。在即使到来的异步更新中，render 阶段可能执行多次，才执行一次 commit；这样也会导致 willXXX 钩子执行多次，违反它们的语义，它们的废弃是不可逆转的。在进入 commit 阶段时，组件多了一个新钩子叫 getSnapshotBeforeUpdate，它与 commit 阶段的钩子一样只执行一次。如果出错呢，在 componentDidMount/Update 后，我们可以使用 componentDidCatch 方法。</p><p>render 阶段的钩子都不应该操作 DOM，最好也不要 setState，我们称之为<strong>轻量钩子</strong>；commit 阶段的钩子则对应称之为<strong>重量钩子</strong>。</p><ul><li>constructor</li></ul><p>&nbsp;</p><pre><code class=language-ts>/**
+</code></pre><ul><li>更急迫的更新可以“<strong>中断</strong>”已经开始的渲染；</li><li>创建的任务/更新有不同的优先级；</li><li>渲染过程可以被打断；</li><li>setState 是异步。</li></ul></li></ul><h3 id=生命周期>生命周期</h3><p>reconciler 阶段（render 阶段）；生成新的 fiber 树并收集本次<strong>要更新</strong>的点；对应的钩子为：</p><ul><li>constructor</li><li>static getDerivedStateFromProps</li><li>static getDerivedStateFromError（发生错误的组件不会触发自身的钩子）</li><li>shouldComponentUpdate</li><li>render</li></ul><p>commit 阶段（renderer 阶段）；将<strong>要更新</strong>的点 patch 到 DOM 上并切换 fiber 树；对应的钩子为：</p><ul><li>getSnapshotBeforeUpdate</li><li>componentDidMount</li><li>componentDidUpdate</li><li>componentDidCatch（发生错误的组件不会触发自身的钩子）</li><li>componentWillUnmount</li></ul><p><img src=/react-design/lifecycle.png alt="Local Image"></p><p><a href=https://zhuanlan.zhihu.com/p/37095662#为什么要对生命周期钩子大换血>为什么要对生命周期钩子大换血？（来自“司徒正美”）</a></p><p>组件在挂载过程中会调三次钩子（constructor、componentWillMount、render），组件在更新过程中会调四次钩子（componentWillReceiveProps、shouldComponentUpdate、componentWillUpdate），总不能每个方法都用 try...catch... 包起来，这样会性能很差。而 constructor、render 是不可避免的，于是对三个 willXXX 动刀了。</p><p>在早期版本中，componentWillMount 与 componentWillReceiveProps 会做内部优化，执行多次 setState 都会延后到 render 时进行合并处理。因此用户就肆意 setState 了。这些 willXXX 还可以让用户任意操作 DOM。操作 DOM 会可能 reflow，这是官方不愿意看到的。于是官方推出了 getDerivedStateFromProps，让你在 render 设置新 state，你主要返回一个新对象，它就主动帮你 setState。由于这是一个静态方法，你不能操作 instance，这就阻止了你多次操作 setState。由于没有 instance，也就没有 instance.refs.xxx，你也没有机会操作 DOM 了。这样一来，getDerivedStateFromProps 的逻辑应该会很简单，这样就不会出错，不会出错，就不会打断 DFS 过程。</p><p>getDerivedStateFromProps 取代了原来的 componentWillMount 与 componentWillReceiveProps 方法，而 componentWillUpdate 本来就是可有可无，以前完全是为了对称好看。在即使到来的异步更新中，render 阶段可能执行多次，才执行一次 commit；这样也会导致 willXXX 钩子执行多次，违反它们的语义，它们的废弃是不可逆转的。在进入 commit 阶段时，组件多了一个新钩子叫 getSnapshotBeforeUpdate，它与 commit 阶段的钩子一样只执行一次。如果出错呢，在 componentDidMount/Update 后，我们可以使用 componentDidCatch 方法。</p><p>render 阶段的钩子都不应该操作 DOM，最好也不要 setState，我们称之为<strong>轻量钩子</strong>；commit 阶段的钩子则对应称之为<strong>重量钩子</strong>。</p><ul><li>constructor</li></ul><p>&nbsp;</p><pre><code class=language-ts>/**
  * 以下情况会调用 constructClassInstance（构建类组件实例）：
  * 1. updateClassComponent（如果 instance 为 null）
  * 2. mountIncompleteClassComponent
