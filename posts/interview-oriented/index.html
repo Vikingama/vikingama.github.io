@@ -1,4 +1,4 @@
-<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no,user-scalable=no"><meta name=author content=馬腊咯稽><meta name=description content=面向面试编程><meta name=keywords content=面试><link rel=canonical href=https://vikingama.github.io/posts/interview-oriented/><link rel="shortcut icon" href=https://vikingama.github.io/images/favicon.ico><link rel=stylesheet href=https://vikingama.github.io/css/zozo.css><link rel=stylesheet href=https://vikingama.github.io/css/animate.css><link rel=stylesheet href=https://vikingama.github.io/css/highlight.css><link rel=stylesheet href=https://vikingama.github.io/css/remixicon.css><title>面向面试编程 &middot; 庙小妖风大 · 水浅王八多</title></head><body><div class="main animated"><div class="nav_container animated fadeInDown"><div class=site_nav id=site_nav><ul><li><a href=/>首页</a></li><li><a href=/posts/>归档</a></li><li><a href=/inspires/>启发</a></li><li><a href=/command/>命令</a></li><li><a href=/about/>关于</a></li></ul></div><div class=menu_icon><a id=menu_icon><i class=remixicon-links-line></i></a></div></div><div class="header animated fadeInDown"><div class=site_title_container><div class=site_title><h1><a href=https://vikingama.github.io><img style=width:65px;height:auto;vertical-align:top src=https://vikingama.github.io/images/avatar.png></a></h1></div><div class=description><p class=sub_title>庙小妖风大<br>水浅王八多</p><div class=my_socials><a href=https://www.douban.com/people/nicknoonan title=douban target=_blank><i class=remixicon-douban-fill></i></a><a href=https://github.com/Vikingama title=github target=_blank><i class=remixicon-github-fill></i></a><a href=https://weibo.com/vikingx title=weibo target=_blank><i class=remixicon-weibo-fill></i></a><a href=https://www.zhihu.com/people/vikingama title=zhihu target=_blank><i class=remixicon-zhihu-fill></i></a><a href=https://vikingama.github.io/index.xml type=application/rss+xml title=rss target=_blank><i class=remixicon-rss-fill></i></a></div></div></div></div><div class=content><div class=post_page><div class="post animated fadeInDown"><div class="post_title post_detail_title"><h2><a href=/posts/interview-oriented/>面向面试编程</a></h2><span class=date>2020.03.11</span></div><div class="post_content markdown"><blockquote><p>好烦刷面试题。</p></blockquote><h3 id=for-循环打印-0-9>for 循环打印 0-9</h3><pre><code class=language-js>for (var i = 0; i &lt; 10; i++) {
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no,user-scalable=no"><meta name=author content=馬腊咯稽><meta name=description content=面向面试编程><meta name=keywords content=面试><link rel=canonical href=https://vikingama.github.io/posts/interview-oriented/><link rel="shortcut icon" href=https://vikingama.github.io/images/favicon.ico><link rel=stylesheet href=https://vikingama.github.io/css/zozo.css><link rel=stylesheet href=https://vikingama.github.io/css/animate.css><link rel=stylesheet href=https://vikingama.github.io/css/highlight.css><link rel=stylesheet href=https://vikingama.github.io/css/remixicon.css><title>面向面试编程 &middot; 庙小妖风大 · 水浅王八多</title></head><body><div class="main animated"><div class="nav_container animated fadeInDown"><div class=site_nav id=site_nav><ul><li><a href=/>首页</a></li><li><a href=/posts/>归档</a></li><li><a href=/resume/>简历</a></li><li><a href=/inspires/>启发</a></li><li><a href=/command/>命令</a></li><li><a href=/about/>关于</a></li></ul></div><div class=menu_icon><a id=menu_icon><i class=remixicon-links-line></i></a></div></div><div class="header animated fadeInDown"><div class=site_title_container><div class=site_title><h1><a href=https://vikingama.github.io><img style=width:65px;height:auto;vertical-align:top src=https://vikingama.github.io/images/avatar.png></a></h1></div><div class=description><p class=sub_title>庙小妖风大<br>水浅王八多</p><div class=my_socials><a href=https://www.douban.com/people/nicknoonan title=douban target=_blank><i class=remixicon-douban-fill></i></a><a href=https://github.com/Vikingama title=github target=_blank><i class=remixicon-github-fill></i></a><a href=https://weibo.com/vikingx title=weibo target=_blank><i class=remixicon-weibo-fill></i></a><a href=https://www.zhihu.com/people/vikingama title=zhihu target=_blank><i class=remixicon-zhihu-fill></i></a><a href=https://vikingama.github.io/index.xml type=application/rss+xml title=rss target=_blank><i class=remixicon-rss-fill></i></a></div></div></div></div><div class=content><div class=post_page><div class="post animated fadeInDown"><div class="post_title post_detail_title"><h2><a href=/posts/interview-oriented/>面向面试编程</a></h2><span class=date>2020.03.11</span></div><div class="post_content markdown"><blockquote><p>好烦刷面试题。</p></blockquote><h3 id=for-循环打印-0-9>for 循环打印 0-9</h3><pre><code class=language-js>for (var i = 0; i &lt; 10; i++) {
   (function (i) {
     setTimeout(() =&gt; {
       console.log(i);
@@ -1210,39 +1210,6 @@ function seventTwo(num) {
 
 console.log(sevenOne(3));
 console.log(seventTwo(3));
-</code></pre><h3 id=找出字符串中-连续-出现最多的字符和个数>找出字符串中『连续』出现最多的字符和个数</h3><pre><code class=language-js>/**
- * 'abcaakjbb' =&gt; {'a':2,'b':2}
- * 'abbkejsbcccwqaa' =&gt; {'c':3}
- */
-let str = 'abcaaakjbbbabbkejsbcccwqaaaa';
-
-function findContinuous(str) {
-  let temp = {};
-  let count = 0;
-  let maxCount = 0;
-  let pk = str[0];
-
-  for (let i = 1; i &lt; str.length; i++) {
-    const item = str[i];
-    if (pk === item) {
-      count++;
-      if (count &gt; maxCount) {
-        temp = { [item]: count };
-        maxCount = count;
-      }
-      if (count === maxCount) {
-        temp[item] = count;
-      }
-    } else {
-      pk = item;
-      count = 1;
-    }
-  }
-
-  return temp;
-}
-
-console.log(findContinuous(str));
 </code></pre><h3 id=字符串排序>字符串排序</h3><pre><code class=language-js>// 红蓝蓝黄红黄蓝红红黄红，排序后为：黄黄黄红红红红红蓝蓝蓝
 function sortStr(str) {
   let temp = str.split('');
