@@ -1042,7 +1042,12 @@ function workLoopConcurrent() {
     performUnitOfWork(workInProgress);
   }
 }
-</code></pre><p>&nbsp;</p><ul><li>“递”阶段（beginWork）：传入<strong>当前 fiberNode</strong>，创建<strong>子 fiberNode</strong>；</li></ul><p>&nbsp;</p><pre><code class=language-ts>function beginWork(
+</code></pre><p>&nbsp;</p><ul><li>“递”阶段（beginWork）：传入<strong>当前 fiberNode</strong>，创建<strong>子 fiberNode</strong>；</li></ul><p>&nbsp;</p><pre><code class=language-ts>/**
+ * 从 rootFiber 开始向下深度优先遍历；为遍历到的每个 fiberNode 调用 beginWork 方法
+ * 该方法会根据传入的 fiberNode 创建子 fiberNode，并将这两个 fiberNode 连接起来
+ * 当遍历到“没有子组件的组件”时就会进入“归”阶段
+ */
+function beginWork(
   current, // 上一次更新的 fiberNode（workInProgress.alternate）
   workInProgress, // 当前组件对应的 fiberNode
   renderLanes // 渲染优先级
@@ -1155,7 +1160,13 @@ export const Update = /*                       */ 0b000000000000000100;
 export const PlacementAndUpdate = /*           */ 0b000000000000000110;
 export const Deletion = /*                     */ 0b000000000000001000;
 // ...
-</code></pre><p>&nbsp;</p><ul><li>“归”阶段（completeWork）：</li></ul><p>&nbsp;</p><pre><code class=language-ts>function completeWork(current, workInProgress, renderLanes) {
+</code></pre><p>&nbsp;</p><ul><li>“归”阶段（completeWork）：</li></ul><p>&nbsp;</p><pre><code class=language-ts>/**
+ * 当某个 fiberNode 执行完 completeWork，如果其存在兄弟 fiberNode（fiber.sibling !== null），会进入其兄弟 fiberNode 的“递”阶段
+ * 如果不存在兄弟 fiberNode，会进入父级 fiber 的“归”阶段
+ * “递”和“归”阶段会交错执行，直到“归”到 rootFiber
+ * 至此，render 阶段的工作就结束了
+ */
+function completeWork(current, workInProgress, renderLanes) {
   const newProps = workInProgress.pendingProps;
   switch (workInProgress.tag) {
     case IndeterminateComponent:
@@ -1232,6 +1243,7 @@ export const Deletion = /*                     */ 0b000000000000001000;
   }
 }
 </code></pre><p>&nbsp;</p><ul><li>effectList：除了构建 workInProgress，completeUnitOfWork 还会将所有存在 effectTag 中的 fiberNode 保存在 effectList 单向链表中；在 commit 阶段，只需要遍历 effectList，执行所有 effect 就好。</li></ul><p>&nbsp;</p><pre><code class=language-markdown>                      nextEffect        nextEffect
+
 rootFiber.firstEffect ----------&gt; fiber ----------&gt; fiber ----------&gt; ...
 </code></pre><p>render 阶段之后 fiberRoot 会被传递给 commitRoot，进入 commit 阶段。</p><h3 id=组件类型>组件类型</h3><pre><code class=language-ts>// 有状态组件
 export const ClassComponent = 1;
