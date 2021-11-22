@@ -819,11 +819,7 @@ function reconcileChildFibers(
 ) {
   /**
    * 这个算法不能通过从两端搜索来优化，和 newChildren 中每个组件相比较的是 currentFiber；
-   * 同级 fiber 是由 sibling 指针链接的单链表，不支持双指针遍历；
-   * 即 newChildren[0] 与 fiber 比较，newChildren[1] 与 fiber.sibling 比较。
-   * diff 会进行两轮遍历：
-   * 1. 处理更新的节点；
-   * 2. 处理不属于更新的节点。
+   * newChildren[0] 与 fiber 比较，newChildren[1] 与 fiber.sibling 比较。
    */
   let resultingFirstChild = null;
   let previousNewFiber = null;
@@ -831,6 +827,7 @@ function reconcileChildFibers(
   let lastPlacedIndex = 0;
   let newIdx = 0;
   let nextOldFiber = null;
+  // 首先遍历 newChildren
   for (; oldFiber !== null &amp;&amp; newIdx &lt; newChildren.length; newIdx++) {
     if (oldFiber.index &gt; newIdx) {
       nextOldFiber = oldFiber;
@@ -887,7 +884,7 @@ function reconcileChildFibers(
     }
     return resultingFirstChild;
   }
-  // 将没有处理的 oldFiber 存入 map
+  // newChildren 与 oldFiber 都没遍历完，将没有处理的 oldFiber 存入 map
   const existingChildren = mapRemainingChildren(returnFiber, oldFiber);
   // 遍历剩余的 newChildren
   for (; newIdx &lt; newChildren.length; newIdx++) {
@@ -1141,7 +1138,7 @@ function beginWork(
     );
   } else {
     /**
-     * update 阶段，diff 两棵树上的 fiberNode
+     * update 阶段，diff 两棵树上的 fiberNode，进行复用（diff 算法）
      * reconcileChildFibers 会生成带有 effectTag 属性的 fiberNode
      * 如果当前的 current 子节点和 workInProgress 中的相同
      * 这说明我们还没有开始对这些子节点进行任何操作
@@ -1164,7 +1161,6 @@ export const Deletion = /*                     */ 0b000000000000001000;
  * 当某个 fiberNode 执行完 completeWork，如果其存在兄弟 fiberNode（fiber.sibling !== null），会进入其兄弟 fiberNode 的“递”阶段
  * 如果不存在兄弟 fiberNode，会进入父级 fiber 的“归”阶段
  * “递”和“归”阶段会交错执行，直到“归”到 rootFiber
- * 至此，render 阶段的工作就结束了
  */
 function completeWork(current, workInProgress, renderLanes) {
   const newProps = workInProgress.pendingProps;
@@ -1242,7 +1238,7 @@ function completeWork(current, workInProgress, renderLanes) {
     // ...
   }
 }
-</code></pre><p>&nbsp;</p><ul><li>effectList：除了构建 workInProgress，completeUnitOfWork 还会将所有存在 effectTag 中的 fiberNode 保存在 effectList 单向链表中；在 commit 阶段，只需要遍历 effectList，执行所有 effect 就好。</li></ul><p>&nbsp;</p><pre><code class=language-markdown>                      nextEffect        nextEffect
+</code></pre><p>&nbsp;</p><ul><li>effectList：除了构建 workInProgress，completeUnitOfWork 还会将所有存在 effectTag 中的 fiberNode 保存在 effectList 单向链表中（仅保存 fiberNode，fiberNode 上的 effect 在 commit 阶段会被剪开）；在 commit 阶段，只需要遍历 effectList，执行所有 effect 就好。</li></ul><p>&nbsp;</p><pre><code class=language-markdown>                      nextEffect        nextEffect
 
 rootFiber.firstEffect ----------&gt; fiber ----------&gt; fiber ----------&gt; ...
 </code></pre><p>render 阶段之后 fiberRoot 会被传递给 commitRoot，进入 commit 阶段。</p><h3 id=组件类型>组件类型</h3><pre><code class=language-ts>// 有状态组件
