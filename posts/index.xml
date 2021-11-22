@@ -12,9 +12,7 @@
 &lt;p&gt;非科班出身的难民；AVL、红黑树、二叉堆、图，你们牛逼。&lt;/p&gt;
 &lt;/blockquote&gt;</description></item><item><title>重读《深入浅出 Node.js》</title><link>https://vikingama.github.io/posts/node-learn-notes/</link><pubDate>Sun, 02 Aug 2020 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/posts/node-learn-notes/</guid><description>&lt;blockquote&gt;
 &lt;p&gt;一直在学 Node，从来没有成功过。&lt;/p&gt;
-&lt;/blockquote&gt;</description></item><item><title>如何在组件卸载时取消请求？</title><link>https://vikingama.github.io/posts/cancel-request/</link><pubDate>Sun, 10 May 2020 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/posts/cancel-request/</guid><description>&lt;blockquote&gt;
-&lt;p&gt;最近接触到了一些复杂的 Vue 项目，发现在组件销毁时，组件里的请求也会取消。&lt;/p&gt;
-&lt;/blockquote&gt;</description></item><item><title>Renderless Component</title><link>https://vikingama.github.io/posts/renderless-component/</link><pubDate>Wed, 29 Apr 2020 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/posts/renderless-component/</guid><description>&lt;blockquote&gt;
+&lt;/blockquote&gt;</description></item><item><title>基于作用域插槽的 Renderless 组件</title><link>https://vikingama.github.io/posts/renderless-component/</link><pubDate>Wed, 29 Apr 2020 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/posts/renderless-component/</guid><description>&lt;blockquote&gt;
 &lt;p&gt;昨天面试被问到了 Renderless 组件，一脸懵逼。&lt;/p&gt;
 &lt;/blockquote&gt;</description></item><item><title>TypeScript 复习总结（二）</title><link>https://vikingama.github.io/posts/ts-tips/</link><pubDate>Fri, 24 Apr 2020 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/posts/ts-tips/</guid><description>&lt;blockquote&gt;
 &lt;p&gt;不喜欢 TS 的原因是在写业务代码时，注意力总被类型系统吸引过去。&lt;/p&gt;
