@@ -1018,33 +1018,6 @@ console.log(
       a.codePointAt(1) - b.codePointAt(1)
   )
 );
-</code></pre><h3 id=冒泡排序>冒泡排序</h3><pre><code class=language-js>function randomArr(length) {
-  let arr = [];
-
-  for (let i = 0; i &lt; length; i++) {
-    arr.push(Math.floor(Math.random() * (length + 1)));
-  }
-
-  return arr;
-}
-function bubble(arr) {
-  console.time('bubble');
-  for (let i = 0; i &lt; arr.length; i++) {
-    for (let j = 0; j &lt; arr.length - i - 1; j++) {
-      if (arr[j] &gt; arr[j + 1]) {
-        let temp = arr[j];
-        arr[j] = arr[j + 1];
-        arr[j + 1] = temp;
-      }
-    }
-  }
-  console.timeEnd('bubble');
-  return arr;
-}
-const ea = randomArr(1000);
-console.log(ea);
-const eb = bubble(ea);
-console.log(eb);
 </code></pre><h3 id=计算数组交集>计算数组交集</h3><pre><code class=language-js>function randomArr(length) {
   let arr = [];
 
