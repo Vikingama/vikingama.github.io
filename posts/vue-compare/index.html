@@ -54,7 +54,7 @@ export function popTarget() {
 </code></pre><p>Watcher 实例被称作依赖（收集起来）或者订阅者，它<strong>观察/订阅了</strong>数据变动；数据的 getter 被触发时，watcher 会被收集起来；数据的 setter 被调用时，watcher 会触发相应的副作用函数：</p><ul><li>在 mountComponent 中会 new Watcher(...) 作为组件的 renderWatcher；同时在组件 update 时，会调用 watcher.before 来触发 beforeUpdate 钩子；</li><li>每次调用 vm.$watch 或者组件的 watchOptions 都会 new Watcher(...)；</li><li>组件的 computedOptions 也会 new Watcher(...)。</li></ul><p>&nbsp;</p><pre><code class=language-ts>/**
  * 对于 vm.$watch('a.b.c', function () {}, {...})
  * 只需要把 watcher 添加到 a.b.c 的订阅者列表中去
- * 每个组件实例、computed、watch 都对应一个 watcher
+ * 每个组件实例 computed、watch 都对应一个 watcher
  * 组件在初始化的时候会 new 一个 watcher
  */
 export default class Watcher {
@@ -2360,81 +2360,7 @@ export function computed&lt;T&gt;(
     isFunction(getterOrOptions) || !getterOrOptions.set
   ) as any;
 }
-</code></pre><h3 id=diff-2-x>diff 2.x</h3><pre><code class=language-ts>// 初始化构造函数
-function Vue(options) {
-  this._init(options);
-}
-/**
- * Vue.prototype._init = function (){
- *      initLifecycle(vm)
- *      initEvents(vm)
- *      initRender(vm)
- *      callHook(vm, 'beforeCreate')
- *      initInjections(vm)
- *      initState(vm)
- *      initProvide(vm)
- *      callHook(vm, 'created')
- *      vm.$options.el &amp;&amp; vm.$mount(vm.$options.el)
- * }
- */
-initMixin(Vue);
-/**
- * Object.defineProperty(Vue.prototype, '$data', dataDef)
- * Object.defineProperty(Vue.prototype, '$props', propsDef)
- * Vue.prototype.$set = function (){...}
- * Vue.prototype.$delete = function (){...}
- * Vue.prototype.$watch = function (){...}
- */
-stateMixin(Vue);
-/**
- * Vue.prototype.$on = function (){...}
- * Vue.prototype.$once = function (){...}
- * Vue.prototype.$off = function (){...}
- * Vue.prototype.$emit = function (){...}
- */
-eventsMixin(Vue);
-/**
- * Vue.prototype._update = function (){...}
- * Vue.prototype.$forceUpdate = function (){...}
- * Vue.prototype.$destroy = function (){...}
- */
-lifecycleMixin(Vue);
-/**
- * installRenderHelpers(Vue.prototype) 向 Vue 原型链上添加运行时辅助渲染工具
- * Vue.prototype.$nextTick = function (){...}
- * Vue.prototype._render = function (){...}
- */
-renderMixin(Vue);
-/**
- * Object.defineProperty(Vue, 'config', configDef)
- * Vue.util = {...}
- * Vue.set = set
- * Vue.delete = del
- * Vue.nextTick = nextTick
- * Vue.observable = funtion (){...}
- * extend(Vue.options.components, builtInComponents)
- * Vue.use = function (){...}
- * Vue.mixin = function (){...}
- * Vue.extend = function (){...}
- * Vue.component = function (){...}
- * Vue.directive = function (){...}
- * Vue.filter = function (){...}
- */
-initGlobalAPI(Vue);
-Object.defineProperty(Vue, 'FunctionalRenderContext', {
-  value: FunctionalRenderContext
-});
-Vue.version = 'xxx';
-Vue.config.mustUseProp = mustUseProp;
-Vue.config.isReservedTag = isReservedTag;
-Vue.config.isReservedAttr = isReservedAttr;
-Vue.config.getTagNamespace = getTagNamespace;
-Vue.config.isUnknownElement = isUnknownElement;
-extend(Vue.options.directives, platformDirectives);
-extend(Vue.options.components, platformComponents);
-Vue.prototype.__patch__ = patch;
-Vue.compile = compileToFunctions;
-// 挂载
+</code></pre><h3 id=diff-2-x>diff 2.x</h3><pre><code class=language-ts>// 挂载
 export function mountComponent(
   vm: Component,
   el: ?Element,
@@ -4063,9 +3989,7 @@ const updateComponent = (n1: VNode, n2: VNode, optimized: boolean) =&gt; {
     instance.vnode = n2;
   }
 };
-/**
- * patch-processComponent-updateComponent-updateComponentPreRender
- */
+// patch-processComponent-updateComponent-updateComponentPreRender
 const updateComponentPreRender = (
   instance: ComponentInternalInstance,
   nextVNode: VNode,
@@ -4568,7 +4492,7 @@ export function nextTick(
   const p = currentFlushPromise || resolvedPromise;
   return fn ? p.then(this ? fn.bind(this) : fn) : p;
 }
-$nextTick: i =&gt; nextTick.bind(i.proxy!),
+// $nextTick: i =&gt; nextTick.bind(i.proxy!)
 </code></pre><h3 id=vnode-2-x>vnode 2.x</h3><pre><code class=language-ts>/**
  * 调用场景：
  * 1. createComponent 中 new VNode(...)
@@ -4607,9 +4531,8 @@ export default class VNode {
     /**
      * vm.$options.parent：子组件渲染执行 vm.__patch__ 时当前活跃的组件实例，也就是子组件实例的父组件实例
      * vm.$parent：组件实例的第一个“非抽象”的父组件实例
-     * vnode.parent：组件占位 vnode，不会出现在 DOM
      */
-    this.parent = undefined;
+    this.parent = undefined; // 组件占位 vnode，不会出现在 DOM
     this.raw = false; // 是否包含原生 HTML？
     this.isStatic = false; // 是否是静态提升节点
     this.isRootInsert = true; // 进入 transition 检查所必需的
@@ -4750,7 +4673,7 @@ export function cloneVNode(vnode) {
   };
   // vnode.key 不能为 NaN
   if (vnode.key !== vnode.key) {
-    warn(`VNode created with invalid key (NaN). VNode type:`, vnode.type);
+    warn(`VNode created with invalid key (NaN)`);
   }
   // 标准化子节点，把不同数据类型的 children 转成数组或者文本类型
   normalizeChildren(vnode, children);
@@ -5339,11 +5262,7 @@ export function stateMixin(Vue: Class&lt;Component&gt;) {
 }
 </code></pre><h3 id=watch-3-x>watch 3.x</h3><p>watch 需要侦听特定的数据源，并在单独的回调函数中（惰性）执行副作用；watchEffect 立即执行传入的一个函数，同时响应式追踪其依赖，并在其依赖变更时重新运行该函数。</p><pre><code class=language-ts>// watchers 在未定义初始值时触发的初始值
 const INITIAL_WATCHER_VALUE = {};
-/**
- * watch(() =&gt; state.count, (count, prevCount, onInvalidate) =&gt; {...}, {...})
- * Vue 不会自动生成 getter
- * 由用户指定
- */
+// watch(() =&gt; state.count, (count, prevCount, onInvalidate) =&gt; {...}, {...})
 export function watch(source, cb, options) {
   return doWatch(source, cb, options);
 }

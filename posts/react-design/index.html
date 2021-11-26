@@ -111,10 +111,10 @@ function createRootImpl(
    * 4. 从 EventTarget.__reactEvents 找到所有绑定的 listener（保存在 Set 里）
    * 5. listener 里如果没有 `${domEventName}__${capture ? 'capture' : 'bubble'}` 会执行 addTrappedEventListener
    * addTrappedEventListener(EventTarget, DOMEventName, EventSystemFlags, isCapture, isDeferred)
-   * 1. createEventListenerWrapperWithPriority 会根据事件类型，使用不同的优先级函数包裹 listener
-   *    a. dispatchDiscreteEvent
-   *    b. dispatchUserBlockingUpdate
-   *    c. dispatchEvent
+   * 1. createEventListenerWrapperWithPriority 会根据事件类型，使用不同的优先级函数包裹 listener（事件优先级）
+   *    a. dispatchDiscreteEvent 离散事件
+   *    b. dispatchUserBlockingUpdate 用户阻塞事件
+   *    c. dispatchEvent 连续事件
    * 2. 对于“touchstart”、“touchmove”、“wheel”三个事件，isPassive = true（提前告知浏览器，我没有阻止默认行为，不要害怕）
    * 3. 根据 isCapture 和 isPassive 将事件绑定分发给了四个函数 addEvent[Bubble/Capture]Listener[WithPassiveFlag]
    * 4. 调用原生 API：addEventListener 和 removeEventListener 进行事件的绑定和移除
@@ -1276,8 +1276,9 @@ export const LegacyHiddenComponent = 24;
 export function createUpdate(eventTime, lane) {
   // 表示一个需要进行变更的动作
   const update = {
-    eventTime, // 任务时间
-    lane, // 优先级
+    // 若优先级不够导致 update 一直没执行；React 会在任务超时后，调度 update
+    eventTime, // 任务时间（update 生成时间）
+    lane, // update 优先级
     tag: UpdateState, // UpdateState、ReplaceState、ForceUpdate、CaptureUpdate
     payload: null, // 更新挂载的数据
     /**
@@ -1285,8 +1286,8 @@ export function createUpdate(eventTime, lane) {
      * 就会在 updateQueue 的副作用链表中挂在当前 update
      * 具体逻辑在 processUpdateQueue 函数中
      */
-    callback: null,
-    next: null // 指向其他 update，所有 update 链接形成链表保存在 fiber.updateQueue
+    callback: null, // update 回调
+    next: null // 指向下一个 update，所有 update 链接形成链表保存在 fiber.updateQueue
   };
   return update;
 }
@@ -1326,19 +1327,20 @@ export function initializeUpdateQueue&lt;State&gt;(fiber: Fiber): void {
   };
   fiber.updateQueue = queue;
 }
-// setState
+// setState 会调用 enqueueSetState 生成一个 update
 Component.prototype.setState = function (partialState, callback) {
   if (!(typeof partialState === 'object' || typeof partialState === 'function' || partialState == null)) {
     // ...
   }
   this.updater.enqueueSetState(this, partialState, callback, 'setState');
 };
+// 触发更新优先级
 enqueueSetState(inst, payload, callback) {
   // 通过组件实例获取对应 fiber
   const fiber = getInstance(inst);
   const eventTime = requestEventTime();
   const suspenseConfig = requestCurrentSuspenseConfig();
-  // 获取优先级
+  // 获取优先级（根据事件的优先级来决定 update 优先级）
   const lane = requestUpdateLane(fiber, suspenseConfig);
   // 创建 update
   const update = createUpdate(eventTime, lane, suspenseConfig);
@@ -1347,14 +1349,14 @@ enqueueSetState(inst, payload, callback) {
   if (callback !== undefined &amp;&amp; callback !== null) {
     update.callback = callback;
   }
-  // 将 update 插入 updateQueue
+  // 将 setSate 产生的 update 插入 updateQueue
   enqueueUpdate(fiber, update);
   // 调度 update
   scheduleUpdateOnFiber(fiber, lane, eventTime);
 }
 </code></pre><p>&nbsp;</p><ul><li><p>legacy 模式：</p><pre><code class=language-jsx>ReactDOM.render(&lt;App /&gt;, rootNode);
 </code></pre><ul><li>在同步操作中，setState 是异步的；</li><li>在异步操作中，setState 是同步的；</li><li>创建的任务/更新均为同样的优先级。</li></ul></li><li><p>concurrent 模式：</p><pre><code class=language-jsx>ReactDOM.createRoot(rootNode).render(&lt;App /&gt;);
-</code></pre><ul><li>更急迫的更新可以“<strong>中断</strong>”已经开始的渲染；</li><li>创建的任务/更新有不同的优先级；</li><li>渲染过程可以被打断；</li><li>setState 是异步。</li></ul></li></ul><h3 id=生命周期>生命周期</h3><p>reconciler 阶段（render 阶段）；生成新的 fiber 树并收集本次<strong>要更新</strong>的点；对应的钩子为：</p><ul><li>constructor</li><li>static getDerivedStateFromProps</li><li>static getDerivedStateFromError（发生错误的组件不会触发自身的钩子）</li><li>shouldComponentUpdate</li><li>render</li></ul><p>commit 阶段（renderer 阶段）；将<strong>要更新</strong>的点 patch 到 DOM 上并切换 fiber 树；对应的钩子为：</p><ul><li>getSnapshotBeforeUpdate</li><li>componentDidMount</li><li>componentDidUpdate</li><li>componentDidCatch（发生错误的组件不会触发自身的钩子）</li><li>componentWillUnmount</li></ul><p><img src=/react-design/lifecycle.png alt="Local Image"></p><p><a href=https://zhuanlan.zhihu.com/p/37095662#为什么要对生命周期钩子大换血>为什么要对生命周期钩子大换血？（来自“司徒正美”）</a></p><p>组件在挂载过程中会调三次钩子（constructor、componentWillMount、render），组件在更新过程中会调四次钩子（componentWillReceiveProps、shouldComponentUpdate、componentWillUpdate），总不能每个方法都用 try...catch... 包起来，这样会性能很差。而 constructor、render 是不可避免的，于是对三个 willXXX 动刀了。</p><p>在早期版本中，componentWillMount 与 componentWillReceiveProps 会做内部优化，执行多次 setState 都会延后到 render 时进行合并处理。因此用户就肆意 setState 了。这些 willXXX 还可以让用户任意操作 DOM。操作 DOM 会可能 reflow，这是官方不愿意看到的。于是官方推出了 getDerivedStateFromProps，让你在 render 设置新 state，你主要返回一个新对象，它就主动帮你 setState。由于这是一个静态方法，你不能操作 instance，这就阻止了你多次操作 setState。由于没有 instance，也就没有 instance.refs.xxx，你也没有机会操作 DOM 了。这样一来，getDerivedStateFromProps 的逻辑应该会很简单，这样就不会出错，不会出错，就不会打断 DFS 过程。</p><p>getDerivedStateFromProps 取代了原来的 componentWillMount 与 componentWillReceiveProps 方法，而 componentWillUpdate 本来就是可有可无，以前完全是为了对称好看。在即使到来的异步更新中，render 阶段可能执行多次，才执行一次 commit；这样也会导致 willXXX 钩子执行多次，违反它们的语义，它们的废弃是不可逆转的。在进入 commit 阶段时，组件多了一个新钩子叫 getSnapshotBeforeUpdate，它与 commit 阶段的钩子一样只执行一次。如果出错呢，在 componentDidMount/Update 后，我们可以使用 componentDidCatch 方法。</p><p>render 阶段的钩子都不应该操作 DOM，最好也不要 setState，我们称之为<strong>轻量钩子</strong>；commit 阶段的钩子则对应称之为<strong>重量钩子</strong>。</p><ul><li>constructor</li></ul><p>&nbsp;</p><pre><code class=language-ts>/**
+</code></pre><ul><li>更急迫的更新可以“<strong>中断</strong>”已经开始的渲染；</li><li>创建的任务/更新有不同的优先级；</li><li>渲染过程可以被打断；</li><li>setState 是异步。</li></ul></li></ul><h3 id=生命周期>生命周期</h3><p>reconciler 阶段（render 阶段）；生成新的 fiber 树并收集本次<strong>要更新</strong>的点；对应的钩子为：</p><ul><li>constructor</li><li>static getDerivedStateFromProps</li><li>static getDerivedStateFromError（发生错误的组件不会触发自身的钩子）</li><li>shouldComponentUpdate</li><li>render</li></ul><p>commit 阶段（renderer 阶段）；将<strong>要更新</strong>的点 patch 到 DOM 上并切换 fiber 树；对应的钩子为：</p><ul><li>getSnapshotBeforeUpdate</li><li>componentDidMount</li><li>componentDidUpdate</li><li>componentDidCatch（发生错误的组件不会触发自身的钩子）</li><li>componentWillUnmount</li></ul><p><img src=/react-design/lifecycle.png alt="Local Image"></p><p><a href=https://zhuanlan.zhihu.com/p/37095662#为什么要对生命周期钩子大换血>为什么要对生命周期钩子大换血？（来自“司徒正美”）</a></p><p>组件在挂载过程中会调三次钩子（constructor、componentWillMount、render），组件在更新过程中会调四次钩子（componentWillReceiveProps、shouldComponentUpdate、componentWillUpdate、render），总不能每个方法都用 try...catch... 包起来，这样会性能很差。而 constructor、render 是不可避免的，于是对三个 willXXX 动刀了。</p><p>在早期版本中，componentWillMount 与 componentWillReceiveProps 会做内部优化，执行多次 setState 都会延后到 render 时进行合并处理。因此用户就肆意 setState 了。这些 willXXX 还可以让用户任意操作 DOM。操作 DOM 会可能 reflow，这是官方不愿意看到的。于是官方推出了 getDerivedStateFromProps，让你在 render 设置新 state，你主要返回一个新对象，它就主动帮你 setState。由于这是一个静态方法，你不能操作 instance，这就阻止了你多次操作 setState。由于没有 instance，也就没有 instance.refs.xxx，你也没有机会操作 DOM 了。这样一来，getDerivedStateFromProps 的逻辑应该会很简单，这样就不会出错，不会出错，就不会打断 DFS 过程。</p><p>getDerivedStateFromProps 取代了原来的 componentWillMount 与 componentWillReceiveProps 方法，而 componentWillUpdate 本来就是可有可无，以前完全是为了对称好看。在即使到来的异步更新中，render 阶段可能执行多次，才执行一次 commit；这样也会导致 willXXX 钩子执行多次，违反它们的语义，它们的废弃是不可逆转的。在进入 commit 阶段时，组件多了一个新钩子叫 getSnapshotBeforeUpdate，它与 commit 阶段的钩子一样只执行一次。如果出错呢，在 componentDidMount/Update 后，我们可以使用 componentDidCatch 方法。</p><p>render 阶段的钩子都不应该操作 DOM，最好也不要 setState，我们称之为<strong>轻量钩子</strong>；commit 阶段的钩子则对应称之为<strong>重量钩子</strong>。</p><ul><li>constructor</li></ul><p>&nbsp;</p><pre><code class=language-ts>/**
  * 以下情况会调用 constructClassInstance（构建类组件实例）：
  * 1. updateClassComponent（如果 instance 为 null）
  * 2. mountIncompleteClassComponent
