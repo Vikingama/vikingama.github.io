@@ -83,14 +83,14 @@ new Vue({
       message: 'hello'
     }
   });
-  /*
-    name: &quot;demo&quot;
-    value: &quot;hello&quot;
-    expression: &quot;message&quot;
-    argument: &quot;foo&quot;
-    modifiers: {&quot;a&quot;:true,&quot;b&quot;:true}
-    vnode keys: tag, data, children, text...
-  */
+  /**
+   * name: &quot;demo&quot;
+   * value: &quot;hello&quot;
+   * expression: &quot;message&quot;
+   * argument: &quot;foo&quot;
+   * modifiers: {&quot;a&quot;:true,&quot;b&quot;:true}
+   * vnode keys: tag, data, children, text...
+   */
 &lt;/script&gt;
 </code></pre><p>动态指令：</p><pre><code class=language-html>&lt;div id=&quot;dynamic&quot;&gt;
   &lt;h3&gt;Scroll down inside this section...&lt;/h3&gt;
@@ -558,19 +558,19 @@ new Vue({
       component: Foo,
       // 路由独享守卫
       beforeEnter: (to, from, next) =&gt; {
-        /*
-          to:Route      即将要进入的目标路由
-          from:Route    当前导航正要离开的路由
-          next:Function 调用该方法来 resolve 这个钩子
-            next()
-                进行管道中的下一个钩子
-            next(false)
-                中断当前的导航
-            next('/') 或者 next({ path: '/' })
-                当前的导航被中断，然后进行一个新的导航；可以向 next 传递任意位置对象，且允许设置诸如 replace: true、name: 'home' 之类的选项
-            next(error)
-                传入 Error 实例，导航会被终止且该错误会被传递给 router.onError
-        */
+        /**
+         * to:Route      即将要进入的目标路由
+         * from:Route    当前导航正要离开的路由
+         * next:Function 调用该方法来 resolve 这个钩子
+         * next()
+         *      进行管道中的下一个钩子
+         * next(false)
+         *      中断当前的导航
+         * next('/') 或者 next({ path: '/' })
+         *      当前的导航被中断，然后进行一个新的导航；可以向 next 传递任意位置对象，且允许设置诸如 replace: true、name: 'home' 之类的选项
+         * next(error)
+         *      传入 Error 实例，导航会被终止且该错误会被传递给 router.onError
+         */
       }
     }
   ]

@@ -27,17 +27,17 @@ setImmediate(function () {
   console.log('setImmediate two');
 });
 console.log('end');
-/*
-  start
-  end
-  process.nextTick one
-  process.nextTick two
-  setTimeout one
-  setTimeout two
-  setImmediate one
-  process.nextTick in setImmediate
-  setImmediate two
-*/
+/**
+ * start
+ * end
+ * process.nextTick one
+ * process.nextTick two
+ * setTimeout one
+ * setTimeout two
+ * setImmediate one
+ * process.nextTick in setImmediate
+ * setImmediate two
+ */
 </code></pre><h3 id=垃圾回收>垃圾回收</h3><p>在 V8 中，所有的 JS 对象都是通过堆来进行分配的；Node 提供了 V8 中内存使用量的查看方式（单位均为字节）。</p><pre><code class=language-js>process.memoryUsage()
 {
   // 驻留集大小, 是给这个进程分配了多少物理内存（占总分配内存的一部分），其中包含堆、代码段、以及栈
@@ -171,11 +171,11 @@ var rs = fs.createReadStream('ThinkInSilence.md');
 {
   // 设置可读流编码可以解决乱码问题；这里的 highWaterMark 是指每次读取的长度，其大小决定会触发系统调用和 data 事件的次数
   var rs = fs.createReadStream('ThinkInSilence.md', { highWaterMark: 11 });
-  /*
-    可读流在内部设置了一个 decoder 对象（来自 StringDecoder 的实例）
-    每次 data 事件都通过该 decoder 对象进行 Buffer 到字符串的解码
-    data 不再收到原始的 Buffer 对象
-  */
+  /**
+   * 可读流在内部设置了一个 decoder 对象（来自 StringDecoder 的实例）
+   * 每次 data 事件都通过该 decoder 对象进行 Buffer 到字符串的解码
+   * data 不再收到原始的 Buffer 对象
+   */
   rs.setEncoding('utf8');
 }
 var data = '';
@@ -406,10 +406,10 @@ function render(view, data) {
 const fork = require('child_process').fork;
 const cpus = require('os').cpus();
 for (let i = 0; i &lt; cpus.length; i++) {
-  /*
-    通过 fork 复制的进程都是一个独立的进程，有着独立而全新的 V8 实例
-    这里启动多个进程只是为了充分将 CPU 资源利用起来，而不是为了解决并发问题
-  */
+  /**
+   * 通过 fork 复制的进程都是一个独立的进程，有着独立而全新的 V8 实例
+   * 这里启动多个进程只是为了充分将 CPU 资源利用起来，而不是为了解决并发问题
+   */
   fork('./worker.js');
 }
 // worker.js

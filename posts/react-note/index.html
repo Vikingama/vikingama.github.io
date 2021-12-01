@@ -41,30 +41,26 @@
   }
 }
 </code></pre><p>refs 主要用于：</p><ol><li>管理焦点，文本选择或媒体播放；</li><li>触发强制动画；</li><li>集成第三方 DOM 库。</li></ol><p>ref 的值根据节点的类型而有所不同：</p><ol><li>当 ref 被传递给 render 中的元素时，对该节点的引用可以在 ref 的 current 属性中被访问；</li><li>当 ref 属性用于 HTML 元素时，构造函数中使用 React.createRef() 创建的 ref 接收底层 DOM 元素作为其 current 属性；</li><li>当 ref 属性用于自定义 class 组件时，ref 对象接收组件的挂载实例作为其 current 属性。</li></ol><h3 id=react-createcontext>React.createContext</h3><p>创建一个 Context 对象，每个 Context 对象都会返回一个 Provider 组件，它允许消费组件订阅 Context 的变化；当 React 渲染一个订阅了这个 Context 对象的组件，这个组件会从组件树中离自身最近的那个匹配的 Provider 中读取到当前的 Context 值。</p><p>Provider 接收一个 value 属性，传递给消费组件；一个 Provider 可以和多个消费组件有对应关系；多个 Provider 也可以嵌套使用，里层的会覆盖外层的数据。</p><p>当 Provider 的 value 值发生变化时，它内部的所有消费组件都会重新渲染；Provider 及其内部 Consumer 组件都不受制于 shouldComponentUpdate 函数，因此当 Consumer 组件在其祖先组件退出更新的情况下也能更新。</p><pre><code class=language-jsx>const ThemeContext = React.createContext('light'); // 默认值 light
-const App = ()=&gt; {
-    /**
-      * 使用一个 Provider 来将当前的 theme 传递给以下的组件树
-      * 无论多深，任何组件都能读取这个值
-      * 在这个例子中，我们将“dark”作为当前的值传递下去
-    */
-    return (
-      &lt;ThemeContext.Provider value=&quot;dark&quot;&gt;
-        &lt;Toolbar /&gt;
-      &lt;/ThemeContext.Provider&gt;
-    );
-  }
-// 中间的组件再也不必指明往下传递 theme 了
-const Toolbar = (props)=&gt;(
-    &lt;div&gt;
-      &lt;ThemedButton /&gt;
-    &lt;/div&gt;
+const App = () =&gt; {
+  /**
+   * 使用一个 Provider 来将当前的 theme 传递给以下的组件树
+   * 无论多深，任何组件都能读取这个值
+   * 在这个例子中，我们将“dark”作为当前的值传递下去
+   */
+  return (
+    &lt;ThemeContext.Provider value=&quot;dark&quot;&gt;
+      &lt;Toolbar /&gt;
+    &lt;/ThemeContext.Provider&gt;
   );
-const ThemedButton = ()=&gt; {
-  // 指定 contextType 读取当前的 ThemeContext，React 会往上找到最近的 ThemeContext.Provider，然后使用它的值。
-  render() {
-    return &lt;Button theme={this.context} /&gt;;
-  }
-}
+};
+// 中间的组件再也不必指明往下传递 theme 了
+const Toolbar = () =&gt; (
+  &lt;div&gt;
+    &lt;ThemedButton /&gt;
+  &lt;/div&gt;
+);
+// 指定 contextType 读取当前的 ThemeContext，React 会往上找到最近的 ThemeContext.Provider，然后使用它的值
+const ThemedButton = () =&gt; &lt;Button theme={this.context} /&gt;;
 ThemedButton.contextType = ThemeContext;
 </code></pre><p>Context 对象接受一个名为 displayName 的 property，类型为字符串。React DevTools 使用该字符串来确定 context 要显示的内容。</p><pre><code class=language-jsx>const MyContext = React.createContext(/* some value */);
 

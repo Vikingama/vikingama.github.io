@@ -107,13 +107,13 @@ PrerenderSPAPlugin.prototype.apply((compiler) =&gt; {
       // express 会代理静态目录，通过 puppeteer 访问页面并将页面保存
       .then(() =&gt; prender.renderRoutes(this._options.routes || []))
       .then((renderedRoutes) =&gt; {
-        /*
-          [{
-            originalRoute: route,
-            route: await page.evaluate('window.location.pathname'),
-            html: await page.content()
-          }, {...}...]
-        */
+        /**
+         *  [{
+         *    originalRoute: route,
+         *    route: await page.evaluate('window.location.pathname'),
+         *    html: await page.content()
+         *  }, {...}...]
+         */
         const isValid = renderedRoutes.every((r) =&gt; typeof r === 'object');
         if (isValid) {
           return renderedRoutes;
