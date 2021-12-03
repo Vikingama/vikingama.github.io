@@ -1164,6 +1164,55 @@ function seventTwo(num) {
 
 console.log(sevenOne(3));
 console.log(seventTwo(3));
+</code></pre><h3 id=打印对象层级>打印对象层级</h3><pre><code class=language-js>const o1 = { a: 1 };
+const o2 = {
+  a: {
+    b: {
+      c: {
+        d: {
+          e: 1
+        }
+      }
+    },
+    g: 3
+  },
+  f: 2,
+  h: {
+    i: 6
+  }
+};
+function maxFloor(target) {
+  let max = 0;
+  if (typeof target !== 'object') {
+    return max;
+  }
+  max = max + 1;
+  function calcFloor(o) {
+    let temp = [];
+    let length = temp.length;
+    for (let item in o) {
+      if (o.hasOwnProperty(item)) {
+        if (typeof o[item] === 'object') {
+          for (let key in o[item]) {
+            if (o[item].hasOwnProperty(key)) {
+              temp.push(o[item][key]);
+            }
+          }
+        }
+      }
+    }
+    if (temp.length &gt; length) {
+      max++;
+      length = temp.length;
+      return calcFloor(temp);
+    } else {
+      return max;
+    }
+  }
+  return calcFloor(target);
+}
+console.log(maxFloor(o1)); // 1
+console.log(maxFloor(o2)); // 5
 </code></pre><h3 id=字符串排序>字符串排序</h3><pre><code class=language-js>// 红蓝蓝黄红黄蓝红红黄红，排序后为：黄黄黄红红红红红蓝蓝蓝
 function sortStr(str) {
   let temp = str.split('');
