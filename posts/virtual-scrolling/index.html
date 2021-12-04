@@ -36,7 +36,7 @@
     &lt;!-- ... --&gt;
   &lt;/ul&gt;
 &lt;/div&gt;
-</code></pre><p>具体逻辑如下：</p><ol><li>首先计算用户可以看到的元素数量；</li><li>根据滚动条高度，计算从那个数据开始渲染；</li><li>滚动时需闹动态计算需要填充的 padding 和 数据。</li></ol><p>&nbsp;</p><pre><code class=language-js>const listData = Array.from({ length: 3600 }, (v, i) =&gt; `第 ${i + 1} 条数据`); // 假数据
+</code></pre><p>具体逻辑如下：</p><ol><li>首先计算用户可以看到的元素数量；</li><li>根据滚动条高度，计算从那个数据开始渲染；</li><li>滚动时需要动态计算需要填充的 padding 和数据。</li></ol><p>&nbsp;</p><pre><code class=language-js>const listData = Array.from({ length: 3600 }, (v, i) =&gt; `第 ${i + 1} 条数据`); // 假数据
 const containerEle = document.querySelector('.container'); // 滚动容器
 const listEle = document.querySelector('.list'); // 滚动列表
 
@@ -107,5 +107,5 @@ class VirtualScroll {
   };
 }
 new VirtualScroll(containerEle, listEle, listData);
-</code></pre><p>好吧，这是我瞎写的；DEMO 在<a href=https://vikingama.github.io/demosforife/Virtual%20Scroll.html>这里</a>。</p></div><div class=post_footer><div class=meta><div class=info><span class="field tags"><i class=remixicon-stack-line></i><a href=https://vikingama.github.io/tags/%E4%BA%A4%E4%BA%92/>交互</a></span></div></div></div></div><div class=doc_comments><div class=comments_block_title>发表评论</div><div id=vcomments></div></div><link rel=stylesheet href=https://vikingama.github.io/css/comments.css><script src=/js/av.js></script><script src=/js/valine.js></script><script type=text/javascript>new Valine({el:'#vcomments',appId:'U06blUXOot4uJgfMu8I9xJXz-MdYXbMMI',appKey:'BnrXC06FJsvRNpr4aqb1HYPd',placeholder:'来都来了，不打个招呼吗？',visitor:'true',});</script></div></div><a id=back_to_top href=# class=back_to_top><span>△</span></a></div><footer class=footer><div class=powered_by><a href=https://github.com/varkai/hugo-theme-zozo/ target=_blank>Designed by <span class=jitters>Zeuk</span>,</a>
+</code></pre><p>DEMO 在<a href=https://vikingama.github.io/demosforife/Virtual%20Scroll.html>这里</a>。</p></div><div class=post_footer><div class=meta><div class=info><span class="field tags"><i class=remixicon-stack-line></i><a href=https://vikingama.github.io/tags/%E4%BA%A4%E4%BA%92/>交互</a></span></div></div></div></div><div class=doc_comments><div class=comments_block_title>发表评论</div><div id=vcomments></div></div><link rel=stylesheet href=https://vikingama.github.io/css/comments.css><script src=/js/av.js></script><script src=/js/valine.js></script><script type=text/javascript>new Valine({el:'#vcomments',appId:'U06blUXOot4uJgfMu8I9xJXz-MdYXbMMI',appKey:'BnrXC06FJsvRNpr4aqb1HYPd',placeholder:'来都来了，不打个招呼吗？',visitor:'true',});</script></div></div><a id=back_to_top href=# class=back_to_top><span>△</span></a></div><footer class=footer><div class=powered_by><a href=https://github.com/varkai/hugo-theme-zozo/ target=_blank>Designed by <span class=jitters>Zeuk</span>,</a>
 <a href=https://www.gohugo.io/ target=_blank>Published with <span class=jitters>Hugo</span></a></div><div class=footer_slogan><span id=enter_time></span></div></footer><script src=https://vikingama.github.io/js/jquery.js></script><script src=https://vikingama.github.io/js/highlight.js></script><script src=https://vikingama.github.io/js/zozo.js></script><script>hljs.initHighlightingOnLoad();</script></body></html>
