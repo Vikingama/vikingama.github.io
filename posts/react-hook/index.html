@@ -14,7 +14,7 @@
 </code></pre><p>与 class 组件中的 setState 方法不同，useState 不会自动合并更新对象。</p><pre><code class=language-jsx>setState((prevState) =&gt; {
   return { ...prevState, ...updatedState };
 });
-</code></pre><h6 id=注意-在组件重新渲染时-state-和-setstate-不会重新初始化-渲染前后都是同一个引用-state-像保存在-ref-中的变量>注意：在组件重新渲染时，state 和 setState 不会重新初始化（渲染前后都是同一个引用），state 像保存在 ref 中的变量。</h6><h3 id=useeffect>useEffect</h3><p>useEffect 会在浏览器完成本次渲染之后进行下次渲染之前调用，不会阻塞浏览器更新屏幕；每次运行 effect 的时候，DOM 都已经更新完毕。某种意义上讲，effect 更像是渲染结果的一部分，每个 effect “属于”某一次特定的渲染。</p><pre><code class=language-jsx>function Example() {
+</code></pre><h6 id=注意-在组件重新渲染时-state-和-setstate-不会重新初始化-渲染前后都是同一个引用-state-像保存在-ref-中的变量一样>注意：在组件重新渲染时，state 和 setState 不会重新初始化（渲染前后都是同一个引用），state 像保存在 ref 中的变量一样。</h6><h3 id=useeffect>useEffect</h3><p>useEffect 会在浏览器完成本次渲染之后进行下次渲染之前调用，不会阻塞浏览器更新屏幕；每次运行 effect 的时候，DOM 都已经更新完毕。某种意义上讲，effect 更像是渲染结果的一部分，每个 effect “属于”某一次特定的渲染。</p><pre><code class=language-jsx>function Example() {
   const [count, setCount] = useState(0);
   useEffect(() =&gt; {
     document.title = `u clicked ${count} times`;

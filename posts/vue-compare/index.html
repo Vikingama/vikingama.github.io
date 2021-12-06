@@ -682,7 +682,7 @@ class RefImpl&lt;T&gt; {
 </code></pre><p>ref 接受一个内部值并返回一个响应式且可变的 ref 对象；ref 对象具有指向内部值的单个属性 .value。</p><pre><code class=language-ts>export function ref(value) {
   return createRef(value);
 }
-</code></pre><p>track 和 trigger 用于依赖收集和在依赖变动时触发副作用。</p><pre><code class=language-ts>// 追踪类型
+</code></pre><p>track 和 trigger 用于依赖收集和在依赖变动时触发的副作用。</p><pre><code class=language-ts>// 追踪类型
 export const enum TrackOpTypes {
   GET = 'get',
   HAS = 'has',
@@ -3799,6 +3799,9 @@ const patchUnkeyedChildren = (
 /**
  * 组件挂载 patch-processComponent-mountComponent
  * mountComponent(n2, container, anchor, parentComponent, parentSuspense, isSVG, optimized)
+ * 1. 创建组件实例
+ * 2. 设置组件实例
+ * 3. 设置组件渲染副作用
  */
 const mountComponent: MountComponentFn = (
   initialVNode,
@@ -3809,6 +3812,7 @@ const mountComponent: MountComponentFn = (
   isSVG,
   optimized
 ) =&gt; {
+  // 创建组件实例
   const instance: ComponentInternalInstance = (initialVNode.component =
     createComponentInstance(initialVNode, parentComponent, parentSuspense));
   // 为 KeepAlive 注入渲染器内部
@@ -3817,14 +3821,6 @@ const mountComponent: MountComponentFn = (
   }
   setupComponent(instance);
   // setup() 是异步的，组件依赖待异步逻辑
-  if (__FEATURE_SUSPENSE__ &amp;&amp; instance.asyncDep) {
-    parentSuspense &amp;&amp; parentSuspense.registerDep(instance, setupRenderEffect);
-    if (!initialVNode.el) {
-      const placeholder = (instance.subTree = createVNode(Comment));
-      processCommentNode(null, placeholder, container!, anchor);
-    }
-    return;
-  }
   setupRenderEffect(
     instance,
     initialVNode,
@@ -3835,6 +3831,142 @@ const mountComponent: MountComponentFn = (
     optimized
   );
 };
+export function createComponentInstance(
+  vnode: VNode,
+  parent: ComponentInternalInstance | null,
+  suspense: SuspenseBoundary | null
+) {
+  const type = vnode.type as ConcreteComponent;
+  // 继承父组件的 appContext；如果是根组件，则直接从根 vnode 中取
+  const appContext =
+    (parent ? parent.appContext : vnode.appContext) || emptyAppContext;
+  // 字面量的方式不同于 2.0 中的 new Vue
+  const instance: ComponentInternalInstance = {
+    uid: uid++, // 组件唯一 id
+    vnode, // 组件 vnode
+    type, // vnode 节点类型
+    parent, // 父组件实例
+    appContext, // 上下文
+    root: null!, // // 根组件实例，会被立即赋值
+    next: null, // 新的组件 vnode
+    subTree: null!, // 子节点/子树，创建后将同步设置
+    update: null!, // 带副作用更新函数，创建后将同步设置
+    render: null, // 渲染函数
+    proxy: null, // 渲染上下文代理
+    exposed: null,
+    withProxy: null, // 带有 with 的渲染上下文代理
+    effects: null, // 响应式相关对象
+    provides: parent ? parent.provides : Object.create(appContext.provides), // 从父级继承 provides
+    accessCache: null!, // 渲染代理的属性访问缓存
+    renderCache: [], // 渲染缓存
+    components: null, // 注册的组件
+    directives: null, // 注册的指令
+    propsOptions: normalizePropsOptions(type, appContext),
+    emitsOptions: normalizeEmitsOptions(type, appContext),
+    emit: null as any, // 会被立即赋值
+    emitted: null,
+    // 组件 state 相关
+    ctx: EMPTY_OBJ,
+    data: EMPTY_OBJ,
+    props: EMPTY_OBJ,
+    attrs: EMPTY_OBJ,
+    slots: EMPTY_OBJ,
+    refs: EMPTY_OBJ,
+    setupState: EMPTY_OBJ, // setup 返回的响应式状态
+    setupContext: null, // setup 上下文数据
+    // 组件 suspense 相关
+    suspense,
+    suspenseId: suspense ? suspense.pendingId : 0,
+    asyncDep: null, // suspense 异步依赖
+    asyncResolved: false, // suspense 异步依赖是否都已处理
+    // 生命周期钩子，不用枚举类型是因为会导致计算属性？？？
+    isMounted: false,
+    isUnmounted: false,
+    isDeactivated: false,
+    bc: null,
+    c: null,
+    bm: null,
+    m: null,
+    bu: null,
+    u: null,
+    um: null,
+    bum: null,
+    da: null,
+    a: null,
+    rtg: null,
+    rtc: null,
+    ec: null
+  };
+  instance.ctx = { _: instance }; // 实例上下文
+  instance.root = parent ? parent.root : instance; // 指向根组件的指针
+  instance.emit = emit.bind(null, instance); // emit 方法
+  return instance;
+}
+export function setupComponent(
+  instance: ComponentInternalInstance,
+  isSSR = false
+) {
+  isInSSRComponentSetup = isSSR;
+  const { props, children, shapeFlag } = instance.vnode;
+  // 是否是一个有状态的组件
+  const isStateful = shapeFlag &amp; ShapeFlags.STATEFUL_COMPONENT;
+  // 初始化 props/attrs
+  initProps(instance, props, isStateful, isSSR);
+  // 初始化 slots
+  initSlots(instance, children);
+  // 获取 setup 返回值
+  const setupResult = isStateful
+    ? setupStatefulComponent(instance, isSSR)
+    : undefined;
+  isInSSRComponentSetup = false;
+  return setupResult;
+}
+function setupStatefulComponent(
+  instance: ComponentInternalInstance,
+  isSSR: boolean
+) {
+  const Component = instance.type as ComponentOptions;
+  // 创建渲染代理的属性访问缓存
+  instance.accessCache = Object.create(null);
+  // 创建公共实例/渲染代理
+  instance.proxy = new Proxy(instance.ctx, PublicInstanceProxyHandlers);
+  const { setup } = Component;
+  if (setup) {
+    // 创建 setup 上下文
+    const setupContext = (instance.setupContext =
+      // {attrs、slots、emit、expose}
+      setup.length &gt; 1 ? createSetupContext(instance) : null);
+    currentInstance = instance;
+    pauseTracking();
+    // 调用 setup
+    const setupResult = callWithErrorHandling(
+      setup,
+      instance,
+      ErrorCodes.SETUP_FUNCTION,
+      [instance.props, setupContext]
+    );
+    resetTracking();
+    currentInstance = null;
+    // 处理 setup 结果
+    if (isPromise(setupResult)) {
+      // ...
+    } else {
+      /**
+       * 如果 setupResult 是 VNode，报错
+       * 如果 setupResult 是函数，instance.render = setupResult
+       * 如果 setupResult 是对象，instance.setupState = proxyRefs(setupResult)
+       */
+      handleSetupResult(instance, setupResult, isSSR);
+    }
+  } else {
+    /**
+     * 设置 instance.render
+     * 创建 instance.withProxy
+     * 兼容 OptionsAPI
+     */
+    finishComponentSetup(instance, isSSR);
+  }
+}
 /**
  * patch-processComponent-mountComponent-setupRenderEffect
  * 初次渲染组件的时候，会在组件实例上创建一个渲染副作用（包含了挂载副作用和更新副作用）
@@ -3972,7 +4104,7 @@ const updateComponent = (n1: VNode, n2: VNode, optimized: boolean) =&gt; {
   const instance = (n2.component = n1.component)!;
   // 是否应该更新
   if (shouldUpdateComponent(n1, n2, optimized)) {
-    if (__FEATURE_SUSPENSE__ &amp;&amp; instance.asyncDep &amp;&amp; !instance.asyncResolved) {
+    if (instance.asyncDep &amp;&amp; !instance.asyncResolved) {
       updateComponentPreRender(instance, n2, optimized);
       return;
     } else {
@@ -4008,6 +4140,113 @@ const updateComponentPreRender = (
   // 更新插槽
   updateSlots(instance, nextVNode.children);
   flushPreFlushCbs(undefined, instance.update);
+};
+// 渲染代理 proxy 配置
+export const PublicInstanceProxyHandlers: ProxyHandler&lt;any&gt; = {
+  get({ _: instance }: ComponentRenderContext, key: string) {
+    const { ctx, setupState, data, props, accessCache, type, appContext } =
+      instance;
+    // @vue/reactivity 永远不应该观察 Vue 公共实例
+    if (key === ReactiveFlags.SKIP) {
+      return true;
+    }
+    // 在渲染期间，对访问渲染上下文的任何属性的访问都会调用 getter
+    let normalizedProps;
+    // 如果 key 不以 $ 开头
+    if (key[0] !== '$') {
+      const n = accessCache![key]; // 缓存
+      if (n !== undefined) {
+        // setupState &gt;&gt; data &gt;&gt; ctx &gt;&gt; props
+        switch (n) {
+          case AccessTypes.SETUP:
+            // setupState 是 setup 返回的数据
+            return setupState[key];
+          case AccessTypes.DATA:
+            return data[key];
+          case AccessTypes.CONTEXT:
+            return ctx[key];
+          case AccessTypes.PROPS:
+            return props![key];
+        }
+      } else if (setupState !== EMPTY_OBJ &amp;&amp; hasOwn(setupState, key)) {
+        accessCache![key] = AccessTypes.SETUP;
+        return setupState[key];
+      } else if (data !== EMPTY_OBJ &amp;&amp; hasOwn(data, key)) {
+        accessCache![key] = AccessTypes.DATA;
+        return data[key];
+      } else if (
+        (normalizedProps = instance.propsOptions[0]) &amp;&amp;
+        hasOwn(normalizedProps, key)
+      ) {
+        accessCache![key] = AccessTypes.PROPS;
+        return props![key];
+      } else if (ctx !== EMPTY_OBJ &amp;&amp; hasOwn(ctx, key)) {
+        accessCache![key] = AccessTypes.CONTEXT;
+        return ctx[key];
+      } else if (!__FEATURE_OPTIONS_API__ || !isInBeforeCreate) {
+        accessCache![key] = AccessTypes.OTHER;
+      }
+    }
+    const publicGetter = publicPropertiesMap[key];
+    let cssModule, globalProperties;
+    // $xxx 属性
+    if (publicGetter) {
+      if (key === '$attrs') {
+        track(instance, TrackOpTypes.GET, key);
+      }
+      return publicGetter(instance);
+    } else if (
+      (cssModule = type.__cssModules) &amp;&amp;
+      (cssModule = cssModule[key])
+    ) {
+      return cssModule;
+    } else if (ctx !== EMPTY_OBJ &amp;&amp; hasOwn(ctx, key)) {
+      // 用户可能会在 this 上挂 $自定义属性
+      accessCache![key] = AccessTypes.CONTEXT;
+      return ctx[key];
+    } else if (
+      // 全局属性
+      ((globalProperties = appContext.config.globalProperties),
+      hasOwn(globalProperties, key))
+    ) {
+      return globalProperties[key];
+    }
+  },
+  set(
+    { _: instance }: ComponentRenderContext,
+    key: string,
+    value: any
+  ): boolean {
+    const { data, setupState, ctx } = instance;
+    if (setupState !== EMPTY_OBJ &amp;&amp; hasOwn(setupState, key)) {
+      setupState[key] = value;
+    } else if (data !== EMPTY_OBJ &amp;&amp; hasOwn(data, key)) {
+      data[key] = value;
+    }
+    if (key[0] === '$' &amp;&amp; key.slice(1) in instance) {
+      return false;
+    } else {
+      ctx[key] = value;
+    }
+    return true;
+  },
+  has(
+    {
+      _: { data, setupState, accessCache, ctx, appContext, propsOptions }
+    }: ComponentRenderContext,
+    key: string
+  ) {
+    let normalizedProps;
+    return (
+      accessCache![key] !== undefined ||
+      (data !== EMPTY_OBJ &amp;&amp; hasOwn(data, key)) ||
+      (setupState !== EMPTY_OBJ &amp;&amp; hasOwn(setupState, key)) ||
+      ((normalizedProps = propsOptions[0]) &amp;&amp; hasOwn(normalizedProps, key)) ||
+      hasOwn(ctx, key) ||
+      hasOwn(publicPropertiesMap, key) ||
+      hasOwn(appContext.config.globalProperties, key)
+    );
+  }
 };
 </code></pre><h3 id=keep-alive-2-x>keep-alive 2.x</h3><pre><code class=language-ts>// 获取组件 name
 function getComponentName(opts: ?VNodeComponentOptions): ?string {
@@ -4647,7 +4886,7 @@ export function cloneVNode(vnode) {
   // 创建 VNode
   const vnode: VNode = {
     __v_isVNode: true,
-    __v_skip: true,
+    __v_skip: true, // 表示不能变成“响应式”数据，例如 Object.freeze()、Date、VNode
     type,
     props,
     key: props &amp;&amp; normalizeKey(props),
