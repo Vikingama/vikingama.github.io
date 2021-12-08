@@ -80,5 +80,6 @@ $(document).ready(
 (function () {
   const between = new Date() - new Date('2017-08-21');
   const days = Math.floor(between / 1000 / 60 / 60 / 24);
-  $('#enter_time').text(`入杭 ${days} 天了`);
+  const enterTimeEle = document.querySelector('#enter_time');
+  enterTimeEle.textContent = `入杭 ${days} 天了`;
 })();
