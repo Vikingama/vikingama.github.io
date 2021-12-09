@@ -667,7 +667,7 @@ a:active {
 
   .nav_container .site_nav {
     display: none;
-    position: fixed;
+    position: absolute;
     right: 0;
     top: 60px;
     padding: 10px 0;
@@ -686,7 +686,7 @@ a:active {
   }
 
   .nav_container .menu_icon {
-    position: fixed;
+    /* position: fixed; */
     right: 0;
   }
 
