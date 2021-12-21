@@ -312,7 +312,8 @@ export function updateContainer(
          * 现在就开始同步工作，除非我们已经开始或在批处理中
          * 这有意在 scheduleUpdateOnFiber 中（而不是 scheduleCallbackForFiber 中）
          * 以保留 schedule 回调而不立即执行它的能力
-         * 我们只对用户发起的更新执行此操作，以保留遗留模式的历史行为？？？
+         * 我们只对用户发起的更新执行此操作，以保留遗留模式的历史行为
+         * ？？？
          */
         resetRenderTimer();
         flushSyncCallbackQueue();
@@ -344,7 +345,7 @@ export function updateContainer(
    */
   mostRecentlyUpdatedRoot = root;
 }
-</code></pre><h3 id=scheduler-任务调度>scheduler（任务调度）</h3><p>对任务按照优先级进行调度（高优先级的任务打断低优先级的任务的执行），所有任务保存在最小堆中（方便取出优先级最高的任务）。</p><ul><li>调度任务的入口：</li></ul><p>&nbsp;</p><pre><code class=language-ts>function unstable_scheduleCallback(priorityLevel, callback, options) {
+</code></pre><h3 id=scheduler-任务调度>scheduler（任务调度）</h3><p>对任务按照优先级进行调度（高优先级的任务打断低优先级的任务的执行），所有任务保存在最小堆中（方便取出优先级最高的任务）。</p><pre><code class=language-ts>function unstable_scheduleCallback(priorityLevel, callback, options) {
   var currentTime = getCurrentTime();
   var startTime;
   // 根据 option 计算任务最早开始时间（任务不能早于这个时间运行）
@@ -1327,7 +1328,7 @@ export function initializeUpdateQueue&lt;State&gt;(fiber: Fiber): void {
   };
   fiber.updateQueue = queue;
 }
-// setState 会调用 enqueueSetState 生成一个 update
+// setState 会调用 enqueueSetState 生成一个 update 并调度
 Component.prototype.setState = function (partialState, callback) {
   if (!(typeof partialState === 'object' || typeof partialState === 'function' || partialState == null)) {
     // ...
@@ -1353,6 +1354,40 @@ enqueueSetState(inst, payload, callback) {
   enqueueUpdate(fiber, update);
   // 调度 update
   scheduleUpdateOnFiber(fiber, lane, eventTime);
+}
+// forceUpdate 会调用 enqueueForceUpdate 生成 update 并调度
+Component.prototype.forceUpdate = function(callback) {
+  this.updater.enqueueForceUpdate(this, callback, 'forceUpdate');
+};
+enqueueForceUpdate(inst, callback) {
+  const fiber = getInstance(inst);
+  const eventTime = requestEventTime();
+  const lane = requestUpdateLane(fiber);
+  const update = createUpdate(eventTime, lane);
+  update.tag = ForceUpdate; // 2
+  if (callback !== undefined &amp;&amp; callback !== null) {
+    update.callback = callback;
+  }
+  enqueueUpdate(fiber, update);
+  scheduleUpdateOnFiber(fiber, lane, eventTime);
+};
+// 将 update 添加到 fiber 的 update 链表
+export function enqueueUpdate&lt;State&gt;(fiber: Fiber, update: Update&lt;State&gt;) {
+  const updateQueue = fiber.updateQueue; // 获取 fiber 节点的 update 队列
+  if (updateQueue === null) {
+    // 当节点被卸载之后才会出现这种情况
+    return;
+  }
+  const sharedQueue: SharedQueue&lt;State&gt; = (updateQueue: any).shared;
+  const pending = sharedQueue.pending;
+  if (pending === null) {
+    // 链表是空的
+    update.next = update;
+  } else {
+    update.next = pending.next;
+    pending.next = update;
+  }
+  sharedQueue.pending = update;
 }
 </code></pre><p>&nbsp;</p><ul><li><p>legacy 模式：</p><pre><code class=language-jsx>ReactDOM.render(&lt;App /&gt;, rootNode);
 </code></pre><ul><li>在同步操作中，setState 是异步的；</li><li>在异步操作中，setState 是同步的；</li><li>创建的任务/更新均为同样的优先级。</li></ul></li><li><p>concurrent 模式：</p><pre><code class=language-jsx>ReactDOM.createRoot(rootNode).render(&lt;App /&gt;);
