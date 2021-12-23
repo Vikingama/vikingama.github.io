@@ -26,7 +26,8 @@ new anyType(); // pass
 anyType(); // pass
 /**
  * unknown 类型的值可以被赋值给任何类型
- * 当 unknown 类型被确定是某个类型之后，可以被进行任何操作比如实例化、函数执行等
+ * 当 unknown 类型被确定是某个类型之前
+ * 不可以被进行任何操作比如实例化等
  */
 let unknownType: unknown;
 unknownType = 'hahasha';
@@ -342,7 +343,7 @@ function getLength&lt;T&gt;(arg: Array&lt;T&gt;) {
 interface ReturnItem&lt;T&gt; {
   (para: T): T;
 }
-const returnItem: ReturnItem&lt;number&gt; = (para) =&gt; para;
+const returnItem: ReturnItem&lt;number&gt; = para =&gt; para;
 // 泛型类
 class Stack&lt;T&gt; {
   private arr: T[] = [];
@@ -355,7 +356,7 @@ class Stack&lt;T&gt; {
 }
 // 泛型约束：泛型似乎可以是任何类型，如果我们知道传入的泛型属于哪一类，比如属于 number 或者 string 其中之一，那么应该如何约束泛型
 type Params = number | string;
-// 泛型类型被约数为 number 或 string
+// 泛型类型被约束为 number 或 string
 class Stack&lt;T extends Params&gt; {
   private arr: T[] = [];
   public push(item: T) {
@@ -368,6 +369,12 @@ class Stack&lt;T extends Params&gt; {
 function getValue&lt;T extends object, U extends keyof T&gt;(o: T, k: U) {
   return o[k];
 }
+// 泛型参数的默认类型
+interface DefaultType&lt;T = boolean&gt; {
+  isMarried: T;
+}
+type isMarried = DefaultType&lt;number&gt;;
+const gwenIsMarried: isMarried = { isMarried: 1 };
 // 多重泛型约束
 interface First {
   doSomething(): number;
@@ -395,6 +402,31 @@ class Demo&lt;T extends First &amp; Second&gt; {
 function factory&lt;T&gt;(type: { new (): T }): T {
   return new type();
 }
+// 泛型条件类型
+interface Dictionary&lt;T = unknown&gt; {
+  [prop: string]: T;
+}
+// 当 T 是类型 Dictionary 的子集时，就返回类型 V
+type VDictionary&lt;T&gt; = T extends Dictionary&lt;infer V&gt; ? V : never;
+type ChineseDictionary = Dictionary&lt;'chinese'&gt;;
+type Chinese = VDictionary&lt;ChineseDictionary&gt;; // 'chinese'
+// 泛型工具
+type CustomPartial&lt;T&gt; = {
+  [P in keyof T]?: T[P];
+};
+type CustomRequired&lt;T&gt; = {
+  [P in keyof T]-?: T[P];
+};
+type CustomRecord&lt;K extends keyof any, T&gt; = {
+  [P in K]: T;
+};
+type CustomPick&lt;T, K extends keyof T&gt; = {
+  [P in K]: T[P];
+};
+type CustomExclude&lt;T, U&gt; = T extends U ? never : U;
+type CustomExtract&lt;T, U&gt; = T extends U ? T : never;
+type CustomOmit&lt;T, K extends keyof any&gt; = Pick&lt;T, Exclude&lt;keyof T, K&gt;&gt;;
+type CustomReturnType&lt;T&gt; = T extends (...args: any[]) =&gt; infer V ? V : never;
 </code></pre><h3 id=类型断言与类型守卫>类型断言与类型守卫</h3><pre><code class=language-ts>interface Person {
   name: string;
   age: number;
@@ -523,6 +555,7 @@ type UserAction =
       info: Info;
     };
 const UserReducer = (userAction: UserAction) =&gt; {
+  // 类型守卫
   switch (userAction.action) {
     case 'delete':
       console.log(userAction.id);
@@ -636,33 +669,30 @@ let [a, b] = bar;
 a = 'hello'; // Error：不能把 'string' 类型赋值给 'number' 类型
 </code></pre><h3 id=索引类型-映射类型>索引类型、映射类型</h3><pre><code class=language-ts>// keyof 索引类型查询操作符，用来获取所有 public 属性名构成的联合类型
 class Image {
-    src: string = &quot;&quot;;
-    alt: string = &quot;&quot;;
-    width: number = &quot;&quot;;
+  src: string = '';
+  alt: string = '';
+  width: number = '';
 }
 type propsNames = keyof Images; // &quot;src&quot; | &quot;alt&quot; | &quot;width&quot;
 // T[K] 索引访问操作符
 type propsType = Images[propsName]; // &quot;string&quot; | &quot;number&quot;
 function pick&lt;T, K extends keyof T&gt;(o: T, names: K[]): T[K][] {
-    return names.map(n =&gt; o[n]);
+  return names.map(n =&gt; o[n]);
 }
 // [K in Keys] 映射类型，K：类型变量，对应每个属性名的类型；Keys：字符串字面量构成的联合类型，表示一组属性名（的类型）
 interface User {
-    username: string
-    id: number
-    token: string
-    avatar: string
-    role: string
+  username: string;
+  id: number;
+  token: string;
+  avatar: string;
+  role: string;
 }
-type partial&lt;T&gt; = {[K in keyof T]?;T[K]}
+type partial&lt;T&gt; = { [K in keyof T]?: T[K] };
 type partialUser = partial&lt;User&gt;; // 所有属性都变成了可选类型
 </code></pre><h3 id=条件类型>条件类型</h3><pre><code class=language-ts>type Z = T extends U ? X : Y; // 若 T 能够赋值给 U，那么类型是 X，否则为 Y
 declare function f&lt;T extends boolean&gt;(x: T): T extends true ? string : number;
 f(Math.random() &lt; 0.5); // string | number
 f(false); // number
 f(true); // string
-</code></pre><h3 id=infer-声明一个类型变量-当类型系统给足条件的时候类型就会被推断出来>infer：声明一个类型变量，当类型系统给足条件的时候类型就会被推断出来</h3><pre><code class=language-ts>type ElementOf&lt;T&gt; = T extends Array&lt;infer E&gt; ? E : never;
-type ATuple = [string, number];
-type ToUnion = ElementOf&lt;ATuple&gt;; // string | number
 </code></pre><h5 id=参考-深入理解-typescript-https-jkchao-github-io-typescript-book-chinese>参考：<a href=https://jkchao.github.io/typescript-book-chinese>深入理解 TypeScript</a></h5></div><div class=post_footer><div class=meta><div class=info><span class="field tags"><i class=remixicon-stack-line></i><a href=https://vikingama.github.io/tags/ts/>TS</a></span></div></div></div></div><div class=doc_comments><div class=comments_block_title>发表评论</div><div id=vcomments></div></div><link rel=stylesheet href=https://vikingama.github.io/css/comments.css><script src=//unpkg.com/valine></script><script type=text/javascript>new Valine({el:'#vcomments',avatar:'retro',recordIP:true,path:window.location.pathname,appId:'U06blUXOot4uJgfMu8I9xJXz-MdYXbMMI',appKey:'BnrXC06FJsvRNpr4aqb1HYPd',placeholder:'来都来了，不打个招呼吗？',visitor:'true',serverURLs:'https:\/\/u06bluxo.api.lncldglobal.com'});</script></div></div><a id=back_to_top href=# class=back_to_top><span>△</span></a></div><footer class=footer><div class=powered_by><a href=https://github.com/varkai/hugo-theme-zozo/ target=_blank>Designed by <span class=jitters>Zeuk</span>,</a>
 <a href=https://www.gohugo.io/ target=_blank>Published with <span class=jitters>Hugo</span></a></div><div class=footer_slogan><span id=enter_time></span></div></footer><script src=//unpkg.com/jquery/dist/jquery.min.js></script><script src=//unpkg.com/@highlightjs/cdn-assets/highlight.min.js></script><script src=https://vikingama.github.io/js/zozo.js></script><script>hljs.initHighlightingOnLoad();</script><script type=text/javascript async src="//www.unpkg.com/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML">MathJax.Hub.Config({tex2jax:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$'],['\[\[','\]\]']],processEscapes:true,processEnvironments:true,skipTags:['script','noscript','style','textarea','pre'],TeX:{equationNumbers:{autoNumber:"AMS"},extensions:["AMSmath.js","AMSsymbols.js"]}}});MathJax.Hub.Queue(function(){var all=MathJax.Hub.getAllJax(),i;for(i=0;i<all.length;i+=1){all[i].SourceElement().parentNode.className+=' has-jax';}});</script><style>code.has-jax{background:inherit;border:inherit;color:#515151;font:inherit;font-size:100%}</style><script type=application/javascript>var doNotTrack=false;if(!doNotTrack){window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;ga('create','G-CDS328YPMY','auto');ga('send','pageview');}</script><script async src=https://www.google-analytics.com/analytics.js></script></body></html>
