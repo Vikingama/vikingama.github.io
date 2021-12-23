@@ -107,26 +107,26 @@ const bar = foo; // 可以获取到 foo
 export const foo = 123;
 // bar.ts
 const bar = foo; // Error，找不到 foo
-</code></pre><p>在项目中，一般会建立一个全局类型模块 global.d.ts，可以将通用的类型提取出来作为 lib.d.ts 的扩充。</p><h3 id=interface-与-type>interface 与 type</h3><ol><li><p>都可以描述一个对象或者函数：</p><pre><code class=language-ts>interface User {
-name: string;
-age: number;
-eat(food: string): string;
+</code></pre><p>在项目中，一般会建立一个全局类型模块 global.d.ts，可以将通用的类型提取出来作为 lib.d.ts 的扩充。</p><h3 id=interface-与-type>interface 与 type</h3><ol><li>都可以描述一个对象或者函数：</li></ol><p>&nbsp;</p><pre><code class=language-ts>interface User {
+    name: string;
+    age: number;
+    eat(food: string): string;
 }
 interface NewUser {
-new (name: string, age?: number): User;
+    new (name: string, age?: number): User;
 }
 type User = {
-name: string;
-age: number;
-eat(food: string): string;
+    name: string;
+    age: number;
+    eat(food: string): string;
 };
 type NewUser = new (name: string, age?: number): User;
-</code></pre></li><li><p>都允许拓展，type 使用 &quot;&amp;&quot;，interface 使用 extends：</p><pre><code class=language-ts>// interface extends interface
+</code></pre><ol><li>都允许拓展，type 使用 &quot;&amp;&quot;，interface 使用 extends：</li></ol><p>&nbsp;</p><pre><code class=language-ts>// interface extends interface
 interface PartialPointX {
-x: number;
+  x: number;
 }
 interface Point extends PartialPointX {
-y: number;
+  y: number;
 }
 // type extends type
 type PartialPointX = { x: number };
@@ -134,52 +134,52 @@ type Point = PartialPointX &amp; { y: number };
 // interface extends type
 type PartialPointX = { x: number };
 interface Point extends PartialPointX {
-y: number;
+  y: number;
 }
 // type extends interface
 interface PartialPointX {
-x: number;
+  x: number;
 }
 type Point = PartialPointX &amp; { y: number };
-</code></pre></li><li><p>类都可以实现 interface 和 type：</p><pre><code class=language-ts>interface Point1 {
-x: number;
-y: number;
+</code></pre><ol><li>类都可以实现 interface 和 type：</li></ol><p>&nbsp;</p><pre><code class=language-ts>interface Point1 {
+  x: number;
+  y: number;
 }
 type Point2 = {
-x: number;
-y: number;
+  x: number;
+  y: number;
 };
 class SomePoint1 implements Point1 {
-x = 1;
-y = 2;
+  x = 1;
+  y = 2;
 }
 class SomePoint2 implements Point2 {
-x = 1;
-y = 2;
+  x = 1;
+  y = 2;
 }
-</code></pre></li><li><p>type 可以声明基本类型别名、联合类型、元组等类型：</p><pre><code class=language-ts>// 基本类型别名，给 string 类型起了一个叫 Name 的别名
+</code></pre><ol><li>type 可以声明基本类型别名、联合类型、元组等类型：</li></ol><p>&nbsp;</p><pre><code class=language-ts>// 基本类型别名，给 string 类型起了一个叫 Name 的别名
 type Name = string;
 // 联合类型
 interface Dog {
-wong();
+  wong();
 }
 interface Cat {
-miao();
+  miao();
 }
 type Pet = Dog | Cat;
 // 具体定义数组每个位置的类型
 type PetList = [Dog, Pet];
-</code></pre></li><li><p>type 语句中可以使用 typeof 获取实例的类型进行赋值：</p><pre><code class=language-ts>// 当你想获取一个变量的类型时，使用 typeof
+</code></pre><ol><li>type 语句中可以使用 typeof 获取实例的类型进行赋值：</li></ol><p>&nbsp;</p><pre><code class=language-ts>// 当你想获取一个变量的类型时，使用 typeof
 let div = document.createElement('div');
 type DivType = typeof div; // HTMLDivElement
-</code></pre></li><li><p>interface 能够声明合并（接口可以定义多次）：</p><pre><code class=language-ts>interface User {
-name: string;
-age: number;
+</code></pre><ol><li>interface 能够声明合并（接口可以定义多次）：</li></ol><p>&nbsp;</p><pre><code class=language-ts>interface User {
+  name: string;
+  age: number;
 }
 interface User {
-sex: string;
+  sex: string;
 }
-</code></pre></li></ol><h3 id=undefined-null-never-与-void>undefined、null、never 与 void</h3><p>默认情况下 never、null 和 undefined 是所有类型的子类型；就是说你可以把 never、null 和 undefined 赋值给任何类型的变量。只有 never 可以赋值给 never 类型；当你指定了 --strictNullChecks 标记，null 和 undefined 只能赋值给 void 和它们各自。void 表示没有任何类型，never 表示永远不存在的值的类型。</p><pre><code class=language-ts>function error(message: string): undefined;
+</code></pre><h3 id=undefined-null-never-与-void>undefined、null、never 与 void</h3><p>默认情况下 never、null 和 undefined 是所有类型的子类型；就是说你可以把 never、null 和 undefined 赋值给任何类型的变量。只有 never 可以赋值给 never 类型；当你指定了 --strictNullChecks 标记，null 和 undefined 只能赋值给 void 和它们各自。void 表示没有任何类型，never 表示永远不存在的值的类型。</p><pre><code class=language-ts>function error(message: string): undefined;
 function error(message: string): null;
 function error(message: string): void;
 function error(message: string): never {

@@ -8,7 +8,7 @@ chsh -s /bin/bash
 </code></pre><h3 id=不检查-catalina-更新>不检查 Catalina 更新</h3><pre><code class=language-bash>sudo softwareupdate --ignore &quot;macOS Catalina&quot;
 sudo softwareupdate --reset-ignored
 defaults write com.apple.systempreferences AttentionPrefBundleIDs 0
-</code></pre><h3 id=获取目录-文件权限>获取目录/文件权限</h3><pre><code class=language-zsh>sudo /bin/chmod +a 'user:vikingx:allow write' /etc/hosts
+</code></pre><h3 id=获取目录-文件权限>获取目录/文件权限</h3><pre><code class=language-bash>sudo /bin/chmod +a 'user:vikingx:allow write' /etc/hosts
 </code></pre><h3 id=安装-hugo-0-56>安装 hugo@0.56</h3><pre><code class=language-bash># 似乎已经失效
 brew install https://raw.githubusercontent.com/Homebrew/homebrew-core/cc2b0a5d594ec3d395ac8a293f9fcb2e30835097/Formula/hugo.rb
 # 1. brew tap &lt;org&gt;/&lt;repo&gt; https://github.com/&lt;org&gt;/&lt;repo&gt;
@@ -48,7 +48,7 @@ brew install hugo@0.56.0
 @=&quot;cmd.exe /c takeown /f \&quot;%1\&quot; /r /d y &amp;&amp; icacls \&quot;%1\&quot; /grant administrators:F /t&quot;
 &quot;IsolatedCommand&quot;=&quot;cmd.exe /c takeown /f \&quot;%1\&quot; /r /d y &amp;&amp; icacls \&quot;%1\&quot; /grant administrators:F /t&quot;
 </code></pre><h3 id=允许-任何来源>允许“任何来源”</h3><pre><code class=language-bash>sudo spctl --master-disable
-</code></pre><h3 id=重置-黑暗模式>重置“黑暗模式”</h3><pre><code class=language-zsh>defaults write -g NSRequiresAquaSystemAppearance -bool Yes
+</code></pre><h3 id=重置-黑暗模式>重置“黑暗模式”</h3><pre><code class=language-bash>defaults write -g NSRequiresAquaSystemAppearance -bool Yes
 defaults delete -g NSRequiresAquaSystemAppearance
 </code></pre><h3 id=系统完整性保护>系统完整性保护</h3><pre><code class=language-bash># 查看 SIP 状态
 csrutil status
@@ -81,9 +81,9 @@ git stash clear
 git stash list
 git stash pop
 git stash save
-</code></pre><h3 id=移除文件属性>移除文件属性</h3><pre><code class=language-zsh>xattr -c -r /Users/vikingx/Downloads
+</code></pre><h3 id=移除文件属性>移除文件属性</h3><pre><code class=language-bash>xattr -c -r /Users/vikingx/Downloads
 </code></pre><h3 id=软件已损坏>软件已损坏</h3><pre><code class=language-bash>sudo xattr -d com.apple.quarantine /Applications/xxx.app
-</code></pre><h3 id=解压-pkg>解压 pkg</h3><pre><code class=language-zsh># 将 Edge.pkg 解压到同目录 Edge 文件夹下
+</code></pre><h3 id=解压-pkg>解压 pkg</h3><pre><code class=language-bash># 将 Edge.pkg 解压到同目录 Edge 文件夹下
 pkgutil --expand Edge.pkg Edge
 </code></pre><h3 id=代理终端>代理终端</h3><pre><code class=language-bash>export https_proxy=http://127.0.0.1:7890 http_proxy=http://127.0.0.1:7890 all_proxy=socks5://127.0.0.1:7890
 </code></pre></div><div class=post_footer></div></div></div></div><a id=back_to_top href=# class=back_to_top><span>△</span></a></div><footer class=footer><div class=powered_by><a href=https://github.com/varkai/hugo-theme-zozo/ target=_blank>Designed by <span class=jitters>Zeuk</span>,</a>
