@@ -684,16 +684,16 @@ class RefImpl&lt;T&gt; {
 }
 </code></pre><p>track 和 trigger 用于依赖收集和在依赖变动时触发的副作用。</p><pre><code class=language-ts>// 追踪类型
 export const enum TrackOpTypes {
-  GET = 'get',
-  HAS = 'has',
-  ITERATE = 'iterate'
+  GET = 'get', // 属性读取
+  HAS = 'has', // in 操作符（不包括 for...in）
+  ITERATE = 'iterate' // 迭代器
 }
 // 触发类型
 export const enum TriggerOpTypes {
-  SET = 'set',
-  ADD = 'add',
-  DELETE = 'delete',
-  CLEAR = 'clear'
+  SET = 'set', // 属性设置
+  ADD = 'add', // 属性添加
+  DELETE = 'delete', // 属性删除
+  CLEAR = 'clear' // 清空数据
 }
 // 依赖列表（2.x Array =&gt; 3.x Set）
 type Dep = Set&lt;ReactiveEffect&gt;;
@@ -714,6 +714,7 @@ const trackStack: boolean[] = [];
  * 1. WeakSet 的成员都是弱引用；
  * 2. WeakSet 的成员都是对象；
  * 3. WeakSet 不能遍历。
+ * 只要外部引用消失，立即清除就会帮我们自动回收，不再像 2.x 里的那样，让 watcher 去一个个的通知
  */
 const targetMap = new WeakMap&lt;any, KeyToDepMap&gt;();
 export const ITERATE_KEY = Symbol('');
@@ -853,7 +854,7 @@ export function trigger(
     }
   });
 }
-</code></pre><p>effect 很像之前的 watcher；作为代理数据的订阅者，当对数据进行 get、has、iterate 操作，effect 会被收集起来；当对数据进行 set、add、delete、clear 操作，对应的 effect 会被调用。</p><pre><code class=language-ts>let uid = 0;
+</code></pre><p>effect 很像之前的 watcher；每次调用 effect，会调用 createReactiveEffect 创建 reactiveEffect 并设置为 activeEffect（就像 2.x 的 watcher 在被收集之前，会将自己复制给 Dep.target 一样）；之后会调用传入的 fn（componentEffect 内部的 renderComponentRoot 方法会执行组件的 render 方法、computedGetter、...），如果在 fn 调用的过程中，访问到了『响应式』数据；Proxy 会通过 track 将 activeEffect 收集起来（响应式数据与 effect 建立联系），放到 Set 里（dep.add(activeEffect)）；同时，activeEffect 也会保存一份 dep（activeEffect.deps.push(dep)）。</p><pre><code class=language-ts>let uid = 0;
 const effectStack: ReactiveEffect[] = [];
 export interface ReactiveEffect&lt;T = any&gt; {
   (): T; // ReactiveEffect 可调用
@@ -888,7 +889,7 @@ export function effect(fn, options = {}) {
   }
   return effect;
 }
-function createReactiveEffect&lt;T = any&gt;(
+function 会&lt;T = any&gt;(
   fn: () =&gt; T,
   options: ReactiveEffectOptions
 ): ReactiveEffect&lt;T&gt; {
@@ -901,7 +902,7 @@ function createReactiveEffect&lt;T = any&gt;(
       try {
         enableTracking();
         effectStack.push(effect);
-        // 将自身设置为 activeEffect，方便 track 对自己进行追踪
+        // 将自身设置为 activeEffect，方便 track 对自己进行追踪，从而进行依赖收集
         activeEffect = effect;
         // 每次调用 effect，都会执行 fn
         return fn();
@@ -2292,7 +2293,28 @@ function createComputedGetter(key) {
     }
   };
 }
-</code></pre><h3 id=computed-3-x>computed 3.x</h3><pre><code class=language-ts>class ComputedRefImpl&lt;T&gt; {
+</code></pre><h3 id=computed-3-x>computed 3.x</h3><pre><code class=language-ts>// 处理两种参数形式
+export function computed&lt;T&gt;(
+  getterOrOptions: ComputedGetter&lt;T&gt; | WritableComputedOptions&lt;T&gt;
+) {
+  let getter: ComputedGetter&lt;T&gt;;
+  let setter: ComputedSetter&lt;T&gt;;
+  // 标准化参数
+  if (isFunction(getterOrOptions)) {
+    getter = getterOrOptions;
+    setter = NOOP;
+  } else {
+    getter = getterOrOptions.get;
+    setter = getterOrOptions.set;
+  }
+  // 返回 computed 对象
+  return new ComputedRefImpl(
+    getter,
+    setter,
+    isFunction(getterOrOptions) || !getterOrOptions.set
+  ) as any;
+}
+class ComputedRefImpl&lt;T&gt; {
   private _value!: T;
   private _dirty = true;
   public readonly __v_isRef = true; // computed 是一个 ref
@@ -2338,27 +2360,6 @@ function createComputedGetter(key) {
   set value(newValue: T) {
     this._setter(newValue);
   }
-}
-// 处理两种参数形式
-export function computed&lt;T&gt;(
-  getterOrOptions: ComputedGetter&lt;T&gt; | WritableComputedOptions&lt;T&gt;
-) {
-  let getter: ComputedGetter&lt;T&gt;;
-  let setter: ComputedSetter&lt;T&gt;;
-  // 标准化参数
-  if (isFunction(getterOrOptions)) {
-    getter = getterOrOptions;
-    setter = NOOP;
-  } else {
-    getter = getterOrOptions.get;
-    setter = getterOrOptions.set;
-  }
-  // 返回 computed 对象
-  return new ComputedRefImpl(
-    getter,
-    setter,
-    isFunction(getterOrOptions) || !getterOrOptions.set
-  ) as any;
 }
 </code></pre><h3 id=diff-2-x>diff 2.x</h3><pre><code class=language-ts>// 挂载
 export function mountComponent(
@@ -3840,7 +3841,7 @@ export function createComponentInstance(
   // 继承父组件的 appContext；如果是根组件，则直接从根 vnode 中取
   const appContext =
     (parent ? parent.appContext : vnode.appContext) || emptyAppContext;
-  // 字面量的方式不同于 2.0 中的 new Vue
+  // 字面量的方式不同于 2.x 中的 new Vue
   const instance: ComponentInternalInstance = {
     uid: uid++, // 组件唯一 id
     vnode, // 组件 vnode
@@ -3983,6 +3984,7 @@ const setupRenderEffect: SetupRenderEffectFn = (
   optimized
 ) =&gt; {
   instance.update = effect(
+    // 组件 effect 的回调函数
     function componentEffect() {
       if (!instance.isMounted) {
         let vnodeHook: VNodeHook | null | undefined;
@@ -5501,17 +5503,40 @@ export function stateMixin(Vue: Class&lt;Component&gt;) {
 }
 </code></pre><h3 id=watch-3-x>watch 3.x</h3><p>watch 需要侦听特定的数据源，并在单独的回调函数中（惰性）执行副作用；watchEffect 立即执行传入的一个函数，同时响应式追踪其依赖，并在其依赖变更时重新运行该函数。</p><pre><code class=language-ts>// watchers 在未定义初始值时触发的初始值
 const INITIAL_WATCHER_VALUE = {};
-// watch(() =&gt; state.count, (count, prevCount, onInvalidate) =&gt; {...}, {...})
-export function watch(source, cb, options) {
-  return doWatch(source, cb, options);
+export interface WatchOptionsBase {
+  flush?: 'pre' | 'post' | 'sync';
+  onTrack?: ReactiveEffectOptions['onTrack'];
+  onTrigger?: ReactiveEffectOptions['onTrigger'];
 }
 /**
  * watchEffect((onInvalidate) =&gt; {...}, {...})
  * Vue 会自动追踪 fn 依赖 instance 中的数据
- * 也就是自动生成 getter
+ * 也就是自动生成 getter（需要先运行一次）
  */
 export function watchEffect(fn, options) {
   return doWatch(fn, null, options);
+}
+/**
+ * watch(() =&gt; state.count, (count, prevCount, onInvalidate) =&gt; {...}, {...})
+ * 1. 懒执行副作用；
+ * 2. 更具体地说明什么状态应该触发侦听器重新运行；
+ * 3. 访问侦听状态变化前后的值。
+ */
+export function watch(source, cb, options) {
+  return doWatch(source, cb, options);
+}
+// vm.$watch
+export function instanceWatch(
+  this: ComponentInternalInstance,
+  source: string | Function,
+  cb: WatchCallback,
+  options?: WatchOptions
+): WatchStopHandle {
+  const publicThis = this.proxy as any;
+  const getter = isString(source)
+    ? () =&gt; publicThis[source]
+    : source.bind(publicThis);
+  return doWatch(getter, cb.bind(publicThis), options, this);
 }
 // 最终实现
 function doWatch(
@@ -5522,15 +5547,17 @@ function doWatch(
 ) {
   if (!cb) {
     if (immediate !== undefined) {
-      warn('只有 cb 有值的时候，才支持 immediate');
+      warn('只有 watch(source, callback, options?) 才支持 immediate');
     }
     if (deep !== undefined) {
-      warn('只有 cb 有值的时候，才支持 deep');
+      warn('只有 watch(source, callback, options?) 才支持 deep');
     }
   }
   let getter: () =&gt; any;
   let forceTrigger = false;
+  // 根据不同的 soure，生成不同的 getter，用于触发 Proxy 的拦截器，进行依赖收集
   if (isRef(source)) {
+    // 如果 source 为 ref，自动展开
     getter = () =&gt; source.value;
     forceTrigger = !!source._shallow;
   } else if (isReactive(source)) {
@@ -5538,7 +5565,7 @@ function doWatch(
     getter = () =&gt; source;
     deep = true;
   } else if (isArray(source)) {
-    // 如果 source 为数组
+    // 如果 source 为数组，对每一项做处理并返回
     getter = () =&gt;
       source.map(s =&gt; {
         if (isRef(s)) {
@@ -5656,25 +5683,13 @@ function doWatch(
   } else {
     runner();
   }
+  // 停止监听函数
   return () =&gt; {
     stop(runner);
     if (instance) {
       remove(instance.effects!, runner);
     }
   };
-}
-// vm.$watch
-export function instanceWatch(
-  this: ComponentInternalInstance,
-  source: string | Function,
-  cb: WatchCallback,
-  options?: WatchOptions
-): WatchStopHandle {
-  const publicThis = this.proxy as any;
-  const getter = isString(source)
-    ? () =&gt; publicThis[source]
-    : source.bind(publicThis);
-  return doWatch(getter, cb.bind(publicThis), options, this);
 }
 </code></pre><h3 id=slot-2-x>slot 2.x</h3><p>运行时对插槽的处理。</p><pre><code class=language-ts>export function processElement(element, options) {
   // ...
@@ -6011,4 +6026,4 @@ function genSlot(el, state) {
   return rendered;
 }
 </code></pre></div><div class=post_footer><div class=meta><div class=info><span class="field tags"><i class=remixicon-stack-line></i><a href=https://vikingama.github.io/tags/vue/>Vue</a></span></div></div></div></div><div class=doc_comments><div class=comments_block_title>发表评论</div><div id=vcomments></div></div><link rel=stylesheet href=https://vikingama.github.io/css/comments.css><script src=//unpkg.com/valine></script><script type=text/javascript>new Valine({el:'#vcomments',avatar:'retro',recordIP:true,path:window.location.pathname,appId:'U06blUXOot4uJgfMu8I9xJXz-MdYXbMMI',appKey:'BnrXC06FJsvRNpr4aqb1HYPd',placeholder:'来都来了，不打个招呼吗？',visitor:'true',serverURLs:'https:\/\/u06bluxo.api.lncldglobal.com'});</script></div></div><a id=back_to_top href=# class=back_to_top><span>△</span></a></div><footer class=footer><div class=powered_by><a href=https://github.com/varkai/hugo-theme-zozo/ target=_blank>Designed by <span class=jitters>Zeuk</span>,</a>
-<a href=https://www.gohugo.io/ target=_blank>Published with <span class=jitters>Hugo</span></a></div><div class=footer_slogan><span id=enter_time></span></div></footer><script src=//unpkg.com/jquery/dist/jquery.min.js></script><script src=//unpkg.com/@highlightjs/cdn-assets/highlight.min.js></script><script src=https://vikingama.github.io/js/zozo.js></script><script>hljs.initHighlightingOnLoad();</script><script type=application/javascript>var doNotTrack=false;if(!doNotTrack){window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;ga('create','G-CDS328YPMY','auto');ga('send','pageview');}</script><script async src=https://www.google-analytics.com/analytics.js></script></body></html>
+<a href=https://www.gohugo.io/ target=_blank>Published with <span class=jitters>Hugo</span></a></div><div class=footer_slogan><span id=enter_time></span></div></footer><script src=//unpkg.com/jquery/dist/jquery.min.js></script><script src=//unpkg.com/@highlightjs/cdn-assets/highlight.min.js></script><script src=https://vikingama.github.io/js/zozo.js></script><script>hljs.highlightAll();</script><script type=application/javascript>var doNotTrack=false;if(!doNotTrack){window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;ga('create','G-CDS328YPMY','auto');ga('send','pageview');}</script><script async src=https://www.google-analytics.com/analytics.js></script></body></html>
