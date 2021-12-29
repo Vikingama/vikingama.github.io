@@ -1,15 +1,13 @@
-<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no,user-scalable=no"><meta name=author content=馬腊咯稽><meta name=description content="Vue Composition API"><meta name=keywords content=Vue><link rel=canonical href=https://vikingama.github.io/posts/composition-api/><link rel="shortcut icon" href=https://vikingama.github.io/images/favicon.ico><link rel=stylesheet href=https://vikingama.github.io/css/zozo.css><link rel=stylesheet href=https://vikingama.github.io/css/highlight.css><link rel=stylesheet href=https://vikingama.github.io/css/remixicon.css><title>Vue Composition API &middot; 看不见我的美 · 是你瞎了眼</title></head><body><div class="main animated"><div class="nav_container animated fadeInDown"><div class=site_nav id=site_nav><ul><li><a href=/>首页</a></li><li><a href=/posts/>归档</a></li><li><a href=/resume/>简历</a></li><li><a href=/tags/>标签</a></li><li><a href=/inspires/>启发</a></li><li><a href=/command/>命令</a></li><li><a href=/about/>关于</a></li></ul></div><div class=menu_icon><a id=menu_icon><i class=remixicon-links-line></i></a></div></div><div class="header animated fadeInDown"><div class=site_title_container><div class=site_title><h1><a href=https://vikingama.github.io><img style=width:65px;height:auto;vertical-align:top src=https://vikingama.github.io/images/avatar.png></a></h1></div><div class=description><p class=sub_title>看不见我的美<br>是你瞎了眼</p><div class=my_socials><a href=https://www.douban.com/people/nicknoonan title=douban target=_blank><i class=remixicon-douban-fill></i></a><a href=https://github.com/Vikingama title=github target=_blank><i class=remixicon-github-fill></i></a><a href=https://weibo.com/vikingx title=weibo target=_blank><i class=remixicon-weibo-fill></i></a><a href=https://www.zhihu.com/people/vikingama title=zhihu target=_blank><i class=remixicon-zhihu-fill></i></a><a href=https://vikingama.github.io/index.xml type=application/rss+xml title=rss target=_blank><i class=remixicon-rss-fill></i></a></div></div></div></div><div class=content><div class=post_page><div class="post animated fadeInDown"><div class="post_title post_detail_title"><h2><a href=/posts/composition-api/>Vue Composition API</a></h2><span class=date>2020.04.23</span></div><div class="post_content markdown"><blockquote><p>新 API 的引入是为了更方便的逻辑复用、更清晰的代码结构和更完整的类型检查。</p></blockquote><h3 id=与-react-hooks-的区别>与 React Hooks 的区别</h3><ol><li>更符合 JS 习惯；</li><li>对调用顺序不敏感；</li><li>在每次渲染的过程中不会重复调用，对垃圾回收机制的压力更小；</li><li>避免了内联处理程序导致子组件重复渲染的问题（在 React 中需要使用 useCallback）；</li><li>不需要像 useEffect 和 useMemo 那样需要正确的设置依赖，Vue 会自动的追踪。</li></ol><h3 id=值传递与引用传递>值传递与引用传递</h3><p><img style="display:block;margin:0 auto;width:70%" src=/composition-api/reference-value.gif></p><p>新的 API 非常依赖引用传递，这样 Vue 才能及时捕获数据变化；这也是为什么 toRef 会将普通类型数据包装成对象的原因；reactive 包装的对象在解构时为了保持响应性需要用 toRefs 包装也是这个原因。</p><h3 id=setup>setup</h3><p>作为 Composition API 在 Vue 组件中的入口；它会在组件实例被创建，props 完成初始化之后调用；和模板一起使用时，返回的对象会自动合并到渲染上下文中。</p><pre><code class=language-html>&lt;template&gt;
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no,user-scalable=no"><meta name=author content=馬腊咯稽><meta name=description content="Vue Composition API"><meta name=keywords content=Vue><link rel=canonical href=https://vikingama.github.io/posts/composition-api/><link rel="shortcut icon" href=https://vikingama.github.io/images/favicon.ico><link rel=stylesheet href=https://vikingama.github.io/css/zozo.css><link rel=stylesheet href=https://vikingama.github.io/css/highlight.css><link rel=stylesheet href=https://vikingama.github.io/css/remixicon.css><title>Vue Composition API &middot; 看不见我的美 · 是你瞎了眼</title></head><body><div class="main animated"><div class="nav_container animated fadeInDown"><div class=site_nav id=site_nav><ul><li><a href=/>首页</a></li><li><a href=/posts/>归档</a></li><li><a href=/tags/>标签</a></li><li><a href=/inspires/>启发</a></li><li><a href=/command/>命令</a></li><li><a href=/about/>关于</a></li></ul></div><div class=menu_icon><a id=menu_icon><i class=remixicon-links-line></i></a></div></div><div class="header animated fadeInDown"><div class=site_title_container><div class=site_title><h1><a href=https://vikingama.github.io><img style=width:65px;height:auto;vertical-align:top src=https://vikingama.github.io/images/avatar.png></a></h1></div><div class=description><p class=sub_title>看不见我的美<br>是你瞎了眼</p><div class=my_socials><a href=https://www.douban.com/people/nicknoonan title=douban target=_blank><i class=remixicon-douban-fill></i></a><a href=https://github.com/Vikingama title=github target=_blank><i class=remixicon-github-fill></i></a><a href=https://weibo.com/vikingx title=weibo target=_blank><i class=remixicon-weibo-fill></i></a><a href=https://www.zhihu.com/people/vikingama title=zhihu target=_blank><i class=remixicon-zhihu-fill></i></a><a href=https://vikingama.github.io/index.xml type=application/rss+xml title=rss target=_blank><i class=remixicon-rss-fill></i></a></div></div></div></div><div class=content><div class=post_page><div class="post animated fadeInDown"><div class="post_title post_detail_title"><h2><a href=/posts/composition-api/>Vue Composition API</a></h2><span class=date>2020.04.23</span></div><div class="post_content markdown"><blockquote><p>新 API 的引入是为了更方便的逻辑复用、更清晰的代码结构和更完整的类型检查。</p></blockquote><h3 id=与-react-hooks-的区别>与 React Hooks 的区别</h3><ol><li>更符合 JS 习惯；</li><li>对调用顺序不敏感；</li><li>在每次渲染的过程中不会重复调用，对垃圾回收机制的压力更小；</li><li>避免了内联处理程序导致子组件重复渲染的问题（在 React 中需要使用 useCallback）；</li><li>不需要像 useEffect 和 useMemo 那样需要正确的设置依赖，Vue 会自动的追踪。</li></ol><h3 id=值传递与引用传递>值传递与引用传递</h3><p><img style="display:block;margin:0 auto;width:70%" src=/composition-api/reference-value.gif></p><p>新的 API 非常依赖引用传递，这样 Vue 才能及时捕获数据变化；这也是为什么 toRef 会将普通类型数据包装成对象的原因；reactive 包装的对象在解构时为了保持响应性需要用 toRefs 包装也是这个原因。</p><h3 id=setup>setup</h3><p>作为 Composition API 在 Vue 组件中的入口；它会在组件实例被创建，props 完成初始化之后调用；和模板一起使用时，返回的对象会自动合并到渲染上下文中。</p><pre><code class=language-html>&lt;template&gt;
   &lt;div&gt;{{ count }} {{ object.foo }}&lt;/div&gt;
 &lt;/template&gt;
 &lt;script&gt;
   import { ref, reactive } from 'vue';
-
   export default {
     setup() {
       // ref 在 setup 中返回并在模板中使用时会自动解构，不需要通过 count.value 访问
       const count = ref(0);
       const object = reactive({ foo: 'bar' });
-
       return {
         count,
         object
@@ -18,12 +16,10 @@
   };
 &lt;/script&gt;
 </code></pre><p>setup 也可以返回一个渲染函数，渲染函数可以直接使用所在作用域中的响应式状态。</p><pre><code class=language-js>import { h, ref, reactive } from 'vue';
-
 export default {
   setup() {
     const count = ref(0);
     const object = reactive({ foo: 'bar' });
-
     return () =&gt; h('div', [count.value, object.foo]);
   }
 };
@@ -34,7 +30,6 @@ export default {
   setup(props) {
     // props 对象是响应式的并且是不可变（immutable）对象，不要尝试去修改它
     console.log(props.name);
-
     watchEffect(() =&gt; {
       console.log(`name is: ` + props.name);
     });
@@ -75,23 +70,19 @@ const TwoComponent = {
 </code></pre><p>setup 的类型：</p><pre><code class=language-ts>interface Data {
   [propsName: string]: unknown;
 }
-
 interface SetupContext {
   attrs: Data;
   slots: Slots;
   emit: (event: string, ...args: unknown[]) =&gt; void;
 }
-
 function setup(props: Data, context: SetupContext): Data;
 </code></pre><h3 id=reactive>reactive</h3><p>reactive 接受一个对象并返回一个响应式代理，相当于 2.x 版本的 Vue.observable({})。</p><pre><code class=language-ts>// 响应式转换是深层的，会影响所有嵌套的属性
 function reactive&lt;T extends object&gt;(raw: T): T;
-
 const obj = reactive({ count: 0 });
 </code></pre><h3 id=ref>ref</h3><p>ref 的返回值是一个响应式的可变对象，对象只有一个属性 value；如果传入一个对象，这个对象会被 reactive 方法进行响应式转换。</p><pre><code class=language-js>const count = ref(0);
 const otherCount = ref(2);
 // 如果 ref 作为响应式对象的一个属性，也会自动展开内部的 value，就像普通属性一样
 const state = reactive({ count });
-
 console.log(state.count); // 0
 state.count = 1;
 console.log(count.value); // 1
@@ -107,15 +98,11 @@ console.log(map.get('foo').value);
 </code></pre><p>ref 类型：</p><pre><code class=language-ts>interface Ref&lt;T&gt; {
   value: T;
 }
-
 function ref&lt;T&gt;(value: T): Ref&lt;T&gt;;
-
 const foo = ref&lt;string | number&gt;('foo');
-
 foo.value = 123;
 </code></pre><h3 id=computed>computed</h3><p>传入一个 getter 函数并返回一个不可变的响应式的 ref 对象。</p><pre><code class=language-js>const count = ref(1);
 const plusOne = computed(() =&gt; count.value + 1);
-
 console.log(plusOne.value); // 2
 plusOne.value++; // 报错
 </code></pre><p>如果传入一个有 getter 和 setter 函数的对象，则返回一个可写的 ref 对象。</p><pre><code class=language-js>const count = ref(1);
@@ -127,7 +114,6 @@ const plusOne = computed({
     count.value = val - 1;
   }
 });
-
 plusOne.value = 1;
 console.log(count.value); // 0
 </code></pre><p>computed 的类型：</p><pre><code class=language-ts>function computed&lt;T&gt;(getter: () =&gt; T): Readonly&lt;Ref&lt;Readonly&lt;T&gt;&gt;&gt;;
@@ -137,7 +123,6 @@ function computed&lt;T&gt;(options: {
 }): Ref&lt;T&gt;;
 </code></pre><h3 id=readonly>readonly</h3><p>返回一个原始对象的只读代理，代理中所有嵌套的属性都将是只读的。</p><pre><code class=language-js>const original = reactive({ count: 0 });
 const copy = readonly(original);
-
 watchEffect(() =&gt; {
   console.log(copy);
 });
@@ -146,20 +131,17 @@ original.count++;
 // 改变只读对象会报警告并失败
 copy.count++;
 </code></pre><h3 id=watcheffect>watchEffect</h3><p>在追踪响应式依赖时会立即执行，当依赖发生变化时会重新运行；就像 React.useEffect 的自动设置依赖的版本。</p><pre><code class=language-js>const count = ref(0);
-
 watchEffect(() =&gt; {
   console.log(count.value); // 0, 1, 2, ...
 });
-
 setTimeout(() =&gt; {
   count.value++;
 }, 1000);
 </code></pre><p>当 watchEffect 在 setup 或生命周期函数中调用时，watcher 会被关联到组件的生命周期上，当组件被卸载时会自动停止执行。当然它会返回一个函数，调用这个函数也可以停止 watcher。</p><pre><code class=language-js>const stopWatcher = watchEffect(() =&gt; {
   console.log('...');
 });
-
 stopWatcher();
-</code></pre><p>有时 watchEffect 中会进行一些异步的副作用操作，当副作用失效时需要进行一些清理工作（比如，在副作用执行完毕之前，依赖发生了变化）；副作用函数可以接受一个 onInvalidate 函数，这个函数会在这些情况下被调用：</p><ul><li>副作用将被重新执行的时候；</li><li>watcher 被停止的时候。</li></ul><p>鹅，好像 React.useEffect 的返回函数。</p><pre><code class=language-js>watchEffect((onInvalidate) =&gt; {
+</code></pre><p>有时 watchEffect 中会进行一些异步的副作用操作，当副作用失效时需要进行一些清理工作（比如，在副作用执行完毕之前，依赖发生了变化）；副作用函数可以接受一个 onInvalidate 函数，这个函数会在这些情况下被调用：</p><ul><li>副作用将被重新执行的时候；</li><li>watcher 被停止的时候。</li></ul><p>鹅，好像 React.useEffect 的返回函数。</p><pre><code class=language-js>watchEffect(onInvalidate =&gt; {
   const token = performAsyncOperation(id.value);
   onInvalidate(() =&gt; {
     // 终止之前正在进行的异步操作
@@ -173,7 +155,6 @@ stopWatcher();
   export default {
     setup() {
       const count = ref(0);
-
       watchEffect(() =&gt; {
         /**
          * 将在初始化时同步运行，初始化运行会在组件挂载之前
@@ -181,7 +162,6 @@ stopWatcher();
          */
         console.log(count.value);
       });
-
       return {
         count
       };
@@ -214,7 +194,6 @@ watchEffect(() =&gt; {}, {
 });
 </code></pre><p>watchEffect 的类型：</p><pre><code class=language-ts>type StopHandle = () =&gt; void;
 type InvalidateCbRegistrator = (invalidate: () =&gt; void) =&gt; void;
-
 interface DebuggerEvent {
   effect: ReactiveEffect;
   target: any;
@@ -226,7 +205,6 @@ interface WatchEffectOptions {
   onTrack?: (event: DebuggerEvent) =&gt; void;
   onTrigger?: (event: DebuggerEvent) =&gt; void;
 }
-
 function watchEffect(
   effect: (onInvalidate: InvalidateCbRegistrator) =&gt; void,
   options?: WatchEffectOptions
@@ -235,7 +213,6 @@ function watchEffect(
   count: 0
 });
 const count = ref(0);
-
 watch(
   () =&gt; state.count,
   (count, prevCount) =&gt; {}
@@ -248,7 +225,6 @@ watch([fooRef, barRef], ([foo, bar], [prevFoo, prevBar]) =&gt; {
 type MapSources&lt;T&gt; = {
   [K in keyof T]: T[K] extends WatcherSource&lt;infer V&gt; ? V : never;
 };
-
 interface WatchEffectOptions {
   flush?: 'pre' | 'post' | 'sync';
   onTrack?: (event: DebuggerEvent) =&gt; void;
@@ -258,7 +234,6 @@ interface WatchOptions extends WatchEffectOptions {
   immediate?: boolean; // 默认是 false
   deep?: boolean;
 }
-
 function watch&lt;T&gt;(
   source: WatchSource&lt;T&gt;,
   callback: (
@@ -268,7 +243,6 @@ function watch&lt;T&gt;(
   ) =&gt; void,
   options?: WatchOptions
 ): StopHandle;
-
 function watch&lt;T extends WatcherSource&lt;unknown&gt;[]&gt;(
   source: T,
   callback: (
@@ -279,7 +253,6 @@ function watch&lt;T extends WatcherSource&lt;unknown&gt;[]&gt;(
   options?: WatchOptions
 ): StopHandle;
 </code></pre><h3 id=生命周期函数>生命周期函数</h3><p>生命周期函数只能用在 setup 里，因为它们依赖内部的全局状态来定位当前活跃的组件实例，否则会报错。</p><p>对比 2.x 的生命周期函数：</p><ul><li><del>beforeCreate</del> -&gt; setup</li><li><del>created</del> -&gt; setup</li><li><del>beforeMount</del> -&gt; onBeforeMount</li><li><del>mounted</del> -&gt; onMounted</li><li><del>beforeUpdate</del> -&gt; onBeforeUpdate</li><li><del>updated</del> -&gt; onUpdated</li><li><del>beforeDestroy</del> -&gt; onBeforeUnmount</li><li><del>destroyed</del> -&gt; onUnmounted</li><li><del>errorCaptured</del> -&gt; onErrorCaptured</li></ul><p>&nbsp;</p><pre><code class=language-js>import { onMounted, onUpdated, onUnmounted } from 'vue';
-
 const MyComponent = {
   setup() {
     onMounted(() =&gt; {
@@ -299,7 +272,6 @@ const MyComponent = {
   }
 };
 </code></pre><h3 id=依赖注入>依赖注入</h3><p>行为和 2.x 的 provide/inject 一样；两者需要在 setup 中使用。</p><pre><code class=language-js>import { provide, inject } from 'vue';
-
 const ThemeSymbol = Symbol();
 const Ancestor = {
   setup() {
@@ -322,12 +294,10 @@ watchEffect(() =&gt; {
   console.log(`theme set to: ${theme.value}`);
 });
 </code></pre><p>provide/inject 的类型：</p><pre><code class=language-ts>interface InjectionKey&lt;T&gt; extends Symbol {}
-
 function provide&lt;T&gt;(key: InjectionKey&lt;T&gt; | string, value: T): void;
 function inject&lt;T&gt;(key: InjectionKey&lt;T&gt; | string): T | undefined;
 function inject&lt;T&gt;(key: InjectionKey&lt;T&gt; | string, defaultValue: T): T;
 </code></pre><p>Vue 提供一个继承于 Symbol 的 InjectionKey 接口：</p><pre><code class=language-ts>import { InjectionKey, provide, inject } from 'vue';
-
 const key: InjectionKey&lt;string&gt; = Symbol();
 // provider
 provide(key, 'foo');
@@ -345,7 +315,6 @@ const foo = inject(key, 'bar');
       onMounted(() =&gt; {
         console.log(root.value); // &lt;div/&gt;
       });
-
       return { root };
     }
   };
@@ -365,19 +334,15 @@ const foo = inject(key, 'bar');
 </code></pre><p>在 v-for 中使用：</p><pre><code class=language-html>&lt;template&gt;
   &lt;div v-for=&quot;(item, i) in list&quot; :ref=&quot;el =&gt; { divs[i] = el }&quot;&gt;{{ item }}&lt;/div&gt;
 &lt;/template&gt;
-
 &lt;script&gt;
   import { ref, reactive, onBeforeUpdate } from 'vue';
-
   export default {
     setup() {
       const list = reactive([1, 2, 3]);
       const divs = ref([]);
-
       onBeforeUpdate(() =&gt; {
         divs.value = [];
       });
-
       return {
         list,
         divs
@@ -425,15 +390,12 @@ console.log(state.foo); // 3
     foo: 1,
     bar: 2
   });
-
   return toRefs(state);
 }
-
 export default {
   setup() {
     // 可以解构而不会丢失响应性
     const { foo, bar } = useFeatureX();
-
     return {
       foo,
       bar
@@ -441,4 +403,4 @@ export default {
   }
 };
 </code></pre><h3 id=其他工具>其他工具</h3><ul><li>isRef，判断值是否为 ref 对象</li><li>isProxy，判断对象是否是 reactive/readonly 创建的一个代理；</li><li>isReactive，判断对象是否是 reactive 创建的一个响应式代理；</li><li>isReadonly，判断对象是否是 readonly 创建的一个只读代理。</li></ul></div><div class=post_footer><div class=meta><div class=info><span class="field tags"><i class=remixicon-stack-line></i><a href=https://vikingama.github.io/tags/vue/>Vue</a></span></div></div></div></div><div class=doc_comments><div class=comments_block_title>发表评论</div><div id=vcomments></div></div><link rel=stylesheet href=https://vikingama.github.io/css/comments.css><script src=//unpkg.com/valine></script><script type=text/javascript>new Valine({el:'#vcomments',avatar:'retro',recordIP:true,path:window.location.pathname,appId:'U06blUXOot4uJgfMu8I9xJXz-MdYXbMMI',appKey:'BnrXC06FJsvRNpr4aqb1HYPd',placeholder:'来都来了，不打个招呼吗？',visitor:'true',serverURLs:'https:\/\/u06bluxo.api.lncldglobal.com'});</script></div></div><a id=back_to_top href=# class=back_to_top><span>△</span></a></div><footer class=footer><div class=powered_by><a href=https://github.com/varkai/hugo-theme-zozo/ target=_blank>Designed by <span class=jitters>Zeuk</span>,</a>
-<a href=https://www.gohugo.io/ target=_blank>Published with <span class=jitters>Hugo</span></a></div><div class=footer_slogan><span id=enter_time></span></div></footer><script src=//unpkg.com/jquery/dist/jquery.min.js></script><script src=//unpkg.com/@highlightjs/cdn-assets/highlight.min.js></script><script src=https://vikingama.github.io/js/zozo.js></script><script>hljs.initHighlightingOnLoad();</script><script type=text/javascript async src="//www.unpkg.com/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML">MathJax.Hub.Config({tex2jax:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$'],['\[\[','\]\]']],processEscapes:true,processEnvironments:true,skipTags:['script','noscript','style','textarea','pre'],TeX:{equationNumbers:{autoNumber:"AMS"},extensions:["AMSmath.js","AMSsymbols.js"]}}});MathJax.Hub.Queue(function(){var all=MathJax.Hub.getAllJax(),i;for(i=0;i<all.length;i+=1){all[i].SourceElement().parentNode.className+=' has-jax';}});</script><style>code.has-jax{background:inherit;border:inherit;color:#515151;font:inherit;font-size:100%}</style><script type=application/javascript>var doNotTrack=false;if(!doNotTrack){window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;ga('create','G-CDS328YPMY','auto');ga('send','pageview');}</script><script async src=https://www.google-analytics.com/analytics.js></script></body></html>
+<a href=https://www.gohugo.io/ target=_blank>Published with <span class=jitters>Hugo</span></a></div><div class=footer_slogan><span id=enter_time></span></div></footer><script src=//unpkg.com/jquery/dist/jquery.min.js></script><script src=//unpkg.com/@highlightjs/cdn-assets/highlight.min.js></script><script src=https://vikingama.github.io/js/zozo.js></script><script>hljs.initHighlightingOnLoad();</script><script type=application/javascript>var doNotTrack=false;if(!doNotTrack){window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;ga('create','G-CDS328YPMY','auto');ga('send','pageview');}</script><script async src=https://www.google-analytics.com/analytics.js></script></body></html>

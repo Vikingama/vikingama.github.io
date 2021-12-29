@@ -1,4 +1,4 @@
-<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no,user-scalable=no"><meta name=author content=馬腊咯稽><meta name=description content="React 复习笔记（中）"><meta name=keywords content=React><link rel=canonical href=https://vikingama.github.io/posts/react-hook/><link rel="shortcut icon" href=https://vikingama.github.io/images/favicon.ico><link rel=stylesheet href=https://vikingama.github.io/css/zozo.css><link rel=stylesheet href=https://vikingama.github.io/css/highlight.css><link rel=stylesheet href=https://vikingama.github.io/css/remixicon.css><title>React 复习笔记（中） &middot; 看不见我的美 · 是你瞎了眼</title></head><body><div class="main animated"><div class="nav_container animated fadeInDown"><div class=site_nav id=site_nav><ul><li><a href=/>首页</a></li><li><a href=/posts/>归档</a></li><li><a href=/resume/>简历</a></li><li><a href=/tags/>标签</a></li><li><a href=/inspires/>启发</a></li><li><a href=/command/>命令</a></li><li><a href=/about/>关于</a></li></ul></div><div class=menu_icon><a id=menu_icon><i class=remixicon-links-line></i></a></div></div><div class="header animated fadeInDown"><div class=site_title_container><div class=site_title><h1><a href=https://vikingama.github.io><img style=width:65px;height:auto;vertical-align:top src=https://vikingama.github.io/images/avatar.png></a></h1></div><div class=description><p class=sub_title>看不见我的美<br>是你瞎了眼</p><div class=my_socials><a href=https://www.douban.com/people/nicknoonan title=douban target=_blank><i class=remixicon-douban-fill></i></a><a href=https://github.com/Vikingama title=github target=_blank><i class=remixicon-github-fill></i></a><a href=https://weibo.com/vikingx title=weibo target=_blank><i class=remixicon-weibo-fill></i></a><a href=https://www.zhihu.com/people/vikingama title=zhihu target=_blank><i class=remixicon-zhihu-fill></i></a><a href=https://vikingama.github.io/index.xml type=application/rss+xml title=rss target=_blank><i class=remixicon-rss-fill></i></a></div></div></div></div><div class=content><div class=post_page><div class="post animated fadeInDown"><div class="post_title post_detail_title"><h2><a href=/posts/react-hook/>React 复习笔记（中）</a></h2><span class=date>2020.02.27</span></div><div class="post_content markdown"><blockquote><p>Hook 是一些可以让你在函数组件里“钩入” state 及生命周期等特性的函数。</p></blockquote><h3 id=hook-产生的动机>Hook 产生的动机</h3><ul><li>代码层次更清晰；在类组件中，共属于一个功能的代码分散在各个钩子函数中；</li><li>更好的<strong>状态逻辑</strong>复用，renderProps 和高阶组件不是那么<strong>好用</strong>；</li><li>干掉 this。</li></ul><h3 id=hook-使用规则>Hook 使用规则</h3><ul><li>只能在最外层调用 Hook；不要在循环、条件判断或者子函数中调用（Hook 靠的是调用顺序来确定哪个 state 对应哪个 useState）；</li><li>只在函数组件中调用 Hook。</li></ul><h3 id=usestate>useState</h3><p>state 只在组件首次渲染的时候被创建；在下一次重新渲染时，useState 返回给我们当前的 state。如果初始 state 需要通过复杂计算获得，则可以传入一个函数，在函数中计算并返回初始的 state。</p><pre><code class=language-jsx>const [state, setState] = useState(() =&gt; someExpensiveComputation(props));
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no,user-scalable=no"><meta name=author content=馬腊咯稽><meta name=description content="React 复习笔记（中）"><meta name=keywords content=React><link rel=canonical href=https://vikingama.github.io/posts/react-hook/><link rel="shortcut icon" href=https://vikingama.github.io/images/favicon.ico><link rel=stylesheet href=https://vikingama.github.io/css/zozo.css><link rel=stylesheet href=https://vikingama.github.io/css/highlight.css><link rel=stylesheet href=https://vikingama.github.io/css/remixicon.css><title>React 复习笔记（中） &middot; 看不见我的美 · 是你瞎了眼</title></head><body><div class="main animated"><div class="nav_container animated fadeInDown"><div class=site_nav id=site_nav><ul><li><a href=/>首页</a></li><li><a href=/posts/>归档</a></li><li><a href=/tags/>标签</a></li><li><a href=/inspires/>启发</a></li><li><a href=/command/>命令</a></li><li><a href=/about/>关于</a></li></ul></div><div class=menu_icon><a id=menu_icon><i class=remixicon-links-line></i></a></div></div><div class="header animated fadeInDown"><div class=site_title_container><div class=site_title><h1><a href=https://vikingama.github.io><img style=width:65px;height:auto;vertical-align:top src=https://vikingama.github.io/images/avatar.png></a></h1></div><div class=description><p class=sub_title>看不见我的美<br>是你瞎了眼</p><div class=my_socials><a href=https://www.douban.com/people/nicknoonan title=douban target=_blank><i class=remixicon-douban-fill></i></a><a href=https://github.com/Vikingama title=github target=_blank><i class=remixicon-github-fill></i></a><a href=https://weibo.com/vikingx title=weibo target=_blank><i class=remixicon-weibo-fill></i></a><a href=https://www.zhihu.com/people/vikingama title=zhihu target=_blank><i class=remixicon-zhihu-fill></i></a><a href=https://vikingama.github.io/index.xml type=application/rss+xml title=rss target=_blank><i class=remixicon-rss-fill></i></a></div></div></div></div><div class=content><div class=post_page><div class="post animated fadeInDown"><div class="post_title post_detail_title"><h2><a href=/posts/react-hook/>React 复习笔记（中）</a></h2><span class=date>2020.02.27</span></div><div class="post_content markdown"><blockquote><p>Hook 是一些可以让你在函数组件里“钩入” state 及生命周期等特性的函数。</p></blockquote><h3 id=hook-产生的动机>Hook 产生的动机</h3><ul><li>代码层次更清晰；在类组件中，共属于一个功能的代码分散在各个钩子函数中；</li><li>更好的<strong>状态逻辑</strong>复用，renderProps 和高阶组件不是那么<strong>好用</strong>；</li><li>干掉 this。</li></ul><h3 id=hook-使用规则>Hook 使用规则</h3><ul><li>只能在最外层调用 Hook；不要在循环、条件判断或者子函数中调用（Hook 靠的是调用顺序来确定哪个 state 对应哪个 useState）；</li><li>只在函数组件中调用 Hook。</li></ul><h3 id=usestate>useState</h3><p>state 只在组件首次渲染的时候被创建；在下一次重新渲染时，useState 返回给我们当前的 state。如果初始 state 需要通过复杂计算获得，则可以传入一个函数，在函数中计算并返回初始的 state。</p><pre><code class=language-jsx>const [state, setState] = useState(() =&gt; someExpensiveComputation(props));
 </code></pre><p>在初始渲染期间，state 与传入的 initialState 值相同；setState 函数用于更新 state，它接收一个新的 state 值并将组件的一次重新渲染加入队列。</p><pre><code class=language-jsx>function Counter({ initialCount }) {
   // initialState 参数只会在组件的初始渲染中起作用，后续渲染时会被忽略
   const [count, setCount] = useState(initialCount);
@@ -6,12 +6,12 @@
     &lt;&gt;
       &lt;span&gt;{count}&lt;/span&gt;
       &lt;button onClick={() =&gt; setCount(initialCount)}&gt;Reset&lt;/button&gt;
-      &lt;button onClick={() =&gt; setCount((prevCount) =&gt; prevCount - 1)}&gt;-&lt;/button&gt;
-      &lt;button onClick={() =&gt; setCount((prevCount) =&gt; prevCount + 1)}&gt;+&lt;/button&gt;
+      &lt;button onClick={() =&gt; setCount(prevCount =&gt; prevCount - 1)}&gt;-&lt;/button&gt;
+      &lt;button onClick={() =&gt; setCount(prevCount =&gt; prevCount + 1)}&gt;+&lt;/button&gt;
     &lt;/&gt;
   );
 }
-</code></pre><p>与 class 组件中的 setState 方法不同，useState 不会自动合并更新对象。</p><pre><code class=language-jsx>setState((prevState) =&gt; {
+</code></pre><p>与 class 组件中的 setState 方法不同，useState 不会自动合并更新对象。</p><pre><code class=language-jsx>setState(prevState =&gt; {
   return { ...prevState, ...updatedState };
 });
 </code></pre><h6 id=注意-在组件重新渲染时-state-和-setstate-不会重新初始化-渲染前后都是同一个引用-state-像保存在-ref-中的变量一样>注意：在组件重新渲染时，state 和 setState 不会重新初始化（渲染前后都是同一个引用），state 像保存在 ref 中的变量一样。</h6><h3 id=useeffect>useEffect</h3><p>useEffect 会在浏览器完成本次渲染之后进行下次渲染之前调用，不会阻塞浏览器更新屏幕；每次运行 effect 的时候，DOM 都已经更新完毕。某种意义上讲，effect 更像是渲染结果的一部分，每个 effect “属于”某一次特定的渲染。</p><pre><code class=language-jsx>function Example() {
@@ -50,7 +50,7 @@ const App = () =&gt; (
     &lt;Toolbar /&gt;
   &lt;/ThemeContext.Provider&gt;
 );
-const Toolbar = (props) =&gt; (
+const Toolbar = props =&gt; (
   &lt;div&gt;
     &lt;ThemedButton /&gt;
   &lt;/div&gt;
@@ -86,13 +86,12 @@ const formReducer = (state, action) =&gt; {
 };
 const Form = () =&gt; {
   const [formValues, dispatch] = useReducer(formReducer, formInit);
-  const handleChange = (e) =&gt; {
+  const handleChange = e =&gt; {
     dispatch({
       type: 'CHANGE',
       payload: e.target
     });
   };
-
   return (
     &lt;form&gt;
       &lt;div&gt;
@@ -133,7 +132,7 @@ const memoCallback = useCallback(() =&gt; {
  */
 const memoValue = useMemo(() =&gt; computeExpensiveValue(a, b), [a, b]);
 </code></pre><p>具体使用场景：</p><ol><li>当复合数据（函数也是一种）存在于 useEffect 的依赖数组中，同时当前 useEffect 中有触发组件重新渲染的逻辑；则需要将数据用 useMemo | useCallback 包裹，否则会导致组件无限循环渲染。(1 === 1，{} !=== {}) ；</li><li>父组件重新渲染会导致子组件重新渲染，当子组件使用 React.memo 包裹时（仅当 props 改变才会出触发重新渲染），如果复合数据不使用 useMemo | useCallback 包裹，会导致 React.memo 失效。</li></ol><p>&nbsp;</p><pre><code class=language-jsx>// 获取上一次指定的值
-const usePrevValue = (value) =&gt; {
+const usePrevValue = value =&gt; {
   const ref = useRef();
   useEffect(() =&gt; {
     ref.current = value;
@@ -148,11 +147,11 @@ const App = ({ name }) =&gt; {
    * 会导致 PureComponent、React.memo 等相关优化失效
    */
   const handleCount = () =&gt; {
-    setCount((count) =&gt; count + 1);
+    setCount(count =&gt; count + 1);
   };
   // useCallback 将传入的函数永久缓存了起来
   const memoHandleCount = useCallback(() =&gt; {
-    setCount((count) =&gt; count + 1);
+    setCount(count =&gt; count + 1);
   }, []);
   const prevHandleCount = usePrevValue(handleCount);
   const memoPrevHandleCount = usePrevValue(memoHandleCount);
@@ -162,7 +161,7 @@ const App = ({ name }) =&gt; {
   const memoArray = useMomo(() =&gt; {
     return Array(999)
       .fill(name)
-      .map((v) =&gt; v.toUpperCase());
+      .map(v =&gt; v.toUpperCase());
   }, [name]);
   return (
     &lt;div&gt;
@@ -172,7 +171,7 @@ const App = ({ name }) =&gt; {
     &lt;/div&gt;
   );
 };
-</code></pre><h6 id=注意-如果-usecallback-usememo-缓存的-函数-值-不依赖组建内部的变量-可以将-函数-值-提到组件外部-酱紫-不使用-usecallback-usememo-可以达到相同的效果>注意：如果 useCallback/useMemo 缓存的<strong>函数/值</strong>不依赖组建内部的变量，可以将<strong>函数/值</strong>提到组件外部；酱紫，不使用 useCallback/useMemo 可以达到相同的效果。</h6><h3 id=useref>useRef</h3><p>useRef 返回一个可变的 ref 对象，其 current 属性被初始化为传入的参数 initialValue；返回的 ref 对象在组件的整个生命周期内保持不变。</p><pre><code class=language-jsx>const TextInputWithFocusButton = () =&gt; {
+</code></pre><h6 id=注意-如果-usecallback-usememo-缓存的函数-值-不依赖组件内部的变量-可以将-函数-值-提到组件外部-酱紫-不使用-usecallback-usememo-可以达到相同的效果>注意：如果 useCallback/useMemo 缓存的函数/值<strong>不依赖组件内部的变量</strong>，可以将<strong>函数/值</strong>提到组件外部；酱紫，不使用 useCallback/useMemo 可以达到相同的效果。</h6><h3 id=useref>useRef</h3><p>useRef 返回一个可变的 ref 对象，其 current 属性被初始化为传入的参数 initialValue；返回的 ref 对象在组件的整个生命周期内保持不变。</p><pre><code class=language-jsx>const TextInputWithFocusButton = () =&gt; {
   const inputEl = useRef(null);
   const onButtonClick = () =&gt; {
     // `current` 指向已挂载到 DOM 上的文本输入元素
@@ -200,7 +199,6 @@ const App = ({ name }) =&gt; {
 };
 </code></pre><h3 id=uselayouteffect>useLayoutEffect</h3><p>顾名思义，它是作用在浏览器 Layout 阶段的“副作用”；和 useEffect 的区别只是调用时机不同；它会在所有的 DOM 变更之后<strong>同步</strong>调用 effect，可以使用它来读取 DOM 布局并同步触发重渲染。在浏览器执行绘制之前，useLayoutEffect 内部的更新计划将被同步刷新，如果在里面执行耗时任务的话，页面就会卡顿（阻塞渲染；如果了解渲染机制的话，Layout 不等于“浏览器已经将变更渲染到屏幕上”，它发生于“真正将内容绘制到屏幕之前”；准确的说，DOM 已经变化，但用户还没有看到变化）。</p><h3 id=自定义-hook>自定义 Hook</h3><p>自定义 Hook 是一个函数，其名称以 “use” 开头（方便静态代码检测），函数内部可以调用其他的 Hook；它是一种重用状态逻辑的机制，其中的所有 state 和副作用都是完全隔离的。</p><pre><code class=language-jsx>function useFriendStatus(friendID) {
   const [isOnline, setIsOnline] = useState(null);
-
   useEffect(() =&gt; {
     function handleStatusChange(status) {
       setIsOnline(status.isOnline);
@@ -210,8 +208,7 @@ const App = ({ name }) =&gt; {
       ChatAPI.unsubscribeFromFriendStatus(friendID, handleStatusChange);
     };
   });
-
   return isOnline;
 }
 </code></pre></div><div class=post_footer><div class=meta><div class=info><span class="field tags"><i class=remixicon-stack-line></i><a href=https://vikingama.github.io/tags/react/>React</a></span></div></div></div></div><div class=doc_comments><div class=comments_block_title>发表评论</div><div id=vcomments></div></div><link rel=stylesheet href=https://vikingama.github.io/css/comments.css><script src=//unpkg.com/valine></script><script type=text/javascript>new Valine({el:'#vcomments',avatar:'retro',recordIP:true,path:window.location.pathname,appId:'U06blUXOot4uJgfMu8I9xJXz-MdYXbMMI',appKey:'BnrXC06FJsvRNpr4aqb1HYPd',placeholder:'来都来了，不打个招呼吗？',visitor:'true',serverURLs:'https:\/\/u06bluxo.api.lncldglobal.com'});</script></div></div><a id=back_to_top href=# class=back_to_top><span>△</span></a></div><footer class=footer><div class=powered_by><a href=https://github.com/varkai/hugo-theme-zozo/ target=_blank>Designed by <span class=jitters>Zeuk</span>,</a>
-<a href=https://www.gohugo.io/ target=_blank>Published with <span class=jitters>Hugo</span></a></div><div class=footer_slogan><span id=enter_time></span></div></footer><script src=//unpkg.com/jquery/dist/jquery.min.js></script><script src=//unpkg.com/@highlightjs/cdn-assets/highlight.min.js></script><script src=https://vikingama.github.io/js/zozo.js></script><script>hljs.initHighlightingOnLoad();</script><script type=text/javascript async src="//www.unpkg.com/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML">MathJax.Hub.Config({tex2jax:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$'],['\[\[','\]\]']],processEscapes:true,processEnvironments:true,skipTags:['script','noscript','style','textarea','pre'],TeX:{equationNumbers:{autoNumber:"AMS"},extensions:["AMSmath.js","AMSsymbols.js"]}}});MathJax.Hub.Queue(function(){var all=MathJax.Hub.getAllJax(),i;for(i=0;i<all.length;i+=1){all[i].SourceElement().parentNode.className+=' has-jax';}});</script><style>code.has-jax{background:inherit;border:inherit;color:#515151;font:inherit;font-size:100%}</style><script type=application/javascript>var doNotTrack=false;if(!doNotTrack){window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;ga('create','G-CDS328YPMY','auto');ga('send','pageview');}</script><script async src=https://www.google-analytics.com/analytics.js></script></body></html>
+<a href=https://www.gohugo.io/ target=_blank>Published with <span class=jitters>Hugo</span></a></div><div class=footer_slogan><span id=enter_time></span></div></footer><script src=//unpkg.com/jquery/dist/jquery.min.js></script><script src=//unpkg.com/@highlightjs/cdn-assets/highlight.min.js></script><script src=https://vikingama.github.io/js/zozo.js></script><script>hljs.initHighlightingOnLoad();</script><script type=application/javascript>var doNotTrack=false;if(!doNotTrack){window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;ga('create','G-CDS328YPMY','auto');ga('send','pageview');}</script><script async src=https://www.google-analytics.com/analytics.js></script></body></html>

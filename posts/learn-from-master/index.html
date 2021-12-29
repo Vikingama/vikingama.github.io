@@ -1,4 +1,4 @@
-<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no,user-scalable=no"><meta name=author content=馬腊咯稽><meta name=description content=偷“师”学“艺”><meta name=keywords content=Lerna,ESLint,Husky,Workspaces><link rel=canonical href=https://vikingama.github.io/posts/learn-from-master/><link rel="shortcut icon" href=https://vikingama.github.io/images/favicon.ico><link rel=stylesheet href=https://vikingama.github.io/css/zozo.css><link rel=stylesheet href=https://vikingama.github.io/css/highlight.css><link rel=stylesheet href=https://vikingama.github.io/css/remixicon.css><title>偷“师”学“艺” &middot; 看不见我的美 · 是你瞎了眼</title></head><body><div class="main animated"><div class="nav_container animated fadeInDown"><div class=site_nav id=site_nav><ul><li><a href=/>首页</a></li><li><a href=/posts/>归档</a></li><li><a href=/resume/>简历</a></li><li><a href=/tags/>标签</a></li><li><a href=/inspires/>启发</a></li><li><a href=/command/>命令</a></li><li><a href=/about/>关于</a></li></ul></div><div class=menu_icon><a id=menu_icon><i class=remixicon-links-line></i></a></div></div><div class="header animated fadeInDown"><div class=site_title_container><div class=site_title><h1><a href=https://vikingama.github.io><img style=width:65px;height:auto;vertical-align:top src=https://vikingama.github.io/images/avatar.png></a></h1></div><div class=description><p class=sub_title>看不见我的美<br>是你瞎了眼</p><div class=my_socials><a href=https://www.douban.com/people/nicknoonan title=douban target=_blank><i class=remixicon-douban-fill></i></a><a href=https://github.com/Vikingama title=github target=_blank><i class=remixicon-github-fill></i></a><a href=https://weibo.com/vikingx title=weibo target=_blank><i class=remixicon-weibo-fill></i></a><a href=https://www.zhihu.com/people/vikingama title=zhihu target=_blank><i class=remixicon-zhihu-fill></i></a><a href=https://vikingama.github.io/index.xml type=application/rss+xml title=rss target=_blank><i class=remixicon-rss-fill></i></a></div></div></div></div><div class=content><div class=post_page><div class="post animated fadeInDown"><div class="post_title post_detail_title"><h2><a href=/posts/learn-from-master/>偷“师”学“艺”</a></h2><span class=date>2021.07.19</span></div><div class="post_content markdown"><blockquote><p>项目迁移终于接近尾声了，在这期间也学到不少前端工程化的知识和新的的编程思路。</p></blockquote><h3 id=monorepo>monorepo</h3><p>公司的主要业务是混合云管，所以除了官网这种 ToC 的项目之外，其余均是 ToB 的管理后台项目；根据具体业务分为了：容器服务、镜像管理、服务商监控、应用管理等等。这些子项目有统一的 UI 风格、相近的交互逻辑、耦合的业务逻辑；所以非常适合 monorepo 的项目管理方式。</p><p>Lerna 是前端 monorepo 比较好的解决方案，搭配 yarn 可以非常好的管理项目外部与项目之间的依赖。每个项目都是一个独立的 package，每个 package 都有自己的 workspace，可以将自己的 APIs 通过 lib 暴露并 publish 到内部 npm 仓库，这样每个 package 既是独立的项目也是其他 package 的依赖。</p><pre><code class=language-json>// lerna.json
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no,user-scalable=no"><meta name=author content=馬腊咯稽><meta name=description content=偷“师”学“艺”><meta name=keywords content=Lerna,ESLint,Husky,Workspaces><link rel=canonical href=https://vikingama.github.io/posts/learn-from-master/><link rel="shortcut icon" href=https://vikingama.github.io/images/favicon.ico><link rel=stylesheet href=https://vikingama.github.io/css/zozo.css><link rel=stylesheet href=https://vikingama.github.io/css/highlight.css><link rel=stylesheet href=https://vikingama.github.io/css/remixicon.css><title>偷“师”学“艺” &middot; 看不见我的美 · 是你瞎了眼</title></head><body><div class="main animated"><div class="nav_container animated fadeInDown"><div class=site_nav id=site_nav><ul><li><a href=/>首页</a></li><li><a href=/posts/>归档</a></li><li><a href=/tags/>标签</a></li><li><a href=/inspires/>启发</a></li><li><a href=/command/>命令</a></li><li><a href=/about/>关于</a></li></ul></div><div class=menu_icon><a id=menu_icon><i class=remixicon-links-line></i></a></div></div><div class="header animated fadeInDown"><div class=site_title_container><div class=site_title><h1><a href=https://vikingama.github.io><img style=width:65px;height:auto;vertical-align:top src=https://vikingama.github.io/images/avatar.png></a></h1></div><div class=description><p class=sub_title>看不见我的美<br>是你瞎了眼</p><div class=my_socials><a href=https://www.douban.com/people/nicknoonan title=douban target=_blank><i class=remixicon-douban-fill></i></a><a href=https://github.com/Vikingama title=github target=_blank><i class=remixicon-github-fill></i></a><a href=https://weibo.com/vikingx title=weibo target=_blank><i class=remixicon-weibo-fill></i></a><a href=https://www.zhihu.com/people/vikingama title=zhihu target=_blank><i class=remixicon-zhihu-fill></i></a><a href=https://vikingama.github.io/index.xml type=application/rss+xml title=rss target=_blank><i class=remixicon-rss-fill></i></a></div></div></div></div><div class=content><div class=post_page><div class="post animated fadeInDown"><div class="post_title post_detail_title"><h2><a href=/posts/learn-from-master/>偷“师”学“艺”</a></h2><span class=date>2021.07.19</span></div><div class="post_content markdown"><blockquote><p>项目迁移终于接近尾声了，在这期间也学到不少前端工程化的知识和新的的编程思路。</p></blockquote><h3 id=monorepo>monorepo</h3><p>公司的主要业务是混合云管，所以除了官网这种 ToC 的项目之外，其余均是 ToB 的管理后台项目；根据具体业务分为了：容器服务、镜像管理、服务商监控、应用管理等等。这些子项目有统一的 UI 风格、相近的交互逻辑、耦合的业务逻辑；所以非常适合 monorepo 的项目管理方式。</p><p>Lerna 是前端 monorepo 比较好的解决方案，搭配 yarn 可以非常好的管理项目外部与项目之间的依赖。每个项目都是一个独立的 package，每个 package 都有自己的 workspace，可以将自己的 APIs 通过 lib 暴露并 publish 到内部 npm 仓库，这样每个 package 既是独立的项目也是其他 package 的依赖。</p><pre><code class=language-json>// lerna.json
 {
   &quot;packages&quot;: [
     &quot;packages/@cli/*&quot;, // 脚手架依赖，放置 linters 规则和配置
@@ -64,7 +64,7 @@ const getWorkspaces = () =&gt; {
   if (Object.prototype.toString.call(temp) !== '[object Object]') {
     return [];
   }
-  return Object.keys(temp).map((name) =&gt; ({ name, ...temp[name] }));
+  return Object.keys(temp).map(name =&gt; ({ name, ...temp[name] }));
 };
 const getWorkspacesName = () =&gt; {
   let temp;
@@ -78,7 +78,6 @@ const getWorkspacesName = () =&gt; {
   }
   return Object.keys(temp);
 };
-
 exports.getWorkspaces = getWorkspaces;
 exports.getWorkspacesInfo = getWorkspacesInfo;
 exports.getWorkspacesName = getWorkspacesName;
@@ -96,13 +95,12 @@ const getCurrentBranch = () =&gt; {
 const getCommitScopes = () =&gt; {
   const temp = getWorkspacesName();
   if (Array.isArray(temp)) {
-    return temp.map((name) =&gt;
+    return temp.map(name =&gt;
       name.charAt(0) === '@' ? name.split('/')[1] : name
     );
   }
   return [];
 };
-
 exports.getCurrentBranch = getCurrentBranch;
 exports.getCommitScopes = getCommitScopes;
 </code></pre><h5 id=stylelint-配置>stylelint 配置：</h5><pre><code class=language-js>module.exports = {
@@ -243,7 +241,7 @@ npx lint-staged
     return [false, `提交的简要描述不能为空`];
   }
   const action = subject.slice(0, 2);
-  if (!value.find((item) =&gt; action === item)) {
+  if (!value.find(item =&gt; action === item)) {
     return [
       false,
       `提交的简要描述应该以中文动词加一个空格起头，动词可选值为[${value}]，当前值为 '${action}'`
@@ -260,18 +258,16 @@ function customScopeEnum({ scope }, when = 'never', value = []) {
     return [true];
   }
   return [
-    value.find((item) =&gt; scope === item),
+    value.find(item =&gt; scope === item),
     `scope 必须为 [${value}] 其中之一，当前为 ${scope}`
   ];
 }
-
 module.exports = {
   'custom-subject-action-enum': customSubjectActionEnum,
   'custom-scope-enum': customScopeEnum
 };
 </code></pre><p>commitlint.config：</p><pre><code class=language-js>const { getCommitScopes } = require('./git');
 const rules = require('./commitlint.rules');
-
 const commitScopes = getCommitScopes();
 /*
  * type(scope?): subject
@@ -351,13 +347,12 @@ module.exports = {
 };
 </code></pre><h5 id=commitizen-配置>commitizen 配置：</h5><pre><code class=language-js>const { getCommitScopes } = require('./git');
 const scopes = getCommitScopes();
-
 module.exports = {
   subjectLimit: 72,
   subjectSeparator: ': ',
   typePrefix: '',
   typeSuffix: '',
-  scopes: [{ name: 'root' }, ...scopes.map((name) =&gt; ({ name }))],
+  scopes: [{ name: 'root' }, ...scopes.map(name =&gt; ({ name }))],
   scopeOverrides: {},
   allowCustomScopes: false,
   allowBreakingChanges: ['feat', 'fix', 'st', 'sit'],
@@ -465,4 +460,4 @@ pm2 start verdaccio
 <a href=https://vikingama.github.io/tags/eslint/>ESLint</a>
 <a href=https://vikingama.github.io/tags/husky/>Husky</a>
 <a href=https://vikingama.github.io/tags/workspaces/>Workspaces</a></span></div></div></div></div><div class=doc_comments><div class=comments_block_title>发表评论</div><div id=vcomments></div></div><link rel=stylesheet href=https://vikingama.github.io/css/comments.css><script src=//unpkg.com/valine></script><script type=text/javascript>new Valine({el:'#vcomments',avatar:'retro',recordIP:true,path:window.location.pathname,appId:'U06blUXOot4uJgfMu8I9xJXz-MdYXbMMI',appKey:'BnrXC06FJsvRNpr4aqb1HYPd',placeholder:'来都来了，不打个招呼吗？',visitor:'true',serverURLs:'https:\/\/u06bluxo.api.lncldglobal.com'});</script></div></div><a id=back_to_top href=# class=back_to_top><span>△</span></a></div><footer class=footer><div class=powered_by><a href=https://github.com/varkai/hugo-theme-zozo/ target=_blank>Designed by <span class=jitters>Zeuk</span>,</a>
-<a href=https://www.gohugo.io/ target=_blank>Published with <span class=jitters>Hugo</span></a></div><div class=footer_slogan><span id=enter_time></span></div></footer><script src=//unpkg.com/jquery/dist/jquery.min.js></script><script src=//unpkg.com/@highlightjs/cdn-assets/highlight.min.js></script><script src=https://vikingama.github.io/js/zozo.js></script><script>hljs.initHighlightingOnLoad();</script><script type=text/javascript async src="//www.unpkg.com/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML">MathJax.Hub.Config({tex2jax:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$'],['\[\[','\]\]']],processEscapes:true,processEnvironments:true,skipTags:['script','noscript','style','textarea','pre'],TeX:{equationNumbers:{autoNumber:"AMS"},extensions:["AMSmath.js","AMSsymbols.js"]}}});MathJax.Hub.Queue(function(){var all=MathJax.Hub.getAllJax(),i;for(i=0;i<all.length;i+=1){all[i].SourceElement().parentNode.className+=' has-jax';}});</script><style>code.has-jax{background:inherit;border:inherit;color:#515151;font:inherit;font-size:100%}</style><script type=application/javascript>var doNotTrack=false;if(!doNotTrack){window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;ga('create','G-CDS328YPMY','auto');ga('send','pageview');}</script><script async src=https://www.google-analytics.com/analytics.js></script></body></html>
+<a href=https://www.gohugo.io/ target=_blank>Published with <span class=jitters>Hugo</span></a></div><div class=footer_slogan><span id=enter_time></span></div></footer><script src=//unpkg.com/jquery/dist/jquery.min.js></script><script src=//unpkg.com/@highlightjs/cdn-assets/highlight.min.js></script><script src=https://vikingama.github.io/js/zozo.js></script><script>hljs.initHighlightingOnLoad();</script><script type=application/javascript>var doNotTrack=false;if(!doNotTrack){window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;ga('create','G-CDS328YPMY','auto');ga('send','pageview');}</script><script async src=https://www.google-analytics.com/analytics.js></script></body></html>

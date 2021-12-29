@@ -1,4 +1,4 @@
-<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no,user-scalable=no"><meta name=author content=馬腊咯稽><meta name=description content="Vue 2.x 复习总结"><meta name=keywords content=Vue><link rel=canonical href=https://vikingama.github.io/posts/vue-note/><link rel="shortcut icon" href=https://vikingama.github.io/images/favicon.ico><link rel=stylesheet href=https://vikingama.github.io/css/zozo.css><link rel=stylesheet href=https://vikingama.github.io/css/highlight.css><link rel=stylesheet href=https://vikingama.github.io/css/remixicon.css><title>Vue 2.x 复习总结 &middot; 看不见我的美 · 是你瞎了眼</title></head><body><div class="main animated"><div class="nav_container animated fadeInDown"><div class=site_nav id=site_nav><ul><li><a href=/>首页</a></li><li><a href=/posts/>归档</a></li><li><a href=/resume/>简历</a></li><li><a href=/tags/>标签</a></li><li><a href=/inspires/>启发</a></li><li><a href=/command/>命令</a></li><li><a href=/about/>关于</a></li></ul></div><div class=menu_icon><a id=menu_icon><i class=remixicon-links-line></i></a></div></div><div class="header animated fadeInDown"><div class=site_title_container><div class=site_title><h1><a href=https://vikingama.github.io><img style=width:65px;height:auto;vertical-align:top src=https://vikingama.github.io/images/avatar.png></a></h1></div><div class=description><p class=sub_title>看不见我的美<br>是你瞎了眼</p><div class=my_socials><a href=https://www.douban.com/people/nicknoonan title=douban target=_blank><i class=remixicon-douban-fill></i></a><a href=https://github.com/Vikingama title=github target=_blank><i class=remixicon-github-fill></i></a><a href=https://weibo.com/vikingx title=weibo target=_blank><i class=remixicon-weibo-fill></i></a><a href=https://www.zhihu.com/people/vikingama title=zhihu target=_blank><i class=remixicon-zhihu-fill></i></a><a href=https://vikingama.github.io/index.xml type=application/rss+xml title=rss target=_blank><i class=remixicon-rss-fill></i></a></div></div></div></div><div class=content><div class=post_page><div class="post animated fadeInDown"><div class="post_title post_detail_title"><h2><a href=/posts/vue-note/>Vue 2.x 复习总结</a></h2><span class=date>2020.03.04</span></div><div class="post_content markdown"><blockquote><p>快两年没碰 Vue 了，这还面试个屁呀，摔。</p></blockquote><h3 id=生命周期>生命周期</h3><p><img src=/vue-note/lifecycle.png alt="Local Image"></p><h3 id=异步组件>异步组件</h3><p>Vue 允许你以一个工厂函数的方式定义你的组件，这个工厂函数会异步解析你的组件定义；只有在这个组件需要被渲染的时候才会触发该工厂函数，且会把结果缓存起来供未来重渲染。</p><pre><code class=language-js>const AsyncComponent = () =&gt; ({
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no,user-scalable=no"><meta name=author content=馬腊咯稽><meta name=description content="Vue 2.x 复习总结"><meta name=keywords content=Vue><link rel=canonical href=https://vikingama.github.io/posts/vue-note/><link rel="shortcut icon" href=https://vikingama.github.io/images/favicon.ico><link rel=stylesheet href=https://vikingama.github.io/css/zozo.css><link rel=stylesheet href=https://vikingama.github.io/css/highlight.css><link rel=stylesheet href=https://vikingama.github.io/css/remixicon.css><title>Vue 2.x 复习总结 &middot; 看不见我的美 · 是你瞎了眼</title></head><body><div class="main animated"><div class="nav_container animated fadeInDown"><div class=site_nav id=site_nav><ul><li><a href=/>首页</a></li><li><a href=/posts/>归档</a></li><li><a href=/tags/>标签</a></li><li><a href=/inspires/>启发</a></li><li><a href=/command/>命令</a></li><li><a href=/about/>关于</a></li></ul></div><div class=menu_icon><a id=menu_icon><i class=remixicon-links-line></i></a></div></div><div class="header animated fadeInDown"><div class=site_title_container><div class=site_title><h1><a href=https://vikingama.github.io><img style=width:65px;height:auto;vertical-align:top src=https://vikingama.github.io/images/avatar.png></a></h1></div><div class=description><p class=sub_title>看不见我的美<br>是你瞎了眼</p><div class=my_socials><a href=https://www.douban.com/people/nicknoonan title=douban target=_blank><i class=remixicon-douban-fill></i></a><a href=https://github.com/Vikingama title=github target=_blank><i class=remixicon-github-fill></i></a><a href=https://weibo.com/vikingx title=weibo target=_blank><i class=remixicon-weibo-fill></i></a><a href=https://www.zhihu.com/people/vikingama title=zhihu target=_blank><i class=remixicon-zhihu-fill></i></a><a href=https://vikingama.github.io/index.xml type=application/rss+xml title=rss target=_blank><i class=remixicon-rss-fill></i></a></div></div></div></div><div class=content><div class=post_page><div class="post animated fadeInDown"><div class="post_title post_detail_title"><h2><a href=/posts/vue-note/>Vue 2.x 复习总结</a></h2><span class=date>2020.03.04</span></div><div class="post_content markdown"><blockquote><p>快两年没碰 Vue 了，这还面试个屁呀，摔。</p></blockquote><h3 id=生命周期>生命周期</h3><p><img src=/vue-note/lifecycle.png alt="Local Image"></p><h3 id=异步组件>异步组件</h3><p>Vue 允许你以一个工厂函数的方式定义你的组件，这个工厂函数会异步解析你的组件定义；只有在这个组件需要被渲染的时候才会触发该工厂函数，且会把结果缓存起来供未来重渲染。</p><pre><code class=language-js>const AsyncComponent = () =&gt; ({
   // 需要加载的组件 (应该是一个 `Promise` 对象)
   component: import('./MyComponent.vue'),
   // 异步组件加载时使用的组件
@@ -12,7 +12,7 @@
   timeout: 3000
 });
 </code></pre><h3 id=插件系统>插件系统</h3><p>插件通常用来为 Vue 添加全局功能。插件的功能范围没有严格的限制：</p><ol><li>添加全局方法或者属性；</li><li>添加全局资源：指令/过滤器/过渡等；</li><li>通过全局混入来添加一些组件选项；</li><li>添加 Vue 实例方法，通过把它们添加到 Vue.prototype 上实现；</li><li>提供自己的 API，同时提供上面提到的一个或多个功能。</li></ol><p>举个例子：</p><pre><code class=language-js>Example.install = (Vue, options) =&gt; {
-  Vue.$shareConfig = (configObj) =&gt; {
+  Vue.$shareConfig = configObj =&gt; {
     const { sharetitle, sharedesc, shareimg, shareurl } = configObj;
     const shareObj = {
       title: sharetitle,
@@ -121,11 +121,9 @@ new Vue({
     items: ['a', 'b', 'c']
   }
 });
-
 vm.items[1] = 'x'; // 不是响应性的
 vm.$set(vm.items, indexOfItem, newValue); // 解决问题
 vm.items.splice(indexOfItem, 1, newValue); // 解决问题
-
 vm.items.length = 2; // 不是响应性的
 vm.items.splice(newLength); // 解决问题
 </code></pre><p>Vue 不能检测对象属性的添加或删除：</p><pre><code class=language-js>var vm = new Vue({
@@ -159,7 +157,6 @@ vw.$nextTick(function () {
     &lt;google-map-markers v-bind:places=&quot;iceCreamShops&quot;&gt;&lt;/google-map-markers&gt;
   &lt;/google-map-region&gt;
 &lt;/google-map&gt;
-
 &lt;script&gt;
   Vue.component('google-map', {
     data() {
@@ -250,7 +247,6 @@ var vm = new Vue({
     console.log('component mounted'); // mixin mounted, component mounted
   }
 });
-
 vm.hi(); // hihihi
 vm.bye(); // bye
 vm.do(); // dododo
@@ -389,7 +385,6 @@ new Vue({
 &lt;table&gt;
   &lt;tr is=&quot;blog-post-row&quot;&gt;&lt;/tr&gt;
 &lt;/table&gt;
-
 &lt;!-- 通过将 currentTabComponent 设定为不同的组件来切换渲染结果--&gt;
 &lt;component v-bind:is=&quot;currentTabComponent&quot;&gt;&lt;/component&gt;
 </code></pre><h3 id=slot>slot</h3><p>具名插槽：</p><pre><code class=language-html>&lt;!-- &lt;base-layout&gt; 组件 --&gt;
@@ -409,10 +404,8 @@ new Vue({
   &lt;template v-slot:header&gt;
     &lt;h1&gt;header 内容&lt;/h1&gt;
   &lt;/template&gt;
-
   &lt;p&gt;这两行会被插入到 main 标签&lt;/p&gt;
   &lt;p&gt;这两行会被插入到 main 标签&lt;/p&gt;
-
   &lt;template v-slot:footer&gt;
     &lt;p&gt;footer 内容&lt;/p&gt;
   &lt;/template&gt;
@@ -422,10 +415,8 @@ new Vue({
   &lt;template #header&gt;
     &lt;h1&gt;header 内容&lt;/h1&gt;
   &lt;/template&gt;
-
   &lt;p&gt;这两行会被插入到 main 标签&lt;/p&gt;
   &lt;p&gt;这两行会被插入到 main 标签&lt;/p&gt;
-
   &lt;template #footer&gt;
     &lt;p&gt;footer 内容&lt;/p&gt;
   &lt;/template&gt;
@@ -536,7 +527,7 @@ new Vue({
         name: 'User',
         component: User,
         // /user?id=123 会将 {query: '123'} 作为属性传递给 user 组件
-        props: (route) =&gt; ({ query: route.query.id })
+        props: route =&gt; ({ query: route.query.id })
       }
     ]
   });
@@ -593,7 +584,7 @@ new Vue({
     // 在渲染该组件的对应路由被 confirm 前调用
     // 不！能！获取组件实例 this
     // 守卫执行前，组件实例还没被创建
-    next((vm) =&gt; {
+    next(vm =&gt; {
       // 通过 vm 访问实例
     });
   },
@@ -630,7 +621,7 @@ new Vue({
   ]
 });
 router.beforeEach((to, from, next) =&gt; {
-  if (to.matched.some((v) =&gt; v.meta.requiresAuth)) {
+  if (to.matched.some(v =&gt; v.meta.requiresAuth)) {
     if (!auth.loggedIn()) {
       next({
         path: '/login',
@@ -644,4 +635,4 @@ router.beforeEach((to, from, next) =&gt; {
   }
 });
 </code></pre></div><div class=post_footer><div class=meta><div class=info><span class="field tags"><i class=remixicon-stack-line></i><a href=https://vikingama.github.io/tags/vue/>Vue</a></span></div></div></div></div><div class=doc_comments><div class=comments_block_title>发表评论</div><div id=vcomments></div></div><link rel=stylesheet href=https://vikingama.github.io/css/comments.css><script src=//unpkg.com/valine></script><script type=text/javascript>new Valine({el:'#vcomments',avatar:'retro',recordIP:true,path:window.location.pathname,appId:'U06blUXOot4uJgfMu8I9xJXz-MdYXbMMI',appKey:'BnrXC06FJsvRNpr4aqb1HYPd',placeholder:'来都来了，不打个招呼吗？',visitor:'true',serverURLs:'https:\/\/u06bluxo.api.lncldglobal.com'});</script></div></div><a id=back_to_top href=# class=back_to_top><span>△</span></a></div><footer class=footer><div class=powered_by><a href=https://github.com/varkai/hugo-theme-zozo/ target=_blank>Designed by <span class=jitters>Zeuk</span>,</a>
-<a href=https://www.gohugo.io/ target=_blank>Published with <span class=jitters>Hugo</span></a></div><div class=footer_slogan><span id=enter_time></span></div></footer><script src=//unpkg.com/jquery/dist/jquery.min.js></script><script src=//unpkg.com/@highlightjs/cdn-assets/highlight.min.js></script><script src=https://vikingama.github.io/js/zozo.js></script><script>hljs.initHighlightingOnLoad();</script><script type=text/javascript async src="//www.unpkg.com/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML">MathJax.Hub.Config({tex2jax:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$'],['\[\[','\]\]']],processEscapes:true,processEnvironments:true,skipTags:['script','noscript','style','textarea','pre'],TeX:{equationNumbers:{autoNumber:"AMS"},extensions:["AMSmath.js","AMSsymbols.js"]}}});MathJax.Hub.Queue(function(){var all=MathJax.Hub.getAllJax(),i;for(i=0;i<all.length;i+=1){all[i].SourceElement().parentNode.className+=' has-jax';}});</script><style>code.has-jax{background:inherit;border:inherit;color:#515151;font:inherit;font-size:100%}</style><script type=application/javascript>var doNotTrack=false;if(!doNotTrack){window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;ga('create','G-CDS328YPMY','auto');ga('send','pageview');}</script><script async src=https://www.google-analytics.com/analytics.js></script></body></html>
+<a href=https://www.gohugo.io/ target=_blank>Published with <span class=jitters>Hugo</span></a></div><div class=footer_slogan><span id=enter_time></span></div></footer><script src=//unpkg.com/jquery/dist/jquery.min.js></script><script src=//unpkg.com/@highlightjs/cdn-assets/highlight.min.js></script><script src=https://vikingama.github.io/js/zozo.js></script><script>hljs.initHighlightingOnLoad();</script><script type=application/javascript>var doNotTrack=false;if(!doNotTrack){window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;ga('create','G-CDS328YPMY','auto');ga('send','pageview');}</script><script async src=https://www.google-analytics.com/analytics.js></script></body></html>

@@ -1,4 +1,4 @@
-<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no,user-scalable=no"><meta name=author content=馬腊咯稽><meta name=description content="重读《深入浅出 Node.js》"><meta name=keywords content=Node.js><link rel=canonical href=https://vikingama.github.io/posts/node-learn-notes/><link rel="shortcut icon" href=https://vikingama.github.io/images/favicon.ico><link rel=stylesheet href=https://vikingama.github.io/css/zozo.css><link rel=stylesheet href=https://vikingama.github.io/css/highlight.css><link rel=stylesheet href=https://vikingama.github.io/css/remixicon.css><title>重读《深入浅出 Node.js》 &middot; 看不见我的美 · 是你瞎了眼</title></head><body><div class="main animated"><div class="nav_container animated fadeInDown"><div class=site_nav id=site_nav><ul><li><a href=/>首页</a></li><li><a href=/posts/>归档</a></li><li><a href=/resume/>简历</a></li><li><a href=/tags/>标签</a></li><li><a href=/inspires/>启发</a></li><li><a href=/command/>命令</a></li><li><a href=/about/>关于</a></li></ul></div><div class=menu_icon><a id=menu_icon><i class=remixicon-links-line></i></a></div></div><div class="header animated fadeInDown"><div class=site_title_container><div class=site_title><h1><a href=https://vikingama.github.io><img style=width:65px;height:auto;vertical-align:top src=https://vikingama.github.io/images/avatar.png></a></h1></div><div class=description><p class=sub_title>看不见我的美<br>是你瞎了眼</p><div class=my_socials><a href=https://www.douban.com/people/nicknoonan title=douban target=_blank><i class=remixicon-douban-fill></i></a><a href=https://github.com/Vikingama title=github target=_blank><i class=remixicon-github-fill></i></a><a href=https://weibo.com/vikingx title=weibo target=_blank><i class=remixicon-weibo-fill></i></a><a href=https://www.zhihu.com/people/vikingama title=zhihu target=_blank><i class=remixicon-zhihu-fill></i></a><a href=https://vikingama.github.io/index.xml type=application/rss+xml title=rss target=_blank><i class=remixicon-rss-fill></i></a></div></div></div></div><div class=content><div class=post_page><div class="post animated fadeInDown"><div class="post_title post_detail_title"><h2><a href=/posts/node-learn-notes/>重读《深入浅出 Node.js》</a></h2><span class=date>2020.08.02</span></div><div class="post_content markdown"><blockquote><p>一直在学 Node，从来没有成功过。</p></blockquote><h3 id=node-简介>Node 简介</h3><p><img src=/node-learn-notes/node-chrome.png alt="Local Image"></p><p>Node 的结构与 Chrome 十分相似，它们都是基于事件驱动的异步架构，浏览器通过事件驱动来服务界面上的交互，Node 通过事件驱动来服务 I/O；作为后端 JS 的运行平台，Node 没有改写语言本身的任何特性，它将前端中广泛运用的思想迁移到了服务器端。</p><p><img src=/node-learn-notes/libuv.png alt="Local Image"></p><p>Node 特点：异步输入输出、回调函数、单线程、基于 libuv 实现跨平台。</p><h3 id=模块化>模块化</h3><p>Node 中模块分为两类：核心模块和文件模块；核心模块在 Node 启动时被直接加载进内存中，文件模块则是在运行时动态加载。Node 对引入过的模块都会进行缓存，同浏览器缓存文件一样，不同的是 Node 缓存的是编译和执行之后的对象。</p><p>Node 在对 JS 模块编译的过程中对文件内容进行了头尾包装，这样每个模块文件之间都进行了作用域隔离。包装之后的代码会通过原生模块的 runInThisContext 方法执行，返回一个 function 对象。</p><pre><code class=language-js>(function (exports, require, module, __filename, __dirname) {
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no,user-scalable=no"><meta name=author content=馬腊咯稽><meta name=description content="重读《深入浅出 Node.js》"><meta name=keywords content=Node.js><link rel=canonical href=https://vikingama.github.io/posts/node-learn-notes/><link rel="shortcut icon" href=https://vikingama.github.io/images/favicon.ico><link rel=stylesheet href=https://vikingama.github.io/css/zozo.css><link rel=stylesheet href=https://vikingama.github.io/css/highlight.css><link rel=stylesheet href=https://vikingama.github.io/css/remixicon.css><title>重读《深入浅出 Node.js》 &middot; 看不见我的美 · 是你瞎了眼</title></head><body><div class="main animated"><div class="nav_container animated fadeInDown"><div class=site_nav id=site_nav><ul><li><a href=/>首页</a></li><li><a href=/posts/>归档</a></li><li><a href=/tags/>标签</a></li><li><a href=/inspires/>启发</a></li><li><a href=/command/>命令</a></li><li><a href=/about/>关于</a></li></ul></div><div class=menu_icon><a id=menu_icon><i class=remixicon-links-line></i></a></div></div><div class="header animated fadeInDown"><div class=site_title_container><div class=site_title><h1><a href=https://vikingama.github.io><img style=width:65px;height:auto;vertical-align:top src=https://vikingama.github.io/images/avatar.png></a></h1></div><div class=description><p class=sub_title>看不见我的美<br>是你瞎了眼</p><div class=my_socials><a href=https://www.douban.com/people/nicknoonan title=douban target=_blank><i class=remixicon-douban-fill></i></a><a href=https://github.com/Vikingama title=github target=_blank><i class=remixicon-github-fill></i></a><a href=https://weibo.com/vikingx title=weibo target=_blank><i class=remixicon-weibo-fill></i></a><a href=https://www.zhihu.com/people/vikingama title=zhihu target=_blank><i class=remixicon-zhihu-fill></i></a><a href=https://vikingama.github.io/index.xml type=application/rss+xml title=rss target=_blank><i class=remixicon-rss-fill></i></a></div></div></div></div><div class=content><div class=post_page><div class="post animated fadeInDown"><div class="post_title post_detail_title"><h2><a href=/posts/node-learn-notes/>重读《深入浅出 Node.js》</a></h2><span class=date>2020.08.02</span></div><div class="post_content markdown"><blockquote><p>一直在学 Node，从来没有成功过。</p></blockquote><h3 id=node-简介>Node 简介</h3><p><img src=/node-learn-notes/node-chrome.png alt="Local Image"></p><p>Node 的结构与 Chrome 十分相似，它们都是基于事件驱动的异步架构，浏览器通过事件驱动来服务界面上的交互，Node 通过事件驱动来服务 I/O；作为后端 JS 的运行平台，Node 没有改写语言本身的任何特性，它将前端中广泛运用的思想迁移到了服务器端。</p><p><img src=/node-learn-notes/libuv.png alt="Local Image"></p><p>Node 特点：异步输入输出、回调函数、单线程、基于 libuv 实现跨平台。</p><h3 id=模块化>模块化</h3><p>Node 中模块分为两类：核心模块和文件模块；核心模块在 Node 启动时被直接加载进内存中，文件模块则是在运行时动态加载。Node 对引入过的模块都会进行缓存，同浏览器缓存文件一样，不同的是 Node 缓存的是编译和执行之后的对象。</p><p>Node 在对 JS 模块编译的过程中对文件内容进行了头尾包装，这样每个模块文件之间都进行了作用域隔离。包装之后的代码会通过原生模块的 runInThisContext 方法执行，返回一个 function 对象。</p><pre><code class=language-js>(function (exports, require, module, __filename, __dirname) {
   var math = require('math');
   exports.area = function (radius) {
     return Math.PI * radius * radius;
@@ -70,7 +70,6 @@ for (var j = 0; j &lt; 15; j++) {
   total.push(useMem());
 }
 showMem();
-
 function showMem() {
   var mem = process.memoryUsage();
   var format = function (bytes) {
@@ -118,16 +117,13 @@ const AudioDevice = {
     console.log('stop');
   }
 };
-
 class MusicPlayer extends EventEmitter {
   constructor() {
     super();
     this.playing = false;
   }
 }
-
 const musicPlayer = new MusicPlayer();
-
 musicPlayer.on('play', function (track) {
   this.playing = true;
   AudioDevice.play(track);
@@ -205,7 +201,7 @@ function parseCookie(cookie) {
   }
   const entries = cookie.split(';');
   const temp = {};
-  entries.forEach((item) =&gt; {
+  entries.forEach(item =&gt; {
     const arr = item.split('=');
     const key = arr[0].trim();
     const value = arr[1] || '';
@@ -272,7 +268,7 @@ res.writeHead = () =&gt; {
 </code></pre><p>报文内容部分会通过 data 事件触发，我们需要以流的方式处理：</p><pre><code class=language-js>function handler(req, res) {
   if (hasBody(req)) {
     var bufs = [];
-    req.on('data', (chunk) =&gt; {
+    req.on('data', chunk =&gt; {
       bufs.push(chunk);
     });
     req.on('end', () =&gt; {
@@ -297,17 +293,14 @@ GET /user/jacksontian
 </code></pre><p>举个例子：</p><pre><code class=language-js>const express = require('express');
 const routes = require('./routes');
 const app = express();
-
 app.use(express.json());
 app.use(express.methodOverride());
-
 app.get('/pages', routes.pages.index);
 app.get('/pages/:id', routes.pages.show);
 app.post('/pages', routes.pages.create);
 app.patch('/pages/:id', routes.pages.patch);
 app.put('/pages/:id', routes.pages.update);
 app.del('/pages/:id', routes.pages.remove);
-
 modules.exports = app;
 </code></pre><h3 id=中间件>中间件</h3><p>中间件的行为比较类似 Java 中的过滤器，在进入具体的业务处理之前，先让过滤器处理一些与业务无关的技术细节；由于 Node 异步的原因，我们需要提供一种机制，在当前中间件处理完成后，通知下一个中间件执行：</p><p><img src=/node-learn-notes/middleware-model.png alt="Local Image"></p><p>中间件往往先于业务逻辑执行，为了让业务逻辑提早执行，中间件的编写和使用需要注意两点：</p><ul><li>编写高效的中间件：尽早调用 next 执行后续逻辑、缓存需要重复计算的结果、避免不必要的计算（比如『报文体解析』对于 GET 是不必要的）；</li><li>合理利用路由，避免不必要的中间件执行。</li></ul><p>&nbsp;</p><pre><code class=language-js>function staticFile(req, res, next) {
     const pathname = url.parse(req.url).pathname;
@@ -358,7 +351,7 @@ mime.lookup('file.txt'); // =&gt; 'text/plain'
 mime.lookup('.TXT'); // =&gt; 'text/plain'
 mime.lookup('htm'); // =&gt; 'text/html'
 </code></pre><p>在附件下载场景下，无论响应内容是什么 MIME 值，需要客户端去下载它；为了满足这种需求，需要设置 Content-Disposition 字段，客户端会根据它的值判断是应该将报文数据解析还是下载；当内容只需即时查看时，它的值为 inline，当数据可以存为附件时，它的值为 attachment；Content-Disposition 字段还能通过参数指定保存时应该使用的文件名。</p><pre><code>Content-Disposition: attachment; filename=&quot;filename.ext&quot;
-</code></pre><p>响应附件下载：</p><pre><code class=language-js>res.sendfile = (filepath) =&gt; {
+</code></pre><p>响应附件下载：</p><pre><code class=language-js>res.sendfile = filepath =&gt; {
   // 检查文件是否存在
   fs.stat(filepath, (err, stat) =&gt; {
     if (err) return;
@@ -376,12 +369,12 @@ mime.lookup('htm'); // =&gt; 'text/html'
     stream.pipe(res);
   });
 };
-</code></pre><p>响应 JSON：</p><pre><code class=language-js>res.json = (json) =&gt; {
+</code></pre><p>响应 JSON：</p><pre><code class=language-js>res.json = json =&gt; {
   res.setHeader('Content-Type', 'application/json');
   res.writeHead(200);
   res.end(JSON.stringify(json));
 };
-</code></pre><p>响应跳转：</p><pre><code class=language-js>res.redirect = (url) =&gt; {
+</code></pre><p>响应跳转：</p><pre><code class=language-js>res.redirect = url =&gt; {
   res.setHeader('Location', url);
   res.writeHead(302);
   res.end(url);
@@ -430,12 +423,12 @@ cp.execFile('worker.js', function (err, stdout, stderr) {});
 </code></pre><p>父子进程之间会创建 IPC 通道进行通信：</p><pre><code class=language-js>// parent
 const cp = require('child_process');
 const sub = cp.fork(__dirname + '/sub.js');
-sub.on('message', (m) =&gt; {
+sub.on('message', m =&gt; {
   console.log('parent got msg from child: ' + m);
 });
 sub.send({ msg: 'hello son' });
 // child
-process.on('message', (m) =&gt; {
+process.on('message', m =&gt; {
   console.log('child got msg from parent: ' + m);
 });
 process.send({ msg: 'hello papa' });
@@ -443,7 +436,7 @@ process.send({ msg: 'hello papa' });
 const child_one = require('child_process').fork('./child.js');
 const child_two = require('child_process').fork('./child.js');
 const server = require('net').createServer();
-server.on('connection', (socket) =&gt; {
+server.on('connection', socket =&gt; {
   socket.end('handled by parent\n');
 });
 server.listen(1337, () =&gt; {
@@ -453,7 +446,7 @@ server.listen(1337, () =&gt; {
 // 子进程
 process.on('message', (m, server) =&gt; {
   m === 'server' &amp;&amp;
-    server.on('connection', (socket) =&gt; {
+    server.on('connection', socket =&gt; {
       socket.end('handled by child\n pid is ' + process.pid + '\n');
     });
 });
@@ -474,7 +467,7 @@ const server = http.createServer((req, res) =&gt; {
 });
 process.on('message', (m, tcp) =&gt; {
   m === 'server' &amp;&amp;
-    tcp.on('connection', (socket) =&gt; {
+    tcp.on('connection', socket =&gt; {
       server.emit('connection', socket);
     });
 });
@@ -489,13 +482,10 @@ const fork = require('child_process').fork;
 const cpus = require('os').cpus();
 const server = require('net').createServer();
 const workers = {};
-
 server.listen(1337);
-
 for (let i = 0; i &lt; cpus.length; i++) {
   createWorker();
 }
-
 function createWorker() {
   let worker = fork(__dirname + './worker.js');
   worker.on('exit', () =&gt; {
@@ -513,7 +503,7 @@ process.on('exit', () =&gt; {
     workers[pid].kill();
   }
 });
-process.on('uncaughtException', (err) =&gt; {
+process.on('uncaughtException', err =&gt; {
   logger.error(err);
   process.send({
     act: 'suicide'
@@ -527,7 +517,6 @@ process.on('uncaughtException', (err) =&gt; {
 let duration = 60000;
 const restart = [];
 const workers = {};
-
 function createWorker() {
   if (isTooFrequently()) {
     // 如果重启太过频繁，不再重启
@@ -539,7 +528,7 @@ function createWorker() {
     console.log('worker ' + worker.pid + ' exited.');
     delete workers[worker.pid];
   });
-  worker.on('message', (message) =&gt; {
+  worker.on('message', message =&gt; {
     message.act === 'suicide' &amp;&amp; createWorker();
   });
   worker.send('server', server);
@@ -579,7 +568,6 @@ export NODE_CLUSTER_SCHED_POLICY=none;
 </code></pre><p>cluster 模块用以解决多核 CPU 的利用率问题，它的底层实现还是 child_process，同时提供了较完善的 API 用以处理进程的健壮性问题，允许简易的创建共享服务器端口的子进程。</p><pre><code class=language-js>const http = require('http');
 const cluster = require('cluster');
 const numCPUs = require('os').cpus().length;
-
 // cluster.isWorker = ('NODE_UNIQUE_ID' in process.env);
 // cluster.isMaster = (cluster.isWorker === false);
 // 如果是主进程
@@ -603,8 +591,7 @@ if (cluster.isMaster) {
       res.end('你好世界\n');
     })
     .listen(8000);
-
   console.log(`工作进程 ${process.pid} 已启动`);
 }
 </code></pre><h3 id=最佳实践>最佳实践</h3><ul><li>动静分离：将动态请求和静态请求分离后，Node 专注于处理动态请求；</li><li>启用缓存：消减同步 I/O 带来的时间浪费；</li><li>多进程架构：使用工具进行进程管理；</li><li>读写分离：将数据库进行主从设计，减少读写操作的相互影响；</li><li>记录日志：记录那些意外产生的异常错误；</li><li>文件分组：按照业务角色分组比按技术角色分组更好。</li></ul><h5 id=参考-构建自己的-node-js-知识体系-https-github-com-ringcrl-node-point-the-node-js-best-practices-list-https-github-com-goldbergyoni-nodebestpractices>参考：<a href=https://github.com/ringcrl/node-point>构建自己的 Node.js 知识体系</a>、<a href=https://github.com/goldbergyoni/nodebestpractices/>The Node.js Best Practices List</a></h5></div><div class=post_footer><div class=meta><div class=info><span class="field tags"><i class=remixicon-stack-line></i><a href=https://vikingama.github.io/tags/node.js/>Node.js</a></span></div></div></div></div><div class=doc_comments><div class=comments_block_title>发表评论</div><div id=vcomments></div></div><link rel=stylesheet href=https://vikingama.github.io/css/comments.css><script src=//unpkg.com/valine></script><script type=text/javascript>new Valine({el:'#vcomments',avatar:'retro',recordIP:true,path:window.location.pathname,appId:'U06blUXOot4uJgfMu8I9xJXz-MdYXbMMI',appKey:'BnrXC06FJsvRNpr4aqb1HYPd',placeholder:'来都来了，不打个招呼吗？',visitor:'true',serverURLs:'https:\/\/u06bluxo.api.lncldglobal.com'});</script></div></div><a id=back_to_top href=# class=back_to_top><span>△</span></a></div><footer class=footer><div class=powered_by><a href=https://github.com/varkai/hugo-theme-zozo/ target=_blank>Designed by <span class=jitters>Zeuk</span>,</a>
-<a href=https://www.gohugo.io/ target=_blank>Published with <span class=jitters>Hugo</span></a></div><div class=footer_slogan><span id=enter_time></span></div></footer><script src=//unpkg.com/jquery/dist/jquery.min.js></script><script src=//unpkg.com/@highlightjs/cdn-assets/highlight.min.js></script><script src=https://vikingama.github.io/js/zozo.js></script><script>hljs.initHighlightingOnLoad();</script><script type=text/javascript async src="//www.unpkg.com/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML">MathJax.Hub.Config({tex2jax:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$'],['\[\[','\]\]']],processEscapes:true,processEnvironments:true,skipTags:['script','noscript','style','textarea','pre'],TeX:{equationNumbers:{autoNumber:"AMS"},extensions:["AMSmath.js","AMSsymbols.js"]}}});MathJax.Hub.Queue(function(){var all=MathJax.Hub.getAllJax(),i;for(i=0;i<all.length;i+=1){all[i].SourceElement().parentNode.className+=' has-jax';}});</script><style>code.has-jax{background:inherit;border:inherit;color:#515151;font:inherit;font-size:100%}</style><script type=application/javascript>var doNotTrack=false;if(!doNotTrack){window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;ga('create','G-CDS328YPMY','auto');ga('send','pageview');}</script><script async src=https://www.google-analytics.com/analytics.js></script></body></html>
+<a href=https://www.gohugo.io/ target=_blank>Published with <span class=jitters>Hugo</span></a></div><div class=footer_slogan><span id=enter_time></span></div></footer><script src=//unpkg.com/jquery/dist/jquery.min.js></script><script src=//unpkg.com/@highlightjs/cdn-assets/highlight.min.js></script><script src=https://vikingama.github.io/js/zozo.js></script><script>hljs.initHighlightingOnLoad();</script><script type=application/javascript>var doNotTrack=false;if(!doNotTrack){window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;ga('create','G-CDS328YPMY','auto');ga('send','pageview');}</script><script async src=https://www.google-analytics.com/analytics.js></script></body></html>

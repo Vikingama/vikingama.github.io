@@ -1,4 +1,4 @@
-<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no,user-scalable=no"><meta name=author content=馬腊咯稽><meta name=description content=面向面试编程><meta name=keywords content=面试><link rel=canonical href=https://vikingama.github.io/posts/interview-oriented/><link rel="shortcut icon" href=https://vikingama.github.io/images/favicon.ico><link rel=stylesheet href=https://vikingama.github.io/css/zozo.css><link rel=stylesheet href=https://vikingama.github.io/css/highlight.css><link rel=stylesheet href=https://vikingama.github.io/css/remixicon.css><title>面向面试编程 &middot; 看不见我的美 · 是你瞎了眼</title></head><body><div class="main animated"><div class="nav_container animated fadeInDown"><div class=site_nav id=site_nav><ul><li><a href=/>首页</a></li><li><a href=/posts/>归档</a></li><li><a href=/resume/>简历</a></li><li><a href=/tags/>标签</a></li><li><a href=/inspires/>启发</a></li><li><a href=/command/>命令</a></li><li><a href=/about/>关于</a></li></ul></div><div class=menu_icon><a id=menu_icon><i class=remixicon-links-line></i></a></div></div><div class="header animated fadeInDown"><div class=site_title_container><div class=site_title><h1><a href=https://vikingama.github.io><img style=width:65px;height:auto;vertical-align:top src=https://vikingama.github.io/images/avatar.png></a></h1></div><div class=description><p class=sub_title>看不见我的美<br>是你瞎了眼</p><div class=my_socials><a href=https://www.douban.com/people/nicknoonan title=douban target=_blank><i class=remixicon-douban-fill></i></a><a href=https://github.com/Vikingama title=github target=_blank><i class=remixicon-github-fill></i></a><a href=https://weibo.com/vikingx title=weibo target=_blank><i class=remixicon-weibo-fill></i></a><a href=https://www.zhihu.com/people/vikingama title=zhihu target=_blank><i class=remixicon-zhihu-fill></i></a><a href=https://vikingama.github.io/index.xml type=application/rss+xml title=rss target=_blank><i class=remixicon-rss-fill></i></a></div></div></div></div><div class=content><div class=post_page><div class="post animated fadeInDown"><div class="post_title post_detail_title"><h2><a href=/posts/interview-oriented/>面向面试编程</a></h2><span class=date>2020.03.11</span></div><div class="post_content markdown"><blockquote><p>好烦刷面试题。</p></blockquote><h3 id=for-循环打印-0-9>for 循环打印 0-9</h3><pre><code class=language-js>for (var i = 0; i &lt; 10; i++) {
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no,user-scalable=no"><meta name=author content=馬腊咯稽><meta name=description content=面向面试编程><meta name=keywords content=面试><link rel=canonical href=https://vikingama.github.io/posts/interview-oriented/><link rel="shortcut icon" href=https://vikingama.github.io/images/favicon.ico><link rel=stylesheet href=https://vikingama.github.io/css/zozo.css><link rel=stylesheet href=https://vikingama.github.io/css/highlight.css><link rel=stylesheet href=https://vikingama.github.io/css/remixicon.css><title>面向面试编程 &middot; 看不见我的美 · 是你瞎了眼</title></head><body><div class="main animated"><div class="nav_container animated fadeInDown"><div class=site_nav id=site_nav><ul><li><a href=/>首页</a></li><li><a href=/posts/>归档</a></li><li><a href=/tags/>标签</a></li><li><a href=/inspires/>启发</a></li><li><a href=/command/>命令</a></li><li><a href=/about/>关于</a></li></ul></div><div class=menu_icon><a id=menu_icon><i class=remixicon-links-line></i></a></div></div><div class="header animated fadeInDown"><div class=site_title_container><div class=site_title><h1><a href=https://vikingama.github.io><img style=width:65px;height:auto;vertical-align:top src=https://vikingama.github.io/images/avatar.png></a></h1></div><div class=description><p class=sub_title>看不见我的美<br>是你瞎了眼</p><div class=my_socials><a href=https://www.douban.com/people/nicknoonan title=douban target=_blank><i class=remixicon-douban-fill></i></a><a href=https://github.com/Vikingama title=github target=_blank><i class=remixicon-github-fill></i></a><a href=https://weibo.com/vikingx title=weibo target=_blank><i class=remixicon-weibo-fill></i></a><a href=https://www.zhihu.com/people/vikingama title=zhihu target=_blank><i class=remixicon-zhihu-fill></i></a><a href=https://vikingama.github.io/index.xml type=application/rss+xml title=rss target=_blank><i class=remixicon-rss-fill></i></a></div></div></div></div><div class=content><div class=post_page><div class="post animated fadeInDown"><div class="post_title post_detail_title"><h2><a href=/posts/interview-oriented/>面向面试编程</a></h2><span class=date>2020.03.11</span></div><div class="post_content markdown"><blockquote><p>好烦刷面试题。</p></blockquote><h3 id=for-循环打印-0-9>for 循环打印 0-9</h3><pre><code class=language-js>for (var i = 0; i &lt; 10; i++) {
   (function (i) {
     setTimeout(() =&gt; {
       console.log(i);
@@ -7,7 +7,7 @@
 }
 for (var i = 0; i &lt; 10; i++) {
   setTimeout(
-    (i) =&gt; {
+    i =&gt; {
       console.log(i);
     },
     1000,
@@ -48,7 +48,6 @@ for (let i = 0; i &lt; 10; i++) {
       console.info(target);
       console.info(key);
       console.info(receiver);
-
       return Reflect.get(target, key, receiver);
     },
     set(target, key, value, receiver) {
@@ -57,17 +56,14 @@ for (let i = 0; i &lt; 10; i++) {
       console.info(key);
       console.info(value);
       console.info(receiver);
-
       if (key === 'text') {
         inputEle.value = value;
         pEle.innerText = value;
       }
-
       return Reflect.set(target, key, value, receiver);
     }
   });
-
-  inputEle.addEventListener('input', (e) =&gt; {
+  inputEle.addEventListener('input', e =&gt; {
     console.log(e);
     o2.text = e.target.value;
   });
@@ -85,7 +81,6 @@ for (let i = 0; i &lt; 10; i++) {
 Function.prototype.call = function (context = window, ...args) {
   console.log(this); // 谁调用了 call 方法 =&gt; example
   console.log(context); // 传入的第一个参数 =&gt; eo
-
   if (typeof this !== 'function') {
     throw new Error('call 方法只能在函数上调用');
   }
@@ -110,7 +105,6 @@ Function.prototype.bind = function (context = window, ...params1) {
   }
   return bindFn;
 };
-
 let eo = { a: 1 };
 function example(...rest) {
   console.log(this);
@@ -119,7 +113,6 @@ function example(...rest) {
   }, 0);
   console.log(rest);
 }
-
 example.call(eo, 1, 2, 3);
 example.apply(eo, [4, 5, 6]);
 example.bind(eo, [7, 8, 9])();
@@ -138,9 +131,9 @@ example.bind(eo, [7, 8, 9])();
   };
 }
 // 测试代码
-const a = (msg) =&gt; `${msg}a`;
-const b = (msg) =&gt; `${msg}b`;
-const c = (msg) =&gt; `${msg}c`;
+const a = msg =&gt; `${msg}a`;
+const b = msg =&gt; `${msg}b`;
+const c = msg =&gt; `${msg}c`;
 const f = compose(a, b, c);
 console.log(f('hello, ')); // hello, cba
 </code></pre><h3 id=实现-instanceof>实现 instanceof</h3><p>决定类型的是 prototype，而不是构造函数：</p><pre><code class=language-js>// instanceOf({}, Object);
@@ -162,9 +155,7 @@ function instanceOf(L, R) {
 };
 const toString = Object.prototype.toString;
 console.log(toString.call(temp)); // [object Hello]
-</code></pre><h3 id=实现-flatten>实现 flatten</h3><pre><code class=language-js>var arr = [[1, 2, 2], [3, 4, 5, 5], [6, 7, 8, 9, [11, 12, [12, 13, [14]]]], 10];
-
-function flattenOne(arr) {
+</code></pre><h3 id=实现-flatten>实现 flatten</h3><pre><code class=language-js>function flattenOne(arr) {
   return arr.reduce(
     (acc, val) =&gt;
       Array.isArray(val) ? [...acc, ...flattenOne(val)] : [...acc, val],
@@ -172,16 +163,14 @@ function flattenOne(arr) {
   );
 }
 function flattenTwo(arr) {
-  while (arr.some((item) =&gt; Array.isArray(item))) {
+  while (arr.some(item =&gt; Array.isArray(item))) {
     arr = [].concat(...arr);
   }
-
   return arr;
 }
 function flattenThree(arr) {
   let inner = [...arr];
   let temp = [];
-
   while (inner.length) {
     let item = inner.shift(); // 取出第一项（会修改原数组）
     if (Array.isArray(item)) {
@@ -190,7 +179,6 @@ function flattenThree(arr) {
       temp.push(item);
     }
   }
-
   return temp;
 }
 function flattenFour(arr) {
@@ -199,7 +187,12 @@ function flattenFour(arr) {
 function flattenFive(arr) {
   return JSON.parse(`[${JSON.stringify(arr).replace(/\[|\]/g, '')}]`);
 }
-
+const arr = [
+  [1, 2, 2],
+  [3, 4, 5, 5],
+  [6, 7, 8, 9, [11, 12, [12, 13, [14]]]],
+  10
+];
 console.log(flattenOne(arr));
 console.log(flattenTwo(arr));
 console.log(flattenThree(arr));
@@ -235,15 +228,14 @@ jsonp(
     return acc;
   }, []);
 };
-const a = [1, 2, 3, 4].implementMapUsingReduce((a) =&gt; a + 1);
-const b = ['a', 'b', 'c'].implementMapUsingReduce((a) =&gt; a + '!');
+const a = [1, 2, 3, 4].implementMapUsingReduce(a =&gt; a + 1);
+const b = ['a', 'b', 'c'].implementMapUsingReduce(a =&gt; a + '!');
 console.log(a); // [2, 3, 4, 5]
 console.log(b); // ['a!', 'b!', 'c!']
 </code></pre><h3 id=实现-new>实现 new</h3><pre><code class=language-js>function customNew() {
-  const con = [].shift.call(arguments);
+  const con = [].shift.call(arguments); // 获取构造函数
   const obj = Object.create(con.prototype);
   const temp = con.apply(obj, arguments);
-
   return temp instanceof con ? temp : obj;
 }
 </code></pre><h3 id=实现-setinterval-settimeout-使用-requestanimationframe>实现 setInterval/setTimeout（使用 requestAnimationFrame）</h3><pre><code class=language-js>function setInterval(cb, time) {
@@ -257,8 +249,7 @@ console.log(b); // ['a!', 'b!', 'c!']
     if (endTime - startTime &gt; time) {
       endTime = startTime = getNow();
       cb(timer);
-      // setTimeout 放开这一行
-      // window.cancelAnimationFrame(timer)
+      // window.cancelAnimationFrame(timer) // 如果是 setTimeout，放开这一行
     }
   };
   timer = window.requestAnimationFrame(loop);
@@ -266,7 +257,7 @@ console.log(b); // ['a!', 'b!', 'c!']
 }
 </code></pre><h3 id=实现-sleep>实现 sleep</h3><pre><code class=language-js>async function sleep(time) {
   console.time('sleep');
-  await new Promise((resolve) =&gt; {
+  await new Promise(resolve =&gt; {
     setTimeout(resolve, time);
   });
 }
@@ -286,9 +277,7 @@ sleep(3000).then(() =&gt; {
       return;
     }
     if (handler) {
-      this._events[type] = this._events[type].filter(
-        (item) =&gt; item !== handler
-      );
+      this._events[type] = this._events[type].filter(item =&gt; item !== handler);
     } else {
       delete this._events[type];
     }
@@ -304,7 +293,7 @@ sleep(3000).then(() =&gt; {
     if (!this._events[type]) {
       return;
     }
-    this._events[type].forEach((handler) =&gt; {
+    this._events[type].forEach(handler =&gt; {
       handler(...args);
     });
   }
@@ -313,37 +302,31 @@ sleep(3000).then(() =&gt; {
   constructor(name) {
     this.name = name;
     this.doSomething = [];
-
     console.log(`Hi I am ${this.name}`);
-
     setTimeout(() =&gt; {
       this.next();
     }, 0);
   }
   eat(food) {
-    const sth = ((food) =&gt; () =&gt; {
+    const sth = (food =&gt; () =&gt; {
       console.log(`I am eating ${food}`);
       this.next();
     })(food);
-
     this.doSomething.push(sth);
-
     return this;
   }
   sleep(time) {
-    const sth = ((time) =&gt; () =&gt; {
+    const sth = (time =&gt; () =&gt; {
       setTimeout(() =&gt; {
         console.log(`等待了${time}秒...`);
         this.next();
       }, time * 1000);
     })(time);
-
     this.doSomething.push(sth);
-
     return this;
   }
   sleepFirst(time) {
-    var sth = ((time) =&gt; () =&gt; {
+    var sth = (time =&gt; () =&gt; {
       setTimeout(() =&gt; {
         console.log(`等待了${time}秒...`);
         this.next();
@@ -351,32 +334,23 @@ sleep(3000).then(() =&gt; {
     })(time);
     // 将任务添加到最前边
     this.doSomething.unshift(sth);
-
     return this;
   }
   next() {
     let doSth = this.doSomething.shift();
-    doSth &amp;&amp; doSth();
+    typeof doSth === 'function' &amp;&amp; doSth();
   }
 }
 function LazyMan(name) {
   return new LazyManClass(name);
 }
-
-LazyMan('Tony')
-  .eat('lunch')
-  .eat('dinner')
-  .sleepFirst(5)
-  .sleep(10)
-  .eat('junk food');
+LazyMan('Tony').eat('lunch').eat('dinner').sleepFirst(5).sleep(10).eat('juice');
 </code></pre><h3 id=实现-object-assign>实现 Object.assign</h3><pre><code class=language-js>Object.defineProperty(Object, 'customAssign', {
   value(target) {
     if (!target) {
       throw new Error('&gt;_&lt;');
     }
-
     const sources = [...arguments].slice(1);
-
     for (let source of sources) {
       for (let attr in source) {
         if (Object.hasOwnProperty.call(source, attr)) {
@@ -384,12 +358,10 @@ LazyMan('Tony')
         }
       }
     }
-
     return target;
   },
   enumerable: false
 });
-
 var a = {
   qq: 123456789,
   name: 'Cardi B',
@@ -406,22 +378,21 @@ var b = {
     Rfefes: 18
   }
 };
-
 console.log(Object.customAssign(b, a));
 </code></pre><h3 id=实现-promise>实现 Promise</h3><pre><code class=language-js>function MyPromise(executor) {
   const self = this;
   self.data = undefined;
   self.status = 'pending';
-  self.onFulfilledCallbacks = [];
-  self.onRejectedCallbacks = [];
+  self.onFulfilledCbs = [];
+  self.onRejectedCbs = [];
   function fulfill(value) {
     if (self.status !== 'pending') {
       return;
     }
     self.status = 'fulfilled';
     self.data = value;
-    for (let i = 0; i &lt; self.onFulfilledCallbacks.length; i++) {
-      self.onFulfilledCallbacks[i](value);
+    for (let i = 0; i &lt; self.onFulfilledCbs.length; i++) {
+      self.onFulfilledCbs[i](value);
     }
   }
   function reject(reason) {
@@ -430,8 +401,8 @@ console.log(Object.customAssign(b, a));
     }
     self.status = 'rejected';
     self.data = reason;
-    for (let i = 0; i &lt; self.onRejectedCallbacks.length; i++) {
-      self.onRejectedCallbacks[i](reason);
+    for (let i = 0; i &lt; self.onRejectedCbs.length; i++) {
+      self.onRejectedCbs[i](reason);
     }
   }
   try {
@@ -457,7 +428,7 @@ MyPromise.prototype.then = function (onFulFilled, onRejected) {
         };
   if (self.status === 'pending') {
     promise = new MyPromise(function (fulfill, reject) {
-      self.onFulfilledCallbacks.push(function () {
+      self.onFulfilledCbs.push(function () {
         try {
           const temp = onFulFilled(self.data);
           if (temp instanceof MyPromise) {
@@ -468,7 +439,7 @@ MyPromise.prototype.then = function (onFulFilled, onRejected) {
           reject(e);
         }
       });
-      self.onRejectedCallbacks.push(function () {
+      self.onRejectedCbs.push(function () {
         try {
           const temp = onRejected(self.data);
           if (temp instanceof MyPromise) {
@@ -510,7 +481,7 @@ MyPromise.prototype.then = function (onFulFilled, onRejected) {
 MyPromise.prototype.catch = function (onRejected) {
   return this.then(null, onRejected);
 };
-</code></pre><h3 id=实现-promise-all-promise-race-promise-retry-和-promise-allsettled>实现 Promise.all、Promise.race、Promise.retry 和 Promise.allSettled</h3><pre><code class=language-js>Promise.myAll = (ps) =&gt; {
+</code></pre><h3 id=实现-promise-all-promise-race-promise-retry-和-promise-allsettled>实现 Promise.all、Promise.race、Promise.retry 和 Promise.allSettled</h3><pre><code class=language-js>Promise.myAll = ps =&gt; {
   if (typeof ps[Symbol.iterator] !== 'function') {
     return Promise.reject('arguments must be an iterator object');
   }
@@ -519,7 +490,7 @@ MyPromise.prototype.catch = function (onRejected) {
   return new Promise((resolve, reject) =&gt; {
     ps.forEach((p, i) =&gt; {
       Promise.resolve(p)
-        .then((v) =&gt; {
+        .then(v =&gt; {
           resolvedList[i] = v;
           resolvedNum = resolvedNum + 1;
           if (resolvedList.length === resolvedNum) {
@@ -530,12 +501,12 @@ MyPromise.prototype.catch = function (onRejected) {
     });
   });
 };
-Promise.myRace = (ps) =&gt; {
+Promise.myRace = ps =&gt; {
   if (typeof ps[Symbol.iterator] !== 'function') {
     return Promise.reject('arguments must be an iterator object');
   }
   return new Promise((resolve, reject) =&gt; {
-    ps.forEach((p) =&gt; {
+    ps.forEach(p =&gt; {
       Promise.resolve(p).then(resolve).catch(reject);
     });
   });
@@ -555,7 +526,7 @@ Promise.myRetry = (p, time = 3) =&gt; {
     }
   });
 };
-Promise.myAllSettled = (ps) =&gt; {
+Promise.myAllSettled = ps =&gt; {
   if (typeof ps[Symbol.iterator] !== 'function') {
     return Promise.reject('arguments must be an iterator object');
   }
@@ -564,15 +535,13 @@ Promise.myAllSettled = (ps) =&gt; {
   return new Promise((resolve, reject) =&gt; {
     ps.forEach((p, i) =&gt; {
       Promise.resolve(p)
-        .then((v) =&gt; {
+        .then(v =&gt; {
           tempList[i] = { status: 'fulfilled', value: v };
-          tempNum = tempNum + 1;
-          if (tempList.length === tempNum) {
-            resolve(tempList);
-          }
         })
-        .catch((e) =&gt; {
+        .catch(e =&gt; {
           tempList[i] = { status: 'rejected', reason: e };
+        })
+        .finally(() =&gt; {
           tempNum = tempNum + 1;
           if (tempList.length === tempNum) {
             resolve(tempList);
@@ -610,7 +579,7 @@ class Child extends Parent {
  * 1. 错误方法一
  * Son.prototype = Papa.prototype;
  * 仅仅是创建了一个指向 Papa.prototype 的引用
- * 修改 Son.prototype 也会改变 Papa.prototype
+ * 修改 Son.prototype 也会改变 Papa.prototype（两个引用会相互影响）
  * 2. 错误方法二
  * Son.prototype = new Papa();
  * 使用到了构造函数调用，假如 Papa 本身有一些副作用
@@ -653,7 +622,7 @@ console.log(test(2, 3, 4, 5)); // 15
 console.log(test(2, 3)(4, 5)); // 15
 console.log(test(2)(3, 4)(5)); // 15
 console.log(test(2)(3)(4)(5)); // 15
-</code></pre><h3 id=实现深拷贝>实现深拷贝</h3><pre><code class=language-js>const type = (o) =&gt;
+</code></pre><h3 id=实现深拷贝>实现深拷贝</h3><pre><code class=language-js>const type = o =&gt;
   Object.prototype.toString.call(o).replace(/\[object |\]/g, '');
 function deepClone(o, map = new WeakMap()) {
   if (
@@ -679,7 +648,7 @@ function deepClone(o, map = new WeakMap()) {
   if (type(o) === 'RegExp') {
     return new RegExp(o);
   }
-  if (map.has(o)) {
+  if (map.get(o)) {
     return map.get(o);
   }
   let temp = new o.constructor();
@@ -692,7 +661,7 @@ function deepClone(o, map = new WeakMap()) {
     return temp;
   }
   if (type(o) === 'Set' || type(o) === 'WeakSet') {
-    o.forEach((v) =&gt; {
+    o.forEach(v =&gt; {
       temp.add(deepClone(v, map));
     });
     return temp;
@@ -705,64 +674,17 @@ function deepClone(o, map = new WeakMap()) {
   }
   return temp;
 }
-</code></pre><h3 id=实现绑定-解绑和派发的事件类>实现绑定、解绑和派发的事件类</h3><pre><code class=language-js>class Event {
-  constructor() {
-    this.cache = {};
-  }
-  // 注册事件
-  on(type, cb) {
-    this.cache[type] = this.cache[type] || [];
-    const cbs = this.cache[type];
-
-    if (cbs.indexOf(cb) === -1) {
-      cbs.push(cb);
-    }
-
-    return this;
-  }
-  // 触发事件
-  dispatch(type, ...params) {
-    let cbs = this.cache[type];
-
-    if (Array.isArray(cbs)) {
-      cbs.forEach((cb) =&gt; {
-        cb(...params);
-      });
-    }
-
-    return this;
-  }
-  // 删除事件
-  off(type, cb) {
-    let cbs = this.cache[type];
-
-    if (Array.isArray(cbs)) {
-      if (cb) {
-        let index = cbs.indexOf(cb);
-        if (index !== -1) {
-          cbs.splice(index, 1);
-        }
-      } else {
-        cbs = [];
-      }
-    }
-
-    return this;
-  }
-}
 </code></pre><h3 id=实现一个无限累加的函数>实现一个无限累加的函数</h3><pre><code class=language-js>function add(m) {
   function temp(n = 0) {
     m = m + n;
     return temp;
   }
-
+  // 比 toString、valueOf 优先级高
   temp[Symbol.toPrimitive] = function () {
     return m;
   };
-
   return temp;
 }
-
 console.log(add(1)); // 1
 console.log(add(1)(2)); // 3
 console.log(add(1)(2)(3)); // 6
@@ -795,30 +717,27 @@ console.log(add(1)(2)(3)(4)(5)); // 15
 }
 bigNumberSum(123456, 9);
 </code></pre><h3 id=复杂类型转换>复杂类型转换</h3><pre><code class=language-js>const example = {
-  valueOf() {
-    // 优先级次之
-    return 123;
-  },
   toString() {
     // 优先级最低
     return '123';
+  },
+  valueOf() {
+    // 优先级次之
+    return 123;
   },
   [Symbol.toPrimitive]() {
     // 优先级最高
     return 'toPrimitive';
   }
 };
-
 console.log(example + ''); // toPrimitive
 console.log(example - 0); // NaN
-
 var hahasha = {
   variable: 0,
   valueOf() {
     return ++this.variable;
   }
 };
-
 if (hahasha == 1 &amp;&amp; hahasha == 2 &amp;&amp; hahasha == 3) {
   console.log('哈哈啥');
 }
@@ -828,9 +747,6 @@ if (hahasha == 1 &amp;&amp; hahasha == 2 &amp;&amp; hahasha == 3) {
 function deduTwo(arr) {
   let temp = [];
   for (let item of arr) {
-    // if (temp.indexOf(item) === -1) {
-    //     temp.push(item);
-    // }
     if (!temp.includes(item)) {
       temp.push(item);
     }
@@ -850,78 +766,37 @@ function deduFour(arr) {
       temp.push(item);
     }
   }
-
   return temp;
 }
-
 var arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 4, 3, 7, 2, 8, 3, 2, 6, 1];
-
 console.log(deduOne(arr));
 console.log(deduTwo(arr));
 console.log(deduThree(arr));
 console.log(deduFour(arr));
 </code></pre><h3 id=写一个函数-输入-n-求斐波那契数列的第-n-项>写一个函数，输入 n ，求斐波那契数列的第 n 项</h3><pre><code class=language-js>// 斐波那契的本质是 [a, b] = [b, a + b]
 function fibonacciOne(n) {
-  if (n % 1 !== 0) {
-    throw new Error('&gt;.&lt;');
-  }
-  if (n &lt;= 0) {
-    return 0;
-  }
-  if (n === 1) {
-    return 1;
-  }
+  if (n % 1 !== 0) throw new Error('&gt;.&lt;');
+  if (n &lt;= 0) return 0;
+  if (n === 1) return 1;
   // 这个会导致调用栈爆炸，如果 n 很大的话
   return fibonacciOne(n - 1) + fibonacciOne(n - 2);
 }
 function fibonacciTwo(n) {
   const temp = [0, 1];
-
-  if (n % 1 !== 0) {
-    throw new Error('&gt;.&lt;');
-  }
-  if (n &lt;= 0) {
-    return temp[0];
-  }
-  if (n === 1) {
-    return temp[1];
-  }
-
+  if (n % 1 !== 0) throw new Error('&gt;.&lt;');
+  if (n &lt;= 0) return temp[0];
+  if (n === 1) return temp[1];
   for (let i = 2; i &lt; n + 1; i++) {
     temp[i] = temp[i - 1] + temp[i - 2];
   }
-
   return temp.reverse()[0];
-}
-function fibonacciThree(n) {
-  let a = 0;
-  let b = 1;
-
-  if (n % 1 !== 0) {
-    throw new Error('&gt;.&lt;');
-  }
-  if (n &lt;= 0) {
-    return a;
-  }
-  if (n === 1) {
-    return b;
-  }
-
-  for (let i = 0; i &lt; n; i++) {
-    [a, b] = [b, a + b];
-  }
-
-  return a;
 }
 let n = 10;
 console.log(fibonacciOne(n));
 console.log(fibonacciTwo(n));
-console.log(fibonacciThree(n));
 </code></pre><h3 id=扁平化去重>扁平化去重</h3><pre><code class=language-js>// 将数组扁平化去并除其中重复部分数据，最终得到一个升序且不重复的数组
 var arr = [[1, 2, 2], [3, 4, 5, 5], [6, 7, 8, 9, [11, 12, [12, 13, [14]]]], 10];
-// One
 console.log([...new Set(arr.flat(Infinity))].sort((a, b) =&gt; a - b));
-// Two
 console.log(
   [...new Set(arr.toString().split(','))].sort((a, b) =&gt; a - b).map(Number)
 );
@@ -992,6 +867,16 @@ function debounce(fn, wait = 300, isImmediate) {
     }, wait);
   };
 }
+window.addEventListener(
+  'scroll',
+  debounce(
+    function (e) {
+      console.log(e);
+    },
+    1000,
+    true
+  )
+);
 </code></pre><h3 id=合并数组>合并数组</h3><pre><code class=language-js>// 把 arrOne 和 arrTwo 合并为 ['A1', 'A2', 'A', 'B1', 'B2', 'B', 'C1', 'C2', 'C', 'D1', 'D2', 'D']
 const arrOne = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2', 'D1', 'D2'];
 const arrTwo = ['A', 'B', 'C', 'D'];
@@ -1002,7 +887,7 @@ arrTwo.forEach((item, index) =&gt; {
 });
 // sort 对字符串排序不需要参数
 const temp = arrOne.concat(arrTwo).sort();
-const answer = temp.map((item) =&gt; {
+const answer = temp.map(item =&gt; {
   if (item.includes('3')) {
     return item.split('')[0];
   }
@@ -1010,29 +895,17 @@ const answer = temp.map((item) =&gt; {
 });
 console.log(answer);
 // 第二种
-const arrThree = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2', 'D1', 'D2'];
-const arrFour = ['A', 'B', 'C', 'D'];
 console.log(
-  [...arrThree, ...arrFour].sort(
+  [...arrOne, ...arrTwo].sort(
     (a, b) =&gt;
       a.codePointAt(0) - b.codePointAt(0) ||
       b.length - a.length ||
       a.codePointAt(1) - b.codePointAt(1)
   )
 );
-</code></pre><h3 id=计算数组交集>计算数组交集</h3><pre><code class=language-js>function randomArr(length) {
-  let arr = [];
-
-  for (let i = 0; i &lt; length; i++) {
-    arr.push(Math.floor(Math.random() * (length + 1)));
-  }
-
-  return arr;
-}
-function jiaoJi(a1, a2) {
+</code></pre><h3 id=计算数组交集>计算数组交集</h3><pre><code class=language-js>function jiaoJi(a1, a2) {
   const temp = [];
   const map = {};
-
   for (let item of a1) {
     // 记录第一个数组中各项出现的次数
     if (map[item]) {
@@ -1047,84 +920,61 @@ function jiaoJi(a1, a2) {
       map[item]--;
     }
   }
-
   return temp;
 }
-
+const randomArr = length =&gt;
+  Array.from({ length }, () =&gt; Math.floor(Math.random() * (length + 1)));
 const a1 = randomArr(50);
 const a2 = randomArr(100);
-
-console.info(a1, a2);
 console.log(jiaoJi(a1, a2));
 </code></pre><h3 id=大小写取相反>大小写取相反</h3><pre><code class=language-js>function upLow(str) {
   let strArr = str.split('');
-
   strArr.forEach((item, index) =&gt; {
     const temp = item.toUpperCase();
-
     item === temp
       ? (strArr[index] = item.toLowerCase())
       : (strArr[index] = temp);
   });
-
   return strArr.join('');
 }
-
-let example = 'tYUFtfhjfFugyuiygU';
-console.log(upLow(example));
+console.log(upLow('tYUFtfhjfFugyuiygU'));
 </code></pre><h3 id=字符串匹配>字符串匹配</h3><pre><code class=language-js>// 从长度为 n 的字符串 S 中，查找是否存在字符串 T，T 的长度是 m，若存在返回所在位置
 function fitStr(s, t) {
   const n = s.length;
   const m = t.length;
-
   if (n &lt; m) {
     return -1;
   }
-
   for (let i = 0; i &lt; n - m; i++) {
     if (s.substr(i, m) === t) {
       return i;
     }
   }
-
   return -1;
 }
-</code></pre><h3 id=旋转数组>旋转数组</h3><pre><code class=language-js>/**
- * 输入: [1, 2, 3, 4, 5, 6, 7] 和 k = 3
- * 输出: [5, 6, 7, 1, 2, 3, 4]
- */
-function spinOne(arr, k) {
+</code></pre><h3 id=旋转数组>旋转数组</h3><pre><code class=language-js>function spinOne(arr, k) {
   const halfOne = arr.slice(arr.length - k);
   const halfTwo = arr.slice(0, arr.length - k);
-
   return halfOne.concat(halfTwo);
 }
 function spinTwo(arr, k) {
   let temp = arr.concat();
-
   for (let i = 0; i &lt; k; i++) {
     let val = temp.pop();
     temp.unshift(val);
   }
-
   return temp;
 }
-
 var arr = [1, 2, 3, 4, 5, 6, 7, 9, 10];
 var k = 3;
-
 console.log(spinOne(arr, k));
 console.log(spinTwo(arr, k));
 </code></pre><h3 id=打印出-1-1000-之间所有的对称数>打印出 1-1000 之间所有的对称数</h3><pre><code class=language-js>[...Array(1000).keys()].filter(
-  (item) =&gt;
+  item =&gt;
     item.toString().length &gt; 1 &amp;&amp;
     item === Number(item.toString().split('').reverse().join(''))
 );
-</code></pre><h3 id=找区间>找区间</h3><pre><code class=language-js>/**
- * 输入: [1, 2, 3, 5, 7, 8, 10]
- * 输出: 1~3 5 7~8 10
- */
-function findRange(arr) {
+</code></pre><h3 id=找区间>找区间</h3><pre><code class=language-js>function findRange(arr) {
   let temp = [];
   for (let i = 0; i &lt; arr.length; i++) {
     const range = { from: arr[i], to: arr[i] };
@@ -1134,12 +984,12 @@ function findRange(arr) {
     }
     temp.push(range);
   }
-  temp = temp.map((item) =&gt;
+  temp = temp.map(item =&gt;
     item.from === item.to ? item.from : `${item.from}~${item.to}`
   );
   return temp.join(' ');
 }
-findRange([1, 2, 3, 5, 7, 8, 10]);
+findRange([1, 2, 3, 5, 7, 8, 10]); // 1~3 5 7~8 10
 </code></pre><h3 id=给定一个整数数组和一个目标值-找出数组中和为目标值的两个数>给定一个整数数组和一个目标值，找出数组中和为目标值的两个数</h3><pre><code class=language-js>function findSum(arr, target) {
   for (let i = 0; i &lt; arr.length; i++) {
     for (let j = i + 1; j &lt; arr.length; j++) {
@@ -1148,10 +998,8 @@ findRange([1, 2, 3, 5, 7, 8, 10]);
       }
     }
   }
-
   return -1;
 }
-
 console.log(findSum([2, 7, 11, 15], 9));
 </code></pre><h3 id=不使用加减乘除计算整数的-7-倍>不使用加减乘除计算整数的 7 倍</h3><pre><code class=language-js>function sevenOne(num) {
   return '1'.repeat(num).repeat(7).length;
@@ -1161,71 +1009,18 @@ function seventTwo(num) {
     .fill(Array.from({ length: num }))
     .flat().length;
 }
-
 console.log(sevenOne(3));
 console.log(seventTwo(3));
-</code></pre><h3 id=打印对象层级>打印对象层级</h3><pre><code class=language-js>const o1 = { a: 1 };
-const o2 = {
-  a: {
-    b: {
-      c: {
-        d: {
-          e: 1
-        }
-      }
-    },
-    g: 3
-  },
-  f: 2,
-  h: {
-    i: 6
-  }
-};
-function maxFloor(target) {
-  let max = 0;
-  if (typeof target !== 'object') {
-    return max;
-  }
-  max = max + 1;
-  function calcFloor(o) {
-    let temp = [];
-    let length = temp.length;
-    for (let item in o) {
-      if (o.hasOwnProperty(item)) {
-        if (typeof o[item] === 'object') {
-          for (let key in o[item]) {
-            if (o[item].hasOwnProperty(key)) {
-              temp.push(o[item][key]);
-            }
-          }
-        }
-      }
-    }
-    if (temp.length &gt; length) {
-      max++;
-      length = temp.length;
-      return calcFloor(temp);
-    } else {
-      return max;
-    }
-  }
-  return calcFloor(target);
-}
-console.log(maxFloor(o1)); // 1
-console.log(maxFloor(o2)); // 5
-</code></pre><h3 id=字符串排序>字符串排序</h3><pre><code class=language-js>// 红蓝蓝黄红黄蓝红红黄红，排序后为：黄黄黄红红红红红蓝蓝蓝
-function sortStr(str) {
+</code></pre><h3 id=字符串排序>字符串排序</h3><pre><code class=language-js>function sortStr(str) {
   let temp = str.split('');
   let rule = { 黄: 1, 红: 2, 蓝: 3 };
-
   temp.sort((prev, next) =&gt; {
     return rule[prev] - rule[next];
   });
   temp = temp.join('');
-
   return temp;
 }
-console.log(sortStr('红蓝蓝黄红黄蓝红红黄红'));
+console.log(sortStr('红蓝蓝黄红黄蓝红红黄红')); // 黄黄黄红红红红红蓝蓝蓝
 </code></pre><h3 id=检验链表是否成环>检验链表是否成环</h3><pre><code class=language-js>function hasCycle(linkedList) {
   // 分别取两个指针（快、慢），如果成环，那么快、慢指针一定会相遇
   if (!linkedList.head) return false;
@@ -1250,4 +1045,4 @@ console.log(sortStr('红蓝蓝黄红黄蓝红红黄红'));
   return slow;
 }
 </code></pre><h5 id=参考-壹题汇总-https-muyiy-cn-question-每日进阶-https-www-pzijun-cn-blog>参考：<a href=https://muyiy.cn/question/>壹题汇总</a>、<a href=https://www.pzijun.cn/blog/>每日进阶</a></h5></div><div class=post_footer><div class=meta><div class=info><span class="field tags"><i class=remixicon-stack-line></i><a href=https://vikingama.github.io/tags/%E9%9D%A2%E8%AF%95/>面试</a></span></div></div></div></div><div class=doc_comments><div class=comments_block_title>发表评论</div><div id=vcomments></div></div><link rel=stylesheet href=https://vikingama.github.io/css/comments.css><script src=//unpkg.com/valine></script><script type=text/javascript>new Valine({el:'#vcomments',avatar:'retro',recordIP:true,path:window.location.pathname,appId:'U06blUXOot4uJgfMu8I9xJXz-MdYXbMMI',appKey:'BnrXC06FJsvRNpr4aqb1HYPd',placeholder:'来都来了，不打个招呼吗？',visitor:'true',serverURLs:'https:\/\/u06bluxo.api.lncldglobal.com'});</script></div></div><a id=back_to_top href=# class=back_to_top><span>△</span></a></div><footer class=footer><div class=powered_by><a href=https://github.com/varkai/hugo-theme-zozo/ target=_blank>Designed by <span class=jitters>Zeuk</span>,</a>
-<a href=https://www.gohugo.io/ target=_blank>Published with <span class=jitters>Hugo</span></a></div><div class=footer_slogan><span id=enter_time></span></div></footer><script src=//unpkg.com/jquery/dist/jquery.min.js></script><script src=//unpkg.com/@highlightjs/cdn-assets/highlight.min.js></script><script src=https://vikingama.github.io/js/zozo.js></script><script>hljs.initHighlightingOnLoad();</script><script type=text/javascript async src="//www.unpkg.com/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML">MathJax.Hub.Config({tex2jax:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$'],['\[\[','\]\]']],processEscapes:true,processEnvironments:true,skipTags:['script','noscript','style','textarea','pre'],TeX:{equationNumbers:{autoNumber:"AMS"},extensions:["AMSmath.js","AMSsymbols.js"]}}});MathJax.Hub.Queue(function(){var all=MathJax.Hub.getAllJax(),i;for(i=0;i<all.length;i+=1){all[i].SourceElement().parentNode.className+=' has-jax';}});</script><style>code.has-jax{background:inherit;border:inherit;color:#515151;font:inherit;font-size:100%}</style><script type=application/javascript>var doNotTrack=false;if(!doNotTrack){window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;ga('create','G-CDS328YPMY','auto');ga('send','pageview');}</script><script async src=https://www.google-analytics.com/analytics.js></script></body></html>
+<a href=https://www.gohugo.io/ target=_blank>Published with <span class=jitters>Hugo</span></a></div><div class=footer_slogan><span id=enter_time></span></div></footer><script src=//unpkg.com/jquery/dist/jquery.min.js></script><script src=//unpkg.com/@highlightjs/cdn-assets/highlight.min.js></script><script src=https://vikingama.github.io/js/zozo.js></script><script>hljs.initHighlightingOnLoad();</script><script type=application/javascript>var doNotTrack=false;if(!doNotTrack){window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;ga('create','G-CDS328YPMY','auto');ga('send','pageview');}</script><script async src=https://www.google-analytics.com/analytics.js></script></body></html>
