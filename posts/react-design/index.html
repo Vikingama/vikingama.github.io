@@ -577,7 +577,7 @@ function commitRootImpl(root, renderPriorityLevel) {
     pendingPassiveEffectsRenderPriority = renderPriorityLevel;
   } else {
     /**
-     * 处理完 effect 了，清除 nextEffect，
+     * 处理完 effect 了，清除 nextEffect
      * 如果有副作用，会在 flushPassiveEffects 里消耗掉
      */
     nextEffect = firstEffect;
@@ -696,7 +696,7 @@ function flushPassiveEffectsImpl() {
   /**
    * 任何副作用函数被运行之前，应该先运行清理函数
    * 否则兄弟组件的副作用可能会相互影响
-   * 例如，一个组件的销毁函数可能无意间覆盖 ref 的值（另一个组件的副作用设置的）
+   * 例如，一个组件的销毁函数可能无意间覆盖（另一个组件的副作用设置的）ref 的值
    */
   const unmountEffects = pendingPassiveHookEffectsUnmount;
   pendingPassiveHookEffectsUnmount = [];
@@ -856,7 +856,7 @@ function commitLifeCycles(
     case SimpleMemoComponent:
     case Block: {
       /**
-       * 在 mutation 阶段，Layout Effects 已经销毁
+       * 在 mutation 阶段，LayoutEffects 已经销毁
        * 酱紫是为了防止兄弟组件的 Effects 相互干扰
        */
       commitHookEffectListMount(HookLayout | HookHasEffect, finishedWork);

@@ -12,7 +12,7 @@
 &lt;p&gt;项目迁移终于接近尾声了，在这期间也学到不少前端工程化的知识和新的的编程思路。&lt;/p&gt;
 &lt;/blockquote&gt;</description></item><item><title>SPA 的 SEO 实践</title><link>https://vikingama.github.io/posts/spa-seo/</link><pubDate>Sun, 15 Nov 2020 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/posts/spa-seo/</guid><description>&lt;blockquote&gt;
 &lt;p&gt;为了搜索引擎优化，雷德竟然让我用 jQuery 重写官网。&lt;/p&gt;
-&lt;/blockquote&gt;</description></item><item><title>数据结构与算法学习笔记</title><link>https://vikingama.github.io/posts/data-structures-algorithms/</link><pubDate>Thu, 01 Oct 2020 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/posts/data-structures-algorithms/</guid><description>&lt;blockquote&gt;
+&lt;/blockquote&gt;</description></item><item><title>《学习 JS 数据结构与算法》笔记</title><link>https://vikingama.github.io/posts/data-structures-algorithms/</link><pubDate>Thu, 01 Oct 2020 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/posts/data-structures-algorithms/</guid><description>&lt;blockquote&gt;
 &lt;p&gt;非科班出身的难民；AVL、红黑树、二叉堆、图，你们牛逼。&lt;/p&gt;
 &lt;/blockquote&gt;</description></item><item><title>重读《深入浅出 Node.js》</title><link>https://vikingama.github.io/posts/node-learn-notes/</link><pubDate>Sun, 02 Aug 2020 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/posts/node-learn-notes/</guid><description>&lt;blockquote&gt;
 &lt;p&gt;一直在学 Node，从来没有成功过。&lt;/p&gt;
@@ -46,10 +46,6 @@
 &lt;p&gt;朴灵大神的书看的云里雾里，还是从基础开始吧。&lt;/p&gt;
 &lt;/blockquote&gt;</description></item><item><title>「转」从输入 URL 到页面加载的过程</title><link>https://vikingama.github.io/posts/url-to-load/</link><pubDate>Fri, 26 Jul 2019 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/posts/url-to-load/</guid><description>&lt;blockquote&gt;
 &lt;p&gt;文章转载自&lt;a href=&#34;https://dailc.github.io/2018/03/12/whenyouenteraurl.html&#34;&gt;从输入 URL 到页面加载的过程？如何由一道题完善自己的前端知识体系&lt;/a&gt;。&lt;/p&gt;
-&lt;/blockquote&gt;</description></item><item><title>使用 Sapper 过程中遇到的问题</title><link>https://vikingama.github.io/posts/sapper-tips/</link><pubDate>Wed, 24 Jul 2019 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/posts/sapper-tips/</guid><description>&lt;blockquote&gt;
-&lt;p&gt;最近试着用 Sapper 写了花瓣主站的 DEMO，总结一下遇到的问题。&lt;/p&gt;
-&lt;/blockquote&gt;</description></item><item><title>Sapper 学习笔记</title><link>https://vikingama.github.io/posts/about-sapper/</link><pubDate>Thu, 11 Jul 2019 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/posts/about-sapper/</guid><description>&lt;blockquote&gt;
-&lt;p&gt;工作需要，看了两天英文，有点头大；梳理一下文档内容，方便日后查阅。&lt;/p&gt;
 &lt;/blockquote&gt;</description></item><item><title>站长平台项目总结</title><link>https://vikingama.github.io/posts/summary-of-station-platform/</link><pubDate>Sun, 07 Jul 2019 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/posts/summary-of-station-platform/</guid><description>&lt;blockquote&gt;
 &lt;p&gt;这个月除了抠脚，还写了一个“花瓣站长平台”；总结一下遇到的坑。&lt;/p&gt;
 &lt;/blockquote&gt;</description></item><item><title>「转」谈谈递归</title><link>https://vikingama.github.io/posts/tail-recursion/</link><pubDate>Fri, 14 Jun 2019 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/posts/tail-recursion/</guid><description>&lt;blockquote&gt;

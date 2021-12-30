@@ -197,7 +197,7 @@ const App = ({ name }) =&gt; {
   // ...
   return null;
 };
-</code></pre><h3 id=uselayouteffect>useLayoutEffect</h3><p>顾名思义，它是作用在浏览器 Layout 阶段的“副作用”；和 useEffect 的区别只是调用时机不同；它会在所有的 DOM 变更之后<strong>同步</strong>调用 effect，可以使用它来读取 DOM 布局并同步触发重渲染。在浏览器执行绘制之前，useLayoutEffect 内部的更新计划将被同步刷新，如果在里面执行耗时任务的话，页面就会卡顿（阻塞渲染；如果了解渲染机制的话，Layout 不等于“浏览器已经将变更渲染到屏幕上”，它发生于“真正将内容绘制到屏幕之前”；准确的说，DOM 已经变化，但用户还没有看到变化）。</p><h3 id=自定义-hook>自定义 Hook</h3><p>自定义 Hook 是一个函数，其名称以 “use” 开头（方便静态代码检测），函数内部可以调用其他的 Hook；它是一种重用状态逻辑的机制，其中的所有 state 和副作用都是完全隔离的。</p><pre><code class=language-jsx>function useFriendStatus(friendID) {
+</code></pre><h3 id=uselayouteffect>useLayoutEffect</h3><p>顾名思义，它是作用在浏览器 Layout 阶段的“副作用”；和 useEffect 的区别只是调用时机不同；既然是作用在 Layout 阶段的副作用，那么必须在浏览器渲染之前进行调用，所以可能会阻塞浏览器渲染。在浏览器执行绘制之前，useLayoutEffect 内部的更新计划将被同步刷新，如果在里面执行耗时任务的话，页面就会卡顿。</p><h3 id=自定义-hook>自定义 Hook</h3><p>自定义 Hook 是一个函数，其名称以 “use” 开头（方便静态代码检测），函数内部可以调用其他的 Hook；它是一种重用状态逻辑的机制，其中的所有 state 和副作用都是完全隔离的。</p><pre><code class=language-jsx>function useFriendStatus(friendID) {
   const [isOnline, setIsOnline] = useState(null);
   useEffect(() =&gt; {
     function handleStatusChange(status) {
