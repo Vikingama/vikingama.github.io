@@ -1,0 +1,258 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no,user-scalable=no"><meta name=author content=馬腊咯稽><meta name=description content=我在函数组件中可以随便写，最通俗异步组件原理><meta name=keywords content=React,Suspense><link rel=canonical href=https://vikingama.github.io/posts/react-suspense/><link rel="shortcut icon" href=https://vikingama.github.io/images/favicon.ico><link rel=stylesheet href=https://vikingama.github.io/css/zozo.css><link rel=stylesheet href=https://vikingama.github.io/css/highlight.css><link rel=stylesheet href=https://vikingama.github.io/css/remixicon.css><title>「转」我在函数组件中可以随便写，最通俗异步组件原理 &middot; 看不见我的美 · 是你瞎了眼</title></head><body><div class="main animated"><div class="nav_container animated fadeInDown"><div class=site_nav id=site_nav><ul><li><a href=/>首页</a></li><li><a href=/posts/>归档</a></li><li><a href=/tags/>标签</a></li><li><a href=/inspires/>启发</a></li><li><a href=/command/>命令</a></li><li><a href=/about/>关于</a></li></ul></div><div class=menu_icon><a id=menu_icon><i class=remixicon-links-line></i></a></div></div><div class="header animated fadeInDown"><div class=site_title_container><div class=site_title><h1><a href=https://vikingama.github.io><img style=width:65px;height:auto;vertical-align:top src=https://vikingama.github.io/images/avatar.png></a></h1></div><div class=description><p class=sub_title>看不见我的美<br>是你瞎了眼</p><div class=my_socials><a href=https://www.douban.com/people/nicknoonan title=douban target=_blank><i class=remixicon-douban-fill></i></a><a href=https://github.com/Vikingama title=github target=_blank><i class=remixicon-github-fill></i></a><a href=https://weibo.com/vikingx title=weibo target=_blank><i class=remixicon-weibo-fill></i></a><a href=https://www.zhihu.com/people/vikingama title=zhihu target=_blank><i class=remixicon-zhihu-fill></i></a><a href=https://vikingama.github.io/index.xml type=application/rss+xml title=rss target=_blank><i class=remixicon-rss-fill></i></a></div></div></div></div><div class=content><div class=post_page><div class="post animated fadeInDown"><div class="post_title post_detail_title"><h2><a href=/posts/react-suspense/>「转」我在函数组件中可以随便写，最通俗异步组件原理</a></h2><span class=date>2021.12.31</span></div><div class="post_content markdown"><blockquote><p>文章转载自<a href=https://juejin.cn/post/7018427879859945509>我在函数组件中可以随便写，最通俗异步组件原理</a>，已取得授权。</p></blockquote><p>我可以认真的说，看完这篇文章，你将掌握：</p><ol><li>componentDidCatch 原理；</li><li>Suspense 原理；</li><li>异步组件原理。</li></ol><h3 id=不可能的事>不可能的事</h3><p>我的函数组件中里可以随便写，很多同学看到这句话的时候，脑海里应该浮现的四个字是：怎么可能？因为我们印象中的函数组件，是不能直接使用异步的，而且必须返回一段 JSX 代码。</p><p>那么今天我将打破这个规定，在我们认为是组件的函数里做一些意想不到的事情。接下来跟着我的思路往下看吧。</p><p>首先先来看一下 JSX，在 JSX 中 &lt;div /&gt; 代表 DOM 元素，而 &lt;Index /&gt; 代表组件， Index 本质是函数组件或类组件。</p><p>透过现象看本质，JSX 为 ReactElement 的表象，JSX 语法糖会被 Babel 编译成 ReactElement 对象 ，那么上述中:</p><ol><li>&lt;div /&gt; 不是真正的 DOM 元素，是 type 属性为 div 的 element 对象；</li><li>&lt;Index /&gt; 是 type 属性为类或者组件本身的 element 对象。</li></ol><p>言归正传，那么以函数组件为参考，Index 已经约定俗成为这个样子：</p><pre><code class=language-tsx>function Index() {
+  /**
+   * 不能直接的进行异步操作
+   * return 一段 JSX 代码
+   */
+  return &lt;div&gt;&lt;/div&gt;;
+}
+</code></pre><p>如果不严格按照这个格式写，通过 &lt;Index /&gt; 形式挂载，就会报错。看如下的例子：</p><pre><code class=language-tsx>// 不是严格的组件形式
+function Index() {
+  return {
+    name: '《React 进阶实践指南》'
+  };
+}
+// 正常挂载 Index 组件
+class App extends React.Component {
+  render() {
+    return (
+      &lt;div&gt;
+        hello world, let us learn React!
+        &lt;Index /&gt;
+      &lt;/div&gt;
+    );
+  }
+}
+</code></pre><p><img src=/react-suspense/render-object.png alt="Local Image"></p><p>我们通过报错信息，不难发现原因，children 类型错误，children 应该是一个 ReactElement 对象，但是 Index 返回的却是一个普通的对象。</p><p>既然不能是普通的对象，那么如果 Index 里面更不可能有异步操作了，比如如下这种情况：</p><pre><code class=language-tsx>function Index() {
+  return new Promise(resolve =&gt; {
+    setTimeout(() =&gt; {
+      resolve({ name: '《React 进阶实践指南》' });
+    }, 1000);
+  });
+}
+</code></pre><p>同样也会报上面的错误，所以在一个标准的 React 组件规范下：</p><ol><li>必须返回 JSX 对象结构，不能返回普通对象；</li><li>render 执行过程中，不能出现异步操作。</li></ol><h3 id=不可能的事变为可能>不可能的事变为可能</h3><p>那么如何破局，将不可能的事情变得可能。首先要解决的问题是<strong>报错问题</strong>，只要不报错，App 就能正常渲染。不难发现产生的错误时机都是在 render 过程中。那么就可以用 React 提供的两个渲染错误边界的生命周期 componentDidCatch 和 getDerivedStateFromError。</p><p>因为我们要在捕获渲染错误之后做一些骚操作，所以这里选 componentDidCatch。接下来我们用 componentDidCatch 改造一下 App。</p><pre><code class=language-tsx>class App extends React.component {
+  state = {
+    isError: false
+  };
+  componentDidCatch(e) {
+    this.setState({ isError: true });
+  }
+  render() {
+    return (
+      &lt;div&gt;
+        hello world, let us learn React!
+        {!this.state.isError &amp;&amp; &lt;Index /&gt;}
+      &lt;/div&gt;
+    );
+  }
+}
+</code></pre><p>用 componentDidCatch 捕获异常，渲染异常。</p><p><img src=/react-suspense/render-object-with-did-catch.png alt="Local Image"></p><p>可以看到，虽然还是报错，但是至少页面可以正常渲染了。现在做的事情还不够，以第一 Index 返回一个正常对象为例，我们想要挂载这个组件，还要获取 Index 返回的数据，那么怎么办呢？</p><p>突然想到 componentDidCatch 能够捕获到渲染异常，那么它的内部就应该像 try...catch 一样，通过 catch 捕获异常。类似下面这种：</p><pre><code class=language-tsx>try {
+  // 尝试渲染
+} catch (e) {
+  // 渲染失败，执行 componentDidCatch(e)
+  componentDidCatch(e);
+}
+</code></pre><p>那么如果在 Index 中抛出的错误，是不是也可以在 componentDidCatch 接收到；于是说干就干。我们把 Index 改变由 return 变成 throw，然后在 componentDidCatch 打印错误 error。</p><pre><code class=language-tsx>function Index() {
+  throw {
+    name: '《React 进阶实践指南》'
+  };
+}
+</code></pre><p>通过 componentDidCatch 捕获错误；此时的 e 就是 Index 组件 throw 的对象；接下来用子组件抛出的对象渲染。</p><pre><code class=language-tsx>class App extends React.Component {
+  state = {
+    isError: false,
+    childThrowMes: {}
+  };
+  componentDidCatch(e) {
+    // error: {name: '《React 进阶实践指南》'}
+    console.log('error:', e);
+    this.setState({ isError: true, childThrowMes: e });
+  }
+  render() {
+    return (
+      &lt;div&gt;
+        hello world, let us learn React!
+        {!this.state.isError ? (
+          &lt;Index /&gt;
+        ) : (
+          &lt;div&gt;{this.state.childThrowMes.name}&lt;/div&gt;
+        )}
+      &lt;/div&gt;
+    );
+  }
+}
+</code></pre><p>捕获到 Index 抛出的异常对象，用异常对象里面的数据重新渲染。</p><p><img src=/react-suspense/render-throw.png alt="Local Image"></p><p>大功告成，子组件 throw 错误，父组件 componentDidCatch 接受并渲染，这波操作是不是有点...</p><p>但是 throw 的所有对象，都会被正常捕获吗？于是我们把第二个 Index 抛出的 Promise 对象用 componentDidCatch 捕获。看看会是什么吧？</p><p><img src=/react-suspense/render-throw-promise.png alt="Local Image"></p><p>如上所示，Promise 对象没有被正常捕获，捕获的是异常的提示信息。在异常提示中，可以找到 Suspense 的字样。那么 throw Promise 和 Suspense 之间肯定存在着关联，换句话说就是 Suspense 能够捕获到 Promise 对象。而这个错误警告，就是 React 内部发出找不到上层的 Suspense 组件的错误。</p><p>到此为止，可以总结出：</p><ol><li>componentDidCatch 通过 try...catch 捕获到异常；如果我们在渲染过程中，throw 出来的普通对象，也会被捕获到。但是 Promise 对象，会被 React 底层第二次抛出异常；</li><li>Suspense 内部可以接受 throw 出来的 Promise 对象，那么内部有一个 componentDidCatch 专门负责异常捕获。</li></ol><h3 id=鬼畜版-我的组件可以写异步>鬼畜版，我的组件可以写异步</h3><p>即然直接 throw Promise 会在 React 底层被拦截，那么如何在组件内部实现正常编写异步操作的功能呢？既然 React 会拦截组件抛出的 Promise 对象，那么如果把 Promise 对象包装一层呢? 于是我们把 Index 内容做修改。</p><pre><code class=language-tsx>function Index() {
+  throw {
+    current: new Promise(resolve =&gt; {
+      setTimeout(() =&gt; {
+        resolve({ name: '《React 进阶实践指南》' });
+      }, 1000);
+    })
+  };
+}
+</code></pre><p>如上，这回不再直接抛出 Promise，而是在 Promise 的外面在包裹一层对象。接下来打印错误看一下。</p><p><img src=/react-suspense/render-throw-promise-error.png alt="Local Image"></p><p>可以看到，能够直接接收到 Promise 啦，接下来我们执行 Promise 对象，模拟异步请求，用请求之后的数据进行渲染。于是修改 App 组件。</p><pre><code class=language-tsx>class App extends React.Component {
+  state = {
+    isError: false,
+    childThrowMes: {}
+  };
+  componentDidCatch(e) {
+    const errorPromise = e.current;
+    Promise.resolve(errorPromise).then(res =&gt; {
+      this.setState({ isError: true, childThrowMes: res });
+    });
+  }
+  render() {
+    return (
+      &lt;div&gt;
+        hello world, let us learn React!
+        {!this.state.isError ? (
+          &lt;Index /&gt;
+        ) : (
+          &lt;div&gt;{this.state.childThrowMes.name}&lt;/div&gt;
+        )}
+      &lt;/div&gt;
+    );
+  }
+}
+</code></pre><p>在 componentDidCatch 的参数 e 中获取 Promise，Promise.resolve 执行 Promise 获取数据并渲染。</p><p><img src=/react-suspense/render-throw-promise-with-resolve.png alt="Local Image"></p><p>可以看到数据正常渲染了，但是面临一个新的问题：目前的 Index 不是一个真正意义上的组件，而是一个函数；所以接下来，改造 Index 使其变成正常的组件，通过获取异步的数据。</p><pre><code class=language-tsx>function Index({ isResolve = false, data }) {
+  const [likeNumber, setLikeNumber] = React.useState(0);
+  if (isResolve) {
+    return (
+      &lt;div&gt;
+        &lt;p&gt;名称：{data.name}&lt;/p&gt;
+        &lt;p&gt;点赞：{likeNumber}&lt;/p&gt;
+        &lt;button onClick={() =&gt; setLikeNumber(likeNumber + 1)}&gt;点赞&lt;/button&gt;
+      &lt;/div&gt;
+    );
+  } else {
+    throw {
+      current: new Promise(resolve =&gt; {
+        setTimeout(() =&gt; {
+          resolve({ name: '《React 进阶实践指南》' });
+        }, 1000);
+      })
+    };
+  }
+}
+</code></pre><p>Index 中通过 isResolve 判断组件是否加载完成；第一次的时候 isResolve 为 false，所以 throw Promise。</p><p>父组件 App 中接受 Promise，得到数据，改变状态 isResolve；二次渲染，那么第二次 Index 就会正常渲染了。看一下 App 如何写：</p><pre><code class=language-tsx>class App extends React.Component {
+  state = {
+    isResolve: false,
+    data: {}
+  };
+  componentDidCatch(e) {
+    const errorPromise = e.current;
+    Promise.resolve(errorPromise).then(res =&gt; {
+      this.setState({ isResolve: true, data: res });
+    });
+  }
+  /**
+   * 绕了一大圈，通过 componentDidCatch 捕获 Index 的 Promise 的值
+   * 然后，将捕获到的值，通过 props 再回传给 Index 进行渲染
+   */
+  render() {
+    const { isResolve, data } = this.state;
+    return (
+      &lt;div&gt;
+        hello world, let us learn React!
+        &lt;Index data={data} isResolve={isResolve} /&gt;
+      &lt;/div&gt;
+    );
+  }
+}
+</code></pre><p>通过 componentDidCatch 捕获错误，然后进行第二次渲染。</p><p><img src=/react-suspense/render-throw-promise-with-star.png alt="Local Image"></p><h3 id=飞翔版-实现一个简单-suspense>飞翔版，实现一个简单 Suspense</h3><p>Suspense 是什么？Suspense 英文翻译『悬停』。在 React 中 Suspense 是什么呢？那么正常情况下组件染是一气呵成的，在 Suspense 模式下的组件渲染就变成了可以先悬停下来。</p><p>首先解释为什么悬停？</p><p>Suspense 在 React 生态中的位置，重点体现在以下方面。</p><ul><li>codeSplitting（代码分割）：哪个组件加载，就加载哪个组件的代码；听上去挺拗口，可确实打实的解决了主文件体积过大的问题，间接优化了项目的首屏加载时间，我们知道过浏览器加载资源也是耗时的，这些时间给用户造成的影响就是白屏效果；</li><li><p>spinner 解耦：正常情况下，页面展示是需要前后端交互的，数据加载过程不期望看到：无数据状态 -&gt; 闪现数据的场景，更期望的是一种 spinner 数据加载状态 -&gt; 加载完成展示页面状态：</p><pre><code class=language-tsx>&lt;List1 /&gt;
+&lt;List2 /&gt;
+</code></pre></li></ul><p>List1 和 List2 都使用服务端请求数据，那么在加载数据过程中，需要 Spin 效果去优雅的展示 UI，所以需要一个 Spin 组件；但是 Spin 组件需要放入 List1 和 List2 的内部，就造成耦合关系。现在通过 Suspense 来接耦 Spin，在业务代码中这么写道：</p><pre><code class=language-tsx>&lt;Suspense fallback={&lt;Spin /&gt;}&gt;
+  &lt;List1 /&gt;
+  &lt;List2 /&gt;
+&lt;/Suspense&gt;
+</code></pre><ul><li>renderData：整个 render 过程都是同步执行一气呵成的，那样就会：组件 render -&gt; 请求数据 -&gt; 组件 reRender；但是在 Suspense 异步组件情况下允许调用 render -&gt; 发现异步请求 -&gt; 悬停，等待异步请求完毕 -&gt; 再次渲染展示数据。这样无疑减少了一次渲染。</li></ul><p>接下来解释如何悬停。</p><p>上面理解了 Suspense 初衷，接下来分析一波原理；首先通过上文中，已经交代了 Suspense 原理，如何悬停，很简单粗暴，直接抛出一个异常。</p><p>异常是什么，一个 Promise，这个 Promise 也分为二种情况：</p><ul><li>第一种就是异步请求数据，这个 Promise 内部封装了请求方法，请求数据用于渲染；</li><li>第二种就是异步加载组件，配合 Webpack 提供的 require API，实现代码分割。</li></ul><p>悬停后再次 render。</p><p>在 Suspense 悬停后，如果想要恢复渲染，那么 reRender 一下就可以了。</p><p>如上详细介绍了 Suspense。接下来到了实践环节，我们去尝试实现一个 Suspense，首先声明一下这个 Suspense 并不是 React 提供的 Suspense，这里只是模拟了一下它的大致实现细节。</p><p>本质上，Suspense 落地的瓶颈也是对请求函数的的封装，Suspense 主要接收 Promise，并 resolve 它；那么对于成功的状态回传到异步组件中，对于开发者来说是未知的，对于 Promise 和状态传递的函数 createFetcher，应该满足如下的条件：</p><ul><li>通过 createFetcher 封装请求函数；请求函数 getData 返回一个 Promise，这个 Promise 的使命就是完成数据交互；</li><li><p>一个模拟的异步组件，内部使用 createFetcher 创建的请求函数，请求数据。</p><pre><code class=language-tsx>const fetch = createFetcher(function getData() {
+return new Promise(resolve =&gt; {
+setTimeout(() =&gt; {
+  resolve({
+    name: '《React 进阶实践指南》',
+    author: 'alien'
+  });
+}, 1000);
+});
+});
+function Text() {
+const data = fetch();
+return (
+&lt;div&gt;
+  name: {data.name}
+  author:{data.author}
+&lt;/div&gt;
+);
+}
+</code></pre></li></ul><p>接下来就是 createFetcher 函数的编写：</p><ul><li>这里要注意的是 fn 就是 getData，getDataPromise 就是 getData 返回的 Promise；</li><li>返回一个函数 fetch，在 Text 内部执行；第一次组件渲染，由于 status = pedding 所以抛出异常 fetcher 给 Suspense，渲染中止；</li><li>Suspense 会在内部 componentDidCatch 处理这个 fetcher，执行 getDataPromise.then，这个时候 status 已经是 resolve 状态，数据也能正常返回了；</li><li><p>接下来 Suspense 再次渲染组件，此时就能正常的获取数据了。</p><pre><code class=language-tsx>function createFetcher(fn) {
+const fetcher = {
+status: 'pedding',
+result: null,
+p: null
+};
+return function () {
+const getDataPromise = fn();
+fetcher.p = getDataPromise;
+getDataPromise.then(result =&gt; {
+  /* 成功获取数据 */
+  fetcher.result = result;
+  fetcher.status = 'resolve';
+});
+if (fetcher.status === 'pedding') {
+  /* 第一次执行中断渲染，第二次 */
+  throw fetcher;
+}
+/* 第二次执行 */
+if (fetcher.status === 'resolve') return fetcher.result;
+};
+}
+</code></pre></li></ul><p>既然有了 createFetcher 函数，接下来就要模拟上游组件 Suspense。</p><pre><code class=language-tsx>class MySuspense extends React.Component {
+  state = {
+    isResolve: true
+  };
+  componentDidCatch(fetcher) {
+    const p = fetcher.p;
+    this.setState({ isResolve: false });
+    Promise.resolve(p).then(() =&gt; {
+      this.setState({ isResolve: true });
+    });
+  }
+  render() {
+    const { fallback, children } = this.props;
+    const { isResolve } = this.state;
+    return isResolve ? children : fallback;
+  }
+}
+</code></pre><p>我们编写的 Suspense 起名字叫 MySuspense；MySuspense 内部 componentDidCatch 通过 Promise.resolve 捕获 Promise 成功的状态。成功后，取缔 fallback 效果。</p><p>大功告成，接下来就是体验环节了。我们尝试一下 MySuspense 效果。</p><pre><code class=language-tsx>function Index() {
+  return (
+    &lt;MySuspense fallback={&lt;div&gt;loading...&lt;/div&gt;}&gt;
+      &lt;Text /&gt;
+    &lt;/MySuspense&gt;
+  );
+}
+</code></pre><p><img src=/react-suspense/my-suspense.gif alt="Local Image"></p><p>虽然实现了效果，但是和真正的 Suspense 还差的很远；首先暴露出的问题就是数据可变的问题。上述编写的 MySuspense 数据只加载一次，但是通常情况下，数据交互是存在变数的，数据也是可变的。</p><h3 id=衍生版-实现一个错误异常处理组件>衍生版，实现一个错误异常处理组件</h3><p>言归正传，我们不会在函数组件中做如上的骚操作，也不会自己去编写 createFetcher 和 Suspense。但是有一个场景还是蛮实用的，那就是对渲染错误的处理，以及 UI 的降级，这种情况通常出现在服务端数据的不确定的场景下，比如我们通过服务端的数据 data 进行渲染，像如下场景：</p><pre><code class=language-tsx>&lt;div&gt;{data.name}&lt;/div&gt;
+</code></pre><p>如果 data 是一个对象，那么会正常渲染；但是如果 data 是 null，那么就会报错；如果不加渲染错误边界，那么一个小问题会导致整个页面都渲染不出来。</p><p>那么对于如上情况，如果每一个页面组件，都加上 componentDidCatch 这样捕获错误，降级 UI 的方式，那么代码过于冗余，难以复用，无法把降级的 UI 从业务组件中解耦出来。</p><p>所以可以统一写一个 RenderControlError 组件，目的就是在组件的出现异常的情况，统一展示降级的 UI；也确保了整个前端应用不会奔溃，同样也让服务端的数据格式容错率大大提升。接下来看一下具体实现：</p><pre><code class=language-tsx>class RenderControlError extends React.Component {
+  state = {
+    isError: false
+  };
+  componentDidCatch() {
+    this.setState({ isError: true });
+  }
+  render() {
+    return !this.state.isError ? (
+      this.props.children
+    ) : (
+      &lt;div style={styles.errorBox}&gt;
+        &lt;img
+          url={require('../../assets/img/error.png')}
+          style={styles.erroImage}
+        /&gt;
+        &lt;span style={styles.errorText}&gt;出现错误&lt;/span&gt;
+      &lt;/div&gt;
+    );
+  }
+}
+</code></pre><p>如果 children 出错，那么降级 UI。</p><pre><code class=language-tsx>&lt;RenderControlError&gt;
+  &lt;Index /&gt;
+&lt;/RenderControlError&gt;
+</code></pre><p>本文通过一些脑洞大开，奇葩的操作，让大家明白了 Suspense，componentDidCatch 等原理。我相信不久之后，随着 React 18 发布，Suspense 将崭露头角，未来可期。</p></div><div class=post_footer><div class=meta><div class=info><span class="field tags"><i class=remixicon-stack-line></i><a href=https://vikingama.github.io/tags/react/>React</a>
+<a href=https://vikingama.github.io/tags/suspense/>Suspense</a></span></div></div></div></div><div class=doc_comments><div class=comments_block_title>发表评论</div><div id=vcomments></div></div><link rel=stylesheet href=https://vikingama.github.io/css/comments.css><script src=//unpkg.com/valine></script><script type=text/javascript>new Valine({el:'#vcomments',avatar:'retro',recordIP:true,path:window.location.pathname,appId:'U06blUXOot4uJgfMu8I9xJXz-MdYXbMMI',appKey:'BnrXC06FJsvRNpr4aqb1HYPd',placeholder:'来都来了，不打个招呼吗？',visitor:'true',serverURLs:'https:\/\/u06bluxo.api.lncldglobal.com'});</script></div></div><a id=back_to_top href=# class=back_to_top><span>△</span></a></div><footer class=footer><div class=powered_by><a href=https://github.com/varkai/hugo-theme-zozo/ target=_blank>Designed by <span class=jitters>Zeuk</span>,</a>
+<a href=https://www.gohugo.io/ target=_blank>Published with <span class=jitters>Hugo</span></a></div><div class=footer_slogan><span id=enter_time></span></div></footer><script src=//unpkg.com/jquery/dist/jquery.min.js></script><script src=//unpkg.com/@highlightjs/cdn-assets/highlight.min.js></script><script src=https://vikingama.github.io/js/zozo.js></script><script>hljs.highlightAll();</script><script type=application/javascript>var doNotTrack=false;if(!doNotTrack){window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;ga('create','G-CDS328YPMY','auto');ga('send','pageview');}</script><script async src=https://www.google-analytics.com/analytics.js></script></body></html>

@@ -257,7 +257,9 @@ Vue.component('fetch-data', {
     }
   }
   render() {
-    return this.props.children(this.state);
+    const { children } = this.props;
+    // 需要判断是否为函数
+    return typeof children === 'function' ? children(this.state) : children;
   }
 }
 const RenderWithFetchData = props =&gt; (

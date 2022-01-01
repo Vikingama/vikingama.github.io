@@ -227,25 +227,28 @@ class Tabs extends Component {
     activeIndex: 0
   };
   render() {
-    const childrenEnhance = React.children
+    const childrenReplacement = React.children
       .toArray(this.props.children)
       .map((child, index) =&gt; {
-        if (child.type) {
+        if (React.isValidElement(child)) {
+          /**
+           * 要想扩展传给子节点的 props，只能通过 React.cloneElement
+           * 直接修改 props 对象是不行滴
+           */
           return React.cloneElement(child, {
             active: this.state.activeIndex === index,
             onClick: () =&gt; this.setState({ activeIndex: index })
           });
-        } else {
-          return child;
         }
-      });
-    // 不渲染原有的 children，改为渲染 childrenEnhance
-    return &lt;&gt;{childrenEnhance}&lt;/&gt;;
+      })
+      .filter(({ props }) =&gt; !props.disabled);
+    // 不渲染原有的 children，改为渲染 childrenReplacement
+    return &lt;&gt;{childrenReplacement}&lt;/&gt;;
   }
 }
 &lt;Tabs&gt;
   &lt;TabItem&gt;One&lt;/TabItem&gt;
-  &lt;TabItem&gt;Two&lt;/TabItem&gt;
+  &lt;TabItem disabled&gt;Two&lt;/TabItem&gt;
   &lt;TabItem&gt;Three&lt;/TabItem&gt;
 &lt;/Tabs&gt;;
 </code></pre></div><div class=post_footer><div class=meta><div class=info><span class="field tags"><i class=remixicon-stack-line></i><a href=https://vikingama.github.io/tags/react/>React</a></span></div></div></div></div><div class=doc_comments><div class=comments_block_title>发表评论</div><div id=vcomments></div></div><link rel=stylesheet href=https://vikingama.github.io/css/comments.css><script src=//unpkg.com/valine></script><script type=text/javascript>new Valine({el:'#vcomments',avatar:'retro',recordIP:true,path:window.location.pathname,appId:'U06blUXOot4uJgfMu8I9xJXz-MdYXbMMI',appKey:'BnrXC06FJsvRNpr4aqb1HYPd',placeholder:'来都来了，不打个招呼吗？',visitor:'true',serverURLs:'https:\/\/u06bluxo.api.lncldglobal.com'});</script></div></div><a id=back_to_top href=# class=back_to_top><span>△</span></a></div><footer class=footer><div class=powered_by><a href=https://github.com/varkai/hugo-theme-zozo/ target=_blank>Designed by <span class=jitters>Zeuk</span>,</a>

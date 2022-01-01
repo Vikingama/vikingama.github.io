@@ -1,4 +1,4 @@
-<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no,user-scalable=no"><meta name=author content=馬腊咯稽><meta name=description content="Vue 2.x/3.x 比较"><meta name=keywords content=Vue><link rel=canonical href=https://vikingama.github.io/posts/vue-compare/><link rel="shortcut icon" href=https://vikingama.github.io/images/favicon.ico><link rel=stylesheet href=https://vikingama.github.io/css/zozo.css><link rel=stylesheet href=https://vikingama.github.io/css/highlight.css><link rel=stylesheet href=https://vikingama.github.io/css/remixicon.css><title>Vue 2.x/3.x 比较 &middot; 看不见我的美 · 是你瞎了眼</title></head><body><div class="main animated"><div class="nav_container animated fadeInDown"><div class=site_nav id=site_nav><ul><li><a href=/>首页</a></li><li><a href=/posts/>归档</a></li><li><a href=/tags/>标签</a></li><li><a href=/inspires/>启发</a></li><li><a href=/command/>命令</a></li><li><a href=/about/>关于</a></li></ul></div><div class=menu_icon><a id=menu_icon><i class=remixicon-links-line></i></a></div></div><div class="header animated fadeInDown"><div class=site_title_container><div class=site_title><h1><a href=https://vikingama.github.io><img style=width:65px;height:auto;vertical-align:top src=https://vikingama.github.io/images/avatar.png></a></h1></div><div class=description><p class=sub_title>看不见我的美<br>是你瞎了眼</p><div class=my_socials><a href=https://www.douban.com/people/nicknoonan title=douban target=_blank><i class=remixicon-douban-fill></i></a><a href=https://github.com/Vikingama title=github target=_blank><i class=remixicon-github-fill></i></a><a href=https://weibo.com/vikingx title=weibo target=_blank><i class=remixicon-weibo-fill></i></a><a href=https://www.zhihu.com/people/vikingama title=zhihu target=_blank><i class=remixicon-zhihu-fill></i></a><a href=https://vikingama.github.io/index.xml type=application/rss+xml title=rss target=_blank><i class=remixicon-rss-fill></i></a></div></div></div></div><div class=content><div class=post_page><div class="post animated fadeInDown"><div class="post_title post_detail_title"><h2><a href=/posts/vue-compare/>Vue 2.x/3.x 比较</a></h2><span class=date>2021.10.24</span></div><div class="post_content markdown"><blockquote><p>最近在看 Vue 源码，顺手做下笔记。</p></blockquote><h3 id=相同点与不同点>相同点与不同点</h3><p>2.x 与 3.x 的实现原理相同，都是：数据变化 -&gt; 自动执行 render -&gt; 得到最新的 VDOM -&gt; 对比新旧 VDOM -&gt; 更新 DOM。</p><p>2.x 与 3.x 的不同点：</p><ul><li>项目结构采用 monorepo 的管理方式，每个功能都是一个独立的包，每个包都可以单独使用，方便 tree-shaking；</li><li>数据劫持优化，Object.defineProperty 被 Proxy 取代，实现了对 Map、Set、WeakMap、WeakSet 的支持；</li><li>编译优化，相比于 2.x 的静态提升，3.x 又引入了 blockTree、cacheHandler；</li><li>删除了 filter、inline-template 等不常使用的功能的支持。</li></ul><h3 id=响应式原理-2-x>响应式原理 2.x</h3><p>Dep 用来存放订阅者（watcher）的对象；每个 Dep 实例都存在于<strong>对象每个属性对应的 getter/setter 所在的闭包里</strong>（外边访问不到）并且都有唯一的 id。</p><pre><code class=language-ts>export default class Dep {
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no,user-scalable=no"><meta name=author content=馬腊咯稽><meta name=description content="Vue 2.x/3.x 比较"><meta name=keywords content=Vue><link rel=canonical href=https://vikingama.github.io/posts/vue-compare/><link rel="shortcut icon" href=https://vikingama.github.io/images/favicon.ico><link rel=stylesheet href=https://vikingama.github.io/css/zozo.css><link rel=stylesheet href=https://vikingama.github.io/css/highlight.css><link rel=stylesheet href=https://vikingama.github.io/css/remixicon.css><title>Vue 2.x/3.x 比较 &middot; 看不见我的美 · 是你瞎了眼</title></head><body><div class="main animated"><div class="nav_container animated fadeInDown"><div class=site_nav id=site_nav><ul><li><a href=/>首页</a></li><li><a href=/posts/>归档</a></li><li><a href=/tags/>标签</a></li><li><a href=/inspires/>启发</a></li><li><a href=/command/>命令</a></li><li><a href=/about/>关于</a></li></ul></div><div class=menu_icon><a id=menu_icon><i class=remixicon-links-line></i></a></div></div><div class="header animated fadeInDown"><div class=site_title_container><div class=site_title><h1><a href=https://vikingama.github.io><img style=width:65px;height:auto;vertical-align:top src=https://vikingama.github.io/images/avatar.png></a></h1></div><div class=description><p class=sub_title>看不见我的美<br>是你瞎了眼</p><div class=my_socials><a href=https://www.douban.com/people/nicknoonan title=douban target=_blank><i class=remixicon-douban-fill></i></a><a href=https://github.com/Vikingama title=github target=_blank><i class=remixicon-github-fill></i></a><a href=https://weibo.com/vikingx title=weibo target=_blank><i class=remixicon-weibo-fill></i></a><a href=https://www.zhihu.com/people/vikingama title=zhihu target=_blank><i class=remixicon-zhihu-fill></i></a><a href=https://vikingama.github.io/index.xml type=application/rss+xml title=rss target=_blank><i class=remixicon-rss-fill></i></a></div></div></div></div><div class=content><div class=post_page><div class="post animated fadeInDown"><div class="post_title post_detail_title"><h2><a href=/posts/vue-compare/>Vue 2.x/3.x 比较</a></h2><span class=date>2021.10.24</span></div><div class="post_content markdown"><blockquote><p>最近在看 Vue 源码，顺手做下笔记。</p></blockquote><h3 id=响应式原理-2-x>响应式原理 2.x</h3><p>Dep 用来存放订阅者（watcher）的对象；每个 Dep 实例都存在于<strong>对象每个属性对应的 getter/setter 所在的闭包里</strong>（外边访问不到）并且都有唯一的 id。</p><pre><code class=language-ts>export default class Dep {
   static target;
   constructor() {
     this.id = uid++;
@@ -13,6 +13,7 @@
   depend() {
     if (Dep.target) {
       /**
+       * 进行依赖收集时，Dep.target 会指向待被收集的 watcher
        * 调用 watcher 的 addDep 方法
        * watcher 会调用 dep.addSub 把它自己加到 subs 里
        * 同时，watcher 会把当前 dep 记录下来
@@ -21,18 +22,16 @@
     }
   }
   notify() {
-    // 浅复制一份“订阅者列表”
+    // 循环“订阅者列表”，触发 watcher.update，告诉它们“数据变了”
     const subs = this.subs.slice();
     for (let i = 0, l = subs.length; i &lt; l; i++) {
-      // 触发 watcher.update，告诉它们“数据变了”
       subs[i].update();
     }
   }
 }
 /**
  * 用来指向某个正在被求值的 watcher
- * 这个是全局唯一的变量
- * 因为某个时间点，仅有一个 watcher 可以被求值
+ * 某个时间点，仅有一个 watcher 可以被求值
  */
 Dep.target = null;
 /**
@@ -51,13 +50,7 @@ export function popTarget() {
   // 恢复上一个 Dep.target
   Dep.target = targetStack[targetStack.length - 1];
 }
-</code></pre><p>Watcher 实例被称作依赖（收集起来）或者订阅者，它<strong>观察/订阅了</strong>数据变动；数据的 getter 被触发时，watcher 会被收集起来；数据的 setter 被调用时，watcher 会触发相应的副作用函数：</p><ul><li>在 mountComponent 中会 new Watcher(...) 作为组件的 renderWatcher；同时在组件 update 时，会调用 watcher.before 来触发 beforeUpdate 钩子；</li><li>每次调用 vm.$watch 或者组件的 watchOptions 都会 new Watcher(...)；</li><li>组件的 computedOptions 也会 new Watcher(...)。</li></ul><p>&nbsp;</p><pre><code class=language-ts>/**
- * 对于 vm.$watch('a.b.c', function () {}, {...})
- * 只需要把 watcher 添加到 a.b.c 的订阅者列表中去
- * 每个组件实例 computed、watch 都对应一个 watcher
- * 组件在初始化的时候会 new 一个 watcher
- */
-export default class Watcher {
+</code></pre><p>Watcher 实例被称作依赖（收集起来）或者订阅者，它<strong>观察/订阅了</strong>数据变动；数据的 getter 被触发时，watcher 会被收集起来；数据的 setter 被调用时，watcher 会触发相应的副作用函数：</p><ul><li>在 mountComponent 中会 new Watcher(...) 作为组件的 renderWatcher；同时在组件 update 时，会调用 watcher.before 来触发 beforeUpdate 钩子；</li><li>每个 vm.$watch 或者 watchOptions 都会 new Watcher(...)；</li><li>组件的 computedOptions 也会 new Watcher(...)。</li></ul><p>&nbsp;</p><pre><code class=language-ts>export default class Watcher {
   /**
    * 每个响应式数据都有自己的 Dep 列表（这个存在于闭包中）；
    * 保存着所有依赖于“此数据”的“订阅者”。
@@ -95,14 +88,13 @@ export default class Watcher {
     this.cb = cb; // 保存回调
     this.id = ++uid; // 批处理用的，唯一的标识
     this.active = true; // watcher 是否存活，teardown 之后被置为 false
-    this.dirty = this.lazy; // 是否是 computedWatcher
+    this.dirty = this.lazy; // 是否&quot;脏&quot;了，脏了的话，如果 computedGetter 被出发了，就会重新求最新值
     /**
      * 为什么会有 deps、newDeps、depIds、newDepIds？
      * 假设 vm.$watch(() =&gt; vm.a ? vm.b : vm.c, () =&gt; {...})
      * 上一次收集的依赖和这一次收集的依赖可能不一样（取决于 vm.a 的值）
      * 当 vm.a 为 true 时，收集的依赖为 vm.a、vm.b
      * 当 vm.a 为 false 时，收集的依赖为 vm.a、vm.c
-     * 此时 vm.b 再变化，就不会触发 watcher
      */
     this.deps = [];
     this.newDeps = [];
@@ -127,7 +119,6 @@ export default class Watcher {
       this.getter = parsePath(expOrFn);
       if (!this.getter) {
         this.getter = noop;
-        console.warn('...');
       }
     }
     // 如果不是 computedWatcher，则在实例化的过程中对 getter 求值，作为 prevValue
@@ -221,7 +212,7 @@ export default class Watcher {
       this.deps[i].depend();
     }
   }
-  // 当数据变化，会被调用的 update “通知方法”，通知订阅者“数据变化了”
+  // 当数据变化，会『被』调用的 update（dep.notify 调用的）
   update() {
     if (this.lazy) {
       /**
@@ -230,7 +221,7 @@ export default class Watcher {
        */
       this.dirty = true;
     } else if (this.sync) {
-      // 立即调用 run 方法，重新求值并执行回调
+      // 立即调用 run 方法，重新求值并执行回调，一般用来在组件初始化阶段执行一次 cb
       this.run();
     } else {
       // 把 watcher 加入异步队列
@@ -248,7 +239,7 @@ export default class Watcher {
    */
   run() {
     if (this.active) {
-      const value = this.get();
+      const value = this.get(); // 重新求值作为最新的值，并对比前后值，不相同才会执行 cb
       if (value !== this.value || isObject(value) || this.deep) {
         const oldValue = this.value;
         this.value = value;
@@ -257,10 +248,10 @@ export default class Watcher {
       }
     }
   }
-  // 给 computed 惰性求值的
+  // 给 computed 惰性求值用的
   evaluate() {
     this.value = this.get();
-    this.dirty = false;
+    this.dirty = false; // 求值完了之后，会标记为『干净』
   }
 }
 </code></pre><p>&nbsp;</p><p>defineReactive 通过调用 Object.defineProperty 将 o[k（可配置属性）] 转化为 getter/setter（访问器属性）的形式，并在闭包内实例化了一个 Dep，用于依赖收集：</p><ul><li>初始化依赖注入时，会调用 defineReactive(vm, key, (resolveInject(vm.$options.inject, vm))[key])；</li><li>初始化渲染函数时，会调用 defineReactive(vm, '$attrs/\$listeners', ...)；</li><li>初始化 props 时，会调用 defineReactive(props, key, value)；</li><li>作为 Vue.util.defineReactive 工具函数使用；</li><li>每次调用 vm.$set 都会调用 defineReactive；</li><li>new Observer() 会调用 defineReactive。</li></ul><p>&nbsp;</p><pre><code class=language-ts>// 将 obj[key] 转换为 getter/setters 形式
@@ -340,7 +331,7 @@ function dependArray(value) {
     }
   }
 }
-</code></pre><p>&nbsp;</p><p>observe(value) 会返回一个 Observer 实例（对 value 的观察者），这个实例挂载在 value.__ob__ 上，而且是单例的；同时，观察者对象的 value 指向被观察对象，形成循环引用；observe(value) 会通过判断 value 类型，将其转化为响应式对象/数组：</p><ul><li>作为 Vue.observable 工具函数使用（返回的对象是响应式的，可直接用于 Vue  渲染）；</li><li>在初始化组件状态时，会调用 observe(vm.$options.data)；</li><li>需要深层响应的场景，会递归调用 observe。</li></ul><p>&nbsp;</p><pre><code class=language-ts>// 为“值”创建观察者实例的工厂函数
+</code></pre><p>&nbsp;</p><p>observe(value) 会返回一个 Observer 实例（对 value 的观察者），这个实例挂载在 value.__ob__ 上，而且是单例的；同时，观察者对象的 value 指向被观察对象，形成循环引用；observe(value) 会通过判断 value 类型，将其转化为响应式对象/数组：</p><ul><li>作为 Vue.observable 工具函数使用（返回的对象是响应式的，可直接用于 Vue 渲染）；</li><li>在初始化组件状态时，会调用 observe(vm.$options.data)；</li><li>需要深层响应的场景，会递归调用 observe。</li></ul><p>&nbsp;</p><pre><code class=language-ts>// 为“值”创建观察者实例的工厂函数
 export function observe(value, asRootData) {
   // value 不能是 VNode，也不能是 Vue 组件实例
   if (!isObject(value) || value instanceof VNode) {
@@ -854,7 +845,7 @@ export function trigger(
     }
   });
 }
-</code></pre><p>effect 很像之前的 watcher；每次调用 effect，会调用 createReactiveEffect 创建 reactiveEffect 并设置为 activeEffect（就像 2.x 的 watcher 在被收集之前，会将自己复制给 Dep.target 一样）；之后会调用传入的 fn（componentEffect 内部的 renderComponentRoot 方法会执行组件的 render 方法、computedGetter、...），如果在 fn 调用的过程中，访问到了『响应式』数据；Proxy 会通过 track 将 activeEffect 收集起来（响应式数据与 effect 建立联系），放到 Set 里（dep.add(activeEffect)）；同时，activeEffect 也会保存一份 dep（activeEffect.deps.push(dep)）。</p><pre><code class=language-ts>let uid = 0;
+</code></pre><p>effect 很像之前的 watcher；每次调用 effect，（如果不 lazy 的话）会调用 createReactiveEffect 创建 reactiveEffect 并设置为 activeEffect（就像 2.x 的 watcher 在被收集之前，会将自己赋值给 Dep.target 一样）；之后会调用传入的 fn（componentEffect 内部的 renderComponentRoot 方法会执行组件的 render 方法、computedGetter、...），如果在 fn 调用的过程中，访问到了『响应式』数据；Proxy 会通过 track 将 activeEffect 收集起来（响应式数据与 effect 建立联系），放到 Set 里（dep.add(activeEffect)）；同时，activeEffect 也会保存一份 dep（activeEffect.deps.push(dep)）。</p><pre><code class=language-ts>let uid = 0;
 const effectStack: ReactiveEffect[] = [];
 export interface ReactiveEffect&lt;T = any&gt; {
   (): T; // ReactiveEffect 可调用
@@ -889,7 +880,7 @@ export function effect(fn, options = {}) {
   }
   return effect;
 }
-function 会&lt;T = any&gt;(
+function createReactiveEffect&lt;T = any&gt;(
   fn: () =&gt; T,
   options: ReactiveEffectOptions
 ): ReactiveEffect&lt;T&gt; {
@@ -2326,6 +2317,7 @@ class ComputedRefImpl&lt;T&gt; {
     isReadonly: boolean
   ) {
     this.effect = effect(getter, {
+      // 由于 lazy 为 true，effect 不会先执行一遍，而是等到 computedGetter 被访问时，才会运行 effect
       lazy: true,
       scheduler: () =&gt; {
         if (!this._dirty) {
@@ -2340,12 +2332,9 @@ class ComputedRefImpl&lt;T&gt; {
   }
   get value() {
     /**
-     * 渲染开始时，computedGetter 被触发，renderEffect 会被收集到依赖里
-     * 因为 computedGetter 访问了（依赖了）“别的数据”
-     * 所以，computedEffect 会被”自身依赖的数据“收集
-     * 当“别的数据”更新，会调用 computedScheduler，将 _dirty 设置为 true
-     * 当执行到 trigger 时，renderEffect 又会重新触发 computedGetter
-     * 有点“牵一发而动全身”的意思
+     * 渲染开始时，computedGetter 被触发
+     * 调用 this.effect，此时 activeEffect 被赋值
+     * track 被调用，依赖被收集
      */
     if (this._dirty) {
       // 值是通过调用 effect 获得的

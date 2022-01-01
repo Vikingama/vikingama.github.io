@@ -40,6 +40,30 @@ $(document).ready(
     };
   })(this)
 );
+(function () {
+  const between = new Date() - new Date('2017-08-21');
+  const days = Math.floor(between / 1000 / 60 / 60 / 24);
+  const enterTimeEle = document.querySelector('#enter_time');
+  enterTimeEle.textContent = `入杭 ${days} 天了`;
+})();
+(function () {
+  document.addEventListener('copy', function (e) {
+    const clipboardData = e.clipboardData || window.clipboardData;
+    if (!clipboardData) {
+      return;
+    }
+    const selectionContent =
+      window.getSelection().toString() || document.getSelection().toString();
+    if (!selectionContent) {
+      return;
+    }
+    e.preventDefault();
+    clipboardData.setData(
+      'text/plain',
+      `${selectionContent}\r\n链接：${window.location.href}\r\n来源：馬腊咯稽\r\n转载请注明出处`
+    );
+  });
+})();
 // (function () {
 //   $.ajax({
 //     url: 'https://api.unsplash.com/photos/random?client_id=iJ9xWJbk75lC5KD9HBAAEsJXZGP8qsT1ariISDUcuQk',
@@ -77,9 +101,3 @@ $(document).ready(
 //     }
 //   });
 // })();
-(function () {
-  const between = new Date() - new Date('2017-08-21');
-  const days = Math.floor(between / 1000 / 60 / 60 / 24);
-  const enterTimeEle = document.querySelector('#enter_time');
-  enterTimeEle.textContent = `入杭 ${days} 天了`;
-})();
