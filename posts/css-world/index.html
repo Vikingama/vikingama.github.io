@@ -9,13 +9,13 @@
   }
   dot::before {
     display: block;
-    /* 三个点、两个点、一个点；是因为 IE9 不支持 animation，可以不影响显示效果 */
+   /* 三个点、两个点、一个点；是因为 IE9 不支持 animation，可以不影响显示效果 */
     content: '...\A..\A.';
-    /* 如何处理元素中的空白：pre（连续的空白符会被保留；在遇到换行符或者 &lt;br&gt; 元素时才会换行） */
+   /* 如何处理元素中的空白：pre（连续的空白符会被保留；在遇到换行符或者 &lt;br&gt; 元素时才会换行） */
     white-space: pre;
     animation: dot 3s infinite step-start both;
   }
-  /* 整个效果的原理就是：不断上下移动 */
+ /* 整个效果的原理就是：不断上下移动 */
   @keyframes dot {
     33% {
       transform: translateY(-2em);
@@ -65,12 +65,12 @@
   }
 &lt;/style&gt;
 &lt;span alt=&quot;没有内联元素&quot;&gt;&lt;/span&gt;
-&lt;span alt=&quot;最后一行内联元素的基线&quot;&gt;span&lt;br /&gt;span&lt;/span&gt;
+&lt;span alt=&quot;最后一行内联元素的基线&quot;&gt;span&lt;br/&gt;span&lt;/span&gt;
 &lt;span alt=&quot;margin 底边缘&quot;&gt;&lt;/span&gt;
 </code></pre><p><img style="display:block;margin:0 auto;width:70%" src=/css-word/baseline.png></p><h3 id=float>float</h3><p>float 的特性：</p><ol><li>块状化并格式化上下文，元素一旦 float 的属性值不为 none，则其 display 计算值就是 block 或者 table；</li><li>破坏文档流，使父元素高度塌陷（这是标准不是 bug，浮动本来就是为了破坏文档流实现文字环绕效果）；</li><li>没有任何 margin 合并。</li></ol><p>&nbsp;</p><pre><code class=language-js>var span = document.createElement('span');
 document.body.appendChild(span);
 console.log('1. ' + window.getComputedStyle(span).display);
-span.style.cssFloat = 'left'; // 设置元素左浮动
+span.style.cssFloat = 'left';// 设置元素左浮动
 console.log('2. ' + window.getComputedStyle(span).display);
 </code></pre><p>浮动锚点是 float 元素所在的“流”中的一个点，这个点本身并不浮动，就表现而言更像一个没有 margin、border 和 padding 的空的内联元素；浮动参考指的是浮动元素对齐参考的实体。在 CSS 世界中，float 元素的“浮动参考”是“行框盒子”，也就是 float 元素在当前“行框盒子”内定位；每一行内联元素都有一个“行框盒子”。</p><pre><code class=language-html>&lt;style&gt;
   div {
@@ -96,7 +96,7 @@ console.log('2. ' + window.getComputedStyle(span).display);
   }
 &lt;/style&gt;
 &lt;div&gt;
-  &lt;img src=&quot;https://vikingama.github.io/images/avatar.png&quot; /&gt;
+  &lt;img src=&quot;https://vikingama.github.io/images/avatar.png&quot;/&gt;
   &lt;p&gt;
     Bacon ipsum dolor amet chislic beef ribs ball tip strip steak. Kevin alcatra
     tri-tip, sirloin ball tip prosciutto turducken venison pork loin corned beef
@@ -113,7 +113,7 @@ console.log('2. ' + window.getComputedStyle(span).display);
   }
 &lt;/style&gt;
 &lt;div&gt;
-  &lt;img src=&quot;https://vikingama.github.io/images/avatar.png&quot; /&gt;
+  &lt;img src=&quot;https://vikingama.github.io/images/avatar.png&quot;/&gt;
 &lt;/div&gt;
 </code></pre><p><img style="display:block;margin:0 auto;width:70%" src=/css-word/overflow-cut.png></p><p>对于 webkit 浏览器，可以通过一下选择器修改滚动条样式：</p><ol><li>::-webkit-scrollbar，整个滚动条；</li><li>::-webkit-scrollbar-button，滚动条上的按钮（上下箭头）；</li><li>::-webkit-scrollbar-thumb，滚动条上的滚动滑块；</li><li>::-webkit-scrollbar-track，滚动条轨道；</li><li>::-webkit-scrollbar-track-piece，滚动条没有滑块的轨道部分；</li><li>::-webkit-scrollbar-corner，当同时有垂直滚动条和水平滚动条时交汇的部分；</li><li>::-webkit-resizer，某些元素的 corner 部分的部分样式（例，textarea 的可拖动按钮）。</li></ol><p>文本溢出省略：</p><pre><code class=language-html>&lt;style&gt;
   div {
@@ -165,14 +165,14 @@ console.log('2. ' + window.getComputedStyle(span).display);
 &lt;script&gt;
   const spanEle = document.querySelector('span');
   const pEle = document.querySelector('p');
-  console.log(window.getComputedStyle(spanEle).display); // block
-  console.log(window.getComputedStyle(pEle).display); // block
+  console.log(window.getComputedStyle(spanEle).display);// block
+  console.log(window.getComputedStyle(pEle).display);// block
 &lt;/script&gt;
 </code></pre><p><img style="display:block;margin:0 auto;width:70%" src=/css-word/dependless-absolute.png></p><p>text-align 可以<strong>改变</strong>无依赖绝对定位元素的位置，原因是：</p><ol><li>div 内部，img 之前存在<strong>幽灵空白节点</strong>，受 text-align:center 影响而水平居中显示；</li><li>无依赖绝对定位的 img 本来的位置就应该在<strong>幽灵空白节点</strong>右边，而且不占空间。</li></ol><p>&nbsp;</p><pre><code class=language-html>&lt;style&gt;
   div {
     text-align: center;
     outline: 1px solid red;
-    /*
+   /*
       如果 overflow 容器不是定位元素
       同时 absolute 元素和 overflow 容器之间也没有定位元素
       则 overflow 无法对 absolute 元素进行剪裁，也不会出现滚动条
@@ -186,7 +186,7 @@ console.log('2. ' + window.getComputedStyle(span).display);
   }
 &lt;/style&gt;
 &lt;div&gt;
-  &lt;img src=&quot;https://vikingama.github.io/images/avatar.png&quot; /&gt;
+  &lt;img src=&quot;https://vikingama.github.io/images/avatar.png&quot;/&gt;
 &lt;/div&gt;
 </code></pre><p><img style="display:block;margin:0 auto;width:70%" src=/css-word/center-absolute.png></p><p>当 absolute 遇到 left/top/right/bottom 属性的时候，absolute 元素才真正变成绝对定位元素。</p><pre><code class=language-html>&lt;style&gt;
   div {
@@ -220,13 +220,13 @@ console.log('2. ' + window.getComputedStyle(span).display);
   &lt;p&gt;&lt;/p&gt;
   &lt;p&gt;&lt;/p&gt;
 &lt;/div&gt;
-</code></pre><p><img style="display:block;margin:0 auto;width:70%" src=/css-word/absolute-size.png></p><h3 id=层叠规则>层叠规则</h3><p>层叠上下文（stacking context），是 HTML 中的一个三维的概念；如果一个元素含有层叠上下文，我们可以理解为这个元素在 z 轴（垂直于显示器）上就“高人一等”。</p><p>层叠水平（stacking level），决定了<strong>同一个层叠上下文</strong>中元素在 z 轴上的显示顺序。</p><p>层叠顺序（stacking order），表示元素发生层叠时有着特定的<strong>垂直显示顺序</strong>。</p><p><img style="display:block;margin:0 auto;width:70%" src=/css-word/stacking-order.png></p><p>background/border 为装饰属性，浮动和块状元素一般用作布局，而内联元素都是内容。</p><p>当元素发生层叠的时候，其覆盖关系遵循下面两条准则：</p><ol><li><strong>谁大谁上</strong>，当具有明显的层叠水平标识的时候，如生效的 z-index 属性值，在同一个层叠上下文领域，层叠水平值大的那一个覆盖小的那一个；</li><li><strong>后来居上</strong>，当元素的层叠水平一致、层叠顺序相同的时候，在 DOM 流中处于后面的元素会覆盖前面的元素。</li></ol><p>层叠上下文元素有如下特性：</p><ul><li>层叠上下文的层叠水平要比普通元素高；</li><li>层叠上下文可以阻断元素的混合模式；</li><li>层叠上下文可以嵌套，内部层叠上下文及其所有子元素均受制于外部的“层叠上下文”；</li><li>每个层叠上下文和兄弟元素独立，也就是说，当进行层叠变化或渲染的时候，只需要考虑后代元素；</li><li>每个层叠上下文是自成体系的，当元素发生层叠的时候，整个元素被认为是在父层叠上下文的层叠顺序中。</li></ul><p><strong>根层叠上下文</strong>指的是页面根元素，可以看成是 &gt;html&lt;元素。因此，页面中所有的元素一定处于至少一个“层叠结界”中。</p><p>对于 position:relative/absolute 以及 Firefox/IE 下含有 position:fixed 声明的<strong>定位元素</strong>，当其 z-index 值不是 auto 的时候，会创建层叠上下文。</p><pre><code class=language-html>&lt;div style=&quot;position: relative; z-index: auto&quot;&gt;
+</code></pre><p><img style="display:block;margin:0 auto;width:70%" src=/css-word/absolute-size.png></p><h3 id=层叠规则>层叠规则</h3><p>层叠上下文（stacking context），是 HTML 中的一个三维的概念；如果一个元素含有层叠上下文，我们可以理解为这个元素在 z 轴（垂直于显示器）上就“高人一等”。</p><p>层叠水平（stacking level），决定了<strong>同一个层叠上下文</strong>中元素在 z 轴上的显示顺序。</p><p>层叠顺序（stacking order），表示元素发生层叠时有着特定的<strong>垂直显示顺序</strong>。</p><p><img style="display:block;margin:0 auto;width:70%" src=/css-word/stacking-order.png></p><p>background/border 为装饰属性，浮动和块状元素一般用作布局，而内联元素都是内容。</p><p>当元素发生层叠的时候，其覆盖关系遵循下面两条准则：</p><ol><li><strong>谁大谁上</strong>，当具有明显的层叠水平标识的时候，如生效的 z-index 属性值，在同一个层叠上下文领域，层叠水平值大的那一个覆盖小的那一个；</li><li><strong>后来居上</strong>，当元素的层叠水平一致、层叠顺序相同的时候，在 DOM 流中处于后面的元素会覆盖前面的元素。</li></ol><p>层叠上下文元素有如下特性：</p><ul><li>层叠上下文的层叠水平要比普通元素高；</li><li>层叠上下文可以阻断元素的混合模式；</li><li>层叠上下文可以嵌套，内部层叠上下文及其所有子元素均受制于外部的“层叠上下文”；</li><li>每个层叠上下文和兄弟元素独立，也就是说，当进行层叠变化或渲染的时候，只需要考虑后代元素；</li><li>每个层叠上下文是自成体系的，当元素发生层叠的时候，整个元素被认为是在父层叠上下文的层叠顺序中。</li></ul><p><strong>根层叠上下文</strong>指的是页面根元素，可以看成是 &lt;html&lt;元素。因此，页面中所有的元素一定处于至少一个“层叠结界”中。</p><p>对于 position:relative/absolute 以及 Firefox/IE 下含有 position:fixed 声明的<strong>定位元素</strong>，当其 z-index 值不是 auto 的时候，会创建层叠上下文。</p><pre><code class=language-html>&lt;div style=&quot;position: relative; z-index: auto&quot;&gt;
   &lt;img
     style=&quot;position: absolute; z-index: 2&quot;
     src=&quot;./cat.jpg&quot;
     class=&quot;cat&quot;
     alt=&quot;猫&quot;
-  /&gt;
+ /&gt;
 &lt;/div&gt;
 &lt;div style=&quot;position: relative; z-index: auto&quot;&gt;
   &lt;img
@@ -234,7 +234,7 @@ console.log('2. ' + window.getComputedStyle(span).display);
     src=&quot;./car.jpg&quot;
     class=&quot;car&quot;
     alt=&quot;车&quot;
-  /&gt;
+ /&gt;
 &lt;/div&gt;
 </code></pre><p><img style="display:block;margin:0 auto;width:70%" src=/css-word/z-index-auto.png></p><pre><code class=language-html>&lt;div style=&quot;position: relative; z-index: 0&quot;&gt;
   &lt;img
@@ -242,7 +242,7 @@ console.log('2. ' + window.getComputedStyle(span).display);
     src=&quot;./cat.jpg&quot;
     class=&quot;cat&quot;
     alt=&quot;猫&quot;
-  /&gt;
+ /&gt;
 &lt;/div&gt;
 &lt;div style=&quot;position: relative; z-index: 0&quot;&gt;
   &lt;img
@@ -250,46 +250,46 @@ console.log('2. ' + window.getComputedStyle(span).display);
     src=&quot;./car.jpg&quot;
     class=&quot;car&quot;
     alt=&quot;车&quot;
-  /&gt;
+ /&gt;
 &lt;/div&gt;
-</code></pre><p><img style="display:block;margin:0 auto;width:70%" src=/css-word/z-index-0.png></p><p>层叠上下文的创建：</p><ol><li>元素为 flex 布局元素（display:flex|inline-flex），同时 z-index 值不是 auto；</li><li>元素的 opacity 值不是 1；</li><li>元素的 transform 值不是 none；</li><li>元素的 mix-blend-mode 值不是 normal；</li><li>元素的 filter 值不是 none；</li><li>元素的 isolation 值是 isolate；</li><li>元素的 will-change 属性值为上面 2 ～ 6 的任意一个（如 will-change:opacity）；</li><li><p>元素的 -webkit-overflow-scrolling 值是 touch。</p><pre><code class=language-html>&lt;style&gt;
-div {
-background-color: cornflowerblue;
-width: 270px;
-height: 270px;
-/* opacity: 0.99; */
-}
-div img {
-position: relative;
-right: -50%;
-height: 100%;
-z-index: -1;
-}
+</code></pre><p><img style="display:block;margin:0 auto;width:70%" src=/css-word/z-index-0.png></p><p>层叠上下文的创建：</p><ol><li>元素为 flex 布局元素（display:flex|inline-flex），同时 z-index 值不是 auto；</li><li>元素的 opacity 值不是 1；</li><li>元素的 transform 值不是 none；</li><li>元素的 mix-blend-mode 值不是 normal；</li><li>元素的 filter 值不是 none；</li><li>元素的 isolation 值是 isolate；</li><li>元素的 will-change 属性值为上面 2 ～ 6 的任意一个（如 will-change:opacity）；</li><li>元素的 -webkit-overflow-scrolling 值是 touch。</li></ol><p>&nbsp;</p><pre><code class=language-html>&lt;style&gt;
+  div {
+    background-color: cornflowerblue;
+    width: 270px;
+    height: 270px;
+   /* opacity: 0.99; */
+  }
+  div img {
+    position: relative;
+    right: -50%;
+    height: 100%;
+    z-index: -1;
+  }
 &lt;/style&gt;
 &lt;div&gt;
-&lt;img src=&quot;./cat.jpg&quot; alt=&quot;猫&quot; /&gt;
+  &lt;img src=&quot;./cat.jpg&quot; alt=&quot;猫&quot;/&gt;
 &lt;/div&gt;
-</code></pre></li></ol><p><img style="display:block;margin:0 auto;width:70%" src=/css-word/z-index--1.png>
-<img style="display:block;margin:0 auto;width:70%" src=/css-word/opacity-0.99.png></p><p>z-index 负值可以隐藏元素，只需要层叠上下文内的某一个父元素加个背景色就可以。它与 clip 隐藏相比的一个优势是，元素无须绝对定位，设置 position:relative 也可以隐藏，另一个优势是它对原来的布局以及元素的行为没有任何影响，而 clip 隐藏会导致控件 focus 的焦点发生细微的变化，在特定条件下是有体验问题的。它的不足之处就是不具有普遍适用性，需要其他元素配合进行隐藏。</p><h3 id=font>font</h3><p>font-size 的关键字属性分为两类：</p><ol><li>相对尺寸关键字：相对于当前元素计算；<ul><li>large：&gt;big /&lt; 元素的默认 font-size 属性值；</li><li>small：&gt;small /&lt; 元素的默认 font-size 属性值。</li></ul></li><li>绝对尺寸关键字：与当前元素 font-size 无关，仅仅受浏览器设置的字号影响。<ul><li>xx-large：和 &gt;h1 /&lt; 元素的计算值一样；</li><li>x-large：和 &gt;h2 /&lt; 元素的计算值一样；</li><li>large：和 &gt;h3 /&lt; 元素的计算值近似（偏差在一个像素以内）；</li><li>medium：font-size 的初始值，和 &gt;h4 /&lt; 元素的计算值一样；</li><li>small：和 &gt;h5 /&lt; 元素的计算值近似；</li><li>x-small：和 &gt;h6 /&lt; 元素的计算值近似；</li><li>xx-small：无对应的 HTML 元素。</li></ul></li></ol><p>由于浏览器限制，并不是所有小于 12px 的 font-size 都 会被当作 12px 处理；有一个值例外，那就是 0，如果 font-size:0，那么文字会直接被隐藏掉，并且只能是 font-size:0，哪怕设置成 font-size:0.0000001px，都还是会被当作 12px 处理的。</p><p>font-family 默认值由操作系统和浏览器共同决定，例如 Windows 和 macOS 下的 Chrome 默认字体不一样，Windows 下的 Chrome 和 Firefox 默认字体也不一样；font-family 支持两类属性值，一类是“字体名”，一类是“字体族”。</p><pre><code class=language-css>body {
-  /* 不用区分大小写 */
+</code></pre><p><img style="display:block;margin:0 auto;width:70%" src=/css-word/z-index--1.png>
+<img style="display:block;margin:0 auto;width:70%" src=/css-word/opacity-0.99.png></p><p>z-index 负值可以隐藏元素，只需要层叠上下文内的某一个父元素加个背景色就可以。它与 clip 隐藏相比的一个优势是，元素无须绝对定位，设置 position:relative 也可以隐藏，另一个优势是它对原来的布局以及元素的行为没有任何影响，而 clip 隐藏会导致控件 focus 的焦点发生细微的变化，在特定条件下是有体验问题的。它的不足之处就是不具有普遍适用性，需要其他元素配合进行隐藏。</p><h3 id=font>font</h3><p>font-size 的关键字属性分为两类：</p><ol><li>相对尺寸关键字：相对于当前元素计算；<ul><li>large：&lt;big/&gt; 元素的默认 font-size 属性值；</li><li>small：&lt;small/&gt; 元素的默认 font-size 属性值。</li></ul></li><li>绝对尺寸关键字：与当前元素 font-size 无关，仅仅受浏览器设置的字号影响。<ul><li>xx-large：和 &lt;h1/&gt; 元素的计算值一样；</li><li>x-large：和 &lt;h2/&gt; 元素的计算值一样；</li><li>large：和 &lt;h3/&gt; 元素的计算值近似（偏差在一个像素以内）；</li><li>medium：font-size 的初始值，和 &lt;h4/&gt; 元素的计算值一样；</li><li>small：和 &lt;h5/&gt; 元素的计算值近似；</li><li>x-small：和 &lt;h6/&gt; 元素的计算值近似；</li><li>xx-small：无对应的 HTML 元素。</li></ul></li></ol><p>由于浏览器限制，并不是所有小于 12px 的 font-size 都 会被当作 12px 处理；有一个值例外，那就是 0，如果 font-size:0，那么文字会直接被隐藏掉，并且只能是 font-size:0，哪怕设置成 font-size:0.0000001px，都还是会被当作 12px 处理的。</p><p>font-family 默认值由操作系统和浏览器共同决定，例如 Windows 和 macOS 下的 Chrome 默认字体不一样，Windows 下的 Chrome 和 Firefox 默认字体也不一样；font-family 支持两类属性值，一类是“字体名”，一类是“字体族”。</p><pre><code class=language-css>body {
+ /* 不用区分大小写 */
   font-family: simsun;
 }
 section {
-  /* 如果字体名包含空格，需要使用引号包起来 */
+ /* 如果字体名包含空格，需要使用引号包起来 */
   font-family: 'Microsoft Yahei';
 }
 span {
-  /* 如果有多个字体设定，从左往右依次寻找本地是否有对应的字体即可 */
+ /* 如果有多个字体设定，从左往右依次寻找本地是否有对应的字体即可 */
   font-family: 'PingFang SC', 'Microsoft Yahei';
 }
 i {
-  /* 字体族分很多类 */
-  font-family: serif; /* 衬线字体 */
-  font-family: sans-serif; /* 无衬线字体 */
-  font-family: monospace; /* 等宽字体 */
-  font-family: cursive; /* 手写字体 */
-  font-family: fantasy; /* 奇幻字体 */
-  font-family: system-ui; /* 系统 UI 字体 */
+ /* 字体族分很多类 */
+  font-family: serif;/* 衬线字体 */
+  font-family: sans-serif;/* 无衬线字体 */
+  font-family: monospace;/* 等宽字体 */
+  font-family: cursive;/* 手写字体 */
+  font-family: fantasy;/* 奇幻字体 */
+  font-family: system-ui;/* 系统 UI 字体 */
 }
 </code></pre><p>衬线字体，通俗讲就是笔画开始、结束的地方有额外装饰而且笔画的粗细会有所不同的字体。比如：宋体、Times New Roman、Georgia 等。无衬线字体没有这些额外的装饰，而且笔画的粗细差不多，比如：雅黑、Arial、Verdana、Tahoma、Helivetica 等。在大多数浏览器下，写在 serif 和 sans-serif 后面的所有字体都会被忽略。</p><p>所谓等宽字体，一般是针对英文字体而言的。东亚字体应该都是等宽的，就是每个字符在同等 font-size 下占据的宽度是一样的。但是英文字体就不一定了。</p><p>微软正黑体是一款全面支持 ClearType 技术的 TrueType 无衬线字体，用于繁体中文系统；对于微软雅黑和微软正黑，这两套字体都同时包含了比较完整的简体和繁体汉字，但这两套字形在正式场合是不能混淆使用的。</p><p>平常所说的“宋体”，指的都是“中易宋体”，英文名称 SimSun，“黑体”类似的是“中易黑体”。macOS 内置的“宋体-简”和我们平常所说的“宋体”并不是同一个字体，其英文名称是“Songti SC”，字形表现也有差异。</p><p>font-weight 如果使用数值作为属性值，必须是 100-900 的整百数，没有 x50 这种东西；font-weight:400 等同于 font-weight:normal；font-weight:700 等同于 font-weight:bold。浏览器支持 100-900 的整百数，没有效果是因为系统缺乏对应粗细的字体。</p><pre><code class=language-html>&lt;style&gt;
   p {
@@ -322,27 +322,27 @@ body {
 </code></pre><p>凡是使用自定义字体的，差不多都是下面这种格式：</p><pre><code class=language-html>&lt;pre alt=&quot;传统版本&quot;&gt;
 @font-face {
   font-family: ICON;
-  /* eot 是 IE 的私有格式，兼容模式的 IE 不认识『?』，所以才有了这一行多余的 src */
+ /* eot 是 IE 的私有格式，兼容模式的 IE 不认识『?』，所以才有了这一行多余的 src */
   src: url('icon.eot') format('eot');
-  /* #iefix 没什么用，有用的是『?』，防止 IE 对地址的错误解析 */
+ /* #iefix 没什么用，有用的是『?』，防止 IE 对地址的错误解析 */
   src: url('icon.eot?#iefix') format('embedded-opentype'),
-      /* woff2 比 woff 体积更小，Web 开发首选，仅 Chrome 和 Firefox 支持比较好 */
+     /* woff2 比 woff 体积更小，Web 开发首选，仅 Chrome 和 Firefox 支持比较好 */
       url('icon.woff2') format(&quot;woff2&quot;),
-      /* woff（Web Open Font Format）是专门为 Web 开发的字体，Android 4.4 开始支持 */
+     /* woff（Web Open Font Format）是专门为 Web 开发的字体，Android 4.4 开始支持 */
       url('icon.woff') format(&quot;woff&quot;),
-      /* ttf 为操作系统字体，缺点是体积大 */
+     /* ttf 为操作系统字体，缺点是体积大 */
       url('icon.ttf') format(&quot;typetrue&quot;),
-      /* svg 格式是为了兼容 iOS 4.1 以及之前的版本 */
-      url('icon.svg#icon') format('svg'); /* format 是用来帮助浏览器识别字体格式的，最好不要省略 */
-  font-weight: normal; /* 多余，用来实现响应式字体，不同字重的情况下使用不同字体 */
-  font-style: normal; /* 多余，用来实现响应式字体，不同样式的情况下使用不同字体 */
+     /* svg 格式是为了兼容 iOS 4.1 以及之前的版本 */
+      url('icon.svg#icon') format('svg');/* format 是用来帮助浏览器识别字体格式的，最好不要省略 */
+  font-weight: normal;/* 多余，用来实现响应式字体，不同字重的情况下使用不同字体 */
+  font-style: normal;/* 多余，用来实现响应式字体，不同样式的情况下使用不同字体 */
 }
 &lt;/pre&gt;
 &lt;pre alt=&quot;精简版本&quot;&gt;
 @font-face {
   font-family: ICON;
   src: url('icon.eot');
-  src: local('☺'), /* local 使用系统安装字体，url 使用外部字体，IE6-8 不认识 */
+  src: local('☺'),/* local 使用系统安装字体，url 使用外部字体，IE6-8 不认识 */
       url('icon.woff2') format(&quot;woff2&quot;),
       url('icon.woff') format(&quot;woff&quot;),
       url('icon.ttf') format(&quot;typetrue&quot;);
@@ -352,11 +352,11 @@ body {
 @font-face {
   font-family: quote;
   src: local('SimSun');
-  /* 用来指定哪些字符使用 SimSun 字体 */
+ /* 用来指定哪些字符使用 SimSun 字体 */
   unicode-range: U+201c, U+201d;
 }
 .font {
-  /* 效果就是，引号使用 SimSun 字体，其他文字使用 Microsoft Yahei 字体 */
+ /* 效果就是，引号使用 SimSun 字体，其他文字使用 Microsoft Yahei 字体 */
   font-family: quote, 'Microsoft Yahei';
 }
 &lt;/pre&gt;
@@ -384,51 +384,51 @@ body {
   filet mignon ground round meatball tail. Prosciutto porchetta strip steak
   drumstick jowl corned beef pork chop cupim turkey biltong pancetta swine.
 &lt;/p&gt;
-</code></pre><p><img style="display:block;margin:0 auto;width:70%" src=/css-word/text-indent.png></p><p>text-indent 应该注意几点：</p><ol><li>text-indent 仅对第一行内联盒子内容有效；</li><li>非替换元素以外的 display 计算值为 inline 的内联元素设置 text-indent 值无效；如果计算值是 inline-block/inline-table 则会生效。因此，如果父级块状元素设置了 text-indent 属性值，子 inline-block/inline-table 需要设置 text-indent:0 重置；</li><li>&gt;input /&lt; 标签按钮 text-indent 值无效；</li><li>&gt;button /&lt; 标签按钮 text-indent 值有效，但是存在兼容性差异，IE 理解为单标签，百分比值按照容器计算，而 Chrome 和 Firefox 标签内还有其他 ShadowDOM 元素，因此百分比值是按照自身的尺寸计算的；</li><li>&gt;input /&lt; 和 &gt;textarea /&lt; 输入框的 text-indent 在低版本 IE 下有兼容问题。</li></ol><h3 id=letter-spacing>letter-spacing</h3><p>letter-spacing 具有一下特征：</p><ol><li>继承性；</li><li>默认值是 normal 而不是 0，虽然说正常情况下，normal 的计算值就是 0，但在有些场景下，letter-spacing 会调整 normal 的计算值以实现更好的版面布局；</li><li>支持负值，且值足够大的时候，会让字符形成重叠，甚至反向排列（非 IE）；</li><li>和 text-indent 属性一样，无论值多大或多小，第一行一定会保留至少一个字符。在默认的左对齐情况下，无论值如何设置，第一个字符的位置一定是纹丝不动的；</li><li>支持小数值，即使 0.1px 也是支持的，但并不总能看到效果，这与屏幕的密度有关。对普通的桌面显示器，设备像素比是 1，最小渲染单位是 1px，因此，需要至少连续 10 个字符，才能看到 0.1px 产生的 1px 间距变化，如果是 9 个字符，则不会有效果，这很可能会让人误以为 letter-spacing 不支持非常小的数值，实际上是支持的；</li><li>暂不支持百分比值。</li></ol><h3 id=word-spacing>word-spacing</h3><p>word-spacing 和 letter-spacing 名称类似，其特性也有很多共通之处：</p><ol><li>都具有继承性；</li><li>默认值都是 normal 而不是 0；通常情况下，两者表现并无差异；</li><li>都支持负值，都可以让字符重叠，但是对于 inline-block 和 inline-table 元素却存在兼容性差异，Chrome 下可以重叠，IE/Firefox 下则再大的负值也不会重叠，因此不适合使用 word-spacing 来清除空白间隙；</li><li>都支持小数值，如 word-spacing:0.5px；</li><li>间隔算法都会受到 text-align:justify 两端对齐的影响；</li><li>letter-spacing 作用于所有字符，word-spacing 仅作用于空格字符（即可以是键盘敲出来的空格 Space/Tab，也可以是换行符产生的空格）。</li></ol><h3 id=word-break-break-all-word-wrap-break-word>word-break:break-all/word-wrap:break-word</h3><p>word-break 的属性如下：</p><ul><li>normal，使用默认的换行规则；</li><li>break-all，允许任意非 CJK（Chinese/Japanese/Korean）文本间的单词断行；</li><li>keep-all，CJK 只能在半角空格或连字符处换行；非 CJK 文本的行为实际上和 normal。</li></ul><p>word-wrap 的属性如下：</p><ul><li>normal，正常的换行规则；</li><li><p>break-word，一行单词中实在没有其他靠谱的换行点的时候换行。</p><pre><code class=language-html>&lt;p style=&quot;word-break: break-all;&quot;&gt;
-如果您在阅读过程中有任何疑问或者发现表述不严谨的地方，欢迎去官方论坛
-http://bbs.cssworld.cn 进行反馈与交流。
+</code></pre><p><img style="display:block;margin:0 auto;width:70%" src=/css-word/text-indent.png></p><p>text-indent 应该注意几点：</p><ol><li>text-indent 仅对第一行内联盒子内容有效；</li><li>非替换元素以外的 display 计算值为 inline 的内联元素设置 text-indent 值无效；如果计算值是 inline-block/inline-table 则会生效。因此，如果父级块状元素设置了 text-indent 属性值，子 inline-block/inline-table 需要设置 text-indent:0 重置；</li><li>&lt;input/&gt; 标签按钮 text-indent 值无效；</li><li>&lt;button/&gt; 标签按钮 text-indent 值有效，但是存在兼容性差异，IE 理解为单标签，百分比值按照容器计算，而 Chrome 和 Firefox 标签内还有其他 ShadowDOM 元素，因此百分比值是按照自身的尺寸计算的；</li><li>&lt;input/&gt; 和 &lt;textarea/&gt; 输入框的 text-indent 在低版本 IE 下有兼容问题。</li></ol><h3 id=letter-spacing>letter-spacing</h3><p>letter-spacing 具有一下特征：</p><ol><li>继承性；</li><li>默认值是 normal 而不是 0，虽然说正常情况下，normal 的计算值就是 0，但在有些场景下，letter-spacing 会调整 normal 的计算值以实现更好的版面布局；</li><li>支持负值，且值足够大的时候，会让字符形成重叠，甚至反向排列（非 IE）；</li><li>和 text-indent 属性一样，无论值多大或多小，第一行一定会保留至少一个字符。在默认的左对齐情况下，无论值如何设置，第一个字符的位置一定是纹丝不动的；</li><li>支持小数值，即使 0.1px 也是支持的，但并不总能看到效果，这与屏幕的密度有关。对普通的桌面显示器，设备像素比是 1，最小渲染单位是 1px，因此，需要至少连续 10 个字符，才能看到 0.1px 产生的 1px 间距变化，如果是 9 个字符，则不会有效果，这很可能会让人误以为 letter-spacing 不支持非常小的数值，实际上是支持的；</li><li>暂不支持百分比值。</li></ol><h3 id=word-spacing>word-spacing</h3><p>word-spacing 和 letter-spacing 名称类似，其特性也有很多共通之处：</p><ol><li>都具有继承性；</li><li>默认值都是 normal 而不是 0；通常情况下，两者表现并无差异；</li><li>都支持负值，都可以让字符重叠，但是对于 inline-block 和 inline-table 元素却存在兼容性差异，Chrome 下可以重叠，IE/Firefox 下则再大的负值也不会重叠，因此不适合使用 word-spacing 来清除空白间隙；</li><li>都支持小数值，如 word-spacing:0.5px；</li><li>间隔算法都会受到 text-align:justify 两端对齐的影响；</li><li>letter-spacing 作用于所有字符，word-spacing 仅作用于空格字符（即可以是键盘敲出来的空格 Space/Tab，也可以是换行符产生的空格）。</li></ol><h3 id=word-break-break-all-word-wrap-break-word>word-break:break-all/word-wrap:break-word</h3><p>word-break 的属性如下：</p><ul><li>normal，使用默认的换行规则；</li><li>break-all，允许任意非 CJK（Chinese/Japanese/Korean）文本间的单词断行；</li><li>keep-all，CJK 只能在半角空格或连字符处换行；非 CJK 文本的行为实际上和 normal。</li></ul><p>word-wrap 的属性如下：</p><ul><li>normal，正常的换行规则；</li><li>break-word，一行单词中实在没有其他靠谱的换行点的时候换行。</li></ul><p>&nbsp;</p><pre><code class=language-html>&lt;p style=&quot;word-break: break-all;&quot;&gt;
+  如果您在阅读过程中有任何疑问或者发现表述不严谨的地方，欢迎去官方论坛
+  http://bbs.cssworld.cn 进行反馈与交流。
 &lt;/p&gt;
 &lt;p style=&quot;word-wrap: break-word;&quot;&gt;
-如果您在阅读过程中有任何疑问或者发现表述不严谨的地方，欢迎去官方论坛
-http://bbs.cssworld.cn 进行反馈与交流。
+  如果您在阅读过程中有任何疑问或者发现表述不严谨的地方，欢迎去官方论坛
+  http://bbs.cssworld.cn 进行反馈与交流。
 &lt;/p&gt;
-</code></pre></li></ul><p><img style="display:block;margin:0 auto;width:70%" src=/css-word/word-break|word-wrap.png></p><h3 id=white-space>white-space</h3><p>white-space 属性声明了如何处理元素内的空白字符，这类空白字符包括 Space、Enter、Tab 产生的空白。因此，white-space 可以决定图文内容是否在一行显示（回车空格是否生效），是否显示大段连续空白（空格是否生效）等。其属性值包括下面这些：</p><ul><li>normal，合并<strong>空白字符</strong>（多个空格变成一个）和<strong>换行符</strong>（多个连续换行合并成一个，并当作一个普通空格处理）；</li><li>pre，不合并<strong>空白字符</strong>，内容只在有<strong>换行符</strong>的地方换行；</li><li>nowrap，合并<strong>空白字符</strong>，但不允许文本环绕，元素的宽度此时表现为“最大可用宽度”，换行符和一些空格全部合并，文本一行显示；</li><li>pre-wrap，不合并<strong>空白字符</strong>，内容只在有<strong>换行符</strong>的地方换行，允许文本环绕（一行文字内容超出容器宽度时，会自动从下一行开始显示）；</li><li>pre-line，合并<strong>空白字符</strong>，内容只在有<strong>换行符</strong>的地方换行，允许文本环绕。</li></ul><p><img style="display:block;margin:0 auto;width:70%" src=/css-word/white-space.png></p><h3 id=text-align-justify>text-align:justify</h3><p>在默认设置下，text-align:justify 要想有两端对齐的效果，需要满足两点：</p><ol><li>有分隔点，如空格；</li><li>要超过一行，不足一行，不会两端对齐；</li><li><p>text-align-last:justify，兼容性不是很好（Safari/IE）。</p><pre><code class=language-html>&lt;style&gt;
-.justify {
-/* 如果不酱紫，容器下方会多出一行 */
-font-size: 0;
-}
-.justify::after {
-content: '';
-display: inline-block;
-width: 100%;
-}
-.justify &gt; span {
-font-size: 16px;
-}
+</code></pre><p><img style="display:block;margin:0 auto;width:70%" src=/css-word/word-break|word-wrap.png></p><h3 id=white-space>white-space</h3><p>white-space 属性声明了如何处理元素内的空白字符，这类空白字符包括 Space、Enter、Tab 产生的空白。因此，white-space 可以决定图文内容是否在一行显示（回车空格是否生效），是否显示大段连续空白（空格是否生效）等。其属性值包括下面这些：</p><ul><li>normal，合并<strong>空白字符</strong>（多个空格变成一个）和<strong>换行符</strong>（多个连续换行合并成一个，并当作一个普通空格处理）；</li><li>pre，不合并<strong>空白字符</strong>，内容只在有<strong>换行符</strong>的地方换行；</li><li>nowrap，合并<strong>空白字符</strong>，但不允许文本环绕，元素的宽度此时表现为“最大可用宽度”，换行符和一些空格全部合并，文本一行显示；</li><li>pre-wrap，不合并<strong>空白字符</strong>，内容只在有<strong>换行符</strong>的地方换行，允许文本环绕（一行文字内容超出容器宽度时，会自动从下一行开始显示）；</li><li>pre-line，合并<strong>空白字符</strong>，内容只在有<strong>换行符</strong>的地方换行，允许文本环绕。</li></ul><p><img style="display:block;margin:0 auto;width:70%" src=/css-word/white-space.png></p><h3 id=text-align-justify>text-align:justify</h3><p>在默认设置下，text-align:justify 要想有两端对齐的效果，需要满足两点：</p><ol><li>有分隔点，如空格；</li><li>要超过一行，不足一行，不会两端对齐；</li><li>text-align-last:justify，兼容性不是很好（Safari/IE）。</li></ol><p>&nbsp;</p><pre><code class=language-html>&lt;style&gt;
+  .justify {
+   /* 如果不酱紫，容器下方会多出一行 */
+    font-size: 0;
+  }
+  .justify::after {
+    content: '';
+    display: inline-block;
+    width: 100%;
+  }
+  .justify &gt; span {
+    font-size: 16px;
+  }
 &lt;/style&gt;
 &lt;p style=&quot;text-align: initial;&quot;&gt;
-如果您在阅读过程中有任何疑问或者发现表述不严谨的地方，欢迎去官方论坛
-http://bbs.cssworld.cn 进行反馈与交流。
+  如果您在阅读过程中有任何疑问或者发现表述不严谨的地方，欢迎去官方论坛
+  http://bbs.cssworld.cn 进行反馈与交流。
 &lt;/p&gt;
 &lt;p style=&quot;text-align: justify;&quot;&gt;
-如果您在阅读过程中有任何疑问或者发现表述不严谨的地方，欢迎去官方论坛
-http://bbs.cssworld.cn 进行反馈与交流。
+  如果您在阅读过程中有任何疑问或者发现表述不严谨的地方，欢迎去官方论坛
+  http://bbs.cssworld.cn 进行反馈与交流。
 &lt;/p&gt;
 &lt;p style=&quot;text-align: justify; text-align-last: justify;&quot;&gt;
-如果您在阅读过程中有任何疑问或者发现表述不严谨的地方，欢迎去官方论坛
-http://bbs.cssworld.cn 进行反馈与交流。
+  如果您在阅读过程中有任何疑问或者发现表述不严谨的地方，欢迎去官方论坛
+  http://bbs.cssworld.cn 进行反馈与交流。
 &lt;/p&gt;
 &lt;p
-style=&quot;text-align: justify;&quot;
-class=&quot;justify&quot;
-alt=&quot;这种方法需要额外的元素辅助&quot;
+  style=&quot;text-align: justify;&quot;
+  class=&quot;justify&quot;
+  alt=&quot;这种方法需要额外的元素辅助&quot;
 &gt;
-&lt;span&gt;
-如果您在阅读过程中有任何疑问或者发现表述不严谨的地方，欢迎去官方论坛
-http://bbs.cssworld.cn 进行反馈与交流。
-&lt;/span&gt;
+  &lt;span&gt;
+    如果您在阅读过程中有任何疑问或者发现表述不严谨的地方，欢迎去官方论坛
+    http://bbs.cssworld.cn 进行反馈与交流。
+  &lt;/span&gt;
 &lt;/p&gt;
-</code></pre></li></ol><p><img style="display:block;margin:0 auto;width:70%" src=/css-word/text-align-justify.png></p><h3 id=first-letter-first-line>::first-letter/::first-line</h3><p>::first-letter/::first-line 生效的前提：</p><ol><li>不是所有的字符都能单独作为 ::first-letter 伪元素存在的；常见的标点符号、各类括号和引号都不行（::first-line 不适用）；</li><li>可以作为 ::first-letter 伪元素的字符：数字、字母、中文、$、运算符、空格等（::first-line 不适用）；</li><li>元素的 display 计算值必须是：block、inline-block、list-item、table-cell、table-caption；</li><li>::first-letter 伪元素是作为子元素存在的，或者说应当被看作是子元素，CSS 权重更高；</li><li>应用在 ::first-letter 伪元素上的 CSS 只有一部分规则有效。</li></ol><h3 id=display-opacity-visibility>display、opacity、visibility</h3><p><img src=/css-word/display-opacity-visibility.png alt="Local Image"></p><p>HTML 中有很多标签和属性天然 display:none，如 &gt;style /&lt;、&gt;script /&lt;、&gt;dialog /&lt;、[type=&quot;hidden&quot;] 元素。如果这些标签在 &gt;body /&lt; 元素中，设置 display:block 是可以让内联 CSS 和 JS 代码直接在页面中显示的。</p><pre><code class=language-html>&lt;body&gt;
+</code></pre><p><img style="display:block;margin:0 auto;width:70%" src=/css-word/text-align-justify.png></p><h3 id=first-letter-first-line>::first-letter/::first-line</h3><p>::first-letter/::first-line 生效的前提：</p><ol><li>不是所有的字符都能单独作为 ::first-letter 伪元素存在的；常见的标点符号、各类括号和引号都不行（::first-line 不适用）；</li><li>可以作为 ::first-letter 伪元素的字符：数字、字母、中文、$、运算符、空格等（::first-line 不适用）；</li><li>元素的 display 计算值必须是：block、inline-block、list-item、table-cell、table-caption；</li><li>::first-letter 伪元素是作为子元素存在的，或者说应当被看作是子元素，CSS 权重更高；</li><li>应用在 ::first-letter 伪元素上的 CSS 只有一部分规则有效。</li></ol><h3 id=display-opacity-visibility>display、opacity、visibility</h3><p><img src=/css-word/display-opacity-visibility.png alt="Local Image"></p><p>HTML 中有很多标签和属性天然 display:none，如 &lt;style/&gt;、&lt;script/&gt;、&lt;dialog/&gt;、[type=&quot;hidden&quot;] 元素。如果这些标签在 &lt;body/&gt; 元素中，设置 display:block 是可以让内联 CSS 和 JS 代码直接在页面中显示的。</p><pre><code class=language-html>&lt;body&gt;
   &lt;style style=&quot;display: block; border: 1px solid red;&quot; alt=&quot;必须在 body 中&quot;&gt;
     p {
       padding: 8px;
@@ -442,7 +442,7 @@ http://bbs.cssworld.cn 进行反馈与交流。
     .justify::after {
       content: '';
       display: inline-block;
-      /* vertical-align: bottom; */
+     /* vertical-align: bottom; */
       width: 100%;
     }
     .justify &gt; span {
