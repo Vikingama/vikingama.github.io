@@ -157,54 +157,54 @@ class App extends React.Component {
     );
   }
 }
-</code></pre><p>通过 componentDidCatch 捕获错误，然后进行第二次渲染。</p><p><img src=/react-suspense/render-throw-promise-with-star.png alt="Local Image"></p><h3 id=飞翔版-实现一个简单-suspense>飞翔版，实现一个简单 Suspense</h3><p>Suspense 是什么？Suspense 英文翻译『悬停』。在 React 中 Suspense 是什么呢？那么正常情况下组件染是一气呵成的，在 Suspense 模式下的组件渲染就变成了可以先悬停下来。</p><p>首先解释为什么悬停？</p><p>Suspense 在 React 生态中的位置，重点体现在以下方面。</p><ul><li>codeSplitting（代码分割）：哪个组件加载，就加载哪个组件的代码；听上去挺拗口，可确实打实的解决了主文件体积过大的问题，间接优化了项目的首屏加载时间，我们知道过浏览器加载资源也是耗时的，这些时间给用户造成的影响就是白屏效果；</li><li><p>spinner 解耦：正常情况下，页面展示是需要前后端交互的，数据加载过程不期望看到：无数据状态 -&gt; 闪现数据的场景，更期望的是一种 spinner 数据加载状态 -&gt; 加载完成展示页面状态：</p><pre><code class=language-tsx>&lt;List1 /&gt;
-&lt;List2 /&gt;
-</code></pre></li></ul><p>List1 和 List2 都使用服务端请求数据，那么在加载数据过程中，需要 Spin 效果去优雅的展示 UI，所以需要一个 Spin 组件；但是 Spin 组件需要放入 List1 和 List2 的内部，就造成耦合关系。现在通过 Suspense 来接耦 Spin，在业务代码中这么写道：</p><pre><code class=language-tsx>&lt;Suspense fallback={&lt;Spin /&gt;}&gt;
+</code></pre><p>通过 componentDidCatch 捕获错误，然后进行第二次渲染。</p><p><img src=/react-suspense/render-throw-promise-with-star.png alt="Local Image"></p><h3 id=飞翔版-实现一个简单-suspense>飞翔版，实现一个简单 Suspense</h3><p>Suspense 是什么？Suspense 英文翻译『悬停』。在 React 中 Suspense 是什么呢？那么正常情况下组件染是一气呵成的，在 Suspense 模式下的组件渲染就变成了可以先悬停下来。</p><p>首先解释为什么悬停？</p><p>Suspense 在 React 生态中的位置，重点体现在以下方面。</p><ul><li>codeSplitting（代码分割）：哪个组件加载，就加载哪个组件的代码；听上去挺拗口，可确实打实的解决了主文件体积过大的问题，间接优化了项目的首屏加载时间，我们知道过浏览器加载资源也是耗时的，这些时间给用户造成的影响就是白屏效果；</li><li>spinner 解耦：正常情况下，页面展示是需要前后端交互的，数据加载过程不期望看到：无数据状态 -&gt; 闪现数据的场景，更期望的是一种 spinner 数据加载状态 -&gt; 加载完成展示页面状态：</li></ul><p>&nbsp;</p><pre><code class=language-tsx>  &lt;List1 /&gt;
+  &lt;List2 /&gt;
+</code></pre><p>List1 和 List2 都使用服务端请求数据，那么在加载数据过程中，需要 Spin 效果去优雅的展示 UI，所以需要一个 Spin 组件；但是 Spin 组件需要放入 List1 和 List2 的内部，就造成耦合关系。现在通过 Suspense 来接耦 Spin，在业务代码中这么写道：</p><pre><code class=language-tsx>&lt;Suspense fallback={&lt;Spin /&gt;}&gt;
   &lt;List1 /&gt;
   &lt;List2 /&gt;
 &lt;/Suspense&gt;
-</code></pre><ul><li>renderData：整个 render 过程都是同步执行一气呵成的，那样就会：组件 render -&gt; 请求数据 -&gt; 组件 reRender；但是在 Suspense 异步组件情况下允许调用 render -&gt; 发现异步请求 -&gt; 悬停，等待异步请求完毕 -&gt; 再次渲染展示数据。这样无疑减少了一次渲染。</li></ul><p>接下来解释如何悬停。</p><p>上面理解了 Suspense 初衷，接下来分析一波原理；首先通过上文中，已经交代了 Suspense 原理，如何悬停，很简单粗暴，直接抛出一个异常。</p><p>异常是什么，一个 Promise，这个 Promise 也分为二种情况：</p><ul><li>第一种就是异步请求数据，这个 Promise 内部封装了请求方法，请求数据用于渲染；</li><li>第二种就是异步加载组件，配合 Webpack 提供的 require API，实现代码分割。</li></ul><p>悬停后再次 render。</p><p>在 Suspense 悬停后，如果想要恢复渲染，那么 reRender 一下就可以了。</p><p>如上详细介绍了 Suspense。接下来到了实践环节，我们去尝试实现一个 Suspense，首先声明一下这个 Suspense 并不是 React 提供的 Suspense，这里只是模拟了一下它的大致实现细节。</p><p>本质上，Suspense 落地的瓶颈也是对请求函数的的封装，Suspense 主要接收 Promise，并 resolve 它；那么对于成功的状态回传到异步组件中，对于开发者来说是未知的，对于 Promise 和状态传递的函数 createFetcher，应该满足如下的条件：</p><ul><li>通过 createFetcher 封装请求函数；请求函数 getData 返回一个 Promise，这个 Promise 的使命就是完成数据交互；</li><li><p>一个模拟的异步组件，内部使用 createFetcher 创建的请求函数，请求数据。</p><pre><code class=language-tsx>const fetch = createFetcher(function getData() {
-return new Promise(resolve =&gt; {
-setTimeout(() =&gt; {
-  resolve({
-    name: '《React 进阶实践指南》',
-    author: 'alien'
+</code></pre><ul><li>renderData：整个 render 过程都是同步执行一气呵成的，那样就会：组件 render -&gt; 请求数据 -&gt; 组件 reRender；但是在 Suspense 异步组件情况下允许调用 render -&gt; 发现异步请求 -&gt; 悬停，等待异步请求完毕 -&gt; 再次渲染展示数据。这样无疑减少了一次渲染。</li></ul><p>接下来解释如何悬停。</p><p>上面理解了 Suspense 初衷，接下来分析一波原理；首先通过上文中，已经交代了 Suspense 原理，如何悬停，很简单粗暴，直接抛出一个异常。</p><p>异常是什么，一个 Promise，这个 Promise 也分为二种情况：</p><ul><li>第一种就是异步请求数据，这个 Promise 内部封装了请求方法，请求数据用于渲染；</li><li>第二种就是异步加载组件，配合 Webpack 提供的 require API，实现代码分割。</li></ul><p>悬停后再次 render。</p><p>在 Suspense 悬停后，如果想要恢复渲染，那么 reRender 一下就可以了。</p><p>如上详细介绍了 Suspense。接下来到了实践环节，我们去尝试实现一个 Suspense，首先声明一下这个 Suspense 并不是 React 提供的 Suspense，这里只是模拟了一下它的大致实现细节。</p><p>本质上，Suspense 落地的瓶颈也是对请求函数的的封装，Suspense 主要接收 Promise，并 resolve 它；那么对于成功的状态回传到异步组件中，对于开发者来说是未知的，对于 Promise 和状态传递的函数 createFetcher，应该满足如下的条件：</p><ul><li>通过 createFetcher 封装请求函数；请求函数 getData 返回一个 Promise，这个 Promise 的使命就是完成数据交互；</li><li>一个模拟的异步组件，内部使用 createFetcher 创建的请求函数，请求数据。</li></ul><p>&nbsp;</p><pre><code class=language-tsx>const fetch = createFetcher(function getData() {
+  return new Promise(resolve =&gt; {
+    setTimeout(() =&gt; {
+      resolve({
+        name: '《React 进阶实践指南》',
+        author: 'alien'
+      });
+    }, 1000);
   });
-}, 1000);
-});
 });
 function Text() {
-const data = fetch();
-return (
-&lt;div&gt;
-  name: {data.name}
-  author:{data.author}
-&lt;/div&gt;
-);
+  const data = fetch();
+  return (
+    &lt;div&gt;
+      name: {data.name}
+      author:{data.author}
+    &lt;/div&gt;
+  );
 }
-</code></pre></li></ul><p>接下来就是 createFetcher 函数的编写：</p><ul><li>这里要注意的是 fn 就是 getData，getDataPromise 就是 getData 返回的 Promise；</li><li>返回一个函数 fetch，在 Text 内部执行；第一次组件渲染，由于 status = pedding 所以抛出异常 fetcher 给 Suspense，渲染中止；</li><li>Suspense 会在内部 componentDidCatch 处理这个 fetcher，执行 getDataPromise.then，这个时候 status 已经是 resolve 状态，数据也能正常返回了；</li><li><p>接下来 Suspense 再次渲染组件，此时就能正常的获取数据了。</p><pre><code class=language-tsx>function createFetcher(fn) {
-const fetcher = {
-status: 'pedding',
-result: null,
-p: null
-};
-return function () {
-const getDataPromise = fn();
-fetcher.p = getDataPromise;
-getDataPromise.then(result =&gt; {
-  /* 成功获取数据 */
-  fetcher.result = result;
-  fetcher.status = 'resolve';
-});
-if (fetcher.status === 'pedding') {
-  /* 第一次执行中断渲染，第二次 */
-  throw fetcher;
+</code></pre><p>接下来就是 createFetcher 函数的编写：</p><ul><li>这里要注意的是 fn 就是 getData，getDataPromise 就是 getData 返回的 Promise；</li><li>返回一个函数 fetch，在 Text 内部执行；第一次组件渲染，由于 status = pedding 所以抛出异常 fetcher 给 Suspense，渲染中止；</li><li>Suspense 会在内部 componentDidCatch 处理这个 fetcher，执行 getDataPromise.then，这个时候 status 已经是 resolve 状态，数据也能正常返回了；</li><li>接下来 Suspense 再次渲染组件，此时就能正常的获取数据了。</li></ul><p>&nbsp;</p><pre><code class=language-tsx>function createFetcher(fn) {
+  const fetcher = {
+    status: 'pedding',
+    result: null,
+    p: null
+  };
+  return function () {
+    const getDataPromise = fn();
+    fetcher.p = getDataPromise;
+    getDataPromise.then(result =&gt; {
+      /* 成功获取数据 */
+      fetcher.result = result;
+      fetcher.status = 'resolve';
+    });
+    if (fetcher.status === 'pedding') {
+      /* 第一次执行中断渲染，第二次 */
+      throw fetcher;
+    }
+    /* 第二次执行 */
+    if (fetcher.status === 'resolve') return fetcher.result;
+  };
 }
-/* 第二次执行 */
-if (fetcher.status === 'resolve') return fetcher.result;
-};
-}
-</code></pre></li></ul><p>既然有了 createFetcher 函数，接下来就要模拟上游组件 Suspense。</p><pre><code class=language-tsx>class MySuspense extends React.Component {
+</code></pre><p>既然有了 createFetcher 函数，接下来就要模拟上游组件 Suspense。</p><pre><code class=language-tsx>class MySuspense extends React.Component {
   state = {
     isResolve: true
   };
