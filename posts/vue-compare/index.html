@@ -446,7 +446,6 @@ function createReactiveObject(
   if (target.__v_skip || !Object.isExtensible(target)) {
     return target;
   }
-  // 只有 Object、Array、Map、Set、WeakMap、WeakSet 才可以
   const toRawType = v =&gt; Object.prototype.toString.call(v).slice(8, -1);
   if (targetTypeMap(toRawType(value)) === TargetType.INVALID) {
     return target;
@@ -845,7 +844,7 @@ export function trigger(
     }
   });
 }
-</code></pre><p>effect 很像之前的 watcher；每次调用 effect，（如果不 lazy 的话）会调用 createReactiveEffect 创建 reactiveEffect 并设置为 activeEffect（就像 2.x 的 watcher 在被收集之前，会将自己赋值给 Dep.target 一样）；之后会调用传入的 fn（componentEffect 内部的 renderComponentRoot 方法会执行组件的 render 方法、computedGetter、...），如果在 fn 调用的过程中，访问到了『响应式』数据；Proxy 会通过 track 将 activeEffect 收集起来（响应式数据与 effect 建立联系），放到 Set 里（dep.add(activeEffect)）；同时，activeEffect 也会保存一份 dep（activeEffect.deps.push(dep)）。</p><pre><code class=language-ts>let uid = 0;
+</code></pre><p>effect 很像之前的 watcher；每次调用 effect，（如果不 lazy 的话）会调用 createReactiveEffect 创建 reactiveEffect 并设置为 activeEffect（就像 2.x 的 watcher 在被收集之前，会将自己赋值给 Dep.target 一样）；之后会调用传入的 fn（componentEffect 内部的 renderComponentRoot 方法会执行组件的 render 方法、computedGetter、...），如果在 fn 调用的过程中，访问到了『响应式』数据；Proxy 会通过 track 将 activeEffect 收集起来（响应式数据与 effect 建立联系），放到 Set 里（dep.add(activeEffect)）；同时，activeEffect 也会保存一份 dep（activeEffect.deps.push(dep)）。</p><p>cleanup 流程就是通知 effect.deps 里保存的 dep，调用 dep.delete 方法。</p><p>stop 流程就是在 cleanup 的基础上，调用传入的 onStop 钩子。</p><pre><code class=language-ts>let uid = 0;
 const effectStack: ReactiveEffect[] = [];
 export interface ReactiveEffect&lt;T = any&gt; {
   (): T; // ReactiveEffect 可调用
@@ -988,7 +987,7 @@ export function stop(effect: ReactiveEffect) {
     if (has[id] != null) {
       circular[id] = (circular[id] || 0) + 1;
       if (circular[id] &gt; 100) {
-        // 判断时候死循环
+        // 判断是否是死循环
         break;
       }
     }
@@ -1023,7 +1022,6 @@ export interface SchedulerJob {
 export type SchedulerCb = Function &amp; { id?: number };
 export type SchedulerCbs = SchedulerCb | SchedulerCb[];
 type CountMap = Map&lt;SchedulerJob | SchedulerCb, number&gt;;
-
 let isFlushing = false; // 是否正在刷新
 let isFlushPending = false; // 是否正在等待刷新
 // 还未被执行的 pre/post 任务，如果当前 tick 正在 flushPreCbs/flushPostCbs 的时候，有新的任务进来，会被添加到这个数组中
@@ -1034,7 +1032,6 @@ let activePreFlushCbs: SchedulerCb[] | null = null;
 let activePostFlushCbs: SchedulerCb[] | null = null;
 let preFlushIndex = 0;
 let postFlushIndex = 0;
-
 let currentFlushPromise: Promise&lt;void&gt; | null = null;
 let currentPreFlushParentJob: SchedulerJob | null = null;
 const resolvedPromise: Promise&lt;any&gt; = Promise.resolve();
@@ -1097,7 +1094,7 @@ function flushJobs(seen?: CountMap) {
     for (flushIndex = 0; flushIndex &lt; queue.length; flushIndex++) {
       const job = queue[flushIndex];
       if (job) {
-        // 将 job 放到 try...catch... 里执行
+        // 将 job 放到 try...catch 里执行
         callWithErrorHandling(job, null, ErrorCodes.SCHEDULER);
       }
     }
@@ -1562,7 +1559,7 @@ function add(
    * 如果当前运行时环境支持微任务并且火狐版本&lt;=53
    * 内部元素点击事件触发 patch、外层元素的事件处理函数在 patch 期间又被触发
    * 原因是浏览器在事件冒泡期间触发了微任务
-   * 解决方法是在绑定处理程序的时候，存一个时间戳；
+   * 解决方法是在绑定处理程序的时候，存一个时间戳
    * 当事件触发时 event.timeStamp 大于之前的事件戳时，handler 才能被触发
    */
   if (useMicrotaskFix) {
@@ -1618,7 +1615,7 @@ export default {
   create: updateDOMListeners,
   update: updateDOMListeners
 };
-// 把 fns 放在 try...catch... 里调用
+// 把 fns 放在 try...catch 里调用
 export function createFnInvoker(fns: Function | Array&lt;Function&gt;, vm): Function {
   function invoker() {
     const fns = invoker.fns;
@@ -2223,7 +2220,7 @@ function registerKeepAliveHook(
     }
   }
 }
-</code></pre><h3 id=computed-2-x>computed 2.x</h3><p>computed 是定义在 vm 上的特殊 getter，computedWatcher 在创建的时候会将 dirty 和 lazy 属性设置为 true；当 computed 的值被访问，触发 getter，computedGetter 会调用 watcher.evaluate 进行求值。</p><pre><code class=language-ts>export function initState (vm: Component) {
+</code></pre><h3 id=computed-2-x>computed 2.x</h3><p>computed 是定义在 vm 上的特殊 getter，computedWatcher 在创建的时候会将 dirty 和 lazy 属性设置为 true；当 computed 的值被访问，触发 computedGetter，computedGetter 会调用 watcher.evaluate 进行求值。</p><pre><code class=language-ts>export function initState (vm: Component) {
   // ...
   if (opts.computed) initComputed(vm, opts.computed)
   // ...
@@ -2278,6 +2275,7 @@ function createComputedGetter(key) {
         watcher.evaluate();
       }
       if (Dep.target) {
+        // 依赖收集
         watcher.depend();
       }
       return watcher.value;
@@ -2319,6 +2317,7 @@ class ComputedRefImpl&lt;T&gt; {
     this.effect = effect(getter, {
       // 由于 lazy 为 true，effect 不会先执行一遍，而是等到 computedGetter 被访问时，才会运行 effect
       lazy: true,
+      // 每当依赖更新，都会调用 scheduler，将 _dirty 置为 true，等待 getter 再次求值
       scheduler: () =&gt; {
         if (!this._dirty) {
           // 数据“脏”了
@@ -5604,6 +5603,7 @@ function doWatch(
   };
   // 初始值是：[] 或 {}
   let oldValue = isArray(source) ? [] : INITIAL_WATCHER_VALUE;
+  // flush:sync
   const job: SchedulerJob = () =&gt; {
     if (!runner.active) {
       return;
@@ -5639,8 +5639,10 @@ function doWatch(
   if (flush === 'sync') {
     scheduler = job;
   } else if (flush === 'post') {
+    // flush:post
     scheduler = () =&gt; queuePostRenderEffect(job, instance &amp;&amp; instance.suspense);
   } else {
+    // flush:pre
     scheduler = () =&gt; {
       if (!instance || instance.isMounted) {
         // 如果实例不存在或者实例已经挂载
@@ -5656,6 +5658,7 @@ function doWatch(
     lazy: true,
     onTrack,
     onTrigger,
+    // 根据 Options 的不同，scheduler 有三种不同的取值
     scheduler
   });
   if (instance) {

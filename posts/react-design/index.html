@@ -48,7 +48,6 @@ function legacyRenderSubtreeIntoContainer(
         /**
          * getPublicRootInstance 会通过 fiberRoot 访问 rootFiberNode
          * 如果 rootFiberNode 没有子节点，返回 null
-         * 如果 rootFiberNode 子节点是平台组件
          * 否则返回 rootFiberNode 子节点的 stateNode
          * 总之就是返回一个非 rootFiberNode 的组建实例
          */
@@ -89,14 +88,14 @@ function createRootImpl(
   container.__reactContainer$ = root.current;
   /**
    * 获取应用挂载的 DOM 的 nodeType，nodeType 都有：
-   * Node.ELEMENT_NODE                      1   元素节点
-   * Node.TEXT_NODE                         3   文字
-   * Node.CDATA_SECTION_NODE                4   &lt;!CDATA[[ … ]]&gt;
-   * Node.PROCESSING_INSTRUCTION_NODE       7   &lt;?xml-stylesheet ... ?&gt;
-   * Node.COMMENT_NODE                      8   注释
-   * Node.DOCUMENT_NODE                     9   Document
-   * Node.DOCUMENT_TYPE_NODE                10  &lt;!DOCTYPE html&gt;
-   * Node.DOCUMENT_FRAGMENT_NODE            11  DocumentFragment
+   * Node.ELEMENT_NODE                      1     元素节点
+   * Node.TEXT_NODE                         3     文字
+   * Node.CDATA_SECTION_NODE                4     &lt;!CDATA[[ … ]]&gt;
+   * Node.PROCESSING_INSTRUCTION_NODE       7     &lt;?xml-stylesheet ... ?&gt;
+   * Node.COMMENT_NODE                      8     注释
+   * Node.DOCUMENT_NODE                     9     Document
+   * Node.DOCUMENT_TYPE_NODE                10    &lt;!DOCTYPE html&gt;
+   * Node.DOCUMENT_FRAGMENT_NODE            11    DocumentFragment
    */
   const rootContainerElement =
     container.nodeType === COMMENT_NODE ? container.parentNode : container;
@@ -115,7 +114,7 @@ function createRootImpl(
    *    a. dispatchDiscreteEvent 离散事件
    *    b. dispatchUserBlockingUpdate 用户阻塞事件
    *    c. dispatchEvent 连续事件
-   * 2. 对于“touchstart”、“touchmove”、“wheel”三个事件，isPassive = true（提前告知浏览器，我没有阻止默认行为，不要害怕）
+   * 2. 对于“touchstart”、“touchmove”、“wheel”三个事件，isPassive=true（提前告知浏览器，我没有阻止默认行为，不要害怕）
    * 3. 根据 isCapture 和 isPassive 将事件绑定分发给了四个函数 addEvent[Bubble/Capture]Listener[WithPassiveFlag]
    * 4. 调用原生 API：addEventListener 和 removeEventListener 进行事件的绑定和移除
    * 总的来说，React 会根据事件 isCapture、isPassive 和优先级，将事件绑定到合适的 target 上
@@ -275,12 +274,11 @@ export function updateContainer(
      * 接收到在渲染过程中的树的更新，标记 fiberRoot 上存在交叉更新工作
      * 除非 deferRenderPhaseUpdateToNextBatch 标志关闭并且这是 render 阶段更新
      * 在这种情况下，出于向后兼容的原因，我们不会将 render  阶段更新视为交错处理
-     * ？？？
      */
     workInProgressRootUpdatedLanes = workInProgressRootUpdatedLanes | lane;
   }
   /**
-   * 获取 currentPriorityLevel 的值和 Scheduler_*Priority 做对比；获取当前优先级：
+   * 获取 currentPriorityLevel 的值和 Scheduler_*Priority 做对比；获取当前优先级
    * ImmediatePriority ||
    * UserBlockingPriority||
    * NormalPriority ||
@@ -313,7 +311,6 @@ export function updateContainer(
          * 这有意在 scheduleUpdateOnFiber 中（而不是 scheduleCallbackForFiber 中）
          * 以保留 schedule 回调而不立即执行它的能力
          * 我们只对用户发起的更新执行此操作，以保留遗留模式的历史行为
-         * ？？？
          */
         resetRenderTimer();
         flushSyncCallbackQueue();
@@ -323,7 +320,7 @@ export function updateContainer(
     // 计划离散更新，但仅在它不是同步的情况下
     if (
       (executionContext &amp; DiscreteEventContext) !== NoContext &amp;&amp;
-      // 只有用户阻塞或更高优先级的更新才被视为离散的，即使在离散事件中也是如此？？？
+      // 只有用户阻塞或更高优先级的更新才被视为离散的
       (priorityLevel === UserBlockingSchedulerPriority ||
         priorityLevel === ImmediateSchedulerPriority)
     ) {
@@ -418,7 +415,7 @@ export function updateContainer(
   }
   return newTask;
 }
-</code></pre><h3 id=reconciler-render-阶段-生成-wip-收集要更新的节点>reconciler（render 阶段，生成 WIP，收集要更新的节点）</h3><p>通过组件返回的 React 元素和 current 树构建 workInProgress 树，找出前后变化并打上<strong>标记</strong>，将所有变化收集到 effectList 链表（链表对异步友好的；链表在循环时不用每次都进入递归函数，重新生成执行上下文，变量对象，激活对象，性能比递归好）里。</p><ul><li><p>current 与 workInProgress：</p><ul><li>在 React 应用中最多会同时存在两棵 fiber 树，current 树对应当前渲染完成的视图；当状态更新后会在内存中构建 workInProgress 树；</li><li>当 fiberRoot 的 current 指针指向 workInProgress 时，workInProgress 树也就成为了 current 树；</li><li>每次状态更新都会在内存中构建 workInProgress 树，应用通过 current 与 workInProgress 的替换完成更新；</li><li>current 树的节点与 workInProgress 树的节点通过自身 alternate 指向对方。</li></ul></li><li><p>应用 mount（首次渲染）时：</p><ul><li>首次执行 ReactDOM.render 会创建 fiberRoot（应用根节点）和 rootFiber（组件树根节点）；</li><li>fiberRoot 有两个指针，current 指向 current 树，finishedWork 指向 workInProgress 树；</li><li>多次调用 ReactDOM.render 渲染不同的组件树，他们会拥有不同的 rootFiber；但是 fiberRoot 只有一个；</li><li>fiberRoot 的 current 指针会指向当前页面上已渲染内容对应 fiber 树（current）；</li><li>首次渲染时页面没有内容，current 树为空；接下来会在内存中创建 fiberNode，构成 workInProgress；</li><li>workInProgress 会在 commit 阶段同步渲染到视图中。</li></ul></li><li><p>应用 update（状态变化）时：</p><ul><li>应用重新进入 render 阶段，调用组件 render 方法，重新构建 workInProgress；</li><li>workInProgress 会和当前的 current 进行比较，并在需要改变的节点打上<strong>标记</strong>；</li><li>根据收集到的标记，更新视图。</li></ul></li></ul><h3 id=renderer-commit-阶段-提交更新任务>renderer（commit 阶段，提交更新任务）</h3><p>遍历 effectList，将 effect 更新到视图上（ReactArt、ReactDOM、ReactNative）；这个阶段是同步的，不能被打断：</p><pre><code class=language-ts>function commitRoot(root) {
+</code></pre><h3 id=reconciler-render-阶段-生成-wip-收集要更新的节点>reconciler（render 阶段，生成 WIP，收集要更新的节点）</h3><p>通过组件返回的 React 元素和 current 树构建 workInProgress 树，找出前后变化并打上<strong>标记</strong>，将所有变化收集到 effectList 链表（链表对异步友好的；链表在循环时不用每次都进入递归函数，重新生成执行上下文，变量对象，激活对象，性能比递归好）里。</p><ul><li><p>current 与 workInProgress：</p><ul><li>在 React 应用中最多会同时存在两棵 fiber 树，current 树对应当前渲染完成的视图；当状态更新后会在内存中构建 workInProgress 树；</li><li>当 fiberRoot 的 current 指向 workInProgress 时，workInProgress 树也就成为了 current 树；</li><li>每次状态更新都会在内存中构建 workInProgress 树，应用通过 current 与 workInProgress 的替换完成更新；</li><li>current 树的节点与 workInProgress 树的节点通过自身 alternate 指向对方。</li></ul></li><li><p>应用 mount（首次渲染）时：</p><ul><li>首次执行 ReactDOM.render 会创建 fiberRoot（应用根节点）和 rootFiber（组件树根节点）；</li><li>fiberRoot 有两个指针，current 指向 current 树，finishedWork 指向 workInProgress 树；</li><li>多次调用 ReactDOM.render 渲染不同的组件树，他们会拥有不同的 rootFiber；但是 fiberRoot 只有一个；</li><li>首次渲染时页面没有内容，current 树为空；接下来会在内存中创建 fiberNode，构成 workInProgress；</li><li>workInProgress 会在 commit 阶段同步更新到视图中。</li></ul></li><li><p>应用 update（状态变化）时：</p><ul><li>应用重新进入 render 阶段，调用组件 render 方法，重新构建 workInProgress；</li><li>构建 workInProgress 的过程中会和 current 进行比较，并在需要改变的节点打上<strong>标记</strong>；</li><li>根据收集到的标记，更新视图。</li></ul></li></ul><h3 id=renderer-commit-阶段-提交更新任务>renderer（commit 阶段，提交更新任务）</h3><p>遍历 effectList，将 effect 更新到视图上（ReactArt、ReactDOM、ReactNative）；这个阶段是同步的，不能被打断：</p><pre><code class=language-ts>function commitRoot(root) {
   const renderPriorityLevel = getCurrentPriorityLevel();
   runWithPriority(
     ImmediateSchedulerPriority,
@@ -469,7 +466,7 @@ function commitRootImpl(root, renderPriorityLevel) {
    * 将 effectList 赋值给 firstEffect
    * 由于每个 fiber 的 effectList 只包含他的子孙节点
    * 所以根节点如果有 effectTag 则不会被包含进来
-   * 所以，这里将有 effectTag 的根节点插入到 effectList 尾部
+   * 所以这里将有 effectTag 的根节点插入到 effectList 尾部
    * 这样才能保证有 effect 的 fiber 都在 effectList 中
    */
   let firstEffect;
@@ -502,8 +499,10 @@ function commitRootImpl(root, renderPriorityLevel) {
     /**
      * commit 阶段被分成了几个阶段，每个阶段都会遍历一遍 effectList
      * 所有的 MutationEffects 都会在所有的 LayoutEffects 前执行
-     * 第一个阶段『before mutation』：在修改之前，读取主树的 state
+     * 第一个阶段『before mutation』：
+     * 在修改之前，读取主树的 state
      * 调用 getSnapshotBeforeUpdate
+     * 调度 useEffect
      */
     focusedInstanceHandle = prepareForCommit(root.containerInfo);
     shouldFireAfterActiveInstanceBlur = false;
@@ -518,7 +517,12 @@ function commitRootImpl(root, renderPriorityLevel) {
     } while (nextEffect !== null);
     // 不再需要追踪激活的 fiber 实例
     focusedInstanceHandle = null;
-    // 第二个阶段『mutation』：修改主树
+    /**
+     * 第二个阶段『mutation』：
+     * 更新 DOM
+     * 调用 componentWillUnmount
+     * 调用 useLayoutEffect 销毁回调
+     */
     nextEffect = firstEffect;
     do {
       try {
@@ -533,14 +537,15 @@ function commitRootImpl(root, renderPriorityLevel) {
     }
     resetAfterCommit(root.containerInfo);
     /**
-     * commit 之后，work-in-progress 树就成为了 current 树
-     * 这是为了在调用 componentWillUnmount 期间，上一棵树仍然是 current 树
+     * commit 之后，WIP 树就成为了 current 树
+     * 这是为了在调用 componentWillUnmount 期间，还可以获取卸载前组件的信息
      * 也是为了在下一个阶段之前，在 componentDidMount/Update 调用期间，WIP 是 current 树
      */
     root.current = finishedWork;
     /**
-     * 第三个阶段『layout』，调用主树修改之后需要执行的副作用
-     * 历史遗留原因，类组件的生命周期也会在这里调用
+     * 第三个阶段『layout』：
+     * 调用主树修改之后需要执行的副作用 setState 第二个参数
+     * 历史遗留原因，类组件的生命周期也会在这里调用 componentDidMount/Update
      */
     nextEffect = firstEffect;
     do {
@@ -565,6 +570,7 @@ function commitRootImpl(root, renderPriorityLevel) {
       setCurrentUpdateLanePriority(previousLanePriority);
     }
   } else {
+    // effectList 中没有 effect，直接将 WIP 树切换为 current 树
     root.current = finishedWork;
   }
   const rootDidHavePassiveEffects = rootDoesHavePassiveEffects;
@@ -647,9 +653,9 @@ function commitRootImpl(root, renderPriorityLevel) {
   flushSyncCallbackQueue();
   return null;
 }
-</code></pre><ul><li>beforeMutation（渲染前）：遍历 effectList 并调用 commitBeforeMutationEffects；调用 getSnapshotBeforeUpdate；异步调用 useEffect：</li></ul><p>&nbsp;</p><pre><code class=language-ts>/**
+</code></pre><ul><li>beforeMutation（渲染前）：遍历 effectList 并调用 commitBeforeMutationEffects；调用 getSnapshotBeforeUpdate；调度 useEffect：</li></ul><p>&nbsp;</p><pre><code class=language-ts>/**
  * 1. 同步调用 getSnapshotBeforeUpdate
- * 2. 调度 useEffect
+ * 2. 异步调度 useEffect
  */
 function commitBeforeMutationEffects() {
   while (nextEffect !== null) {
@@ -660,15 +666,17 @@ function commitBeforeMutationEffects() {
     const flags = nextEffect.flags;
     if ((flags &amp; Snapshot) !== NoFlags) {
       // commitBeforeMutationEffectOnFiber 会调用 getSnapshotBeforeUpdate
-      // instance.getSnapshotBeforeUpdate(
+      // snapshot = instance.getSnapshotBeforeUpdate(
       //   finishedWork.elementType === finishedWork.type
       //     ? prevProps
       //     : resolveDefaultProps(finishedWork.type, prevProps),
       //   prevState
       // );
+      // 将返回值存储在内部属性上，方便 componentDidUpdate 获取
+      // instance.__reactInternalSnapshotBeforeUpdate = snapshot;
       commitBeforeMutationEffectOnFiber(current, nextEffect);
     }
-    // 调度 useEffect
+    // 异步调度 useEffect
     if ((flags &amp; Passive) !== NoFlags) {
       if (!rootDoesHavePassiveEffects) {
         rootDoesHavePassiveEffects = true;
@@ -803,7 +811,7 @@ function commitMutationEffects(root, renderPriorityLevel) {
         /**
          * 递归调用 fiber 及其子孙 fiber 中 tag === ClassComponent 的 componentWillUnmount 生命周期钩子，从页面移除 fiber 对应的 DOM
          * 解绑 ref
-         * 调度 useEffect 的销毁函数
+         * 调度 useLayoutEffect 的销毁函数
          */
         commitDeletion(root, nextEffect, renderPriorityLevel);
         break;
@@ -813,9 +821,10 @@ function commitMutationEffects(root, renderPriorityLevel) {
     nextEffect = nextEffect.nextEffect;
   }
 }
-</code></pre><p>&nbsp;</p><ul><li>layout（渲染后）：同步调用 componentDidMount/useLayoutEffect。</li></ul><p>&nbsp;</p><pre><code class=language-ts>/**
+</code></pre><p>&nbsp;</p><ul><li>layout（渲染后）：同步调用 componentDidMount/Update。</li></ul><p>&nbsp;</p><pre><code class=language-ts>/**
  * 1. 调用 commitLayoutEffectOnFiber(commitLifeCycles) 执行相应的生命周期函数
  * 2. 调用 commitAttachRef 更新 ref
+ * 3. 调用 setState 第二个参数
  */
 function commitLayoutEffects(root, committedLanes) {
   while (nextEffect !== null) {
@@ -858,8 +867,10 @@ function commitLifeCycles(
       /**
        * 在 mutation 阶段，LayoutEffects 已经销毁
        * 酱紫是为了防止兄弟组件的 Effects 相互干扰
+       * 调用 useLayoutEffect
        */
       commitHookEffectListMount(HookLayout | HookHasEffect, finishedWork);
+      // 调度 useEffect
       schedulePassiveEffects(finishedWork);
       return;
     }
@@ -867,6 +878,7 @@ function commitLifeCycles(
       const instance = finishedWork.stateNode;
       if (finishedWork.flags &amp; Update) {
         if (current === null) {
+          // 执行 componentDidMount
           instance.componentDidMount();
         } else {
           const prevProps =
@@ -874,6 +886,7 @@ function commitLifeCycles(
               ? current.memoizedProps
               : resolveDefaultProps(finishedWork.type, current.memoizedProps);
           const prevState = current.memoizedState;
+          // 执行 componentDidUpdate
           instance.componentDidUpdate(
             prevProps,
             prevState,
@@ -881,6 +894,7 @@ function commitLifeCycles(
           );
         }
       }
+      // 执行 setState 第二个参数
       const updateQueue: UpdateQueue | null = finishedWork.updateQueue;
       if (updateQueue !== null) {
         commitUpdateQueue(finishedWork, updateQueue, instance);
@@ -1053,8 +1067,8 @@ function reconcileChildFibers(
   lanes
 ) {
   /**
-   * 这个算法不能通过从两端搜索来优化，和 newChildren 中每个组件相比较的是 currentFiber；
-   * newChildren[0] 与 fiber 比较，newChildren[1] 与 fiber.sibling 比较。
+   * 这个算法不能通过从两端搜索来优化，和 newChildren 中每个组件相比较的是 currentFiber
+   * newChildren[0] 与 fiber 比较，newChildren[1] 与 fiber.sibling 比较
    */
   let resultingFirstChild = null;
   let previousNewFiber = null;
@@ -1076,7 +1090,7 @@ function reconcileChildFibers(
       newChildren[newIdx],
       lanes
     );
-    // newChildren 与 oldFiber 同时遍历完了？？？
+    // newChildren 与 oldFiber 同时遍历完了
     if (newFiber === null) {
       if (oldFiber === null) {
         oldFiber = nextOldFiber;
@@ -1154,7 +1168,7 @@ function reconcileChildFibers(
   }
   return resultingFirstChild;
 }
-</code></pre><h3 id=fiber>fiber</h3><p>没有 fiber 以前，reconciler 采用<strong>递归</strong>的方式创建虚拟 DOM，这个过程是不能中断的；如果组件树的层级很深，递归会占用线程很多时间，阻塞渲染造成卡顿。为了解决这个问题，React 引入 fiber，重构为了异步的可中断更新：</p><ul><li><p>fiber 的含义：</p><ul><li>递归的数据保存在调用栈中，所以被称为 StackReconciler；基于 fiber 的 Reconciler，被称为 FiberReconciler；</li><li>作为静态的数据结构来说，每个 fiber 节点对应一个 React 元素，保存了该组件的类型（函数组件/类组件/原生组件...）、对应的 DOM 节点等信息；</li><li>作为动态的工作单元来说，每个 fiber 节点保存了本次更新中该组件改变的状态、要执行的工作（需要被删除/被插入页面中/被更新...）。</li></ul></li><li><p>fiber 的目标：</p><ul><li>能够把可中断的任务切片处理；</li><li>能够调整优先级，重置并复用任务；</li><li>能够在父元素与子元素之间交错处理；</li><li>能够在 render() 中返回多个元素；</li><li>更好地支持错误边界。</li></ul></li><li><p>fiberNode 的生成：通过 createFiber 工厂函数生成 fiberNode 实例</p></li></ul><p>&nbsp;</p><pre><code class=language-ts>const createFiber = function (
+</code></pre><h3 id=fiber>fiber</h3><p>没有 fiber 以前，reconciler 采用<strong>递归</strong>的方式创建虚拟 DOM，这个过程是不能中断的；如果组件树的层级很深，递归会占用线程很多时间，阻塞渲染造成卡顿。为了解决这个问题，React 引入 fiber，重构为了异步的可中断更新：</p><ul><li><p>fiber 的含义：</p><ul><li>递归的数据保存在调用栈中，所以被称为 StackReconciler；基于 fiber 的 Reconciler，被称为 FiberReconciler；</li><li>作为静态的数据结构来说，每个 fiber 节点对应一个 React 元素，保存了该组件的类型（函数组件/类组件/原生组件...）、对应的 DOM 节点等信息；</li><li>作为动态的工作单元来说，每个 fiber 节点保存了本次更新中该组件改变的状态、要执行的工作（需要被删除/被插入页面中/被更新...）。</li></ul></li><li><p>fiber 的目标：</p><ul><li>能够把可中断的任务切片处理；</li><li>能够调整优先级，重置并复用任务；</li><li>能够在父元素与子元素之间交错处理；</li><li>能够在 render 中返回多个元素；</li><li>更好地支持错误边界。</li></ul></li><li><p>fiberNode 的生成：通过 createFiber 工厂函数生成 fiberNode 实例</p></li></ul><p>&nbsp;</p><pre><code class=language-ts>const createFiber = function (
   tag: WorkTag,
   pendingProps: mixed,
   key: null | string,
@@ -1431,7 +1445,7 @@ function beginWork(
     );
   } else {
     /**
-     * update 阶段，diff 两棵树上的 fiberNode，进行复用（diff 算法）
+     * update 阶段，diff 两棵树上的 fiberNode，进行复用
      * reconcileChildFibers 会生成带有 effectTag 属性的 fiberNode
      * 如果当前的 current 子节点和 workInProgress 中的相同
      * 这说明我们还没有开始对这些子节点进行任何操作
@@ -1445,9 +1459,7 @@ function beginWork(
     );
   }
 }
-/**
- * 通过 shouldTrackSideEffects 来决定是否打上 effectTag
- */
+// 通过 shouldTrackSideEffects 来决定是否打上 effectTag
 export const mountChildFibers = ChildReconciler(false);
 export const reconcileChildFibers = ChildReconciler(true);
 </code></pre><p>&nbsp;</p><ul><li>effectTag：在 commit 阶段告知 renderer 对视图进行何种操作；在首次渲染时，只有 rootFiber 会被打上 Placement，在 commit 阶段进行一次插入操作；</li></ul><p>&nbsp;</p><pre><code class=language-ts>export const Placement = /*                    */ 0b000000000000000010;
@@ -1584,7 +1596,7 @@ export function renderWithHooks&lt;Props, SecondArg&gt;(
   currentlyRenderingFiber = workInProgress;
   /**
    * 类组件中，memoizedState 存放 state
-   * 函数组件中，以链表的形式存放 hooks
+   * 函数组件中，memoizedState 以链表的形式存放 hooks
    */
   workInProgress.memoizedState = null;
   workInProgress.updateQueue = null;
@@ -2061,7 +2073,7 @@ export const LegacyHiddenComponent = 24;
 </code></pre><h3 id=状态更新>状态更新</h3><p><img src=/react-design/set-state.png style="margin:0 auto;display:block"></p><pre><code class=language-ts>// 初始化更新队列
 export function initializeUpdateQueue&lt;State&gt;(fiber: Fiber): void {
   /**
-   * 假设 fiber 刚完成 commit 阶段，
+   * 假设 fiber 刚完成 commit 阶段
    * 有两个优先级很低的 update（u1、u2）在 render 阶段没有处理
    * u1、u2 就成为了下次更新的 baseUpdate
    * u1.next = u2，fiber.updateQueue.baseUpdate = u1 -&gt; u2
@@ -2436,7 +2448,7 @@ function getStateFromUpdate&lt;State&gt;(
 }
 </code></pre><p>&nbsp;</p><ul><li><p>legacy 模式：</p><pre><code class=language-jsx>ReactDOM.render(&lt;App /&gt;, rootNode);
 </code></pre><ul><li>在同步操作中，setState 是异步的；</li><li>在异步操作中，setState 是同步的；</li><li>创建的任务/更新均为同样的优先级。</li></ul></li><li><p>concurrent 模式：</p><pre><code class=language-jsx>ReactDOM.createRoot(rootNode).render(&lt;App /&gt;);
-</code></pre><ul><li>更急迫的更新可以“<strong>中断</strong>”已经开始的渲染；</li><li>创建的任务/更新有不同的优先级；</li><li>渲染过程可以被打断；</li><li>setState 是异步。</li></ul></li></ul><h3 id=生命周期>生命周期</h3><p>reconciler 阶段（render 阶段）；生成新的 fiber 树并收集本次<strong>要更新</strong>的点；对应的钩子为：</p><ul><li>constructor</li><li>static getDerivedStateFromProps</li><li>static getDerivedStateFromError（发生错误的组件不会触发自身的钩子）</li><li>shouldComponentUpdate</li><li>render</li></ul><p>commit 阶段（renderer 阶段）；将<strong>要更新</strong>的点 patch 到 DOM 上并切换 fiber 树；对应的钩子为：</p><ul><li>getSnapshotBeforeUpdate</li><li>componentDidMount</li><li>componentDidUpdate</li><li>componentDidCatch（发生错误的组件不会触发自身的钩子）</li><li>componentWillUnmount</li></ul><p><img src=/react-design/lifecycle.png alt="Local Image"></p><p><a href=https://zhuanlan.zhihu.com/p/37095662#为什么要对生命周期钩子大换血>为什么要对生命周期钩子大换血？（来自“司徒正美”）</a></p><p>组件在挂载过程中会调三次钩子（constructor、componentWillMount、render），组件在更新过程中会调四次钩子（componentWillReceiveProps、shouldComponentUpdate、componentWillUpdate、render），总不能每个方法都用 try...catch... 包起来，这样会性能很差。而 constructor、render 是不可避免的，于是对三个 willXXX 动刀了。</p><p>在早期版本中，componentWillMount 与 componentWillReceiveProps 会做内部优化，执行多次 setState 都会延后到 render 时进行合并处理。因此用户就肆意 setState 了。这些 willXXX 还可以让用户任意操作 DOM。操作 DOM 会可能 reflow，这是官方不愿意看到的。于是官方推出了 getDerivedStateFromProps，让你在 render 设置新 state，你主要返回一个新对象，它就主动帮你 setState。由于这是一个静态方法，你不能操作 instance，这就阻止了你多次操作 setState。由于没有 instance，也就没有 instance.refs.xxx，你也没有机会操作 DOM 了。这样一来，getDerivedStateFromProps 的逻辑应该会很简单，这样就不会出错，不会出错，就不会打断 DFS 过程。</p><p>getDerivedStateFromProps 取代了原来的 componentWillMount 与 componentWillReceiveProps 方法，而 componentWillUpdate 本来就是可有可无，以前完全是为了对称好看。在即使到来的异步更新中，render 阶段可能执行多次，才执行一次 commit；这样也会导致 willXXX 钩子执行多次，违反它们的语义，它们的废弃是不可逆转的。在进入 commit 阶段时，组件多了一个新钩子叫 getSnapshotBeforeUpdate，它与 commit 阶段的钩子一样只执行一次。如果出错呢，在 componentDidMount/Update 后，我们可以使用 componentDidCatch 方法。</p><p>render 阶段的钩子都不应该操作 DOM，最好也不要 setState，我们称之为<strong>轻量钩子</strong>；commit 阶段的钩子则对应称之为<strong>重量钩子</strong>。</p><ul><li>constructor</li></ul><p>&nbsp;</p><pre><code class=language-ts>/**
+</code></pre><ul><li>更急迫的更新可以<strong>中断</strong>已经开始的渲染；</li><li>创建的任务/更新有不同的优先级；</li><li>渲染过程可以被打断；</li><li>setState 是异步。</li></ul></li></ul><h3 id=生命周期>生命周期</h3><p>reconciler 阶段（render 阶段）；生成新的 fiber 树并收集本次<strong>要更新</strong>的点；对应的钩子为：</p><ul><li>constructor</li><li>static getDerivedStateFromProps</li><li>static getDerivedStateFromError（发生错误的组件不会触发自身的钩子）</li><li>shouldComponentUpdate</li><li>render</li></ul><p>commit 阶段（renderer 阶段）；将<strong>要更新</strong>的点 patch 到 DOM 上并切换 fiber 树；对应的钩子为：</p><ul><li>getSnapshotBeforeUpdate</li><li>componentDidMount</li><li>componentDidUpdate</li><li>componentDidCatch（发生错误的组件不会触发自身的钩子）</li><li>componentWillUnmount</li></ul><p><img src=/react-design/lifecycle.png alt="Local Image"></p><p><a href=https://zhuanlan.zhihu.com/p/37095662#为什么要对生命周期钩子大换血>为什么要对生命周期钩子大换血？（来自“司徒正美”）</a></p><p>组件在挂载过程中会调三次钩子（constructor、componentWillMount、render），组件在更新过程中会调四次钩子（componentWillReceiveProps、shouldComponentUpdate、componentWillUpdate、render），总不能每个方法都用 try...catch 包起来，这样会性能很差。而 constructor、render 是不可避免的，于是对三个 willXXX 动刀了。</p><p>在早期版本中，componentWillMount 与 componentWillReceiveProps 会做内部优化，执行多次 setState 都会延后到 render 时进行合并处理。因此用户就肆意 setState 了。这些 willXXX 还可以让用户任意操作 DOM。操作 DOM 会可能 reflow，这是官方不愿意看到的。于是官方推出了 getDerivedStateFromProps，让你在 render 设置新 state，你主要返回一个新对象，它就主动帮你 setState。由于这是一个静态方法，你不能操作 instance，这就阻止了你多次操作 setState。由于没有 instance，也就没有 instance.refs.xxx，你也没有机会操作 DOM 了。这样一来，getDerivedStateFromProps 的逻辑应该会很简单，这样就不会出错，不会出错，就不会打断 DFS 过程。</p><p>getDerivedStateFromProps 取代了原来的 componentWillMount 与 componentWillReceiveProps 方法，而 componentWillUpdate 本来就是可有可无，以前完全是为了对称好看。在即使到来的异步更新中，render 阶段可能执行多次，才执行一次 commit；这样也会导致 willXXX 钩子执行多次，违反它们的语义，它们的废弃是不可逆转的。在进入 commit 阶段时，组件多了一个新钩子叫 getSnapshotBeforeUpdate，它与 commit 阶段的钩子一样只执行一次。如果出错呢，在 componentDidMount/Update 后，我们可以使用 componentDidCatch 方法。</p><p>render 阶段的钩子都不应该操作 DOM，最好也不要 setState，我们称之为<strong>轻量钩子</strong>；commit 阶段的钩子则对应称之为<strong>重量钩子</strong>。</p><ul><li>constructor</li></ul><p>&nbsp;</p><pre><code class=language-ts>/**
  * 以下情况会调用 constructClassInstance（构建类组件实例）：
  * 1. updateClassComponent（如果 instance 为 null）
  * 2. mountIncompleteClassComponent
@@ -2469,10 +2481,10 @@ function constructClassInstance(
       ? instance.state
       : null);
   /**
-   * 实例需要访问到 Fiber，以便可以安排更新
+   * 实例需要访问到 fiber，以便可以安排更新
    * instance.updater = classComponentUpdater
    * workInProgress.stateNode = instance
-   * instance._reactInternals = workInProgress;
+   * instance._reactInternals = workInProgress
    */
   adoptClassInstance(workInProgress, instance);
   /**
@@ -2507,9 +2519,9 @@ export function applyDerivedStateFromProps(
       : Object.assign({}, prevState, partialState);
   // 保存在 workInProgress 中
   workInProgress.memoizedState = memoizedState;
-  // 更新队列空了之后，将新的状态持久化到基本状态。
+  // 更新队列空了之后，将新的状态持久化到基本状态
   if (workInProgress.lanes === NoLanes) {
-    // 对于类，队列始终为非 null？？？
+    // 对于类，队列始终为非 null
     const updateQueue: UpdateQueue&lt;any&gt; = (workInProgress.updateQueue: any);
     updateQueue.baseState = memoizedState;
   }
@@ -2589,7 +2601,7 @@ function finishClassComponent(
   ) {
     /**
      * 如果捕获到错误，但是没有 getDerivedStateFromError 钩子，卸载所有子组件
-     * componentDidCatch 将安排更新来重新渲染 fallback？？？
+     * componentDidCatch 将安排更新来重新渲染 fallback
      */
     nextChildren = null;
   } else {
@@ -2711,7 +2723,7 @@ function commitLifeCycles(
 </code></pre><p>&nbsp;</p><ul><li>componentWillUnmount</li></ul><p>&nbsp;</p><pre><code class=language-ts>/**
  * 组件卸载时会调用 commitUnmount，其中包含了不同类型的组件的卸载方式
  * 对于 ClassComponent 会先解绑 ref（safelyDetachRef）再调用 safelyCallComponentWillUnmount
- * safelyCallComponentWillUnmount 会在 try...catch... 里调用 callComponentWillUnmountWithTimer
+ * safelyCallComponentWillUnmount 会在 try...catch 里调用 callComponentWillUnmountWithTimer
  */
 const callComponentWillUnmountWithTimer = function (current, instance) {
   instance.props = current.memoizedProps;
