@@ -1,0 +1,939 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no,user-scalable=no"><meta name=author content=馬腊咯稽><meta name=description content="VueRouter 2.x 源码学习"><meta name=keywords content=Vue,Router><link rel=canonical href=https://vikingama.github.io/posts/vue-router/><link rel="shortcut icon" href=https://vikingama.github.io/images/favicon.ico><link rel=stylesheet href=https://vikingama.github.io/css/zozo.css><link rel=stylesheet href=https://vikingama.github.io/css/highlight.css><link rel=stylesheet href=https://vikingama.github.io/css/remixicon.css><title>VueRouter 2.x 源码学习 &middot; 看不见我的美 · 是你瞎了眼</title></head><body><div class="main animated"><div class="nav_container animated fadeInDown"><div class=site_nav id=site_nav><ul><li><a href=/>首页</a></li><li><a href=/posts/>归档</a></li><li><a href=/tags/>标签</a></li><li><a href=/inspires/>启发</a></li><li><a href=/command/>命令</a></li><li><a href=/about/>关于</a></li></ul></div><div class=menu_icon><a id=menu_icon><i class=remixicon-links-line></i></a></div></div><div class="header animated fadeInDown"><div class=site_title_container><div class=site_title><h1><a href=https://vikingama.github.io><img style=width:65px;height:auto;vertical-align:top src=https://vikingama.github.io/images/avatar.png></a></h1></div><div class=description><p class=sub_title>看不见我的美<br>是你瞎了眼</p><div class=my_socials><a href=https://www.douban.com/people/nicknoonan title=douban target=_blank><i class=remixicon-douban-fill></i></a><a href=https://github.com/Vikingama title=github target=_blank><i class=remixicon-github-fill></i></a><a href=https://weibo.com/vikingx title=weibo target=_blank><i class=remixicon-weibo-fill></i></a><a href=https://www.zhihu.com/people/vikingama title=zhihu target=_blank><i class=remixicon-zhihu-fill></i></a><a href=https://vikingama.github.io/index.xml type=application/rss+xml title=rss target=_blank><i class=remixicon-rss-fill></i></a></div></div></div></div><div class=content><div class=post_page><div class="post animated fadeInDown"><div class="post_title post_detail_title"><h2><a href=/posts/vue-router/>VueRouter 2.x 源码学习</a></h2><span class=date>2021.01.06</span></div><div class="post_content markdown"><blockquote><p>本来以为是很简单的东西，没想到这么复杂和巧妙。</p></blockquote><h3 id=vue-use-router>Vue.use(Router)</h3><p>Vue.use 会调用 Router 的静态 install 方法。</p><pre><code class=language-ts>export let _Vue; // 别的地方有用到 _Vue.extend
+export function install(Vue) {
+  // 防止重复 install
+  if (install.installed) return;
+  install.installed = true;
+  // 保存 Vue
+  _Vue = Vue;
+  const isDef = v =&gt; v !== undefined;
+  const registerInstance = (vm, callVal) =&gt; {
+    let i = vm.$options._parentVnode;
+    if (
+      isDef(i) &amp;&amp;
+      isDef((i = i.data)) &amp;&amp;
+      isDef((i = i.registerRouteInstance))
+    ) {
+      /**
+       * 调用 vm.$options._parentVnode.data.registerRouteInstance
+       * data.registerRouteInstance 存在于 router-view 的 render 函数中
+       */
+      i(vm, callVal);
+    }
+  };
+  // 混入钩子
+  Vue.mixin({
+    beforeCreate() {
+      // new Vue({router, ...})，挂载根实例
+      if (isDef(this.$options.router)) {
+        this._routerRoot = this;
+        // 传入的 new Router({mode, routes, ...})
+        this._router = this.$options.router;
+        // 调用 _router 的 init 方法
+        this._router.init(this);
+        /**
+         * defineReactive(obj, key, val, customSetter, shallow)
+         * 将 this._route 转化为 getter/setter
+         * router.view 会访问 this._route，触发 getter
+         * 当 this._route 更新后，setter 调用，router.view 更新视图
+         */
+        Vue.util.defineReactive(this, '_route', this._router.history.current);
+      } else {
+        // 从父组件拿 _routerRoot
+        this._routerRoot = (this.$parent &amp;&amp; this.$parent._routerRoot) || this;
+      }
+      registerInstance(this, this);
+    },
+    destroyed() {
+      registerInstance(this);
+    }
+  });
+  // vm.$router = this._routerRoot._router
+  Object.defineProperty(Vue.prototype, '$router', {
+    get() {
+      return this._routerRoot._router;
+    }
+  });
+  // vm.$route = this._routerRoot._route
+  Object.defineProperty(Vue.prototype, '$route', {
+    get() {
+      return this._routerRoot._route;
+    }
+  });
+  // 注册 router-view 和 router-link
+  Vue.component('router-view', View);
+  Vue.component('router-link', Link);
+  const strats = Vue.config.optionMergeStrategies;
+  strats.beforeRouteEnter = strats.beforeRouteLeave = strats.created;
+}
+</code></pre><h3 id=vuerouter>VueRouter</h3><pre><code class=language-ts>export default class VueRouter {
+  static install: () =&gt; void;
+  static version: string;
+  app: any;
+  apps: Array&lt;any&gt;;
+  ready: boolean;
+  readyCbs: Array&lt;Function&gt;;
+  options: RouterOptions;
+  mode: string;
+  history: HashHistory | HTML5History | AbstractHistory;
+  matcher: Matcher;
+  fallback: boolean;
+  beforeHooks: Array&lt;?NavigationGuard&gt;;
+  resolveHooks: Array&lt;?NavigationGuard&gt;;
+  afterHooks: Array&lt;?AfterNavigationHook&gt;;
+  constructor(options: RouterOptions = {}) {
+    this.app = null;
+    this.apps = [];
+    this.options = options;
+    this.beforeHooks = [];
+    this.resolveHooks = [];
+    this.afterHooks = [];
+    this.matcher = createMatcher(options.routes || [], this);
+    // 默认 hash 模式
+    let mode = options.mode || 'hash';
+    this.fallback = // 不支持 history，退回 hash
+      mode === 'history' &amp;&amp; !supportsPushState &amp;&amp; options.fallback !== false;
+    if (this.fallback) {
+      mode = 'hash';
+    }
+    // 非浏览器环境使用 abstract 模式
+    if (!inBrowser) {
+      mode = 'abstract';
+    }
+    this.mode = mode;
+    // options.base 就是&quot;基路径&quot;
+    switch (mode) {
+      case 'history':
+        this.history = new HTML5History(this, options.base);
+        break;
+      case 'hash':
+        this.history = new HashHistory(this, options.base, this.fallback);
+        break;
+      case 'abstract':
+        this.history = new AbstractHistory(this, options.base);
+        break;
+      default:
+    }
+  }
+  match(raw: RawLocation, current?: Route, redirectedFrom?: Location): Route {
+    return this.matcher.match(raw, current, redirectedFrom);
+  }
+  get currentRoute(): ?Route {
+    return this.history &amp;&amp; this.history.current;
+  }
+  // 每个组件的 beforeCreate 会调用 init 方法，将当前实例传进来
+  init(app: any) {
+    // 向 this.apps 添加当前 Vue 实例
+    this.apps.push(app);
+    // 不要重复 init
+    if (this.app) {
+      return;
+    }
+    // _router.app = vm
+    this.app = app;
+    const history = this.history;
+    if (history instanceof HTML5History) {
+      /**
+       * getCurrentLocation 就是截取掉&quot;基路径&quot;后的路径
+       * url：https://router.vuejs.org/zh/api/?abc=123#hahaha，base: /zh
+       * getCurrentLocation =&gt; /api/?abc=123#hahaha
+       */
+      history.transitionTo(history.getCurrentLocation());
+    } else if (history instanceof HashHistory) {
+      // 绑定 hashchange 事件
+      const setupHashListener = () =&gt; {
+        history.setupListeners();
+      };
+      history.transitionTo(
+        /**
+         * getCurrentLocation 就是截取掉 # 后边的值
+         * url：https://router.vuejs.org/zh/api/?abc=123#hahaha，base: /zh
+         * getCurrentLocation =&gt; hahaha
+         */
+        history.getCurrentLocation(),
+        setupHashListener,
+        setupHashListener
+      );
+    }
+    /**
+     * transitionTo 的 onComplete 会调用 listen 里的函数
+     * 路由改变的时候，所有 Vue 实例里的 _route 都要改变
+     */
+    history.listen(route =&gt; {
+      this.apps.forEach(app =&gt; {
+        app._route = route;
+      });
+    });
+  }
+  beforeEach(fn: Function): Function {
+    return registerHook(this.beforeHooks, fn);
+  }
+  beforeResolve(fn: Function): Function {
+    return registerHook(this.resolveHooks, fn);
+  }
+  afterEach(fn: Function): Function {
+    return registerHook(this.afterHooks, fn);
+  }
+  onReady(cb: Function, errorCb?: Function) {
+    this.history.onReady(cb, errorCb);
+  }
+  onError(errorCb: Function) {
+    this.history.onError(errorCb);
+  }
+  push(location: RawLocation, onComplete?: Function, onAbort?: Function) {
+    this.history.push(location, onComplete, onAbort);
+  }
+  replace(location: RawLocation, onComplete?: Function, onAbort?: Function) {
+    this.history.replace(location, onComplete, onAbort);
+  }
+  go(n: number) {
+    this.history.go(n);
+  }
+  back() {
+    this.go(-1);
+  }
+  forward() {
+    this.go(1);
+  }
+  getMatchedComponents(to?: RawLocation | Route): Array&lt;any&gt; {
+    const route: any = to
+      ? to.matched
+        ? to
+        : this.resolve(to).route
+      : this.currentRoute;
+    if (!route) {
+      return [];
+    }
+    return [].concat.apply(
+      [],
+      route.matched.map(m =&gt; {
+        return Object.keys(m.components).map(key =&gt; {
+          return m.components[key];
+        });
+      })
+    );
+  }
+  resolve(
+    to: RawLocation,
+    current?: Route,
+    append?: boolean
+  ): {
+    location: Location;
+    route: Route;
+    href: string;
+    normalizedTo: Location;
+    resolved: Route;
+  } {
+    const location = normalizeLocation(
+      to,
+      current || this.history.current,
+      append,
+      this
+    );
+    const route = this.match(location, current);
+    const fullPath = route.redirectedFrom || route.fullPath;
+    const base = this.history.base;
+    const href = createHref(base, fullPath, this.mode);
+    return {
+      location,
+      route,
+      href,
+      normalizedTo: location,
+      resolved: route
+    };
+  }
+  addRoutes(routes: Array&lt;RouteConfig&gt;) {
+    this.matcher.addRoutes(routes);
+    if (this.history.current !== START) {
+      this.history.transitionTo(this.history.getCurrentLocation());
+    }
+  }
+}
+</code></pre><h3 id=basehistory>BaseHistory</h3><pre><code class=language-ts>export class History {
+  router: Router;
+  base: string;
+  current: Route;
+  pending: ?Route;
+  cb: (r: Route) =&gt; void;
+  ready: boolean;
+  readyCbs: Array&lt;Function&gt;;
+  readyErrorCbs: Array&lt;Function&gt;;
+  errorCbs: Array&lt;Function&gt;;
+  /**
+   * 需要子类去实现的方法
+   * +go: (n: number) =&gt; void;
+   * +push: (loc: RawLocation) =&gt; void;
+   * +replace: (loc: RawLocation) =&gt; void;
+   * +ensureURL: (push?: boolean) =&gt; void;
+   * +getCurrentLocation: () =&gt; string;
+   */
+  constructor(router: Router, base: ?string) {
+    this.router = router;
+    this.base = normalizeBase(base);
+    this.current = START;
+    this.pending = null;
+    this.ready = false;
+    this.readyCbs = [];
+    this.readyErrorCbs = [];
+    this.errorCbs = [];
+  }
+  listen(cb: Function) {
+    // 给 this.cb 赋值，会在 updateRoute 调用 this.cb
+    this.cb = cb;
+  }
+  onReady(cb: Function, errorCb: ?Function) {
+    if (this.ready) {
+      cb();
+    } else {
+      this.readyCbs.push(cb);
+      if (errorCb) {
+        this.readyErrorCbs.push(errorCb);
+      }
+    }
+  }
+  onError(errorCb: Function) {
+    this.errorCbs.push(errorCb);
+  }
+  // 用于路由切换
+  transitionTo(
+    location: RawLocation,
+    onComplete?: Function,
+    onAbort?: Function
+  ) {
+    // 匹配目标 location 的 route
+    const route = this.router.match(location, this.current);
+    // 确认切换（异步）
+    this.confirmTransition(
+      route,
+      // onComplete
+      () =&gt; {
+        this.updateRoute(route); // 更新 route
+        onComplete &amp;&amp; onComplete(route);
+        this.ensureURL();
+        if (!this.ready) {
+          this.ready = true;
+          this.readyCbs.forEach(cb =&gt; {
+            cb(route);
+          });
+        }
+      },
+      // onAbort
+      err =&gt; {
+        if (onAbort) {
+          onAbort(err);
+        }
+        if (err &amp;&amp; !this.ready) {
+          this.ready = true;
+          this.readyErrorCbs.forEach(cb =&gt; {
+            cb(err);
+          });
+        }
+      }
+    );
+  }
+  confirmTransition(route: Route, onComplete: Function, onAbort?: Function) {
+    const current = this.current;
+    // 导航取消的时候调用
+    const abort = err =&gt; {
+      if (isError(err)) {
+        if (this.errorCbs.length) {
+          this.errorCbs.forEach(cb =&gt; {
+            cb(err);
+          });
+        } else {
+          console.error(err);
+        }
+      }
+      onAbort &amp;&amp; onAbort(err);
+    };
+    if (
+      // 如果 route 和 current 是相同路径（path、hash、query、params 一样）
+      isSameRoute(route, current) &amp;&amp;
+      // 并且匹配的长度一致
+      route.matched.length === current.matched.length
+    ) {
+      // 就没必要跳转
+      this.ensureURL();
+      return abort();
+    }
+    // 找出 currentRecord 和 nextRecord 中的相同与不同
+    const {
+      updated, // 相同但需要更新的
+      deactivated, // currentRecord 独有的
+      activated // nextRecord 独有的
+    } = resolveQueue(
+      this.current.matched, // currentRecord 数组
+      route.matched // nextRecord 数组
+    );
+    /**
+     * 导航被触发
+     * 在失活的组件里调用 beforeRouteLeave 守卫
+     * 调用全局的 beforeEach 守卫
+     * 在重用的组件里调用 beforeRouteUpdate 守卫
+     * 在路由配置里调用 beforeEnter
+     * 解析异步路由组件
+     * 在被激活的组件里调用 beforeRouteEnter
+     * 调用全局的 beforeResolve 守卫
+     * 导航被确认
+     * 调用全局的 afterEach 钩子
+     * 触发 DOM 更新
+     * 调用 beforeRouteEnter 守卫中传给 next 的回调函数，创建好的组件实例会作为回调函数的参数传入
+     */
+    const queue: Array&lt;?NavigationGuard&gt; = [].concat(
+      // 组件内部的 beforeRouteLeave
+      extractLeaveGuards(deactivated),
+      // 全局 beforeEach
+      this.router.beforeHooks,
+      // 组件内部的 beforeRouteUpdate
+      extractUpdateHooks(updated),
+      // routes 路由表里写的 beforeEnter
+      activated.map(m =&gt; m.beforeEnter),
+      // 解析异步路由组件，会等待异步组件的加载，加载完成之后再导航
+      resolveAsyncComponents(activated)
+    );
+    this.pending = route;
+    const iterator = (hook: NavigationGuard, next) =&gt; {
+      // next 被调用之后，会去拿数组里的下一个钩子函数
+      if (this.pending !== route) {
+        return abort();
+      }
+      try {
+        // 有点 to、from、next 那味儿了
+        hook(route, current, (to: any) =&gt; {
+          if (to === false || isError(to)) {
+            // next(false) -&gt; 停止导航
+            this.ensureURL(true);
+            abort(to);
+          } else if (
+            typeof to === 'string' ||
+            (typeof to === 'object' &amp;&amp;
+              (typeof to.path === 'string' || typeof to.name === 'string'))
+          ) {
+            // next('/') 或 next({ path: '/' }) -&gt; 重定向
+            abort();
+            if (typeof to === 'object' &amp;&amp; to.replace) {
+              this.replace(to);
+            } else {
+              this.push(to);
+            }
+          } else {
+            next(to);
+          }
+        });
+      } catch (e) {
+        abort(e);
+      }
+    };
+    runQueue(
+      queue, // 保存了要执行的钩子函数
+      iterator, // queue 里的钩子会被一个一个的拿到 iterator 里执行
+      () =&gt; {
+        // queue 里的钩子被全部调用完成之后，会执行此函数
+        const postEnterCbs = [];
+        const isValid = () =&gt; this.current === route;
+        // 获取组件里 beforeRouteEnter 钩子
+        const enterGuards = extractEnterGuards(
+          activated,
+          postEnterCbs,
+          isValid
+        );
+        // 拼接上全局 beforeResolve 钩子
+        const queue = enterGuards.concat(this.router.resolveHooks);
+        runQueue(queue, iterator, () =&gt; {
+          // 新的 queue 里的钩子被全部调用完成之后，会执行此函数
+          if (this.pending !== route) {
+            return abort();
+          }
+          this.pending = null;
+          onComplete(route);
+          if (this.router.app) {
+            // 调用 beforeRouteEnter 守卫中传给 next 的回调函数，创建好的组件实例会作为回调函数的参数传入
+            this.router.app.$nextTick(() =&gt; {
+              postEnterCbs.forEach(cb =&gt; {
+                cb();
+              });
+            });
+          }
+        });
+      }
+    );
+  }
+  updateRoute(route: Route) {
+    const prev = this.current;
+    this.current = route;
+    // 调用 this.cb（init 的时候，由 history.listen 赋值）
+    this.cb &amp;&amp; this.cb(route);
+    this.router.afterHooks.forEach(hook =&gt; {
+      hook &amp;&amp; hook(route, prev);
+    });
+  }
+}
+export function runQueue(
+  queue: Array&lt;?NavigationGuard&gt;,
+  fn: Function,
+  cb: Function
+) {
+  const step = index =&gt; {
+    if (index &gt;= queue.length) {
+      cb();
+    } else {
+      if (queue[index]) {
+        fn(queue[index], () =&gt; {
+          step(index + 1);
+        });
+      } else {
+        step(index + 1);
+      }
+    }
+  };
+  step(0);
+}
+</code></pre><h3 id=html5history>HTML5History</h3><pre><code class=language-ts>export class HTML5History extends History {
+  constructor(router: Router, base: ?string) {
+    super(router, base);
+    const expectScroll = router.options.scrollBehavior;
+    if (expectScroll) {
+      // popstate 时，保存滚动位置
+      setupScroll();
+    }
+    // 当浏览器行为触发页面前进后退时，重新调用 transitionTo 完成页面切换
+    window.addEventListener('popstate', e =&gt; {
+      const current = this.current;
+      this.transitionTo(getLocation(this.base), route =&gt; {
+        if (expectScroll) {
+          /**
+           * handleScroll(router, to, from, isPop)
+           * 调用 getScrollPosition 获取滚动位置（保存在 history 的 state 里）
+           * 调用 router.options.scrollBehavior(to, from, position) 判断是否需要滚动
+           * 调用 window.scrollTo 进行滚动
+           */
+          handleScroll(router, route, current, true);
+        }
+      });
+    });
+  }
+  go(n: number) {
+    window.history.go(n);
+  }
+  push(location: RawLocation, onComplete?: Function, onAbort?: Function) {
+    const { current: fromRoute } = this;
+    this.transitionTo(
+      location,
+      route =&gt; {
+        pushState(cleanPath(this.base + route.fullPath));
+        handleScroll(this.router, route, fromRoute, false);
+        onComplete &amp;&amp; onComplete(route);
+      },
+      onAbort
+    );
+  }
+  replace(location: RawLocation, onComplete?: Function, onAbort?: Function) {
+    const { current: fromRoute } = this;
+    this.transitionTo(
+      location,
+      route =&gt; {
+        replaceState(cleanPath(this.base + route.fullPath));
+        handleScroll(this.router, route, fromRoute, false);
+        onComplete &amp;&amp; onComplete(route);
+      },
+      onAbort
+    );
+  }
+  ensureURL(push?: boolean) {
+    if (getLocation(this.base) !== this.current.fullPath) {
+      const current = cleanPath(this.base + this.current.fullPath);
+      push ? pushState(current) : replaceState(current);
+    }
+  }
+  getCurrentLocation(): string {
+    return getLocation(this.base);
+  }
+}
+</code></pre><h3 id=hashhistory>HashHistory</h3><pre><code class=language-ts>export class HashHistory extends History {
+  constructor(router: Router, base: ?string, fallback: boolean) {
+    super(router, base);
+    /**
+     * checkFallback 会把 HTML5History 格式的链接转换为 HashHistory 格式的链接
+     * 然后 location.replace 掉
+     * url：https://router.vuejs.org/zh/api/?abc=123#hahaha，base: /zh
+     * checkFallback =&gt; https://router.vuejs.org/zh/#/api/?abc=123#hahaha
+     */
+    if (fallback &amp;&amp; checkFallback(this.base)) {
+      return;
+    }
+    // /zh#/api/?abc=123#hahaha replace 成为 /zh/#/api/?abc=123#hahaha
+    ensureSlash(); // 保证 # 前边有 /
+  }
+  // 延迟到应用挂载，防止事件过早触发
+  setupListeners() {
+    window.addEventListener('hashchange', () =&gt; {
+      if (!ensureSlash()) {
+        return;
+      }
+      this.transitionTo(getHash(), route =&gt; {
+        replaceHash(route.fullPath);
+      });
+    });
+  }
+  push(location: RawLocation, onComplete?: Function, onAbort?: Function) {
+    this.transitionTo(
+      location,
+      route =&gt; {
+        // 赋值 window.location.hash
+        pushHash(route.fullPath);
+        onComplete &amp;&amp; onComplete(route);
+      },
+      onAbort
+    );
+  }
+  replace(location: RawLocation, onComplete?: Function, onAbort?: Function) {
+    this.transitionTo(
+      location,
+      route =&gt; {
+        // 调用 window.location.replace
+        replaceHash(route.fullPath);
+        onComplete &amp;&amp; onComplete(route);
+      },
+      onAbort
+    );
+  }
+  go(n: number) {
+    window.history.go(n);
+  }
+  ensureURL(push?: boolean) {
+    const current = this.current.fullPath;
+    if (getHash() !== current) {
+      push ? pushHash(current) : replaceHash(current);
+    }
+  }
+  getCurrentLocation() {
+    return getHash();
+  }
+}
+</code></pre><h3 id=matcher>matcher</h3><pre><code class=language-ts>export function createMatcher(
+  routes: Array&lt;RouteConfig&gt;, // options.routes
+  router: VueRouter // VueRouter 实例
+): Matcher {
+  // 把传入的路由表转换为路由映射表
+  const { pathList, pathMap, nameMap } = createRouteMap(routes);
+  // addRoutes 就是把新来的 routes 添加到 pathList, pathMap, nameMap 里
+  function addRoutes(routes) {
+    createRouteMap(routes, pathList, pathMap, nameMap);
+  }
+  // 根据 RawLocation 和 currentRoute 返回一个 route
+  function match(
+    raw: RawLocation, // url 或者 Location 对象
+    currentRoute?: Route,
+    redirectedFrom?: Location
+  ): Route {
+    const location = normalizeLocation(raw, currentRoute, false, router);
+    const { name } = location;
+    if (name) {
+      const record = nameMap[name]; // 获取 name 对应的 record
+      if (!record) return _createRoute(null, location);
+      const paramNames = record.regex.keys
+        .filter(key =&gt; !key.optional)
+        .map(key =&gt; key.name);
+      if (typeof location.params !== 'object') {
+        location.params = {};
+      }
+      if (currentRoute &amp;&amp; typeof currentRoute.params === 'object') {
+        for (const key in currentRoute.params) {
+          if (!(key in location.params) &amp;&amp; paramNames.indexOf(key) &gt; -1) {
+            location.params[key] = currentRoute.params[key];
+          }
+        }
+      }
+      if (record) {
+        location.path = fillParams(
+          record.path,
+          location.params,
+          `named route &quot;${name}&quot;`
+        );
+        return _createRoute(record, location, redirectedFrom);
+      }
+    } else if (location.path) {
+      location.params = {};
+      for (let i = 0; i &lt; pathList.length; i++) {
+        const path = pathList[i];
+        const record = pathMap[path];
+        if (matchRoute(record.regex, location.path, location.params)) {
+          return _createRoute(record, location, redirectedFrom);
+        }
+      }
+    }
+    return _createRoute(null, location);
+  }
+  // ...
+  return {
+    match,
+    addRoutes
+  };
+}
+</code></pre><h3 id=route-map>route-map</h3><p>传入 option.routes（开发者写的路由表）返回一个数组两个对象：</p><ol><li>所有路由的 path 组成的数组；</li><li>path 到 record 的映射关系；</li><li>name 到 record 的映射关系。</li></ol><p>&nbsp;</p><pre><code class=language-ts>export function createRouteMap(
+  routes: Array&lt;RouteConfig&gt;,
+  oldPathList?: Array&lt;string&gt;,
+  oldPathMap?: Dictionary&lt;RouteRecord&gt;,
+  oldNameMap?: Dictionary&lt;RouteRecord&gt;
+) {
+  // 用来控制路径匹配优先级
+  const pathList: Array&lt;string&gt; = oldPathList || [];
+  const pathMap: Dictionary&lt;RouteRecord&gt; = oldPathMap || Object.create(null);
+  const nameMap: Dictionary&lt;RouteRecord&gt; = oldNameMap || Object.create(null);
+  routes.forEach(route =&gt; {
+    addRouteRecord(pathList, pathMap, nameMap, route);
+  });
+  // 确保 path 为通配符的路由一直在结尾
+  for (let i = 0, l = pathList.length; i &lt; l; i++) {
+    if (pathList[i] === '*') {
+      pathList.push(pathList.splice(i, 1)[0]);
+      l--;
+      i--;
+    }
+  }
+  return {
+    pathList, // routePath[]
+    pathMap, // {path: record, ...}
+    nameMap // {name: rocord, ...}
+  };
+}
+function addRouteRecord(
+  pathList: Array&lt;string&gt;,
+  pathMap: Dictionary&lt;RouteRecord&gt;,
+  nameMap: Dictionary&lt;RouteRecord&gt;,
+  route: RouteConfig,
+  parent?: RouteRecord,
+  matchAs?: string
+) {
+  const { path, name } = route;
+  // 去除 path 最后的 /，并拼接上 parent.path
+  const normalizedPath = normalizePath(path, parent);
+  const pathToRegexpOptions: PathToRegexpOptions =
+    route.pathToRegexpOptions || {};
+  if (typeof route.caseSensitive === 'boolean') {
+    pathToRegexpOptions.sensitive = route.caseSensitive;
+  }
+  // 根据传入的 route 生成一个 record
+  const record: RouteRecord = {
+    path: normalizedPath, // 规范化之后的 path，带上父级路由的那种
+    regex: compileRouteRegex(normalizedPath, pathToRegexpOptions), // 将 path 解析成正则表达式
+    // 一条 path 可以对应多个 components，通过 router-view 的 name 属性来判断渲染出口
+    components: route.components || { default: route.component },
+    instances: {},
+    name,
+    parent, // ParentRouteRecord
+    matchAs,
+    redirect: route.redirect,
+    beforeEnter: route.beforeEnter,
+    meta: route.meta || {},
+    props:
+      route.props == null
+        ? {}
+        : route.components
+        ? route.props
+        : { default: route.props }
+  };
+  if (route.children) {
+    console.warn(
+      '如果 route 有 name，没有重定向，有一个默认的子路由，如果通过 name 进行导航，默认的子路由不会渲染'
+    );
+    route.children.forEach(child =&gt; {
+      const childMatchAs = matchAs
+        ? cleanPath(`${matchAs}/${child.path}`)
+        : undefined;
+      // record 作为 children 的 parent，重新调用 addRouteRecord
+      addRouteRecord(pathList, pathMap, nameMap, child, record, childMatchAs);
+    });
+  }
+  // 如果路由有别名，同样会生成一条 record
+  if (route.alias !== undefined) {
+    const aliases = Array.isArray(route.alias) ? route.alias : [route.alias];
+    aliases.forEach(alias =&gt; {
+      const aliasRoute = {
+        path: alias,
+        children: route.children
+      };
+      addRouteRecord(
+        pathList,
+        pathMap,
+        nameMap,
+        aliasRoute,
+        parent,
+        record.path || '/' // matchAs
+      );
+    });
+  }
+  if (!pathMap[record.path]) {
+    pathList.push(record.path);
+    pathMap[record.path] = record;
+  }
+  if (name) {
+    if (!nameMap[name]) {
+      nameMap[name] = record;
+    }
+  }
+}
+</code></pre><h3 id=router-link>router-link</h3><pre><code class=language-ts>export default {
+  name: 'router-link',
+  props: {
+    to: {
+      type: [String, Object],
+      required: true
+    },
+    // router-link 默认就是 a 标签
+    tag: {
+      type: String,
+      default: 'a'
+    },
+    exact: Boolean,
+    append: Boolean,
+    replace: Boolean,
+    activeClass: String,
+    exactActiveClass: String,
+    event: {
+      type: [String, Array],
+      default: 'click'
+    }
+  },
+  render(h: Function) {
+    const router = this.$router;
+    const current = this.$route;
+    const { location, route, href } = router.resolve(
+      this.to,
+      current,
+      this.append
+    );
+    const classes = {};
+    const globalActiveClass = router.options.linkActiveClass;
+    const globalExactActiveClass = router.options.linkExactActiveClass;
+    // 不同状态的类名处理
+    const activeClassFallback =
+      globalActiveClass == null ? 'router-link-active' : globalActiveClass;
+    const exactActiveClassFallback =
+      globalExactActiveClass == null
+        ? 'router-link-exact-active'
+        : globalExactActiveClass;
+    const activeClass =
+      this.activeClass == null ? activeClassFallback : this.activeClass;
+    const exactActiveClass =
+      this.exactActiveClass == null
+        ? exactActiveClassFallback
+        : this.exactActiveClass;
+    const compareTarget = location.path
+      ? createRoute(null, location, null, router)
+      : route;
+    classes[exactActiveClass] = isSameRoute(current, compareTarget);
+    classes[activeClass] = this.exact
+      ? classes[exactActiveClass]
+      : isIncludedRoute(current, compareTarget);
+    const handler = e =&gt; {
+      /**
+       * 按下 meta、alt、ctrl、shift 时不起作用
+       * 调用 preventDefault 时不起作用
+       * target=_blank 时不起作用
+       * 右键点击时不起作用
+       */
+      if (guardEvent(e)) {
+        // 调用 replace 和 push
+        if (this.replace) {
+          router.replace(location);
+        } else {
+          router.push(location);
+        }
+      }
+    };
+    const on = { click: guardEvent };
+    if (Array.isArray(this.event)) {
+      this.event.forEach(e =&gt; {
+        on[e] = handler;
+      });
+    } else {
+      on[this.event] = handler;
+    }
+    const data: any = {
+      class: classes
+    };
+    // 创建 a 链接之后，会在 a 链接上绑定 href 属性和 click 事件
+    if (this.tag === 'a') {
+      data.on = on;
+      data.attrs = { href };
+    } else {
+      // 找到子元素中的 a 标签，在上面加 listener 和 href
+      const a = findAnchor(this.$slots.default);
+      if (a) {
+        // in case the &lt;a&gt; is a static node
+        a.isStatic = false;
+        const extend = _Vue.util.extend;
+        const aData = (a.data = extend({}, a.data));
+        aData.on = on;
+        const aAttrs = (a.data.attrs = extend({}, a.data.attrs));
+        aAttrs.href = href;
+      } else {
+        // 没 a 标签，那就把 listener 加到自己身上
+        data.on = on;
+      }
+    }
+    return h(this.tag, data, this.$slots.default);
+  }
+};
+</code></pre><h3 id=router-view>router-view</h3><pre><code class=language-ts>export default {
+  name: 'router-view',
+  functional: true,
+  props: {
+    name: {
+      type: String,
+      default: 'default'
+    }
+  },
+  render(_, { props, children, parent, data }) {
+    data.routerView = true;
+    // 借用父级的 h 函数，酱紫 router-view 渲染的组件可以解析具名插槽
+    const h = parent.$createElement;
+    const name = props.name;
+    const route = parent.$route;
+    const cache = parent._routerViewCache || (parent._routerViewCache = {});
+    // 当前 router-view 所处的层级（嵌套深度，上边还有几个 router-view），顺便检查当前是否 active
+    let depth = 0;
+    let inactive = false;
+    while (parent &amp;&amp; parent._routerRoot !== parent) {
+      if (parent.$vnode &amp;&amp; parent.$vnode.data.routerView) {
+        depth++;
+      }
+      if (parent._inactive) {
+        inactive = true;
+      }
+      parent = parent.$parent;
+    }
+    data.routerViewDepth = depth;
+    // 如果出入 inactive 状态，渲染前一个视图
+    if (inactive) {
+      return h(cache[name], data, children);
+    }
+    // 当前 route 下，对应层级有没有要渲染的组件
+    const matched = route.matched[depth];
+    // 没有匹配上，就渲染空节点
+    if (!matched) {
+      cache[name] = null;
+      return h();
+    }
+    // 获取匹配到的组件
+    const component = (cache[name] = matched.components[name]);
+    // data 上保存了一个函数，被实例注入的生命周期钩子调用
+    data.registerRouteInstance = (vm, val) =&gt; {
+      const current = matched.instances[name];
+      if ((val &amp;&amp; current !== vm) || (!val &amp;&amp; current === vm)) {
+        matched.instances[name] = val;
+      }
+    };
+    (data.hook || (data.hook = {})).prepatch = (_, vnode) =&gt; {
+      matched.instances[name] = vnode.componentInstance;
+    };
+    // 解析 props
+    data.props = resolveProps(route, matched.props &amp;&amp; matched.props[name]);
+    // 调用 h 函数，渲染匹配到的组件
+    return h(component, data, children);
+  }
+};
+</code></pre><p>总之，VueRouter 在初始化的时候，会向组件 mixin 一些钩子函数；在 beforeCreate 中，会借助 Vue.util.defineReactive API 将 vm._route 转换为 getter/setter；又因为 router-view 在调用 h 函数渲染组件的时候，会访问 vm._route.matched，形成对 vm._route 的依赖。所以，每当 vm._route 变化，router-view 会自动匹配自己要渲染的组件。</p><p>router-link 默认会渲染出一个绑定了事件的 a 标签，用户点击时，会调用 transitionTo 进行导航；transitionTo 会计算出最新的 route，调用 History API 更新 URL，调用路由钩子，更新 vm._route，触发 router-view 更新。</p><p>至于 popstate 事件，主要用来处理浏览器的行为（history.pushState/replaceState 并不会触发 popstate）并调用 transitionTo 更新页面。</p></div><div class=post_footer><div class=meta><div class=info><span class="field tags"><i class=remixicon-stack-line></i><a href=https://vikingama.github.io/tags/vue/>Vue</a>
+<a href=https://vikingama.github.io/tags/router/>Router</a></span></div></div></div></div><div class=doc_comments><div class=comments_block_title>发表评论</div><div id=vcomments></div></div><link rel=stylesheet href=https://vikingama.github.io/css/comments.css><script src=//unpkg.com/valine></script><script type=text/javascript>new Valine({el:'#vcomments',avatar:'retro',recordIP:true,path:window.location.pathname,appId:'U06blUXOot4uJgfMu8I9xJXz-MdYXbMMI',appKey:'BnrXC06FJsvRNpr4aqb1HYPd',placeholder:'来都来了，不打个招呼吗？',visitor:'true',serverURLs:'https:\/\/u06bluxo.api.lncldglobal.com'});</script></div></div><a id=back_to_top href=# class=back_to_top><span>△</span></a></div><footer class=footer><div class=powered_by><a href=https://github.com/varkai/hugo-theme-zozo/ target=_blank>Designed by <span class=jitters>Zeuk</span>,</a>
+<a href=https://www.gohugo.io/ target=_blank>Built by <span class=jitters>Hugo</span>,</a>
+<a href=https://github.com/features/actions/ target=_blank>Deployed by <span class=jitters>Actions</span></a></div><div class=footer_slogan><span id=enter_time></span></div></footer><script src=//unpkg.com/jquery/dist/jquery.min.js></script><script src=//unpkg.com/@highlightjs/cdn-assets/highlight.min.js></script><script src=https://vikingama.github.io/js/zozo.js></script><script>hljs.highlightAll();</script><script type=application/javascript>var doNotTrack=false;if(!doNotTrack){window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;ga('create','G-CDS328YPMY','auto');ga('send','pageview');}</script><script async src=https://www.google-analytics.com/analytics.js></script></body></html>
