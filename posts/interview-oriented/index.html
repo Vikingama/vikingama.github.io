@@ -136,20 +136,23 @@ const b = msg =&gt; `${msg}b`;
 const c = msg =&gt; `${msg}c`;
 const f = compose(a, b, c);
 console.log(f('hello, ')); // hello, cba
-</code></pre><h3 id=实现-instanceof>实现 instanceof</h3><p>决定类型的是 prototype，而不是构造函数：</p><pre><code class=language-js>// instanceOf({}, Object);
-function instanceOf(L, R) {
+</code></pre><h3 id=实现-instanceof>实现 instanceof</h3><p>决定类型的是 prototype，而不是构造函数：</p><pre><code class=language-js>function instanceOf(L, R) {
   if (L === null || L === undefined) {
     return false;
   }
   L = Object.getPrototypeOf(L);
   R = R.prototype;
-  while (true) {
+  while (L) {
     if (L === R) {
       return true;
     }
     L = Object.getPrototypeOf(L);
   }
+  return false;
 }
+console.log(instanceOf(Symbol(), Function)); // false
+console.log(instanceOf({}, Object)); // true
+console.log(instanceOf([], Array)); // true
 </code></pre><p>顺带，Symbol.toStringTag 属性可以影响 Object.prototype.toString 的结果：</p><pre><code class=language-js>const temp = {
   [Symbol.toStringTag]: 'Hello'
 };
@@ -163,28 +166,9 @@ console.log(toString.call(temp)); // [object Hello]
   );
 }
 function flattenTwo(arr) {
-  while (arr.some(item =&gt; Array.isArray(item))) {
-    arr = [].concat(...arr);
-  }
-  return arr;
-}
-function flattenThree(arr) {
-  let inner = [...arr];
-  let temp = [];
-  while (inner.length) {
-    let item = inner.shift(); // 取出第一项（会修改原数组）
-    if (Array.isArray(item)) {
-      inner.unshift(...item); // 解构 item 并添加到原数组
-    } else {
-      temp.push(item);
-    }
-  }
-  return temp;
-}
-function flattenFour(arr) {
   return arr.toString().split(',').map(Number);
 }
-function flattenFive(arr) {
+function flattenThree(arr) {
   return JSON.parse(`[${JSON.stringify(arr).replace(/\[|\]/g, '')}]`);
 }
 const arr = [
@@ -196,8 +180,6 @@ const arr = [
 console.log(flattenOne(arr));
 console.log(flattenTwo(arr));
 console.log(flattenThree(arr));
-console.log(flattenFour(arr));
-console.log(flattenFive(arr));
 </code></pre><h3 id=实现-jsonp>实现 jsonp</h3><pre><code class=language-js>function jsonp(url, data, cb) {
   let dataStr = url.indexOf('?') &gt;= 0 ? '&amp;' : '?';
   for (let kv of Object.entries(data)) {
@@ -232,6 +214,36 @@ const a = [1, 2, 3, 4].implementMapUsingReduce(a =&gt; a + 1);
 const b = ['a', 'b', 'c'].implementMapUsingReduce(a =&gt; a + '!');
 console.log(a); // [2, 3, 4, 5]
 console.log(b); // ['a!', 'b!', 'c!']
+</code></pre><h3 id=实现-reduce>实现 reduce</h3><pre><code class=language-js>Array.prototype.implementReduce = function (fn, initValue) {
+  const list = this;
+  if (!Array.isArray(list)) {
+    throw new Error('不能在非数组上调用 reduce');
+  }
+  if (list.length === 0) {
+    throw new Error('不能在空数组上调用 reduce');
+  }
+  let value = initValue === undefined ? list[0] : initValue;
+  list.forEach((item, index, arr) =&gt; {
+    if (index === 0) {
+      if (initValue !== undefined) {
+        value = fn(value, item, index, arr);
+      } else {
+        // 没有给初始值的时候，index = 1 才开始执行 fn！！！
+      }
+    } else {
+      value = fn(value, item, index, arr);
+    }
+  });
+  return value;
+};
+const a = [1, 2, 3, 4].implementReduce((acc, cur) =&gt; acc + cur);
+const b = [
+  [0, 1],
+  [2, 3],
+  [4, 5]
+].implementReduce((acc, cur) =&gt; acc.concat(cur), []);
+console.log(a); // 10
+console.log(b); // [0, 1, 2, 3, 4, 5]
 </code></pre><h3 id=实现-new>实现 new</h3><pre><code class=language-js>function customNew() {
   const con = [].shift.call(arguments); // 获取构造函数
   const obj = Object.create(con.prototype);
@@ -391,9 +403,7 @@ console.log(Object.customAssign(b, a));
     }
     self.status = 'fulfilled';
     self.data = value;
-    for (let i = 0; i &lt; self.onFulfilledCbs.length; i++) {
-      self.onFulfilledCbs[i](value);
-    }
+    self.onFulfilledCbs.forEach(fn =&gt; fn(value));
   }
   function reject(reason) {
     if (self.status !== 'pending') {
@@ -401,9 +411,7 @@ console.log(Object.customAssign(b, a));
     }
     self.status = 'rejected';
     self.data = reason;
-    for (let i = 0; i &lt; self.onRejectedCbs.length; i++) {
-      self.onRejectedCbs[i](reason);
-    }
+    self.onRejectedCbs.forEach(fn =&gt; fn(reason));
   }
   try {
     executor(fulfill, reject);
@@ -458,7 +466,7 @@ MyPromise.prototype.then = function (onFulFilled, onRejected) {
         if (temp instanceof MyPromise) {
           temp.then(fulfill, reject);
         }
-        resolve(temp);
+        fulfill(temp);
       } catch (e) {
         reject(e);
       }
@@ -481,6 +489,16 @@ MyPromise.prototype.then = function (onFulFilled, onRejected) {
 MyPromise.prototype.catch = function (onRejected) {
   return this.then(null, onRejected);
 };
+new MyPromise((resolve, reject) =&gt; {
+  setTimeout(() =&gt; resolve(123), 3000);
+})
+  .then(value =&gt; {
+    console.log(value);
+  })
+  .then(() =&gt; {
+    throw new Error('hahaha');
+  })
+  .catch(e =&gt; console.log(e));
 </code></pre><h3 id=实现-promise-all-promise-race-promise-retry-和-promise-allsettled>实现 Promise.all、Promise.race、Promise.retry 和 Promise.allSettled</h3><pre><code class=language-js>Promise.myAll = ps =&gt; {
   if (typeof ps[Symbol.iterator] !== 'function') {
     return Promise.reject('arguments must be an iterator object');
@@ -622,47 +640,48 @@ console.log(test(2, 3, 4, 5)); // 15
 console.log(test(2, 3)(4, 5)); // 15
 console.log(test(2)(3, 4)(5)); // 15
 console.log(test(2)(3)(4)(5)); // 15
-</code></pre><h3 id=实现深拷贝>实现深拷贝</h3><pre><code class=language-js>const type = o =&gt;
-  Object.prototype.toString.call(o).replace(/\[object |\]/g, '');
-function deepClone(o, map = new WeakMap()) {
+</code></pre><h3 id=实现深拷贝>实现深拷贝</h3><pre><code class=language-js>function deepClone(o, map = new WeakMap()) {
+  const type = o =&gt;
+    Object.prototype.toString
+      .call(o)
+      .replace(/\[object |\]/g, '')
+      .toLowerCase();
   if (
-    type(o) === 'Null' ||
-    type(o) === 'Undefined' ||
-    type(o) === 'String' ||
-    type(o) === 'Number' ||
-    type(o) === 'Boolean' ||
-    type(o) === 'Symbol'
+    type(o) === 'null' ||
+    type(o) === 'undefined' ||
+    type(o) === 'string' ||
+    type(o) === 'number' ||
+    type(o) === 'boolean' ||
+    type(o) === 'symbol' ||
+    type(o) === 'function'
   ) {
     return o;
   }
-  if (type(o) === 'Function') {
-    /**
-     * https://developer.chrome.com/docs/apps/contentSecurityPolicy/#relaxing-inline-script
-     * 似乎失效了
-     */
-    return eval(o.toString());
-  }
-  if (type(o) === 'Date') {
+  // if (type(o) === 'function') {
+  //   // https://developer.chrome.com/docs/apps/contentSecurityPolicy/#relaxing-inline-script
+  //   return eval(o.toString());
+  // }
+  if (type(o) === 'date') {
     return new Date(o);
   }
-  if (type(o) === 'RegExp') {
+  if (type(o) === 'regexp') {
     return new RegExp(o);
   }
   if (map.get(o)) {
-    return map.get(o);
+    return o;
   }
   let temp = new o.constructor();
   map.set(o, temp);
   // Map、Set、WeakMap、WeakSet
-  if (type(o) === 'Map' || type(o) === 'WeakMap') {
+  if (type(o) === 'map' || type(o) === 'weakmap') {
     o.forEach((v, k) =&gt; {
-      temp.set(k, deepClone(v, map));
+      temp.set(k, deepClone(v));
     });
     return temp;
   }
-  if (type(o) === 'Set' || type(o) === 'WeakSet') {
+  if (type(o) === 'set' || type(o) === 'weakset') {
     o.forEach(v =&gt; {
-      temp.add(deepClone(v, map));
+      temp.add(deepClone(v));
     });
     return temp;
   }
@@ -674,6 +693,23 @@ function deepClone(o, map = new WeakMap()) {
   }
   return temp;
 }
+let temp = {
+  0: null,
+  1: undefined,
+  a: 'a',
+  b: 123,
+  c: false,
+  d: [1, 2, 3, 4, 5],
+  e: Symbol(''),
+  f: () =&gt; {},
+  h: new Date(),
+  i: new Set([0, 0, 0]),
+  j: new Map([
+    [0, 1],
+    [1, 0]
+  ])
+};
+deepClone(temp);
 </code></pre><h3 id=实现一个无限累加的函数>实现一个无限累加的函数</h3><pre><code class=language-js>function add(m) {
   function temp(n = 0) {
     m = m + n;
