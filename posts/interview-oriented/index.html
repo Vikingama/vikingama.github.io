@@ -737,7 +737,7 @@ console.log(add(1)(2)(3)(4)(5)); // 15
   }
   const temp = [];
   let overTen = 0;
-  for (let i = a.length - 1; i &gt; -1; i--) {
+  for (let i = a.length - 1; i &gt;= 0; i--) {
     let res = overTen + (a[i] - 0) + (b[i] - 0);
     if (res &gt; 9) {
       overTen = 1;
@@ -751,8 +751,9 @@ console.log(add(1)(2)(3)(4)(5)); // 15
   }
   return temp.join('');
 }
-bigNumberSum(123456, 9);
+bigNumberSum(12345435356, 94564354325); // 106909789681
 </code></pre><h3 id=复杂类型转换>复杂类型转换</h3><pre><code class=language-js>const example = {
+  // 只要发生类型转换，都会按照这个优先级，和转换为什么类型无关
   toString() {
     // 优先级最低
     return '123';
@@ -768,13 +769,14 @@ bigNumberSum(123456, 9);
 };
 console.log(example + ''); // toPrimitive
 console.log(example - 0); // NaN
-var hahasha = {
+const hahasha = {
   variable: 0,
   valueOf() {
     return ++this.variable;
   }
 };
 if (hahasha == 1 &amp;&amp; hahasha == 2 &amp;&amp; hahasha == 3) {
+  // 即使 hahasha 是用 const 声明的
   console.log('哈哈啥');
 }
 </code></pre><h3 id=数组去重>数组去重</h3><pre><code class=language-js>function deduOne(arr) {
@@ -793,22 +795,10 @@ function deduThree(arr) {
   // 从数组的起始位置开始，元素第一次出现的位置应该等于当前的索引值
   return arr.filter((item, index, arr) =&gt; arr.indexOf(item, 0) === index);
 }
-function deduFour(arr) {
-  let park = new Map();
-  let temp = [];
-  for (let item of arr) {
-    if (!park.has(item)) {
-      park.set(item, item);
-      temp.push(item);
-    }
-  }
-  return temp;
-}
-var arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 4, 3, 7, 2, 8, 3, 2, 6, 1];
+const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 4, 3, 7, 2, 8, 3, 2, 6, 1];
 console.log(deduOne(arr));
 console.log(deduTwo(arr));
 console.log(deduThree(arr));
-console.log(deduFour(arr));
 </code></pre><h3 id=写一个函数-输入-n-求斐波那契数列的第-n-项>写一个函数，输入 n ，求斐波那契数列的第 n 项</h3><pre><code class=language-js>// 斐波那契的本质是 [a, b] = [b, a + b]
 function fibonacciOne(n) {
   if (n % 1 !== 0) throw new Error('&gt;.&lt;');
@@ -822,7 +812,7 @@ function fibonacciTwo(n) {
   if (n % 1 !== 0) throw new Error('&gt;.&lt;');
   if (n &lt;= 0) return temp[0];
   if (n === 1) return temp[1];
-  for (let i = 2; i &lt; n + 1; i++) {
+  for (let i = 2; i &lt;= n; i++) {
     temp[i] = temp[i - 1] + temp[i - 2];
   }
   return temp.reverse()[0];
@@ -981,13 +971,16 @@ function fitStr(s, t) {
   if (n &lt; m) {
     return -1;
   }
-  for (let i = 0; i &lt; n - m; i++) {
+  for (let i = 0; i &lt;= n - m; i++) {
     if (s.substr(i, m) === t) {
       return i;
     }
   }
   return -1;
 }
+fitStr('qwer', 'qwert'); // -1
+fitStr('qwert', 'qwer'); // 0
+fitStr('asdfg', 'dfg'); // 2
 </code></pre><h3 id=旋转数组>旋转数组</h3><pre><code class=language-js>function spinOne(arr, k) {
   const halfOne = arr.slice(arr.length - k);
   const halfTwo = arr.slice(0, arr.length - k);
@@ -1001,18 +994,18 @@ function spinTwo(arr, k) {
   }
   return temp;
 }
-var arr = [1, 2, 3, 4, 5, 6, 7, 9, 10];
-var k = 3;
+const arr = [1, 2, 3, 4, 5, 6, 7, 9, 10];
+const k = 3;
 console.log(spinOne(arr, k));
 console.log(spinTwo(arr, k));
 </code></pre><h3 id=打印出-1-1000-之间所有的对称数>打印出 1-1000 之间所有的对称数</h3><pre><code class=language-js>[...Array(1000).keys()].filter(
   item =&gt;
-    item.toString().length &gt; 1 &amp;&amp;
-    item === Number(item.toString().split('').reverse().join(''))
+    `${item}`.length &gt; 1 &amp;&amp;
+    item === Number(`${item}`.split('').reverse().join(''))
 );
 </code></pre><h3 id=找区间>找区间</h3><pre><code class=language-js>function findRange(arr) {
   let temp = [];
-  for (let i = 0; i &lt; arr.length; i++) {
+  for (let i = 0; i &lt;= arr.length - 1; i++) {
     const range = { from: arr[i], to: arr[i] };
     while (arr[i + 1] === arr[i] + 1) {
       range.to = arr[i + 1];
