@@ -255,6 +255,71 @@ export function updateContainer(
   scheduleUpdateOnFiber(current, lane, eventTime);
   return lane;
 }
+/**
+ * 从 17 开始，e.persist() 将不再生效，因为 SyntheticEvent 不再放入事件池中
+ * React 将不再向 document 附加事件处理器
+ * 而会将事件处理器附加到渲染 React 树的根 DOM 容器中
+ * 原因：如果页面上有多个 React 版本，会破坏 e.stopPropagation()
+ */
+export function listenToNativeEvent(
+  domEventName: DOMEventName,
+  isCapturePhaseListener: boolean,
+  rootContainerElement: EventTarget,
+  targetElement: Element | null,
+  eventSystemFlags?: EventSystemFlags = 0
+): void {
+  let target = rootContainerElement;
+  if (
+    domEventName === 'selectionchange' &amp;&amp;
+    rootContainerElement.nodeType !== DOCUMENT_NODE
+  ) {
+    /**
+     * selectionchange 事件需要直接绑定在 document 上
+     * ownerDocument 返回节点的顶层的 document 对象
+     */
+    target = rootContainerElement.ownerDocument;
+  }
+  /**
+   * 如果事件可以被委托（或者在捕获阶段触发）
+   * 那就注册在 rootContainerElement 上
+   * 否则，就绑定在 targetElement 上
+   */
+  if (
+    targetElement !== null &amp;&amp;
+    !isCapturePhaseListener &amp;&amp;
+    nonDelegatedEvents.has(domEventName)
+  ) {
+    /**
+     * 所有不能代理的事件（多媒体事件+cancel+close+invalid+load+scroll+toggle）
+     * 都绑定在 targetElement 上
+     */
+    if (domEventName !== 'scroll') {
+      // 除了 scroll 事件，因为任何元素都可以滚动
+      return;
+    }
+    eventSystemFlags |= IS_NON_DELEGATED;
+    target = targetElement;
+  }
+  // target['__reactEvents$' + Math.random().toString(36).slice(2)] = new Set()
+  const listenerSet = getEventListenerSet(target);
+  // `${domEventName}__${isCapturePhaseListener ? 'capture' : 'bubble'}`
+  const listenerSetKey = getListenerSetKey(
+    domEventName,
+    isCapturePhaseListener
+  );
+  if (!listenerSet.has(listenerSetKey)) {
+    if (isCapturePhaseListener) {
+      eventSystemFlags |= IS_CAPTURE_PHASE;
+    }
+    addTrappedEventListener(
+      target,
+      domEventName,
+      eventSystemFlags,
+      isCapturePhaseListener
+    );
+    listenerSet.add(listenerSetKey);
+  }
+}
 </code></pre><h3 id=调用-scheduleupdateonfiber-发生了什么>调用 scheduleUpdateOnFiber 发生了什么？</h3><pre><code class=language-ts>export function scheduleUpdateOnFiber(
   fiber: Fiber,
   lane: Lane,
