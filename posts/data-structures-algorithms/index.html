@@ -714,7 +714,7 @@ class Dictionary {
     return this.size() === 0;
   }
 }
-</code></pre><h3 id=散列表-哈希表>散列表（哈希表）</h3><p><a href=https://oi-wiki.org/ds/hash/>散列表</a>是一种以 key-value 形式存储数据的数据结构；任意的 key 都唯一对应到内存中的某个位置，只需要输入查找的值 key，就可以快速地找到其对应的 value（哈希算法的作用就是尽可能快地在数据结构中找到一个值）；可以把哈希表理解为一种高级的数组，这种数组的下标可以是很大的整数，浮点数，字符串甚至结构体。</p><pre><code class=language-js>class HashMap {
+</code></pre><h3 id=散列表-哈希表>散列表（哈希表）</h3><p><a href=https://oi-wiki.org/ds/hash>散列表</a>是一种以 key-value 形式存储数据的数据结构；任意的 key 都唯一对应到内存中的某个位置，只需要输入查找的值 key，就可以快速地找到其对应的 value（哈希算法的作用就是尽可能快地在数据结构中找到一个值）；可以把哈希表理解为一种高级的数组，这种数组的下标可以是很大的整数，浮点数，字符串甚至结构体。</p><pre><code class=language-js>class HashMap {
   constructor(toStr = defaultToString) {
     this.toStr = toStr;
     this.table = {};
