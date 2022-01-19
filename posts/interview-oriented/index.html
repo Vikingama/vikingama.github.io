@@ -1050,6 +1050,54 @@ console.log(seventTwo(3));
   return temp;
 }
 console.log(sortStr('红蓝蓝黄红黄蓝红红黄红')); // 黄黄黄红红红红红蓝蓝蓝
+</code></pre><h3 id=将扁平的数据结构转化为树>将扁平的数据结构转化为树</h3><pre><code class=language-js>const exampleArr = [
+  { id: 3, name: '部门3', pid: 1 },
+  { id: 4, name: '部门4', pid: 3 },
+  { id: 5, name: '部门5', pid: 4 },
+  { id: 1, name: '部门1', pid: 0 },
+  { id: 2, name: '部门2', pid: 1 }
+];
+{
+  function arr2Tree1(arr, pid = 0) {
+    let temp = [];
+    getChildren(arr, temp, pid);
+    return temp;
+  }
+  function getChildren(arr, temp, pid) {
+    for (let item of arr) {
+      if (item.pid === pid) {
+        const newItem = { ...item, children: [] };
+        temp.push(newItem);
+        getChildren(arr, newItem.children, item.id);
+      }
+    }
+  }
+}
+{
+  function arr2Tree2(arr) {
+    const temp = [];
+    const map = {};
+    for (let item of arr) {
+      map[item.id] = { ...item, children: [] };
+    }
+    for (let item of arr) {
+      const { id, pid } = item;
+      const mapItem = map[id];
+      if (pid === 0) {
+        temp.push(mapItem);
+      } else {
+        if (!map[pid]) {
+          map[pid] = { children: [] };
+        } else {
+          map[pid].children.push(mapItem);
+        }
+      }
+    }
+    return temp;
+  }
+}
+console.log(arr2Tree1(exampleArr));
+console.log(arr2Tree2(exampleArr));
 </code></pre><h3 id=检验链表是否成环>检验链表是否成环</h3><pre><code class=language-js>function hasCycle(linkedList) {
   // 分别取两个指针（快、慢），如果成环，那么快、慢指针一定会相遇
   if (!linkedList.head) return false;
