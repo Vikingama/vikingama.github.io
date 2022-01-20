@@ -183,15 +183,17 @@ export function ConsumerExample() {
   const value = React.useContext&lt;ThemeType&gt;(Theme);
   return &lt;span&gt;{value.theme}&lt;/span&gt;;
 }
-</code></pre><h3 id=事件>事件</h3><pre><code class=language-tsx>const EventExhibit = ({ children }: { children: React.ReactChildren }) =&gt; (
-  &lt;button
-    onClick={event =&gt; {
-      /* event 被自动推断为 React.MouseEvent&lt;HTMLButtonElement, MouseEvent&gt; */
-      console.log(event);
-    }}&gt;
-    {children}
-  &lt;/button&gt;
-);
+</code></pre><h3 id=事件>事件</h3><pre><code class=language-tsx>const EventExhibit = ({ children }: { children: React.ReactChildren }) =&gt; {
+  return (
+    &lt;button
+      onClick={event =&gt; {
+        /* event 被自动推断为 React.MouseEvent&lt;HTMLButtonElement, MouseEvent&gt; */
+        console.log(event);
+      }}&gt;
+      {children}
+    &lt;/button&gt;
+  );
+};
 const InputExhibit = () =&gt; {
   const [info, setInfo] = React.useState({ name: '', age: '' });
   // 一种是对『事件对象』添加类型
