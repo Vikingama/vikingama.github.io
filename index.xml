@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>看不见我的美 · 是你瞎了眼</title><link>https://vikingama.github.io/</link><description>Recent content on 看不见我的美 · 是你瞎了眼</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Thu, 20 Jan 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://vikingama.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>《CSS 选择器世界》笔记</title><link>https://vikingama.github.io/posts/css-selector/</link><pubDate>Thu, 20 Jan 2022 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/posts/css-selector/</guid><description>&lt;blockquote&gt;
-&lt;p&gt;最近在读张鑫旭大神的 CSS 三部曲，这是第二本，主要讲 CSS 选择器，简单做下笔记。&lt;/p&gt;
+&lt;p&gt;最近在读张鑫旭的 CSS 三部曲，这是第二本，主要讲 CSS 选择器，简单做下笔记。&lt;/p&gt;
 &lt;/blockquote&gt;</description></item><item><title>TS 在 React 中的简单应用</title><link>https://vikingama.github.io/posts/react-ts/</link><pubDate>Mon, 17 Jan 2022 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/posts/react-ts/</guid><description>&lt;blockquote&gt;
 &lt;p&gt;前几天面试，让写一个很简单的 React 项目，竟然有点手生。&lt;/p&gt;
 &lt;/blockquote&gt;</description></item><item><title>VueRouter 2.x 源码学习</title><link>https://vikingama.github.io/posts/vue-router/</link><pubDate>Thu, 06 Jan 2022 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/posts/vue-router/</guid><description>&lt;blockquote&gt;
 &lt;p&gt;本来以为是很简单的东西，没想到这么复杂和巧妙。&lt;/p&gt;
 &lt;/blockquote&gt;</description></item><item><title>《CSS 世界》笔记</title><link>https://vikingama.github.io/posts/css-world/</link><pubDate>Sun, 02 Jan 2022 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/posts/css-world/</guid><description>&lt;blockquote&gt;
-&lt;p&gt;最近在读张鑫旭大神的 CSS 三部曲，这是第一本，主要讲 CSS2.x，简单做下笔记。&lt;/p&gt;
+&lt;p&gt;最近在读张鑫旭的 CSS 三部曲，这是第一本，主要讲 CSS2.x，简单做下笔记。&lt;/p&gt;
 &lt;/blockquote&gt;</description></item><item><title>「转」我在函数组件中可以随便写，最通俗异步组件原理</title><link>https://vikingama.github.io/posts/react-suspense/</link><pubDate>Fri, 31 Dec 2021 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/posts/react-suspense/</guid><description>&lt;blockquote&gt;
 &lt;p&gt;文章转载自&lt;a href=&#34;https://juejin.cn/post/7018427879859945509&#34;&gt;我在函数组件中可以随便写，最通俗异步组件原理&lt;/a&gt;，已取得授权。&lt;/p&gt;
 &lt;/blockquote&gt;</description></item><item><title>如何实现虚拟滚动？</title><link>https://vikingama.github.io/posts/virtual-scrolling/</link><pubDate>Thu, 02 Dec 2021 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/posts/virtual-scrolling/</guid><description>&lt;blockquote&gt;
@@ -36,7 +36,7 @@
 &lt;p&gt;今天的面试涉及到直播弹幕，问我做不做得出来；我当然母鸡了，又不能打嘴炮。&lt;/p&gt;
 &lt;/blockquote&gt;</description></item><item><title>观察者模式与发布订阅模式</title><link>https://vikingama.github.io/posts/patterns/</link><pubDate>Sat, 18 Apr 2020 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/posts/patterns/</guid><description>&lt;blockquote&gt;
 &lt;p&gt;Vue 文档中介绍响应式原理时，对 Watcher 一笔带过；但面试官可不会一笔带过。&lt;/p&gt;
-&lt;/blockquote&gt;</description></item><item><title>HTTP 学习笔记</title><link>https://vikingama.github.io/posts/http-note/</link><pubDate>Wed, 15 Apr 2020 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/posts/http-note/</guid><description>&lt;blockquote&gt;
+&lt;/blockquote&gt;</description></item><item><title>《图解 HTTP》笔记</title><link>https://vikingama.github.io/posts/http-note/</link><pubDate>Wed, 15 Apr 2020 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/posts/http-note/</guid><description>&lt;blockquote&gt;
 &lt;p&gt;疫情之下，力不从心，了解一下 HTTP。&lt;/p&gt;
 &lt;/blockquote&gt;</description></item><item><title>面向面试编程</title><link>https://vikingama.github.io/posts/interview-oriented/</link><pubDate>Wed, 11 Mar 2020 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/posts/interview-oriented/</guid><description>&lt;blockquote&gt;
 &lt;p&gt;好烦刷面试题。&lt;/p&gt;

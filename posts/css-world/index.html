@@ -1,4 +1,4 @@
-<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no,user-scalable=no"><meta name=author content=馬腊咯稽><meta name=description content="《CSS 世界》笔记"><meta name=keywords content=CSS><link rel=canonical href=https://vikingama.github.io/posts/css-world/><link rel="shortcut icon" href=https://vikingama.github.io/images/favicon.ico><link rel=stylesheet href=https://vikingama.github.io/css/zozo.css><link rel=stylesheet href=https://vikingama.github.io/css/highlight.css><link rel=stylesheet href=https://vikingama.github.io/css/remixicon.css><title>《CSS 世界》笔记 &middot; 看不见我的美 · 是你瞎了眼</title></head><body><div class="main animated"><div class="nav_container animated fadeInDown"><div class=site_nav id=site_nav><ul><li><a href=/>首页</a></li><li><a href=/posts/>归档</a></li><li><a href=/tags/>标签</a></li><li><a href=/inspires/>启发</a></li><li><a href=/command/>命令</a></li><li><a href=/about/>关于</a></li></ul></div><div class=menu_icon><a id=menu_icon><i class=remixicon-links-line></i></a></div></div><div class="header animated fadeInDown"><div class=site_title_container><div class=site_title><h1><a href=https://vikingama.github.io><img style=width:65px;height:auto;vertical-align:top src=https://vikingama.github.io/images/avatar.png></a></h1></div><div class=description><p class=sub_title>看不见我的美<br>是你瞎了眼</p><div class=my_socials><a href=https://www.douban.com/people/nicknoonan title=douban target=_blank><i class=remixicon-douban-fill></i></a><a href=https://github.com/Vikingama title=github target=_blank><i class=remixicon-github-fill></i></a><a href=https://weibo.com/vikingx title=weibo target=_blank><i class=remixicon-weibo-fill></i></a><a href=https://www.zhihu.com/people/vikingama title=zhihu target=_blank><i class=remixicon-zhihu-fill></i></a><a href=https://vikingama.github.io/index.xml type=application/rss+xml title=rss target=_blank><i class=remixicon-rss-fill></i></a></div></div></div></div><div class=content><div class=post_page><div class="post animated fadeInDown"><div class="post_title post_detail_title"><h2><a href=/posts/css-world/>《CSS 世界》笔记</a></h2><span class=date>2022.01.02</span></div><div class="post_content markdown"><blockquote><p>最近在读张鑫旭大神的 CSS 三部曲，这是第一本，主要讲 CSS2.x，简单做下笔记。</p></blockquote><h3 id=文档流>文档流</h3><p><strong>文档流</strong>是指 CSS 中引导元素排列和定位的一条看不见的“水流”。</p><p>CSS 的基石是 HTML，所以 HTML 默认的表现符合“流”，可以通过破坏“流”来实现特殊布局。</p><p>文档流的流向是可以改变的，这种改变可以让 CSS 的展现更为丰富；因此，“文档流从左往右自上而下”这种说法是不严谨的。</p><p><strong>流体布局</strong>指的是利用元素“流”的特性实现的各类布局效果；因为“流”本身具有自适应特性，所以“流体布局”往往都是具有自适应性的。</p><p><strong>流动性</strong>是一种 margin/border/padding 和 content <strong>自动分配水平空间</strong>的机制；如果手动设置宽度，就完全就不像“水流”那样完全利用容器空间，即所谓的<strong>流动性丢失</strong>。</p><h3 id=块级元素>块级元素</h3><p><strong>块级元素</strong>和 display:block 不是一个概念。例如，li 默认的 display 值是 list-item，table 默认的 display 值是 table，但是它们均是“块级元素”，因为它们都符合块级元素的基本特征；也就是一个水平流上只能单独显示一个元素，多个块级元素则换行显示。</p><p>由于“块级元素”具有<strong>换行</strong>特性，因此理论上它都可以配合 clear 属性来清除浮动带来的影响（IE 中的伪元素不支持 display:list-item；这是不用 display:list-item 清除浮动的主因，兼容性不好）。</p><h3 id=内外盒子-臆想>内外盒子（臆想）</h3><p>每个元素都两个盒子，外在盒子和内在盒子。<strong>外在盒子</strong>负责元素是可以一行显示，还是只能换行显示；<strong>内在盒子</strong>负责宽高、内容呈现什么的。</p><p>display:block 元素的盒子实际由外在的“块级盒子”和内在的“块级容器盒子”组成；display:inline-block 元素则由外在的“内联盒子”和内在的“块级容器盒子”组成；display:inline 元素则内外均是“内联盒子”。</p><h3 id=替换元素>替换元素</h3><p>通过修改某个属性值呈现的内容就可以被替换的元素就称为<strong>替换元素</strong>；因此，img、object、video、iframe 或者单元素 textarea 和 input 都是典型的替换元素：</p><ol><li>内容可替换；</li><li>内容外观不受页面上 CSS 的影响（样式表现在 CSS 作用域之外）；</li><li>有自己的默认尺寸；</li><li>在很多 CSS 属性上有自己的一套表现规则（例如：vertical-align）；</li><li>伪元素的 content 属性生成的内容都是替换元素。<ol><li>使用 content 生成的文本是无法选中、无法复制的，如同设置了 user-select:none 一般；</li><li>不影响 :empty 选择器的使用；</li><li>content 动态生成的值无法获取。</li></ol></li></ol><p>使用 content 中的换行符，实现“加载中”动画。</p><pre><code class=language-html>&lt;style&gt;
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no,user-scalable=no"><meta name=author content=馬腊咯稽><meta name=description content="《CSS 世界》笔记"><meta name=keywords content=CSS><link rel=canonical href=https://vikingama.github.io/posts/css-world/><link rel="shortcut icon" href=https://vikingama.github.io/images/favicon.ico><link rel=stylesheet href=https://vikingama.github.io/css/zozo.css><link rel=stylesheet href=https://vikingama.github.io/css/highlight.css><link rel=stylesheet href=https://vikingama.github.io/css/remixicon.css><title>《CSS 世界》笔记 &middot; 看不见我的美 · 是你瞎了眼</title></head><body><div class="main animated"><div class="nav_container animated fadeInDown"><div class=site_nav id=site_nav><ul><li><a href=/>首页</a></li><li><a href=/posts/>归档</a></li><li><a href=/tags/>标签</a></li><li><a href=/inspires/>启发</a></li><li><a href=/command/>命令</a></li><li><a href=/about/>关于</a></li></ul></div><div class=menu_icon><a id=menu_icon><i class=remixicon-links-line></i></a></div></div><div class="header animated fadeInDown"><div class=site_title_container><div class=site_title><h1><a href=https://vikingama.github.io><img style=width:65px;height:auto;vertical-align:top src=https://vikingama.github.io/images/avatar.png></a></h1></div><div class=description><p class=sub_title>看不见我的美<br>是你瞎了眼</p><div class=my_socials><a href=https://www.douban.com/people/nicknoonan title=douban target=_blank><i class=remixicon-douban-fill></i></a><a href=https://github.com/Vikingama title=github target=_blank><i class=remixicon-github-fill></i></a><a href=https://weibo.com/vikingx title=weibo target=_blank><i class=remixicon-weibo-fill></i></a><a href=https://www.zhihu.com/people/vikingama title=zhihu target=_blank><i class=remixicon-zhihu-fill></i></a><a href=https://vikingama.github.io/index.xml type=application/rss+xml title=rss target=_blank><i class=remixicon-rss-fill></i></a></div></div></div></div><div class=content><div class=post_page><div class="post animated fadeInDown"><div class="post_title post_detail_title"><h2><a href=/posts/css-world/>《CSS 世界》笔记</a></h2><span class=date>2022.01.02</span></div><div class="post_content markdown"><blockquote><p>最近在读张鑫旭的 CSS 三部曲，这是第一本，主要讲 CSS2.x，简单做下笔记。</p></blockquote><h3 id=文档流>文档流</h3><p><strong>文档流</strong>是指 CSS 中引导元素排列和定位的一条看不见的“水流”。</p><p>CSS 的基石是 HTML，所以 HTML 默认的表现符合“流”，可以通过破坏“流”来实现特殊布局。</p><p>文档流的流向是可以改变的，这种改变可以让 CSS 的展现更为丰富；因此，“文档流从左往右自上而下”这种说法是不严谨的。</p><p><strong>流体布局</strong>指的是利用元素“流”的特性实现的各类布局效果；因为“流”本身具有自适应特性，所以“流体布局”往往都是具有自适应性的。</p><p><strong>流动性</strong>是一种 margin/border/padding 和 content <strong>自动分配水平空间</strong>的机制；如果手动设置宽度，就完全就不像“水流”那样完全利用容器空间，即所谓的<strong>流动性丢失</strong>。</p><h3 id=块级元素>块级元素</h3><p><strong>块级元素</strong>和 display:block 不是一个概念。例如，li 默认的 display 值是 list-item，table 默认的 display 值是 table，但是它们均是“块级元素”，因为它们都符合块级元素的基本特征；也就是一个水平流上只能单独显示一个元素，多个块级元素则换行显示。</p><p>由于“块级元素”具有<strong>换行</strong>特性，因此理论上它都可以配合 clear 属性来清除浮动带来的影响（IE 中的伪元素不支持 display:list-item；这是不用 display:list-item 清除浮动的主因，兼容性不好）。</p><h3 id=内外盒子-臆想>内外盒子（臆想）</h3><p>每个元素都两个盒子，外在盒子和内在盒子。<strong>外在盒子</strong>负责元素是可以一行显示，还是只能换行显示；<strong>内在盒子</strong>负责宽高、内容呈现什么的。</p><p>display:block 元素的盒子实际由外在的“块级盒子”和内在的“块级容器盒子”组成；display:inline-block 元素则由外在的“内联盒子”和内在的“块级容器盒子”组成；display:inline 元素则内外均是“内联盒子”。</p><h3 id=替换元素>替换元素</h3><p>通过修改某个属性值呈现的内容就可以被替换的元素就称为<strong>替换元素</strong>；因此，img、object、video、iframe 或者单元素 textarea 和 input 都是典型的替换元素：</p><ol><li>内容可替换；</li><li>内容外观不受页面上 CSS 的影响（样式表现在 CSS 作用域之外）；</li><li>有自己的默认尺寸；</li><li>在很多 CSS 属性上有自己的一套表现规则（例如：vertical-align）；</li><li>伪元素的 content 属性生成的内容都是替换元素。<ol><li>使用 content 生成的文本是无法选中、无法复制的，如同设置了 user-select:none 一般；</li><li>不影响 :empty 选择器的使用；</li><li>content 动态生成的值无法获取。</li></ol></li></ol><p>使用 content 中的换行符，实现“加载中”动画。</p><pre><code class=language-html>&lt;style&gt;
   dot {
     display: inline-block;
     height: 1em;
@@ -285,12 +285,12 @@ span {
   font-family: 'PingFang SC', 'Microsoft Yahei';
 }
 i {
-  /* 字体族分很多类 */
+  /* 通用字体族分很多类 */
   font-family: serif; /* 衬线字体 */
   font-family: sans-serif; /* 无衬线字体 */
   font-family: monospace; /* 等宽字体 */
-  font-family: cursive; /* 手写字体 */
-  font-family: fantasy; /* 奇幻字体 */
+  font-family: cursive; /* 手写字体，例如中文楷体 */
+  font-family: fantasy; /* 奇幻字体，用来装饰，字形和原本字符可以没有关系，例如，自定义图标 */
   font-family: system-ui; /* 系统 UI 字体 */
 }
 </code></pre><p>衬线字体，通俗讲就是笔画开始、结束的地方有额外装饰而且笔画的粗细会有所不同的字体。比如：宋体、Times New Roman、Georgia 等。无衬线字体没有这些额外的装饰，而且笔画的粗细差不多，比如：雅黑、Arial、Verdana、Tahoma、Helivetica 等。在大多数浏览器下，写在 serif 和 sans-serif 后面的所有字体都会被忽略。</p><p>所谓等宽字体，一般是针对英文字体而言的。东亚字体应该都是等宽的，就是每个字符在同等 font-size 下占据的宽度是一样的。但是英文字体就不一定了。</p><p>微软正黑体是一款全面支持 ClearType 技术的 TrueType 无衬线字体，用于繁体中文系统；对于微软雅黑和微软正黑，这两套字体都同时包含了比较完整的简体和繁体汉字，但这两套字形在正式场合是不能混淆使用的。</p><p>平常所说的“宋体”，指的都是“中易宋体”，英文名称 SimSun。macOS 内置的“宋体-简”和我们平常所说的“宋体”并不是同一个字体，其英文名称是“Songti SC”，字形表现也有差异。</p><p>font-weight 如果使用数值作为属性值，必须是 100-900 的整百数，没有 x50 这种东西；font-weight:400 等同于 font-weight:normal；font-weight:700 等同于 font-weight:bold。浏览器支持 100-900 的整百数，没有效果是因为系统缺乏对应粗细的字体。</p><pre><code class=language-html>&lt;style&gt;
@@ -322,45 +322,45 @@ body {
   font-size: 16px;
 }
 </code></pre><p>凡是使用自定义字体的，差不多都是下面这种格式：</p><pre><code class=language-html>&lt;pre alt=&quot;传统版本&quot;&gt;
-@font-face {
-  font-family: ICON;
-  /* eot 是 IE 的私有格式，兼容模式的 IE 不认识『?』，所以才有了这一行多余的 src */
-  src: url('icon.eot') format('eot');
-  /* #iefix 没什么用，有用的是『?』，防止 IE 对地址的错误解析 */
-  src: url('icon.eot?#iefix') format('embedded-opentype'),
-      /* woff2 比 woff 体积更小，Web 开发首选，仅 Chrome 和 Firefox 支持比较好 */
-      url('icon.woff2') format(&quot;woff2&quot;),
-      /* woff（WebOpenFontFormat）是专门为 Web 开发的字体，Android 4.4 开始支持 */
-      url('icon.woff') format(&quot;woff&quot;),
-      /* ttf 为操作系统字体，缺点是体积大 */
-      url('icon.ttf') format(&quot;typetrue&quot;),
-      /* svg 格式是为了兼容 iOS 4.1 以及之前的版本 */
-      url('icon.svg#icon') format('svg'); /* format 是用来帮助浏览器识别字体格式的，最好不要省略 */
-  font-weight: normal; /* 多余，用来实现响应式字体，不同字重的情况下使用不同字体 */
-  font-style: normal; /* 多余，用来实现响应式字体，不同样式的情况下使用不同字体 */
-}
+  @font-face {
+    font-family: ICON;
+    /* eot 是 IE 的私有格式，兼容模式的 IE 不认识『?』，所以才有了这一行多余的 src */
+    src: url('icon.eot') format('eot');
+    /* #iefix 没什么用，有用的是『?』，防止 IE 对地址的错误解析 */
+    src: url('icon.eot?#iefix') format('embedded-opentype'),
+        /* woff2 比 woff 体积更小，Web 开发首选，仅 Chrome 和 Firefox 支持比较好 */
+        url('icon.woff2') format(&quot;woff2&quot;),
+        /* woff（WebOpenFontFormat）是专门为 Web 开发的字体，Android 4.4 开始支持 */
+        url('icon.woff') format(&quot;woff&quot;),
+        /* ttf 为操作系统字体，缺点是体积大 */
+        url('icon.ttf') format(&quot;typetrue&quot;),
+        /* svg 格式是为了兼容 iOS 4.1 以及之前的版本 */
+        url('icon.svg#icon') format('svg'); /* format 是用来帮助浏览器识别字体格式的，最好不要省略 */
+    font-weight: normal; /* 多余，用来实现响应式字体，不同字重的情况下使用不同字体 */
+    font-style: normal; /* 多余，用来实现响应式字体，不同样式的情况下使用不同字体 */
+  }
 &lt;/pre&gt;
 &lt;pre alt=&quot;精简版本&quot;&gt;
-@font-face {
-  font-family: ICON;
-  src: url('icon.eot');
-  src: local('☺'), /* local 使用系统安装字体，url 使用外部字体，IE6-8 不认识 */
-      url('icon.woff2') format(&quot;woff2&quot;),
-      url('icon.woff') format(&quot;woff&quot;),
-      url('icon.ttf') format(&quot;typetrue&quot;);
-}
+  @font-face {
+    font-family: ICON;
+    src: url('icon.eot');
+    src: local('☺'), /* local 使用系统安装字体，url 使用外部字体，IE6-8 不认识 */
+        url('icon.woff2') format(&quot;woff2&quot;),
+        url('icon.woff') format(&quot;woff&quot;),
+        url('icon.ttf') format(&quot;typetrue&quot;);
+  }
 &lt;/pre&gt;
 &lt;pre&gt;
-@font-face {
-  font-family: quote;
-  src: local('SimSun');
-  /* 用来指定哪些字符使用 SimSun 字体 */
-  unicode-range: U+201c, U+201d;
-}
-.font {
-  /* 效果就是，引号使用 SimSun 字体，其他文字使用 Microsoft Yahei 字体 */
-  font-family: quote, 'Microsoft Yahei';
-}
+  @font-face {
+    font-family: quote;
+    src: local('SimSun');
+    /* 用来指定哪些字符使用 SimSun 字体 */
+    unicode-range: U+201c, U+201d;
+  }
+  .font {
+    /* 效果就是，引号使用 SimSun 字体，其他文字使用 Microsoft Yahei 字体 */
+    font-family: quote, 'Microsoft Yahei';
+  }
 &lt;/pre&gt;
 </code></pre><h3 id=text-indent>text-indent</h3><p>text-indent 可以在标签受限的情况下，实现特殊的布局效果：</p><pre><code class=language-html>&lt;style&gt;
   p {
