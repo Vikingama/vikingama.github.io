@@ -480,7 +480,13 @@ export function listenToNativeEvent(
   }
   return newTask;
 }
-</code></pre><h3 id=reconciler-render-阶段-生成-wip-收集要更新的节点>reconciler（render 阶段，生成 WIP，收集要更新的节点）</h3><p>通过组件返回的 React 元素和 current 树构建 workInProgress 树，找出前后变化并打上<strong>标记</strong>，将所有变化收集到 effectList 链表（链表对异步友好的；链表在循环时不用每次都进入递归函数，重新生成执行上下文，变量对象，激活对象，性能比递归好）里。</p><ul><li><p>current 与 workInProgress：</p><ul><li>在 React 应用中最多会同时存在两棵 fiber 树，current 树对应当前渲染完成的视图；当状态更新后会在内存中构建 workInProgress 树；</li><li>当 fiberRoot 的 current 指向 workInProgress 时，workInProgress 树也就成为了 current 树；</li><li>每次状态更新都会在内存中构建 workInProgress 树，应用通过 current 与 workInProgress 的替换完成更新；</li><li>current 树的节点与 workInProgress 树的节点通过自身 alternate 指向对方。</li></ul></li><li><p>应用 mount（首次渲染）时：</p><ul><li>首次执行 ReactDOM.render 会创建 fiberRoot（应用根节点）和 rootFiber（组件树根节点）；</li><li>fiberRoot 有两个指针，current 指向 current 树，finishedWork 指向 workInProgress 树；</li><li>多次调用 ReactDOM.render 渲染不同的组件树，他们会拥有不同的 rootFiber；但是 fiberRoot 只有一个；</li><li>首次渲染时页面没有内容，current 树为空；接下来会在内存中创建 fiberNode，构成 workInProgress；</li><li>workInProgress 会在 commit 阶段同步更新到视图中。</li></ul></li><li><p>应用 update（状态变化）时：</p><ul><li>应用重新进入 render 阶段，调用组件 render 方法，重新构建 workInProgress；</li><li>构建 workInProgress 的过程中会和 current 进行比较，并在需要改变的节点打上<strong>标记</strong>；</li><li>根据收集到的标记，更新视图。</li></ul></li></ul><h3 id=renderer-commit-阶段-提交更新任务>renderer（commit 阶段，提交更新任务）</h3><p>遍历 effectList，将 effect 更新到视图上（ReactArt、ReactDOM、ReactNative）；这个阶段是同步的，不能被打断：</p><pre><code class=language-ts>function commitRoot(root) {
+</code></pre><h3 id=reconciler-render-阶段-生成-wip-收集要更新的节点>reconciler（render 阶段，生成 WIP，收集要更新的节点）</h3><p>通过组件返回的 React 元素和 current 树构建 workInProgress 树，找出前后变化并打上<strong>标记</strong>，将所有变化收集到 effectList 链表（链表对异步友好的；链表在循环时不用每次都进入递归函数，重新生成执行上下文，变量对象，激活对象，性能比递归好）里。</p><ul><li><p>current 与 workInProgress：</p><ul><li>在 React 应用中最多会同时存在两棵 fiber 树，current 树对应当前渲染完成的视图；当状态更新后会在内存中构建 workInProgress 树；</li><li>当 fiberRoot 的 current 指向 workInProgress 时，workInProgress 树也就成为了 current 树；</li><li>每次状态更新都会在内存中构建 workInProgress 树，应用通过 current 与 workInProgress 的替换完成更新；</li><li>current 树的节点与 workInProgress 树的节点通过自身 alternate 指向对方。</li></ul></li><li><p>应用 mount（首次渲染）时：</p><ul><li>首次执行 ReactDOM.render 会创建 fiberRoot（应用根节点）和 rootFiber（组件树根节点）；</li><li>fiberRoot 有两个指针，current 指向 current 树，finishedWork 指向 workInProgress 树；</li><li>多次调用 ReactDOM.render 渲染不同的组件树，他们会拥有不同的 rootFiber；但是 fiberRoot 只有一个；</li><li>首次渲染时页面没有内容，current 树为空；接下来会在内存中创建 fiberNode，构成 workInProgress；</li><li>workInProgress 会在 commit 阶段同步更新到视图中。</li></ul></li><li><p>应用 update（状态变化）时：</p><ul><li>应用重新进入 render 阶段，调用组件 render 方法，重新构建 workInProgress；</li><li>构建 workInProgress 的过程中会和 current 进行比较，并在需要改变的节点打上<strong>标记</strong>；</li><li>根据收集到的标记，更新视图。</li></ul></li></ul><h3 id=renderer-commit-阶段-提交更新任务>renderer（commit 阶段，提交更新任务）</h3><p>遍历 effectList，更新视图（ReactArt、ReactDOM、ReactNative）；这个阶段是同步的，不能被打断：</p><pre><code class=language-ts>/**
+ * 此时，有两棵树和一个链表：
+ * current 表示当前屏幕显示内容
+ * workInProgress 表示即将更新到屏幕上的内容
+ * effectList 表示本次更新要执行的副作用（DOM 更新、生命周期调用、setState 回调、hooks 调用...）
+ */
+function commitRoot(root) {
   const renderPriorityLevel = getCurrentPriorityLevel();
   runWithPriority(
     ImmediateSchedulerPriority,
@@ -1251,18 +1257,18 @@ function FiberNode(
   this.tag = tag; // 对应的组件类型
   this.key = key; // key 属性
   this.elementType = null; // 元素类型，大部分情况同 type，某些情况不同，比如 React.memo(FunctionComponent)
-  this.type = null; // 对于函数组件，指函数本身；对于类组件，指 class；对于原生组件，指 DOM 节点的 tagName
-  this.stateNode = null; // 对应的 DOM、FiberRoot、ComponentInstance
+  this.type = null; // 对于函数组件，指函数本身；对于类组件，指 class；对于原生组件，指 DOM 节点的 tagName；用来描述与 fiber 相关的 React 元素
+  this.stateNode = null; // 对应的 DOM、FiberRoot、ComponentInstance；保存了 fiber 相关的局部状态
   // 用于连接其他 FiberNode 生成『树』形结构
   this.return = null; // 指向父级 FiberNode
   this.child = null; // 指向子级 FiberNode
   this.sibling = null; // 指向兄弟 FiberNode
   this.index = 0;
   // 保存本次更新造成的状态改变相关信息，用来计算 state
-  this.pendingProps = pendingProps; // 新的 props
-  this.memoizedProps = null; // 经过所有流程处理后的新 props
-  this.memoizedState = null; // 经过所有流程处理后的新 state
-  this.updateQueue = null; // 更新队列，链表结构，用于计算本次的 state
+  this.pendingProps = pendingProps; // 新的 props，需要应用到子组件或者 DOM 元素上
+  this.memoizedProps = null; // 上次渲染期间对应的 props
+  this.memoizedState = null; // 经过所有流程处理后的新 state；在处理更新的过程中，对应的是屏幕上展示的状态
+  this.updateQueue = null; // 更新队列（保存了 stateUpdates、回调、DOMUpdates），链表结构，用于计算本次的 state
   this.dependencies = null;
   // 保存本次更新会造成的 DOM 操作，需要在 commit 阶段应用到视图上
   this.flags = NoFlags;
@@ -1276,7 +1282,7 @@ function FiberNode(
    * currentFiber.alternate === workInProgressFiber;
    * workInProgressFiber.alternate === currentFiber
    */
-  this.alternate = null;
+  this.alternate = null; // 双缓存相关
   this.mode = mode;
   this.ref = null;
 }
@@ -1355,9 +1361,11 @@ function workLoopConcurrent() {
 }
 function performUnitOfWork(unitOfWork: Fiber): void {
   const current = unitOfWork.alternate;
+  // beginWork 总是返回传入节点的子节点
   let next = beginWork(current, unitOfWork, subtreeRenderLanes);
   unitOfWork.memoizedProps = unitOfWork.pendingProps;
   if (next === null) {
+    // 子节点遍历完了，开始遍历当前子树的兄弟节点并回溯到父节点
     completeUnitOfWork(unitOfWork);
   } else {
     workInProgress = next;
@@ -1395,9 +1403,11 @@ function completeUnitOfWork(unitOfWork: Fiber): void {
     }
     const siblingFiber = completedWork.sibling;
     if (siblingFiber !== null) {
+      // 指向兄弟节点，开始兄弟节点的『递和归』
       workInProgress = siblingFiber;
       return;
     }
+    // 指向父节点，完成父节点的『归』
     completedWork = returnFiber;
     workInProgress = completedWork;
   } while (completedWork !== null);
