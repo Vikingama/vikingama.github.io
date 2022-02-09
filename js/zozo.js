@@ -1,5 +1,7 @@
 'use strict';
-
+if (window.top !== window.self) {
+  window.top.location = window.self.location;
+}
 $(document).ready(
   (function (_this) {
     return function () {

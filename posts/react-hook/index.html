@@ -20,7 +20,7 @@
     document.title = `u clicked ${count} times`;
   });
 }
-</code></pre><p>默认情况下，effect 将在每轮渲染结束后执行，但你可以选择让它在只有某些值改变的时候才执行；如果想执行只运行一次的 effect（仅在组件挂载和卸载时执行），可以传递一个空数组 [] 作为第二个参数，effect 内部的 props 和 state 就会一直持有其初始值。</p><p>副作用函数还可以通过返回一个函数来指定如何“清除”副作用；通常，组件卸载时需要清除 effect 创建的诸如订阅或计时器等资源；要实现这一点，useEffect 函数需返回一个清除函数；如果组件多次渲染（通常如此），则在执行下一个 effect 之前，上一个 effect 就已被清除。</p><pre><code class=language-jsx>useEffect(
+</code></pre><p>默认情况下，effect 将在每轮渲染结束后执行，但你可以选择让它在只有<strong>某些值（能够触发组件重新渲染的值）</strong>改变的时候才执行；如果想执行只运行一次的 effect（仅在组件挂载和卸载时执行），可以传递一个空数组 [] 作为第二个参数，effect 内部的 props 和 state 就会一直持有其初始值。</p><p>副作用函数还可以通过返回一个函数来指定如何“清除”副作用；通常，组件卸载时需要清除 effect 创建的诸如订阅或计时器等资源；要实现这一点，useEffect 函数需返回一个清除函数；如果组件多次渲染（通常如此），则在执行下一个 effect 之前，上一个 effect 就已被清除。</p><pre><code class=language-jsx>useEffect(
   () =&gt; {
     // 添加订阅
     const subscription = props.source.subscribe();

@@ -90,7 +90,7 @@ const Content = () =&gt; (
     )}
   &lt;/ThemeContext.Consumer&gt;
 );
-</code></pre><h3 id=reactdom-createportal>ReactDOM.createPortal</h3><p>将子节点渲染到父组件以外的 DOM 节点，AntDesign 的弹窗就是使用 ReactDOM.createPortal 进行渲染的；尽管 portal 可以被放置在 DOM 树中的任何地方，但其行为和普通的 React 子节点行为一致，portal 仍存在于 React 树，且与 DOM 中的位置无关；一个从 portal 内部触发的事件会一直冒泡至包含 React 树的祖先，即便这些元素并不是 DOM 中的祖先。</p><pre><code class=language-jsx>// 在 DOM 中有两个容器是兄弟级
+</code></pre><h3 id=reactdom-createportal>ReactDOM.createPortal</h3><p>将子节点渲染到父组件以外的 DOM 节点，AntDesign 的弹窗就是使用 ReactDOM.createPortal 进行渲染的；尽管 portal 可以被放置在 DOM 树中的任何地方，但其行为和普通的 React 子节点行为一致，portal 仍存在于 React 树，且与 DOM 中的位置无关；一个从 portal 内部触发的事件会一直冒泡至包含 React 树的祖先，即便这些元素并不是 DOM 中的祖先。</p><p>ReactDOM.createPortal 返回的 VitrualDOM 对象会有一个叫做 containerInfo 的属性指向挂载的 DOM 节点；React 内部正是通过判断 containerInfo 属性是否存在来决定 VitrualDOM 的挂载方式的。</p><pre><code class=language-jsx>// 在 DOM 中有两个容器是兄弟级
 const appRoot = document.getElementById('app-root');
 const modalRoot = document.getElementById('modal-root');
 const Child = () =&gt; {
