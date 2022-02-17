@@ -1,4 +1,4 @@
-<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no,user-scalable=no"><meta name=author content=馬腊咯稽><meta name=description content="Vue 2.x/3.x 比较"><meta name=keywords content=Vue><link rel=canonical href=https://vikingama.github.io/posts/vue-compare/><link rel="shortcut icon" href=https://vikingama.github.io/images/favicon.ico><link rel=stylesheet href=https://vikingama.github.io/css/zozo.css><link rel=stylesheet href=https://vikingama.github.io/css/highlight.css><link rel=stylesheet href=https://vikingama.github.io/css/remixicon.css><title>Vue 2.x/3.x 比较 &middot; 看不见我的美 · 是你瞎了眼</title></head><body><div class="main animated"><div class="nav_container animated fadeInDown"><div class=site_nav id=site_nav><ul><li><a href=/>首页</a></li><li><a href=/posts/>归档</a></li><li><a href=/tags/>标签</a></li><li><a href=/inspires/>启发</a></li><li><a href=/command/>命令</a></li><li><a href=/about/>关于</a></li></ul></div><div class=menu_icon><a id=menu_icon><i class=remixicon-links-line></i></a></div></div><div class="header animated fadeInDown"><div class=site_title_container><div class=site_title><h1><a href=https://vikingama.github.io><img style=width:65px;height:auto;vertical-align:top src=https://vikingama.github.io/images/avatar.png></a></h1></div><div class=description><p class=sub_title>看不见我的美<br>是你瞎了眼</p><div class=my_socials><a href=https://www.douban.com/people/nicknoonan title=douban target=_blank><i class=remixicon-douban-fill></i></a><a href=https://github.com/Vikingama title=github target=_blank><i class=remixicon-github-fill></i></a><a href=https://weibo.com/vikingx title=weibo target=_blank><i class=remixicon-weibo-fill></i></a><a href=https://www.zhihu.com/people/vikingama title=zhihu target=_blank><i class=remixicon-zhihu-fill></i></a><a href=https://vikingama.github.io/index.xml type=application/rss+xml title=rss target=_blank><i class=remixicon-rss-fill></i></a></div></div></div></div><div class=content><div class=post_page><div class="post animated fadeInDown"><div class="post_title post_detail_title"><h2><a href=/posts/vue-compare/>Vue 2.x/3.x 比较</a></h2><span class=date>2021.10.24</span></div><div class="post_content markdown"><blockquote><p>最近在看 Vue 源码，顺手做下笔记。</p></blockquote><h3 id=响应式原理-2-x>响应式原理 2.x</h3><p>Dep 用来存放订阅者（watcher）的对象；每个 Dep 实例都存在于<strong>对象每个属性对应的 getter/setter 所在的闭包里</strong>（外边访问不到）并且都有唯一的 id。</p><pre><code class=language-ts>export default class Dep {
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=cache-control content=no-store><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no,user-scalable=no"><meta name=author content=馬腊咯稽><meta name=description content="Vue 2.x/3.x 比较"><meta name=keywords content=Vue><link rel=canonical href=https://vikingama.github.io/posts/vue-compare/><link rel="shortcut icon" href=https://vikingama.github.io/images/favicon.ico><link rel=stylesheet href=https://vikingama.github.io/css/zozo.css><link rel=stylesheet href=https://vikingama.github.io/css/highlight.css><link rel=stylesheet href=https://vikingama.github.io/css/remixicon.css><title>Vue 2.x/3.x 比较 &middot; 看不见我的美 · 是你瞎了眼</title></head><body><div class="main animated"><div class="nav_container animated fadeInDown"><div class=site_nav id=site_nav><ul><li><a href=/>首页</a></li><li><a href=/posts/>归档</a></li><li><a href=/tags/>标签</a></li><li><a href=/inspires/>启发</a></li><li><a href=/command/>命令</a></li><li><a href=/about/>关于</a></li></ul></div><div class=menu_icon><a id=menu_icon><i class=remixicon-links-line></i></a></div></div><div class="header animated fadeInDown"><div class=site_title_container><div class=site_title><h1><a href=https://vikingama.github.io><img style=width:65px;height:auto;vertical-align:top src=https://vikingama.github.io/images/avatar.png></a></h1></div><div class=description><p class=sub_title>看不见我的美<br>是你瞎了眼</p><div class=my_socials><a href=https://www.douban.com/people/nicknoonan title=douban target=_blank><i class=remixicon-douban-fill></i></a><a href=https://github.com/Vikingama title=github target=_blank><i class=remixicon-github-fill></i></a><a href=https://weibo.com/vikingx title=weibo target=_blank><i class=remixicon-weibo-fill></i></a><a href=https://www.zhihu.com/people/vikingama title=zhihu target=_blank><i class=remixicon-zhihu-fill></i></a><a href=https://vikingama.github.io/index.xml type=application/rss+xml title=rss target=_blank><i class=remixicon-rss-fill></i></a></div></div></div></div><div class=content><div class=post_page><div class="post animated fadeInDown"><div class="post_title post_detail_title"><h2><a href=/posts/vue-compare/>Vue 2.x/3.x 比较</a></h2><span class=date>2021.10.24</span></div><div class="post_content markdown"><blockquote><p>最近在看 Vue 源码，顺手做下笔记。</p></blockquote><h3 id=响应式原理-2-x>响应式原理 2.x</h3><p>Dep 用来存放订阅者（watcher）的对象；每个 Dep 实例都存在于<strong>对象每个属性对应的 getter/setter 所在的闭包里</strong>并且都有唯一的 id。</p><pre><code class=language-ts>export default class Dep {
   static target;
   constructor() {
     this.id = uid++;
@@ -47,17 +47,17 @@ export function pushTarget(target: ?Watcher) {
 // 收集依赖完成调用
 export function popTarget() {
   targetStack.pop();
-  // 恢复上一个 Dep.target
+  // 恢复上一个 Dep.target（恢复父级组件对应的 watcher）
   Dep.target = targetStack[targetStack.length - 1];
 }
-</code></pre><p>Watcher 实例被称作依赖（收集起来）或者订阅者，它<strong>观察/订阅了</strong>数据变动；数据的 getter 被触发时，watcher 会被收集起来；数据的 setter 被调用时，watcher 会触发相应的副作用函数：</p><ul><li>在 mountComponent 中会 new Watcher(...) 作为组件的 renderWatcher；同时在组件 update 时，会调用 watcher.before 来触发 beforeUpdate 钩子；</li><li>每个 vm.$watch 或者 watchOptions 都会 new Watcher(...)；</li><li>组件的 computedOptions 也会 new Watcher(...)。</li></ul><p>&nbsp;</p><pre><code class=language-ts>export default class Watcher {
+</code></pre><p>Watcher 实例被称作依赖（需要被收集起来）或者订阅者，它<strong>观察/订阅了</strong>数据变动（在依赖收集期间，访问了数据的 getter）；数据的 getter 被触发时，watcher 会被收集起来（Dep.target 被收集起来）；数据的 setter 被调用时，watcher.update 会被触发（watcher 得到了通知）：</p><ul><li>在 mountComponent 中会 new Watcher(...) 作为组件的 renderWatcher；同时在组件 update 时，会调用 watcher.before 来触发 beforeUpdate 钩子；</li><li>每个 vm.$watch 或者 watchOptions 都会 new Watcher(...)；</li><li>组件的 computedOptions 也会 new Watcher(...)。</li></ul><p>&nbsp;</p><pre><code class=language-ts>export default class Watcher {
   /**
    * 每个响应式数据都有自己的 Dep 列表（这个存在于闭包中）；
    * 保存着所有依赖于“此数据”的“订阅者”。
-   * 每当访问数据，会触发数据的 getter ；
+   * 每当访问数据，会触发数据的 getter；
    * 将全局唯一变量 Dep.target 添加到自己的 dep 列表。
    * 每当数据变化，会触发数据的 setter；
-   * setter 会通知所有“订阅者”（调用 watcher 的 update）。
+   * setter 会通知所有“订阅者”（调用 watcher.update）。
    * 每个 watcher 都维护了一份 dep 列表；
    * 当 watcher 销毁时，需要告诉这些“dep”，
    * 把自己删掉（数据再发生变化，别通知我了）。
@@ -67,7 +67,7 @@ export function popTarget() {
     expOrFn, // a.b.c || () =&gt; a.b.c
     cb, // 副作用回调函数
     options, // computed || deep || lazy
-    isRenderWatcher // 是否是组件 watcher
+    isRenderWatcher // 是否是组件级别的 watcher
   ) {
     this.vm = vm;
     if (isRenderWatcher) {
@@ -88,7 +88,7 @@ export function popTarget() {
     this.cb = cb; // 保存回调
     this.id = ++uid; // 批处理用的，唯一的标识
     this.active = true; // watcher 是否存活，teardown 之后被置为 false
-    this.dirty = this.lazy; // 是否&quot;脏&quot;了，脏了的话，如果 computedGetter 被出发了，就会重新求最新值
+    this.dirty = this.lazy; // computedGetter 被触发时，会判断数据『是否&quot;脏&quot;了』，脏了的话，就会重新求最新值
     /**
      * 为什么会有 deps、newDeps、depIds、newDepIds？
      * 假设 vm.$watch(() =&gt; vm.a ? vm.b : vm.c, () =&gt; {...})
@@ -169,18 +169,15 @@ export function popTarget() {
       }
     }
   }
-  /**
-   * watcher 告诉所有“收集了自己作为依赖”的依赖列表
-   * “我要销毁了，把我移除吧”
-   */
   teardown() {
     if (this.active) {
-      // 同时也将自己从组件的 _watchers 里移除
+      // 将自己从组件的 _watchers 里移除
       if (!this.vm._isBeingDestroyed) {
         remove(this.vm._watchers, this);
       }
       let i = this.deps.length;
       while (i--) {
+        // 告诉所有“收集了自己作为依赖”的依赖列表，“我要销毁了，把我移除吧”
         this.deps[i].removeSub(this);
       }
       // 完成销毁
@@ -239,7 +236,7 @@ export function popTarget() {
    */
   run() {
     if (this.active) {
-      const value = this.get(); // 重新求值作为最新的值，并对比前后值，不相同才会执行 cb
+      const value = this.get(); // 重新求值作为最新的值，并对比前后值；数据变化才会执行 cb
       if (value !== this.value || isObject(value) || this.deep) {
         const oldValue = this.value;
         this.value = value;
@@ -254,7 +251,7 @@ export function popTarget() {
     this.dirty = false; // 求值完了之后，会标记为『干净』
   }
 }
-</code></pre><p>&nbsp;</p><p>defineReactive 通过调用 Object.defineProperty 将 o[k（可配置属性）] 转化为 getter/setter（访问器属性）的形式，并在闭包内实例化了一个 Dep，用于依赖收集：</p><ul><li>初始化依赖注入时，会调用 defineReactive(vm, key, (resolveInject(vm.$options.inject, vm))[key])；</li><li>初始化渲染函数时，会调用 defineReactive(vm, '$attrs/\$listeners', ...)；</li><li>初始化 props 时，会调用 defineReactive(props, key, value)；</li><li>作为 Vue.util.defineReactive 工具函数使用；</li><li>每次调用 vm.$set 都会调用 defineReactive；</li><li>new Observer() 会调用 defineReactive。</li></ul><p>&nbsp;</p><pre><code class=language-ts>// 将 obj[key] 转换为 getter/setters 形式
+</code></pre><p>&nbsp;</p><p>defineReactive 通过调用 Object.defineProperty 将 o[k（可配置属性）] 转化为 getter/setter（访问器）的形式，并在闭包内实例化了一个 Dep，用于保存收集的 watcher：</p><ul><li>初始化依赖注入时，会调用 defineReactive(vm, key, (resolveInject(vm.$options.inject, vm))[key])；</li><li>初始化渲染函数时，会调用 defineReactive(vm, '$attrs/\$listeners', ...)；</li><li>初始化 props 时，会调用 defineReactive(props, key, value)；</li><li>作为 Vue.util.defineReactive 工具函数使用；</li><li>每次调用 vm.$set 都会调用 defineReactive；</li><li>new Observer() 会调用 defineReactive。</li></ul><p>&nbsp;</p><pre><code class=language-ts>// 将 obj[key] 转换为 getter/setters 形式
 export function defineReactive(obj, key, val, customSetter, shallow) {
   const property = Object.getOwnPropertyDescriptor(obj, key);
   if (property &amp;&amp; property.configurable === false) {
@@ -274,7 +271,6 @@ export function defineReactive(obj, key, val, customSetter, shallow) {
     configurable: true,
     get: function reactiveGetter() {
       /**
-       * 收集依赖：
        * watcher 的 getter 被调用之前会执行 pushTarget
        * 将 Dep.target 设置为 watcher，并把自身 push 到 targetStack
        * 调用 dep.depend，进而调用 watcher.addDep 方法
@@ -312,7 +308,6 @@ export function defineReactive(obj, key, val, customSetter, shallow) {
       }
       childOb = !shallow &amp;&amp; observe(newVal);
       /**
-       * 通知“订阅者”：
        * dep.notify 会循环 dep.subs，调用每个 watcher.update
        * watcher 接到通知，会根据“配置”执行相应动作
        */
@@ -459,7 +454,7 @@ function createReactiveObject(
      */
     targetType === TargetType.COLLECTION ? collectionHandlers : baseHandlers
   );
-  proxyMap.set(target, proxy); // 保存一下
+  proxyMap.set(target, proxy);
   return proxy;
 }
 </code></pre><p>reactive 用来创建原始对象的响应式副本，这种转换是深层的，reactive 会影响所有嵌套属性。</p><pre><code class=language-ts>export function reactive(target) {
@@ -704,7 +699,7 @@ const trackStack: boolean[] = [];
  * 1. WeakSet 的成员都是弱引用；
  * 2. WeakSet 的成员都是对象；
  * 3. WeakSet 不能遍历。
- * 只要外部引用消失，立即清除就会帮我们自动回收，不再像 2.x 里的那样，让 watcher 去一个个的通知
+ * 只要外部引用消失，立即清除就会帮我们自动回收
  */
 const targetMap = new WeakMap&lt;any, KeyToDepMap&gt;();
 export const ITERATE_KEY = Symbol('');
@@ -807,7 +802,7 @@ export function trigger(
       // key 不为 undefined 的情况
       add(depsMap.get(key));
     }
-    // 处理 ADD | DELETE | Map.SET 的 iteration key
+    // 处理 ADD | DELETE | SET 的 iteration key
     switch (type) {
       case 'add':
         if (!isArray(target)) {
@@ -1015,7 +1010,6 @@ export interface SchedulerJob {
    * 因为一些内建方法的调用（例如，Array.prototype.push）会导致无限循环
    * 只有在“组件更新函数”和“watch 回调”的情况下，这个选项才可以为 true
    * 组件更新可能会导致子组件的 props 更新，进而触发子组件的“flush: pre”的 watch 回调
-   * 如果这个回调修改了父组件依赖的“状态”
    */
   allowRecurse?: boolean;
 }
@@ -1053,7 +1047,7 @@ const queue: SchedulerJob[] = [];
  */
 export function queueJob(job: SchedulerJob) {
   /**
-   * 重复数据消除搜索使用 Array.include 的 startIndex 参数
+   * 重复数据消除搜索使用 Array.prototype.include 的 startIndex 参数
    * 判断队列中是否已有该 job，没有才会添加到任务队列中，防止任务重新执行
    * 默认情况下，搜索索引包含正在运行的当前 job，因此它无法再次递归触发自身
    */
@@ -1359,7 +1353,6 @@ lifecycleMixin(Vue);
  *
  */
 renderMixin(Vue);
-export default Vue;
 export function initMixin(Vue: Class&lt;Component&gt;) {
   Vue.prototype._init = function (options?: Object) {
     const vm: Component = this;
@@ -1504,9 +1497,8 @@ export function injectHook(
 ): Function | undefined {
   if (target) {
     const hooks = target[type] || (target[type] = []); // 保存着实例对应的钩子函数的数组
-    // __weh 的意思是“带有错误处理的”，
     const wrappedHook =
-      hook.__weh ||
+      hook.__weh || // __weh 的意思是“带有错误处理的”
       (hook.__weh = (...args: unknown[]) =&gt; {
         if (target.isUnmounted) {
           return;
@@ -4131,7 +4123,6 @@ export function nextTick(
   const p = currentFlushPromise || resolvedPromise;
   return fn ? p.then(this ? fn.bind(this) : fn) : p;
 }
-// $nextTick: i =&gt; nextTick.bind(i.proxy!)
 </code></pre><h3 id=vnode-2-x>vnode 2.x</h3><pre><code class=language-ts>/**
  * 调用场景：
  * 1. createComponent 中 new VNode(...)
@@ -4524,7 +4515,6 @@ function doWatch(
   };
   // 初始值是：[] 或 {}
   let oldValue = isArray(source) ? [] : INITIAL_WATCHER_VALUE;
-  // flush:sync
   const job: SchedulerJob = () =&gt; {
     if (!runner.active) {
       return;
@@ -4538,6 +4528,7 @@ function doWatch(
           cleanup();
         }
         callWithAsyncErrorHandling(cb, instance, ErrorCodes.WATCH_CALLBACK, [
+          // cb 接受的三个参数
           newValue,
           oldValue === INITIAL_WATCHER_VALUE ? undefined : oldValue,
           onInvalidate
