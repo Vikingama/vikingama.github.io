@@ -667,8 +667,8 @@ console.log(test(2)(3)(4)(5)); // 15
   if (type(o) === 'regexp') {
     return new RegExp(o);
   }
-  if (map.get(o)) {
-    return o;
+  if (map.has(o)) {
+    return map.get(o);
   }
   let temp = new o.constructor();
   map.set(o, temp);
