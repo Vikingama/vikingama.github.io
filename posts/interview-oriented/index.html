@@ -815,7 +815,7 @@ function fibonacciTwo(n) {
   for (let i = 2; i &lt;= n; i++) {
     temp[i] = temp[i - 1] + temp[i - 2];
   }
-  return temp.reverse()[0];
+  return temp[n];
 }
 let n = 10;
 console.log(fibonacciOne(n));
