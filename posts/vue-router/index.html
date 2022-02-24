@@ -1,72 +1,72 @@
-<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=cache-control content=no-store><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no,user-scalable=no"><meta name=author content=馬腊咯稽><meta name=description content="VueRouter 2.x 源码学习"><meta name=keywords content=Vue,Router><link rel=canonical href=https://vikingama.github.io/posts/vue-router/><link rel="shortcut icon" href=https://vikingama.github.io/images/favicon.ico><link rel=stylesheet href=https://vikingama.github.io/css/zozo.css><link rel=stylesheet href=https://vikingama.github.io/css/highlight.css><link rel=stylesheet href=https://vikingama.github.io/css/remixicon.css><title>VueRouter 2.x 源码学习 &middot; 看不见我的美 · 是你瞎了眼</title></head><body><div class="main animated"><div class="nav_container animated fadeInDown"><div class=site_nav id=site_nav><ul><li><a href=/>首页</a></li><li><a href=/posts/>归档</a></li><li><a href=/tags/>标签</a></li><li><a href=/inspires/>启发</a></li><li><a href=/command/>命令</a></li><li><a href=/about/>关于</a></li></ul></div><div class=menu_icon><a id=menu_icon><i class=remixicon-links-line></i></a></div></div><div class="header animated fadeInDown"><div class=site_title_container><div class=site_title><h1><a href=https://vikingama.github.io><img style=width:65px;height:auto;vertical-align:top src=https://vikingama.github.io/images/avatar.png></a></h1></div><div class=description><p class=sub_title>看不见我的美<br>是你瞎了眼</p><div class=my_socials><a href=https://www.douban.com/people/nicknoonan title=douban target=_blank><i class=remixicon-douban-fill></i></a><a href=https://github.com/Vikingama title=github target=_blank><i class=remixicon-github-fill></i></a><a href=https://weibo.com/vikingx title=weibo target=_blank><i class=remixicon-weibo-fill></i></a><a href=https://www.zhihu.com/people/vikingama title=zhihu target=_blank><i class=remixicon-zhihu-fill></i></a><a href=https://vikingama.github.io/index.xml type=application/rss+xml title=rss target=_blank><i class=remixicon-rss-fill></i></a></div></div></div></div><div class=content><div class=post_page><div class="post animated fadeInDown"><div class="post_title post_detail_title"><h2><a href=/posts/vue-router/>VueRouter 2.x 源码学习</a></h2><span class=date>2022.01.06</span></div><div class="post_content markdown"><blockquote><p>本来以为是很简单的东西，没想到这么复杂和巧妙。</p></blockquote><h3 id=vue-use-router>Vue.use(Router)</h3><p>Vue.use 会调用 Router 的静态 install 方法：</p><ol><li>保存 Vue 构造函数，方便其他组件调用 Vue 的工具函数；</li><li>在每个 Vue 实例中混入钩子：<ol><li>定义 _routerRoot、_router、_route（getter/setter）；</li><li>调用 Router 实例的 init 方法；</li><li>注册路由实例。</li></ol></li><li>在 Vue 原型上挂载 $router、$route；</li><li><p>注册 router-view 和 router-link 组件。</p><pre><code class=language-ts>export let _Vue; // 别的地方有用到 _Vue.extend
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=cache-control content=no-store><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no,user-scalable=no"><meta name=author content=馬腊咯稽><meta name=description content="VueRouter 2.x 源码学习"><meta name=keywords content=Vue,Router><link rel=canonical href=https://vikingama.github.io/posts/vue-router/><link rel="shortcut icon" href=https://vikingama.github.io/images/favicon.ico><link rel=stylesheet href=https://vikingama.github.io/css/zozo.css><link rel=stylesheet href=https://vikingama.github.io/css/highlight.css><link rel=stylesheet href=https://vikingama.github.io/css/remixicon.css><title>VueRouter 2.x 源码学习 &middot; 看不见我的美 · 是你瞎了眼</title></head><body><div class="main animated"><div class="nav_container animated fadeInDown"><div class=site_nav id=site_nav><ul><li><a href=/>首页</a></li><li><a href=/posts/>归档</a></li><li><a href=/tags/>标签</a></li><li><a href=/inspires/>启发</a></li><li><a href=/command/>命令</a></li><li><a href=/about/>关于</a></li></ul></div><div class=menu_icon><a id=menu_icon><i class=remixicon-links-line></i></a></div></div><div class="header animated fadeInDown"><div class=site_title_container><div class=site_title><h1><a href=https://vikingama.github.io><img style=width:65px;height:auto;vertical-align:top src=https://vikingama.github.io/images/avatar.png></a></h1></div><div class=description><p class=sub_title>看不见我的美<br>是你瞎了眼</p><div class=my_socials><a href=https://www.douban.com/people/nicknoonan title=douban target=_blank><i class=remixicon-douban-fill></i></a><a href=https://github.com/Vikingama title=github target=_blank><i class=remixicon-github-fill></i></a><a href=https://weibo.com/vikingx title=weibo target=_blank><i class=remixicon-weibo-fill></i></a><a href=https://www.zhihu.com/people/vikingama title=zhihu target=_blank><i class=remixicon-zhihu-fill></i></a><a href=https://vikingama.github.io/index.xml type=application/rss+xml title=rss target=_blank><i class=remixicon-rss-fill></i></a></div></div></div></div><div class=content><div class=post_page><div class="post animated fadeInDown"><div class="post_title post_detail_title"><h2><a href=/posts/vue-router/>VueRouter 2.x 源码学习</a></h2><span class=date>2022.01.06</span></div><div class="post_content markdown"><blockquote><p>本来以为是很简单的东西，没想到这么复杂和巧妙。</p></blockquote><h3 id=vue-use-router>Vue.use(Router)</h3><p>Vue.use 会调用 Router 的静态 install 方法：</p><ol><li>保存 Vue 构造函数，方便其他组件调用 Vue 的工具函数；</li><li>在每个 Vue 实例中混入钩子：<ol><li>定义 _routerRoot、_router、_route（getter/setter）；</li><li>调用 Router 实例的 init 方法；</li><li>注册路由实例。</li></ol></li><li>在 Vue 原型上挂载 $router、$route；</li><li>注册 router-view 和 router-link 组件。</li></ol><p>&nbsp;</p><pre><code class=language-ts>export let _Vue; // 别的地方有用到 _Vue.extend
 export function install(Vue) {
-// 防止重复 install
-if (install.installed) return;
-install.installed = true;
-// 保存 Vue
-_Vue = Vue;
-const isDef = v =&gt; v !== undefined;
-const registerInstance = (vm, callVal) =&gt; {
-let i = vm.$options._parentVnode;
-if (
-  isDef(i) &amp;&amp;
-  isDef((i = i.data)) &amp;&amp;
-  isDef((i = i.registerRouteInstance))
-) {
-  /**
-   * 调用 vm.$options._parentVnode.data.registerRouteInstance
-   * data.registerRouteInstance 存在于 router-view 中
-   */
-  i(vm, callVal);
+  // 防止重复 install
+  if (install.installed) return;
+  install.installed = true;
+  // 保存 Vue
+  _Vue = Vue;
+  const isDef = v =&gt; v !== undefined;
+  const registerInstance = (vm, callVal) =&gt; {
+    let i = vm.$options._parentVnode;
+    if (
+      isDef(i) &amp;&amp;
+      isDef((i = i.data)) &amp;&amp;
+      isDef((i = i.registerRouteInstance))
+    ) {
+      /**
+       * 调用 vm.$options._parentVnode.data.registerRouteInstance
+       * data.registerRouteInstance 存在于 router-view 中
+       */
+      i(vm, callVal);
+    }
+  };
+  // 混入钩子
+  Vue.mixin({
+    beforeCreate() {
+      // new Vue({router, ...})，挂载根实例
+      if (isDef(this.$options.router)) {
+        this._routerRoot = this;
+        // 传入的 new Router({mode, routes, ...})
+        this._router = this.$options.router;
+        // 调用 _router 的 init 方法
+        this._router.init(this);
+        /**
+         * defineReactive(obj, key, val, customSetter, shallow)
+         * 将 this._route 转化为 getter/setter，render 被调用时
+         * router.view 会访问 this._route，触发 getter
+         * 当 this._route 更新后，setter 调用
+         * router.view 渲染匹配的组件
+         */
+        Vue.util.defineReactive(this, '_route', this._router.history.current);
+      } else {
+        // 向上查找 _routerRoot
+        this._routerRoot = (this.$parent &amp;&amp; this.$parent._routerRoot) || this;
+      }
+      registerInstance(this, this);
+    },
+    destroyed() {
+      registerInstance(this);
+    }
+  });
+  // vm.$router = this._routerRoot._router = new Router({mode, routes, ...})
+  Object.defineProperty(Vue.prototype, '$router', {
+    get() {
+      return this._routerRoot._router;
+    }
+  });
+  // vm.$route = this._routerRoot._route
+  Object.defineProperty(Vue.prototype, '$route', {
+    get() {
+      return this._routerRoot._route;
+    }
+  });
+  // 注册 router-view 和 router-link 组件
+  Vue.component('router-view', View);
+  Vue.component('router-link', Link);
+  const strats = Vue.config.optionMergeStrategies;
+  strats.beforeRouteEnter = strats.beforeRouteLeave = strats.created;
 }
-};
-// 混入钩子
-Vue.mixin({
-beforeCreate() {
-  // new Vue({router, ...})，挂载根实例
-  if (isDef(this.$options.router)) {
-    this._routerRoot = this;
-    // 传入的 new Router({mode, routes, ...})
-    this._router = this.$options.router;
-    // 调用 _router 的 init 方法
-    this._router.init(this);
-    /**
-     * defineReactive(obj, key, val, customSetter, shallow)
-     * 将 this._route 转化为 getter/setter，render 被调用时
-     * router.view 会访问 this._route，触发 getter
-     * 当 this._route 更新后，setter 调用
-     * router.view 渲染匹配的组件
-     */
-    Vue.util.defineReactive(this, '_route', this._router.history.current);
-  } else {
-    // 向上查找 _routerRoot
-    this._routerRoot = (this.$parent &amp;&amp; this.$parent._routerRoot) || this;
-  }
-  registerInstance(this, this);
-},
-destroyed() {
-  registerInstance(this);
-}
-});
-// vm.$router = this._routerRoot._router = new Router({mode, routes, ...})
-Object.defineProperty(Vue.prototype, '$router', {
-get() {
-  return this._routerRoot._router;
-}
-});
-// vm.$route = this._routerRoot._route
-Object.defineProperty(Vue.prototype, '$route', {
-get() {
-  return this._routerRoot._route;
-}
-});
-// 注册 router-view 和 router-link 组件
-Vue.component('router-view', View);
-Vue.component('router-link', Link);
-const strats = Vue.config.optionMergeStrategies;
-strats.beforeRouteEnter = strats.beforeRouteLeave = strats.created;
-}
-</code></pre></li></ol><h3 id=vuerouter>VueRouter</h3><pre><code class=language-ts>export default class VueRouter {
+</code></pre><h3 id=vuerouter>VueRouter</h3><pre><code class=language-ts>export default class VueRouter {
   static install: () =&gt; void;
   static version: string;
   app: any;
@@ -893,7 +893,7 @@ function addRouteRecord(
     const name = props.name;
     const route = parent.$route;
     const cache = parent._routerViewCache || (parent._routerViewCache = {});
-    // 当前 router-view 所处的层级（嵌套深度，上边还有几个 router-view），顺便检查当前是否 active
+    // 当前 router-view 所处的层级（嵌套深度，上层还有几个 router-view），顺便检查当前是否 active
     let depth = 0;
     let inactive = false;
     while (parent &amp;&amp; parent._routerRoot !== parent) {
@@ -906,7 +906,7 @@ function addRouteRecord(
       parent = parent.$parent;
     }
     data.routerViewDepth = depth;
-    // 如果出入 inactive 状态，渲染前一个视图
+    // 如果是 inactive 状态，渲染前一个视图
     if (inactive) {
       return h(cache[name], data, children);
     }
