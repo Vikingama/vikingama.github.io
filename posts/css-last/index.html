@@ -1,0 +1,627 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=cache-control content=no-store><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no,user-scalable=no"><meta name=author content=馬腊咯稽><meta name=description content="《CSS 新世界》笔记（更新中...）"><meta name=keywords content=CSS><link rel=canonical href=https://vikingama.github.io/posts/css-last/><link rel="shortcut icon" href=https://vikingama.github.io/images/favicon.ico><link rel=stylesheet href=https://vikingama.github.io/css/zozo.css><link rel=stylesheet href=https://vikingama.github.io/css/highlight.css><link rel=stylesheet href=https://vikingama.github.io/css/remixicon.css><title>《CSS 新世界》笔记（更新中...） &middot; 看不见我的美 · 是你瞎了眼</title></head><body><div class="main animated"><div class="nav_container animated fadeInDown"><div class=site_nav id=site_nav><ul><li><a href=/>首页</a></li><li><a href=/posts/>归档</a></li><li><a href=/tags/>标签</a></li><li><a href=/inspires/>启发</a></li><li><a href=/command/>命令</a></li><li><a href=/about/>关于</a></li></ul></div><div class=menu_icon><a id=menu_icon><i class=remixicon-links-line></i></a></div></div><div class="header animated fadeInDown"><div class=site_title_container><div class=site_title><h1><a href=https://vikingama.github.io><img style=width:65px;height:auto;vertical-align:top src=https://vikingama.github.io/images/avatar.png></a></h1></div><div class=description><p class=sub_title>看不见我的美<br>是你瞎了眼</p><div class=my_socials><a href=https://www.douban.com/people/nicknoonan title=douban target=_blank><i class=remixicon-douban-fill></i></a><a href=https://github.com/Vikingama title=github target=_blank><i class=remixicon-github-fill></i></a><a href=https://weibo.com/vikingx title=weibo target=_blank><i class=remixicon-weibo-fill></i></a><a href=https://www.zhihu.com/people/vikingama title=zhihu target=_blank><i class=remixicon-zhihu-fill></i></a><a href=https://vikingama.github.io/index.xml type=application/rss+xml title=rss target=_blank><i class=remixicon-rss-fill></i></a></div></div></div></div><div class=content><div class=post_page><div class="post animated fadeInDown"><div class="post_title post_detail_title"><h2><a href=/posts/css-last/>《CSS 新世界》笔记（更新中...）</a></h2><span class=date>2022.01.24</span></div><div class="post_content markdown"><blockquote><p>最近在读张鑫旭的 CSS 三部曲，这是第三本，主要讲 CSS3.x，简单做下笔记。</p></blockquote><h3 id=前置知识>前置知识</h3><p><a href=https://www.zhangxinxu.com/wordpress/2011/03/css-css3-unit-units>CSS/CSS3 长度、时间、频率、角度单位大全</a></p><p><a href=https://www.zhangxinxu.com/wordpress/2019/11/css-value-type>CSS 值类型文档大全</a></p><p>CSS 全局关键字属性值：</p><ol><li>inherit，继承属性值；</li><li>initial，CSS 语法中规定的初始值，不是浏览器内置样式的初始值；</li><li>unset，对于有继承性的属性，等同于 inherit；对于没有继承性的属性，等同于 initial，常常（all:unset）酱紫使用；</li><li>revert，还原为浏览器内置样式。</li></ol><p>all 指代除了自定义属性（还有 unicode-bidi 和 direction）之外的所有 CSS 属性；属性值为 initial|inherit|unset|revert：</p><ul><li>all:initial 无实际价值；</li><li>all:inherit 无实际价值；</li><li>all:unset，让任何元素的样式表现和 <strong>span 一样</strong>；</li><li>all:revert，让元素恢复成<strong>浏览器内置样式</strong>。</li></ul><p>@supports 是用来检测当前浏览器是否支持某个 CSS 新特性的最规范、最正统的处理方法（当然，没 IE 什么事）：</p><ul><li>浏览器提供了相应的 JS 接口 CSS.supports(propertyName, value)；</li><li>@supports 规则的花括号可以包含其他任意 @ 规则，甚至是包含 @supports 规则自身。</li></ul><p>&nbsp;</p><pre><code class=language-css>/* 支持弹性布局 */
+@supports (display: flex) {
+  /* 可以嵌套其他规则 */
+  @media screen and (max-width: 720px) {
+    div {
+      /* ... */
+    }
+  }
+}
+/* 不支持弹性布局 */
+@supports not (display: flex) {
+  /* 可以嵌套 @supports 自身 */
+  @supports (animation: none) {
+    span {
+      /* ... */
+    }
+  }
+}
+/* 同时支持弹性布局和网格布局 */
+@supports (display: flex) and (display: grid) {
+  /* 可以嵌套 @keyframes */
+  @keyframes hahaha {
+    from {
+      /* ... */
+    }
+    to {
+      /* ... */
+    }
+  }
+}
+/* 支持弹性布局或者支持网格布局 */
+@supports (display: flex) or (display: grid) {
+  /* ... */
+}
+</code></pre><p>总之，Web 开发是没有必要让所有浏览器都显示得一模一样的；<strong>好的浏览器有更好的显示，糟糕的浏览器就只有普通的显示</strong>；这才是对用户更负责任的做法。</p><h3 id=width-fit-content>width:fit-content</h3><p>fit-content 的样式表现就是 CSS2.1 规范中的 <strong>shrink-to-fit</strong>，称其为<strong>包裹性</strong>；尺寸收缩但不会超出包含块级元素的尺寸限制：</p><pre><code class=language-html>&lt;style&gt;
+  p {
+    background: red;
+    color: white;
+  }
+  /* 字数少时居中显示，字数多时左对齐显示 */
+  p &gt; .table-span {
+    display: table;
+    margin: auto;
+    background: blue;
+  }
+  p &gt; .fit-content {
+    display: block;
+    margin: auto;
+    width: fit-content;
+    background: green;
+  }
+&lt;/style&gt;
+&lt;p&gt;
+  &lt;span class=&quot;table-span&quot;&gt;Ribeye tail rump tenderloin chislic venison.&lt;/span&gt;
+  &lt;span class=&quot;fit-content&quot;&gt;Ribeye tail rump tenderloin chislic venison.&lt;/span&gt;
+&lt;/p&gt;
+&lt;p&gt;
+  &lt;span class=&quot;table-span&quot;&gt;
+    Flank chuck biltong, beef tenderloin tri-tip andouille alcatra cow ball tip.
+    Ribeye short ribs tail short loin, capicola pork belly landjaeger ham
+    drumstick salami flank.
+  &lt;/span&gt;
+  &lt;span class=&quot;fit-content&quot;&gt;
+    Flank chuck biltong, beef tenderloin tri-tip andouille alcatra cow ball tip.
+    Ribeye short ribs tail short loin, capicola pork belly landjaeger ham
+    drumstick salami flank.
+  &lt;/span&gt;
+&lt;/p&gt;
+</code></pre><p><img style="display:block;margin:0 auto;width:70%" src=/css-last/fit-content.png></p><p>fit-content 的优点：让元素有了确定的尺寸；从此，让元素上下左右都居中有了一种新的写法：</p><pre><code class=language-html>&lt;style&gt;
+  .fit-content-to-center {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: auto;
+    /* 不必再借用 transform 属性了，减小了过渡动画的计算量 */
+    width: fit-content;
+    height: fit-content;
+  }
+&lt;/style&gt;
+&lt;span class=&quot;fit-content-to-center&quot;&gt;
+  Ribeye tail rump tenderloin chislic venison.
+&lt;/span&gt;
+</code></pre><p>stretch、available 和 fill-available 的作用都是一致的，那就是让元素的尺寸自动填满可用空间，就如同 div 元素的默认尺寸表现：</p><ul><li>stretch，<strong>弹性拉伸</strong>，用于替换之前的 fill-available 和 available；</li><li>available，<strong>可用空间</strong>，Firefox 使用的关键字，需要配合 -moz- 前缀使用；</li><li>fill-available，<strong>填充可用空间</strong>，Webkit 使用的关键字，需要配合 -webkit- 前缀使用。</li></ul><p>所以，使用时应该酱紫写 CSS：</p><pre><code class=language-css>/* 其实，在实际开发中，用处不大 */
+.element {
+  width: -webkit-fill-available;
+  width: -moz-available;
+  width: stretch;
+}
+</code></pre><h3 id=min-content-与-max-content>min-content 与 max-content</h3><p>min-content 即<strong>首选最小宽度</strong>或者<strong>最小内容宽度</strong>。</p><p>元素由 content-box、padding-box、border-box 和 margin-box 组成，元素最终占据的尺寸由这 4 个盒子占据的尺寸决定。其中 padding-box、border-box 和 margin-box 的尺寸表现规则<strong>不会</strong>因为元素的不同而有所不同，但是 content-box 不一样，它<strong>随着内容的不同</strong>，首选最小宽度也会不同。</p><ul><li>替换元素（按钮、视频和图片等元素）的首选最小宽度是<strong>当前元素内容自身的宽度</strong>；</li><li>CJK 文字（中文、日文、韩文）：<ul><li>一段<strong>没有标点</strong>的中文文字的首选最小宽度是<strong>单个汉字的宽度</strong>；</li><li>一段中文文字包含<strong>避头标点（，。？、！）</strong>或<strong>避尾标点（前引号、前括号）</strong>，同时 <strong>line-break</strong> 的属性值<strong>不是 anywhere</strong>，首选最小宽度<strong>需要包含标点字符的宽度</strong>;</li></ul></li><li>非 CJK 文字（英文、数字和标点等）的首选最小宽度是由<strong>字符单元（所有连续的英文字母、数字和标点都是一个字符单元，直到遇到中断字符）的宽度</strong>决定的；</li><li>一个元素<strong>最终的首选最小宽度</strong>是所有内部子元素中最大的那个首选最小宽度值。</li></ul><p>&nbsp;</p><pre><code class=language-html>&lt;style&gt;
+  button,
+  span {
+    display: inline-block;
+    width: min-content;
+    outline: 1px solid black;
+  }
+&lt;/style&gt;
+&lt;button&gt;按钮&lt;/button&gt;
+&lt;button&gt;Button&lt;/button&gt;
+&lt;span&gt;大大大小小小&lt;/span&gt;
+&lt;span&gt;AaBbCcDdEe&lt;/span&gt;
+&lt;span&gt;1234567890&lt;/span&gt;
+&lt;span&gt;他于 1999 年在香港科技大学（下称港科大）任职期间创立了固高科技...&lt;/span&gt;
+&lt;span&gt;
+  Pork belly fatback picanha, capicola t-bone rump ham strip steak brisket.
+&lt;/span&gt;
+&lt;span&gt;1-2-34567-8-9-00000000&lt;/span&gt;
+</code></pre><p><img style="display:block;margin:0 auto;width:70%" src=/css-last/min-content.png></p><p>在实际开发中是不会使用 min-content 关键字的，但是会非常频繁地遇到 min-content 的表现场景。</p><p>max-content 表示最大内容宽度；作用是让元素尽可能大，保证图文内容在一行显示，哪怕最终的宽度溢出外部容器元素。</p><p>所有需要使用 max-content 的场景，都能使用 white-space:nowrap 实现一模一样的效果，并且兼容性更好；所以实际上 max-content 没有任何实用价值。</p><h3 id=position-sticky>position:sticky</h3><p>黏性定位效果底层的渲染规则<strong>和固定定位没有任何关系</strong>，而是<strong>相对定位的延伸</strong>：</p><ol><li>元素发生偏移的时候，元素的原始位置是保留的；</li><li>创建了新的绝对定位包含块，如果有绝对定位的子元素，那这个子元素是相对于当前黏性定位元素的；</li><li>支持设置 z-index 来改变元素的层叠顺序；</li><li>黏性定位是相对于层级最近的可滚动元素（overflow 不是 visible 的元素）；如果没有可滚动元素，则相对视口定位；</li><li>当多个粘性元素发生重叠时，会有 A 元素推开 B 元素的视觉表现，而不是相互堆叠。</li></ol><p>黏性定位中有一个<strong>流盒</strong>的概念，指的是黏性定位元素<strong>最近的可滚动元素的尺寸盒子</strong>，如果没有可滚动元素，则表示视口盒子。</p><p>黏性定位中还有一个名为<strong>黏性约束矩形</strong>的概念，指的是<strong>黏性定位元素的包含块</strong>在文档流中呈现的矩形区域和流盒的 4 个边缘在应用黏性定位元素的 left、top、right 和 bottom 属性的偏移计算值后的新矩形的交集。</p><p>滚动的时候<strong>流盒不变</strong>，而黏性定位元素的<strong>包含块跟着滚动</strong>，因此<strong>黏性约束矩形</strong>随着滚动的进行是<strong>实时变化的</strong>。假设黏性定位元素只设置了 top，则黏性定位元素碰到黏性约束矩形的顶部时就开始向下移动，直到它<strong>完全被包含在黏性约束矩形中</strong>。</p><p>如果多个黏性定位元素在<strong>同一容器</strong>中，则这几个黏性定位元素会产生元素重叠的情况：</p><pre><code class=language-html>&lt;style&gt;
+  * {
+    margin: 0;
+    padding: 0;
+    border: none;
+  }
+  body {
+    height: 300vh;
+  }
+  .line {
+    position: fixed;
+    top: 15vh;
+    width: 100vw;
+    border-top: 1px dashed palevioletred;
+  }
+  .container {
+    outline: 1px solid white;
+    margin: 30vh auto 0;
+    width: 60vw;
+    height: 50vh;
+  }
+  p {
+    position: sticky;
+    top: 15vh;
+    border: 1px solid aquamarine;
+    text-align: center;
+    color: aquamarine;
+    font-size: 18px;
+  }
+  p:first-of-type {
+    text-align: left;
+  }
+  p:last-of-type {
+    text-align: right;
+  }
+&lt;/style&gt;
+&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;
+&lt;div class=&quot;container&quot;&gt;
+  &lt;p&gt;1&lt;/p&gt;
+  &lt;p&gt;2&lt;/p&gt;
+  &lt;p&gt;3&lt;/p&gt;
+&lt;/div&gt;
+</code></pre><p><img style="display:block;margin:0 auto;width:70%" src=/css-last/sticky-in-one.png></p><p>如果黏性定位元素分布在<strong>不同的容器</strong>中，同时这些容器在布局上是上下紧密相连的，则<strong>视觉上</strong>会表现为新的黏性定位元素挤开原来的黏性定位元素，形成依次占位的效果：</p><pre><code class=language-html>&lt;style&gt;
+  * {
+    margin: 0;
+    padding: 0;
+    border: none;
+  }
+  body {
+    height: 300vh;
+  }
+  .line {
+    position: fixed;
+    top: 15vh;
+    width: 100vw;
+    border-top: 1px dashed palevioletred;
+  }
+  .container {
+    outline: 1px solid white;
+    margin: 30vh auto 0;
+    width: 60vw;
+    height: 50vh;
+  }
+  p {
+    position: sticky;
+    top: 15vh;
+    border: 1px solid aquamarine;
+    text-align: center;
+    color: aquamarine;
+    font-size: 18px;
+  }
+  section {
+    height: 100px;
+  }
+  section:first-of-type p {
+    text-align: left;
+  }
+  section:last-of-type p {
+    text-align: right;
+  }
+&lt;/style&gt;
+&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;
+&lt;div class=&quot;container&quot;&gt;
+  &lt;section&gt;&lt;p&gt;1&lt;/p&gt;&lt;/section&gt;
+  &lt;section&gt;&lt;p&gt;2&lt;/p&gt;&lt;/section&gt;
+  &lt;section&gt;&lt;p&gt;3&lt;/p&gt;&lt;/section&gt;
+&lt;/div&gt;
+</code></pre><p><img style="display:block;margin:0 auto;width:70%" src=/css-last/sticky-in-three.png></p><p>上一个黏性定位元素被滚走，下一个黏性定位元素正好开始有黏性效果。</p><h3 id=font-family>font-family</h3><p>全新的通用字体族：</p><ul><li>system-ui，系统 UI 字体；<ul><li>使用系统字体不再需要 font:menu、font:status-bar，因为 menu、status-bar、small-caption 关键字是包含字号的；</li><li>font-family:system-ui 就可以使得字体设置随着系统字体变动。</li></ul></li><li>emoji，用于 emoji 字符的字体家族；<ul><li>Apple Color Emoji，用在 iOS 和 macOS 中；</li><li>Segoe UI Emoji，用在 Windows 中；</li><li>Segoe UI Symbol，Windows 7 中添加的一种新字体，一种 Unicode 编码字体，显示的是单色图案，非彩色图形；</li><li>Noto Color Emoji，用在 Android 和 Linux 中。</li></ul></li><li>math，用于数学表达式的字体家族；<ul><li>Cambria Math，Windows 中的数学字体；</li><li>Latin Modern Math，macOS 中的数学字体。</li></ul></li><li>fangsong，中文字体中的仿宋字体家族，一般用于非常正式的公告。</li></ul><p>GitHub 的字体设置：</p><pre><code class=language-html>&lt;pre&gt;
+  body {
+    /*
+      这里的字体设置遗漏了 Roboto 字体
+      Roboto 是为 Android 设计的一款无衬线字体
+      可以在 Android 上以最佳的西文字体显示
+    */
+    font-family:
+      /*
+        只在 macOS 中有效
+        system-ui 字体族还没出现之前的一种私有语法
+        可以让 Firefox 和 Safari 9.1～10.1 使用系统字体
+      */
+      -apple-system,
+      /*
+        只在 macOS 中有效
+        Chrome 53～55 使用系统字体的一种非标准语法
+        可以删掉了
+      */
+      BlinkMacSystemFont,
+      /*
+        不支持系统字体的浏览器兜底用的
+        Windows 从 Vista 开始默认的西文字体族
+      */
+      'Segoe UI',
+      /*
+        不支持系统字体的浏览器兜底用的
+        macOS 和 iOS 中很常用的一款无衬线字体
+      */
+      Helvetica,
+      /*
+        不支持系统字体的浏览器兜底用的
+        全平台都支持的一款无衬线字体
+      */
+      Arial,
+      sans-serif,
+      /*
+        emoji 字体
+        此处同样遗漏了 Android 的 emoji 字体
+      */
+      'Apple Color Emoji',
+      'Segoe UI Emoji';
+  }
+&lt;/pre&gt;
+</code></pre><p>最佳 CSS 字体设置实践：</p><pre><code class=language-css>/* @font-face 定义的字体只有在被使用的时候才会加载 */
+@font-face {
+  font-family: Emoji;
+  src: local('Apple Color Emoji'), local('Segoe UI Emoji'), local(
+      'Segoe UI Symbol'
+    ), local('Noto Color Emoji');
+  unicode-range: U+1F000-1F644, U+203C-3299;
+}
+/* 最佳无衬线字体 */
+body {
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Emoji, Helvetica,
+    Arial, sans-serif;
+}
+/* 最佳衬线字体 */
+.font-serif {
+  font-family: Georgia, Cambria, 'Times New Roman', Times, serif;
+}
+/* 最佳等宽字体 */
+.font-mono {
+  font-family: Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New',
+    monospace;
+}
+/* math 通用字体 */
+math {
+  font-family: Cambria Math, Latin Modern Math;
+}
+</code></pre><h3 id=font-display>font-display</h3><p><strong>字体显示时间线</strong>开始于浏览器<strong>尝试下载</strong>字体的那一刻，整个时间线分为 3 个时段，每个时段有不同的字体渲染行为：</p><ol><li>字体阻塞时段，如果未加载字体，任何试图使用它的元素都必须以<strong>不可见</strong>的方式渲染后备字体；如果在此期间字体成功加载，则正常使用它；</li><li>字体交换时段，如果未加载字体，任何试图使用它的元素都必须以<strong>可见</strong>的方式渲染后备字体；如果在此期间字体成功加载，则正常使用它；</li><li>字体失败时段，如果未加载字体，则浏览器将其视为加载失败，并使用正常字体进行<strong>回退渲染</strong>。</li></ol><p>font-display 就是围绕字体显示时间线展开的；共有五个属性值：</p><ul><li>auto，字体显示策略由浏览器决定；</li><li>block，字体阻塞时段较短，字体交换时段无限；适合<strong>图标字体</strong>场景；</li><li>swap，字体阻塞时段极短（不超过 100ms），字体交换时段无限；适合用在<strong>小段文本同时文本内容对页面非常重要</strong>的场景；</li><li>fallback，字体阻塞时段极短（不超过 100ms），字体交换时段较短；适合用于<strong>大段文本同时对字体效果比较看重</strong>的场景；</li><li>optional，字体阻塞时段极短（不超过 100ms），没有字体交换时段；如果字体瞬间被加载（被缓存），则浏览器使用该字体，否则使用回退字
+体；日常 Web 开发更推荐。</li></ul><p>font-display 属性只能用在 @font-face 规则中；如果你的自定义字体是用于字体呈现，就使用 optional，否则使用默认值。</p><h3 id=中断与换行>中断与换行</h3><p>字符单元默认的中断与换行规则：</p><ul><li>Space（普通空格）、Enter（回车）和 Tab（制表符）无论怎样组合都会<strong>合并为单个普通空格</strong>；</li><li>文字可以在 CJK 文本、普通空格和短横线连字符处换行，连续英文单词和数字不换行。</li></ul><p>word-break:keep-all 可以让 CJK 文本<strong>不换行排版</strong>，同时又<strong>不影响</strong>非 CJK 文本的排版行为。</p><p>hyphens 是专为英文场景设计的一个 CSS 属性，可以让英文单词<strong>断开换行的时候带上连字符</strong>。</p><p>&lt;wbr/&gt; 表示有机会就断开换行（如果宽度足够就不换行）；而 &lt;br/&gt; 则是直接换行显示，无论宽度是否足够。</p><h3 id=text-decoration>text-decoration</h3><p>text-decoration 是一个缩写属性：</p><ul><li>text-decoration-line，装饰线类型：<ul><li>none；</li><li>underline；</li><li>overline；</li><li>line-through。</li></ul></li><li>text-decoration-style，装饰线风格：<ul><li>solid；</li><li>double；</li><li>dotted；</li><li>dashed；</li><li>wavy。</li></ul></li><li>text-decoration-color，装饰线颜色；</li><li>text-decoration-thickness，装饰线粗细。</li></ul><p>text-decoration 最有意思的特性要数装饰线的<strong>累加特性</strong>了：</p><pre><code class=language-html>&lt;style&gt;
+  div {
+    text-decoration: overline wavy orangered 1px;
+  }
+  p {
+    text-decoration: underline dotted tomato 2px;
+  }
+&lt;/style&gt;
+&lt;div&gt;
+  &lt;p&gt;Burgdoggen shank picanha beef ribs capicola pastrami.&lt;/p&gt;
+  &lt;p&gt;Tongue ribs filet shoulder short loin pancetta salami.&lt;/p&gt;
+&lt;/div&gt;
+</code></pre><p><img style="display:block;margin:0 auto;width:70%" src=/css-last/text-decoration.png></p><p>text-underline-position:(under|left|right|from-font) 可以用来设置下划线的位置。</p><p>text-underline-offset 也可以用来设置下划线的位置（只对下划线类型的装饰线有效），其偏移量支持数值和百分比值。</p><h3 id=color>color</h3><p>不是所有人都知道的一些知识：</p><ul><li>HTML 中 color 算法和 CSS 中的 color 算法是<strong>不一样</strong>的；无法识别的颜色在 HTML 中会渲染成另外一个颜色，而在 CSS 中会忽略这个颜色；</li><li>颜色关键字设置的颜色都是实色，不带透明度；</li><li>颜色关键字<strong>不区分大小写</strong>；</li><li>所有颜色关键字中，只有两个颜色是以“deep”开头的，分别是深天蓝色 deepskyblue 和深粉色 deeppink；</li><li>暗灰色 darkgray 要比灰色 gray 更浅，并不是有“dark”前缀的颜色就更深；</li><li>transparent 其实是 rgba(0, 0, 0, 0) 的另外一种快捷书写方式；</li><li>SVG 和 Canvas 中的透明渐变算法与 CSS 的渐变算法<strong>不一致</strong>。</li></ul><p>HSL 颜色很适合用在颜色变化的场合：</p><ul><li>Hue，色调，可以是小数；<ul><li>0 ～ 360deg 大致按照红、橙、黄、绿、青、蓝、紫、红的颜色顺序分布；</li><li>red = 0deg、green = 120deg、blue = 240deg。</li></ul></li><li>Saturation，饱和度，0% ～ 100%；</li><li>Lightness，亮度，0% ～ 100%。</li></ul><h3 id=background-clip>background-clip</h3><p>background-clip 支持下面几个属性值：</p><ul><li>border-box，默认值，背景图像或者背景颜色的显示区域是整个 border-box，边框的下方也会显示背景内容；</li><li>padding-box，背景图像或者背景颜色的显示区域是整个 padding-box；</li><li>content-box，背景图像或者背景颜色的显示区域是整个 content-box；</li><li><p>text，可以让背景图像按照字符形状进行剪裁。</p><pre><code class=language-html>&lt;style&gt;
+div {
+float: left;
+display: flex;
+justify-content: center;
+align-items: center;
+margin: 8px;
+padding: 20px;
+width: 150px;
+height: 150px;
+background-color: cornflowerblue;
+border: 20px dashed darksalmon;
+outline: 1px solid black;
+}
+div:nth-of-type(1) {
+background-clip: border-box;
+}
+div:nth-of-type(2) {
+background-clip: padding-box;
+}
+div:nth-of-type(3) {
+background-clip: content-box;
+}
+div:nth-of-type(4) {
+-webkit-background-clip: text;
+background-clip: text;
+color: transparent;
+}
+&lt;/style&gt;
+&lt;div&gt;background-clip: border-box;&lt;/div&gt;
+&lt;div&gt;background-clip: padding-box;&lt;/div&gt;
+&lt;div&gt;background-clip: content-box;&lt;/div&gt;
+&lt;div&gt;background-clip: text;&lt;/div&gt;
+</code></pre></li></ul><p><img style="display:block;margin:0 auto;width:70%" src=/css-last/background-clip.png></p><h3 id=box-shadow>box-shadow</h3><p>多边框效果：</p><pre><code class=language-html>&lt;style&gt;
+  .multi-border {
+    margin: 40px auto;
+    width: 60%;
+    height: 80px;
+    border-radius: 10px;
+    background-color: dodgerblue;
+    box-shadow: 0 0 0 4px white, 0 0 0 8px #fc9918, 0 0 0 12px #f14a16, 0 0 0
+        16px #35589a, 0 0 0 20px #370665, 0 0 0 24px #121212, 0 0 0 28px #30475e,
+      0 0 0 32px #f05454;
+  }
+&lt;/style&gt;
+&lt;div class=&quot;multi-border&quot;&gt;&lt;/div&gt;
+</code></pre><p><img style="display:block;margin:0 auto;width:70%" src=/css-last/box-shadow-multi.png></p><h3 id=transform>transform</h3><p>CSS 中的角度单位：</p><ul><li>deg，角度，一个完整的圆是 360deg；</li><li>grad，百分度，一个完整的圆是 400grad；</li><li>rad，弧度，一个完整的圆是 2πrad；</li><li>turn，圈数，一个完整的圆是 1turn。</li></ul><p>元素 transform 之后的变化：</p><ul><li>创建层叠上下文；</li><li>子元素 position:fixed 失效；</li><li>transform 不为 none 的元素也可以作为绝对定位元素的包含块。</li></ul><p>卷角投影效果：</p><pre><code class=language-html>&lt;style&gt;
+  html {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #666;
+    transform: scale(1);
+  }
+  .page {
+    position: relative;
+    width: 300px;
+    height: 200px;
+    background-color: #f4f39e;
+    box-shadow: 0 2px 10px 1px rgba(0, 0, 0, 0.2);
+    border-bottom-right-radius: 50% 10px;
+  }
+  .page::before,
+  .page::after {
+    content: '';
+    position: absolute;
+    width: 90%;
+    height: 30%;
+    z-index: -1;
+  }
+  .page::before {
+    left: 15px;
+    bottom: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    transform: skew(-15deg) rotate(-5deg);
+  }
+  .page::after {
+    right: 15px;
+    bottom: 25px;
+    box-shadow: 8px 8px 10px rgba(0, 0, 0, 0.4);
+    transform: skew(15deg) rotate(8deg);
+  }
+&lt;/style&gt;
+&lt;div class=&quot;page&quot;&gt;&lt;/div&gt;
+</code></pre><p><img style="display:block;margin:0 auto;width:70%" src=/css-last/roll-angle.png></p><p>zoom 的属性值：</p><ul><li>百分比值，50%，表示缩小到原来的一半；</li><li>数值，0.5，表示缩小到原来的一半；</li><li>normal，等同于 1，默认值；</li><li>reset，表示按 Ctrl− 或 Ctrl+ 进行文档缩放的时候，元素不跟着缩小与放大。</li></ul><p>zoom 和 transform:scale 的区别：</p><ol><li>zoom 是一个非标准属性；</li><li>zoom 缩放的中心坐标是相对于元素的<strong>左上角</strong>，且不能修改；transform:scale 缩放默认的中心坐标是元素的<strong>中心点</strong>；</li><li>zoom 缩放会实时<strong>改变</strong>元素占据的尺寸空间；</li><li>zoom 不会创建层叠上下文，不会使子元素 position:fixed 失效，不会改变绝对定位元素的包含块。</li></ol><h3 id=min-max-和-clamp>min、max 和 clamp</h3><p>min(expression [, expression]) 支持一个或多个表达式，每个表达式之间使用逗号分隔，然后将最小的表达式的<strong>值</strong>作为返回值；例如：</p><pre><code class=language-css>div {
+  width: min(10vw, 5em, 80px);
+  width: min(10px * 10, 10em);
+  width: min(calc(10px * 10), 10em);
+  width: min(10px * 10, var(--width));
+}
+.constr {
+  width: 1024px;
+  max-width: 100%;
+}
+.constr {
+  width: min(1024px, 100%);
+}
+</code></pre><p>max 和 min 语法类似，区别在于 max 返回的是最大值，min 返回的是最小值。</p><p>clamp 的作用是返回一个区间范围的值，clamp(MIN-最小值, VAL-首选值, MAX-最大值)：</p><ul><li>如果 VAL 在 MIN ～ MAX 范围内，则使用 VAL 作为函数返回值；</li><li>如果 VAL 大于 MAX，则使用 MAX 作为返回值；</li><li>如果 VAL 小于 MIN，则使用 MIN 作为返回值。</li></ul><h3 id=渐变>渐变</h3><p>CSS 渐变本质上是一个图像，无法使用 transition 实现过渡效果，也无法使用 <a href=https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_animated_properties>animation</a> 实现动画效果。</p><p>渐变角度和渐变方位关系：0deg 表示向上，顺时针旋转是正角度，所以 90deg 表示向右。</p><p><img style="display:block;margin:0 auto;width:70%" src=/css-last/gradient-angle.png></p><h3 id=变换>变换</h3><p>3D 变换相关的三个属性：</p><ul><li><a href=https://developer.mozilla.org/zh-CN/docs/Web/CSS/transform-style>transform-style</a>，设置元素的子元素是位于 3D 空间（preserve-3d）中还是平面（flat）中；</li><li><a href=https://developer.mozilla.org/zh-CN/docs/Web/CSS/perspective>perspective</a>，指定观察者与 z=0 平面的距离，使具有三维位置变换的元素产生透视效果；</li><li><a href=https://developer.mozilla.org/zh-CN/docs/Web/CSS/perspective-origin>perspective-origin</a>，指定观察者的位置，用作 perspective 属性的消失点；</li><li><a href=https://developer.mozilla.org/zh-CN/docs/Web/CSS/backface-visibility>backface-visibility</a>，指定当元素背面朝向观察者时是否可见。</li></ul><p>案例，<a href=https://vikingama.github.io/demosforife/Design%20B.html>旋转的骰子</a>。</p><h3 id=动画>动画</h3><p>@keyframes 规则中的 CSS 优先级是最高的；因此，没有必要在 @keyframes 中使用 !important 关键字。</p><p>animation-direction 可以用来控制动画的方向，其本质上是通过控制 @keyframes 规则中定义的动画关键帧执行的方向来实现的：</p><ul><li>normal，每个动画循环结束，动画重置到起点重新开始；[0-&gt;100%, 0-&gt;100%, 0-&gt;100%, ...]；</li><li>alternate，下一轮动画的执行方向和上一轮动画的执行方向相反；[0-&gt;100%, 100%-&gt;0, 0-&gt;100%, ...]；</li><li>reverse，每一轮动画执行的方向相反；[100%-&gt;0, 100%-&gt;0, 100%-&gt;0, ...]；</li><li>alternate-reverse；[100%-&gt;0, 0-&gt;100%, 100%-&gt;0,...]。</li></ul><p>animation-fill-mode 动画填充模式，主要用来定义动画在执行时间之外应用的值：</p><ul><li>none，表示动画开始之前和动画结束之后不会对元素应用 @keyframes 规则中定义的任何样式，可能会有『突变』的糟糕体验；</li><li>both，让元素的动画在延时等待时保持第一帧的样式，在动画结束后保持最后一帧的样式，适用于绝大多数的开发场景；</li><li>forwards，表示动画结束后（由 animation-iterationcount 属性决定），元素将应用当前动画结束时的属性值；</li><li>backwards，表示在动画开始之前，元素将应用当前动画第一轮播放的第一帧的属性值。</li></ul><p>animation-timing-function 支持两种缓动函数，cubic-bezier 和 steps；steps 函数用法为 steps(number, position)：</p><ul><li>number，指数值，且是整数值，表示把动画分成了多少段；</li><li>position，可选参数，指关键字属性值，表示动画跳跃执行是在时间段的开始还是结束：<ul><li>start，在时间段的开头处跳跃（直接开始，也就是时间段才开始，就已经执行了一个距离段）；</li><li>end，默认值，在时间段的结束处跳跃（戛然而止，也就是时间段一结束，当前动画执行就停止）；</li><li>jump-both，动画开始时和结束时都不发生跳跃，然后中间部分等分跳跃；</li><li>jump-none，动画开始时和结束时都发生跳跃；</li><li>jump-start，同 start；</li><li>jump-end，同 end。</li></ul></li></ul><h3 id=分栏布局>分栏布局</h3><p>分栏布局相关的 CSS 属性：</p><ul><li>columns，column-width 和 column-count 的缩写；最终分栏的数量要么由 column-count 决定，要么由 column-width 决定：<ul><li>columns:18em，这里指代 column-width；</li><li>columns:2|auto，这里指代 column-count。</li></ul></li><li>column-width，表示每一栏/列的<strong>最佳宽度</strong>（不支持百分比），是一种<strong>期望尺寸</strong>，实际渲染宽度多半和指定的宽度是<strong>有出入</strong>的：<ul><li><strong>几乎不存在</strong>分栏布局的栏目宽度就是 column-width 设置的宽度这样的场景。</li></ul></li><li>column-count，表示<strong>理想</strong>的分栏数目，最终的分栏数目<strong>可能不受</strong> column-count 的控制；</li><li>column-gap，表示每一栏之间的空白间隙的大小，可以是长度值，也可以是百分比值；</li><li>column-rule，设置各个分栏的分隔线样式，是 column-rule-color、column-rule-style 和 column-rule-width 的缩写：<ul><li>column-rule-color，分隔线颜色；</li><li>column-rule-style，分隔线样式；</li><li>column-rule-width，分隔线粗细。</li></ul></li><li>column-span，表示某一个内容是否跨多栏显示，作用在分栏布局的子元素上：<ul><li>none，表示不横跨多栏，默认值；</li><li>all，表示横跨所有垂直列。</li></ul></li><li><p>column-fill，当内容分栏的时候平衡每一栏填充的内容。</p><pre><code class=language-html>&lt;style&gt;
+.container {
+columns: 100px;
+column-rule: 3px solid olivedrab;
+outline: 1px solid black;
+}
+.content {
+border: 3px solid orangered;
+}
+&lt;/style&gt;
+&lt;section class=&quot;container&quot;&gt;
+&lt;div class=&quot;content&quot;&gt;
+Boudin meatloaf pork belly biltong swine pig flank sirloin. Cow corned beef
+biltong andouille prosciutto. Salami shoulder turducken filet mignon sausage
+hamburger flank kielbasa kevin swine. Ham capicola short loin tongue
+shankle. Pork chuck short ribs, chicken rump pork chop fatback tail bresaola
+boudin.
+&lt;/div&gt;
+&lt;/section&gt;
+</code></pre></li></ul><p><img style="display:block;margin:0 auto;width:70%" src=/css-last/column.png></p><h3 id=弹性布局>弹性布局</h3><p>display:flex 发生了什么？</p><ul><li>弹性子项（包括匿名内联元素）都是<strong>块级元素</strong>；</li><li>弹性子项<strong>浮动失效</strong>；</li><li>弹性子项（即使 position:static）支持 z-index，如果 z-index 不为 auto，会创建新的层叠上下文；</li><li>弹性子项的 margin 不会合并；</li><li>弹性子项的尺寸是经过精确计算的，可以使用 margin:auto 对剩余空间进行分配；</li><li>弹性子项如果被设置为绝对定位，则会脱离弹性布局。</li></ul><p>匿名内联元素会变为匿名块级元素。</p><pre><code class=language-html>&lt;style&gt;
+  .container {
+    display: flex;
+  }
+  .content {
+    margin: 30px;
+    float: right;
+  }
+&lt;/style&gt;
+&lt;!-- 
+  这里的 2 就是『匿名内联元素』
+  在弹性容器中，2 变成了『匿名块级元素』
+  因此，vertical-align 在这里没有用
+--&gt;
+&lt;section class=&quot;container&quot;&gt;
+  &lt;div class=&quot;content&quot;&gt;1&lt;/div&gt;
+  2
+  &lt;div class=&quot;content&quot;&gt;3&lt;/div&gt;
+&lt;/section&gt;
+&lt;script&gt;
+  const contentEle = document.querySelector('.content');
+  // float 的计算属性值还是为 right，但没有 float 行为
+  console.log(window.getComputedStyle(contentEle).float);
+&lt;/script&gt;
+</code></pre><p>margin:auto 可以达到和 justify-content:space-between 一样的效果。</p><pre><code class=language-html>&lt;style&gt;
+  .container {
+    display: flex;
+  }
+  .space-between {
+    justify-content: space-between;
+  }
+  .content {
+    outline: 1px solid black;
+  }
+&lt;/style&gt;
+&lt;h3&gt;margin: auto&lt;/h3&gt;
+&lt;section class=&quot;container&quot;&gt;
+  &lt;div class=&quot;content&quot;&gt;1&lt;/div&gt;
+  &lt;div class=&quot;content&quot; style=&quot;margin: auto&quot;&gt;2&lt;/div&gt;
+  &lt;div class=&quot;content&quot;&gt;3&lt;/div&gt;
+&lt;/section&gt;
+&lt;h3&gt;justify-content: space-between&lt;/h3&gt;
+&lt;section class=&quot;container space-between&quot;&gt;
+  &lt;div class=&quot;content&quot;&gt;1&lt;/div&gt;
+  &lt;div class=&quot;content&quot;&gt;2&lt;/div&gt;
+  &lt;div class=&quot;content&quot;&gt;3&lt;/div&gt;
+&lt;/section&gt;
+</code></pre><p><img style="display:block;margin:0 auto;width:70%" src=/css-last/auto-space-between.png></p><p>绝对定位的子项会脱离弹性布局。</p><pre><code class=language-html>&lt;style&gt;
+  .container {
+    display: flex;
+  }
+  .space-between {
+    justify-content: space-between;
+  }
+  .content {
+    width: 21px;
+    outline: 1px solid black;
+  }
+  .content:first-of-type {
+    position: absolute;
+  }
+&lt;/style&gt;
+&lt;section class=&quot;container space-between&quot;&gt;
+  &lt;div class=&quot;content&quot;&gt;
+    1
+    &lt;br /&gt;
+    1
+  &lt;/div&gt;
+  &lt;div class=&quot;content&quot;&gt;2&lt;/div&gt;
+  &lt;div class=&quot;content&quot;&gt;3&lt;/div&gt;
+&lt;/section&gt;
+</code></pre><p><img style="display:block;margin:0 auto;width:70%" src=/css-last/absolute-flex.png></p><p>align-items 与 align-self 的区别：</p><ul><li>align-items 设置在弹性容器上（负责所有子项），align-self 设置在弹性子项上（负责某一子项）；</li><li>align-items 初始值是 normal，而在弹性布局中，align-items 初始值是 stretch；</li><li>align-self 初始值是 auto，表示子项的垂直对齐方式由弹性容器上的 align-items 控制。</li></ul><p>flex 是 flex-grow、flex-shrink 和 flex-basis 的简写：</p><ul><li>flex-grow，弹性容器在主轴方向上剩余空间<strong>多余</strong>时分配规则；默认 0，表示不分配；</li><li>flex-shrink，弹性容器在主轴方向上剩余空间<strong>不足</strong>时分配规则；默认 1，表示分配；</li><li>flex-basis，空间分配的基础尺寸；作用在 content-box 上，默认 auto；</li><li>flex:initial，等同于 flex:0 1 auto，<strong>不抢</strong>多余空间，可以在空间不足时收缩；</li><li>flex:auto，等同于 flex:1 1 auto，子项<strong>自动拉伸/收缩</strong>来填满剩余空间，在容器尺寸不足时会优先最大化内容尺寸；</li><li>flex:none，等同于 flex:0 0 auto，子项<strong>没有弹性</strong>，子项表现为<strong>最大内容宽度</strong>；</li><li>flex:1，等同于 flex:1 1 0%，子项<strong>自动拉伸/收缩</strong>来填满剩余空间，在容器尺寸不足时会优先最小化内容尺寸；</li><li>flex:0，等同于 flex:0 1 0%，子项<strong>没有弹性</strong>，子项表现为<strong>最小内容宽度</strong>。</li></ul><p>flex:0 和 flex:none 的区别：</p><p><img style="display:block;margin:0 auto;width:70%" src=/css-last/flex-0-none.png></p><p>flex:1 和 flex:auto 的区别：</p><p><img style="display:block;margin:0 auto;width:70%" src=/css-last/flex-1-auto.png></p><p>弹性容器中，子项的最终尺寸是基础尺寸、弹性拉伸/收缩、最大/小尺寸共同作用的结果：</p><ul><li>最终尺寸的计算优先级是：最大/小尺寸&gt;弹性拉伸/收缩&gt;基础尺寸；</li><li>基础尺寸由 flex-basis 或 width，以及 box-sizing 共同决定；</li><li>当没有设置基础尺寸时，最大内容宽度会顶替基础尺寸的角色；</li><li>弹性增长指的是 flex-grow，弹性收缩指的是 flex-shrink；</li><li>最大尺寸主要受 max-width 限制；最小尺寸则受最小内容宽度、width 和 min-width 共同影响。</li></ul><h3 id=网格布局>网格布局</h3><p>网格布局的默认布局和块布局非常类似，就是简单地<strong>从上往下依次垂直排列</strong>。</p><p>显式网格：在规定容器内显示的网格。
+隐式网格：多于设置的单元格数量的 grid 子项，或者是在设定的网格范围之外出现 grid 子项。</p><p>作用于 grid 容器上的 CSS 属性：</p><ul><li><strong>grid-template-columns</strong>，用来指定网格的<strong>列的数量和尺寸</strong>，支持长度值、百分比值、min/max-content、auto、fr 值、函数值；</li><li><strong>grid-template-rows</strong>，用来指定网格的<strong>行的数量和尺寸</strong>，支持的数据类型同 grid-template-columns：<ul><li>min-content，一排/列格子中所有最小内容尺寸中<strong>最大的那个最小内容尺寸值</strong>；</li><li>max-content，一排/列格子中所有最小内容尺寸中<strong>最大的那个最大内容尺寸值</strong>；</li><li>auto，max-content 是固定的尺寸，auto 会受到 justify-content 和 align-content 的影响：</li><li>当多列的宽度同时设置为 auto 的时候，这些列的宽度并不相同，而是在 max-content 的基础上<strong>增加同样大小</strong>的尺寸。</li><li>fr（fraction）值，表示自动分配列（有些列的宽度就由页面自动分配）的尺寸划分比例：</li><li>auto 的尺寸划分是随着内容变化的，内容多则尺寸大，内容少则尺寸小；而 fr 就是纯粹按比例计算，<strong>与内容多少无关</strong>；</li><li>如果所有 fr 值之和大于 1，则按 fr 值的<strong>比例划分</strong>可自动分配的尺寸；</li><li>如果所有 fr 值之和小于 1，最终的尺寸是可自动分配的尺寸和 fr 值的乘积。</li><li>repeat()，不直接参与尺寸设置，更像一种简化代码的语法形式；</li><li>minmax(min, max) ，表示尺寸范围限制在 min ～ max 范围内；</li><li>fit-content(limit)，尺寸由内容决定，内容越多尺寸越大，但不超过设定的 limit 尺寸。</li></ul></li><li>grid-template-areas，用来指定网格区域的划分，网格区域一定要形成规整的矩形区域；无论是 L 形还是凹的或凸的形状都会认为是无效的属性值；</li><li>grid-template，前面三种属性的缩写；</li><li>grid-column-gap，推荐使用 column-gap 替代，垂直间隙；</li><li>grid-row-gap，推荐使用 row-gap 替代，水平间隙；</li><li>grid-gap，推荐使用 gap 替代，grid-column-gap 和 grid-row-gap 的缩写；</li><li>justify-items，用来定义元素在网格中的<strong>水平对齐</strong>表现：<ul><li>stretch，元素水平<strong>尺寸拉伸</strong>，<strong>填满</strong>整个网格的水平空间；</li><li>start，元素的水平尺寸收缩为<strong>内容大小</strong>，同时沿着网格线<strong>左侧对齐</strong>显示；</li><li>end，元素的水平尺寸收缩为<strong>内容大小</strong>，同时沿着网格线<strong>右侧对齐</strong>显示；</li><li>center，元素的水平尺寸收缩为<strong>内容大小</strong>，同时在当前网格区域内部<strong>水平居中</strong>对齐显示。</li></ul></li><li>align-items，用来定义元素在网格中的<strong>垂直对齐</strong>表现：<ul><li>和 justify-items 类似，区别就在于方向不同。</li></ul></li><li>place-items:&lt;align-items&gt; &lt;justify-items&gt;?，以上两个属性的简写；</li><li>justify-content，指定了网格元素整体<strong>水平方向</strong>上的分布对齐方式；</li><li>align-content，指定了网格元素整体<strong>垂直方向</strong>上的分布对齐方式；</li><li>place-content:&lt;align-content&gt; &lt;justify-content&gt;?，以上两个属性的简写；</li><li>grid-auto-columns，用来控制<strong>隐式网格</strong>的尺寸；</li><li>grid-auto-rows，用来控制<strong>隐式网格</strong>的尺寸；</li><li><strong>grid-auto-flow:[row 或者 column]||dense</strong>，用来定义子项目元素的<strong>自动流动状态</strong>，非常类似于弹性布局中的 flex-direction：<ul><li>row，默认值，表示没有指定位置的网格在水平（行）方向上自然排列，<strong>这也是为什么网格布局会优先水平排列</strong>；</li><li>cow，表示没有指定位置的网格在垂直（列）方向上自然排列；</li><li>dense，如果稍后出现的网格比较小，则尝试看看其前面有没有合适的地方放置该网格，使网格尽可能排列紧凑。</li></ul></li><li><strong>grid</strong>，是多个 CSS 属性的缩写集合：<ul><li>grid:none，设置所以子属性为初始值；</li><li>如果没有隐式网格，且无须改变网格布局的自然流向，则当做 grid-template 来使用；</li><li>如果出现隐式网格，或者需要改变网格布局的自然流向，则使用下面两种形式：</li><li>grid:&lt;grid-template-rows&gt;/[auto-flow &amp;&amp; dense?]&lt;grid-auto-columns&gt;?；</li><li>grid:[auto-flow &amp;&amp; dense?]&lt;grid-auto-rows&gt;?/&lt;grid-template-columns&gt;。</li></ul></li></ul><p>grid-template-columns/rows 的用法和简写：</p><pre><code class=language-html>&lt;style&gt;
+  .container {
+    display: grid;
+    /* grid-template-rows: 25% 100px auto 60px; */
+    /* grid-template-columns: 80px auto 100px; */
+    /* grid-template: 25% 100px auto 60px / 80px auto 100px; */
+    grid: 25% 100px auto 60px / 80px auto 100px;
+  }
+  .content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    outline: 1px solid olivedrab;
+  }
+&lt;/style&gt;
+&lt;section class=&quot;container&quot;&gt;
+  &lt;div class=&quot;content&quot;&gt;1&lt;/div&gt;
+  &lt;div class=&quot;content&quot;&gt;2&lt;/div&gt;
+  &lt;div class=&quot;content&quot;&gt;3&lt;/div&gt;
+  &lt;div class=&quot;content&quot;&gt;4&lt;/div&gt;
+  &lt;div class=&quot;content&quot;&gt;5&lt;/div&gt;
+  &lt;div class=&quot;content&quot;&gt;6&lt;/div&gt;
+  &lt;div class=&quot;content&quot;&gt;7&lt;/div&gt;
+  &lt;div class=&quot;content&quot;&gt;8&lt;/div&gt;
+  &lt;div class=&quot;content&quot;&gt;9&lt;/div&gt;
+  &lt;div class=&quot;content&quot;&gt;10&lt;/div&gt;
+  &lt;div class=&quot;content&quot;&gt;11&lt;/div&gt;
+  &lt;div class=&quot;content&quot;&gt;12&lt;/div&gt;
+&lt;/section&gt;
+</code></pre><p><img style="display:block;margin:0 auto;width:70%" src=/css-last/grid-template.png></p><p>fr 值的计算方式：</p><pre><code class=language-html>&lt;style&gt;
+  .container1 {
+    display: grid;
+    grid-template-columns: 1.1fr 1.1fr 1.1fr;
+  }
+  .container2 {
+    margin: 30px 0 0;
+    display: grid;
+    grid-template-columns: 0.3fr 0.2fr 0.1fr;
+  }
+  .content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 30px;
+    outline: 1px solid olivedrab;
+  }
+&lt;/style&gt;
+&lt;section class=&quot;container1&quot;&gt;
+  &lt;div class=&quot;content&quot;&gt;1&lt;/div&gt;
+  &lt;div class=&quot;content&quot;&gt;2&lt;/div&gt;
+  &lt;div class=&quot;content&quot;&gt;3&lt;/div&gt;
+&lt;/section&gt;
+&lt;section class=&quot;container2&quot;&gt;
+  &lt;div class=&quot;content&quot;&gt;1&lt;/div&gt;
+  &lt;div class=&quot;content&quot;&gt;2&lt;/div&gt;
+  &lt;div class=&quot;content&quot;&gt;3&lt;/div&gt;
+&lt;/section&gt;
+</code></pre><p><img style="display:block;margin:0 auto;width:70%" src='/css-last/grid-fr.png""/'></p><p>grid-template-areas 的使用：</p><pre><code class=language-html>&lt;style&gt;
+  .container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    grid-template-areas: '蛙 蛙 蛙' '虾 鱼 鱼' '虾 鱼 鱼' '蟹 蟹 蟹';
+    gap: 8px;
+  }
+  .content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 30px;
+    outline: 1px solid orchid;
+  }
+&lt;/style&gt;
+&lt;section class=&quot;container&quot;&gt;
+  &lt;div class=&quot;content&quot;&gt;蛙&lt;/div&gt;
+  &lt;div class=&quot;content&quot;&gt;蛙&lt;/div&gt;
+  &lt;div class=&quot;content&quot;&gt;蛙&lt;/div&gt;
+  &lt;div class=&quot;content&quot;&gt;虾&lt;/div&gt;
+  &lt;div class=&quot;content&quot;&gt;鱼&lt;/div&gt;
+  &lt;div class=&quot;content&quot;&gt;鱼&lt;/div&gt;
+  &lt;div class=&quot;content&quot;&gt;虾&lt;/div&gt;
+  &lt;div class=&quot;content&quot;&gt;鱼&lt;/div&gt;
+  &lt;div class=&quot;content&quot;&gt;鱼&lt;/div&gt;
+  &lt;div class=&quot;content&quot;&gt;蟹&lt;/div&gt;
+  &lt;div class=&quot;content&quot;&gt;蟹&lt;/div&gt;
+  &lt;div class=&quot;content&quot;&gt;蟹&lt;/div&gt;
+&lt;/section&gt;
+</code></pre><p><img style="display:block;margin:0 auto;width:70%" src=/css-last/grid-template-areas.png></p><p>隐式网格：</p><pre><code class=language-html>&lt;style&gt;
+  .container {
+    display: grid;
+    grid-template: 1fr 1fr / 1fr 1fr;
+    /* 隐式网格高度为 50px */
+    grid-auto-rows: 50px;
+    gap: 8px;
+  }
+  .content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    outline: 1px solid orchid;
+  }
+&lt;/style&gt;
+&lt;section class=&quot;container&quot;&gt;
+  &lt;div class=&quot;content&quot;&gt;1&lt;/div&gt;
+  &lt;div class=&quot;content&quot;&gt;2&lt;/div&gt;
+  &lt;div class=&quot;content&quot;&gt;3&lt;/div&gt;
+  &lt;div class=&quot;content&quot;&gt;4&lt;/div&gt;
+  &lt;!-- 之后的都属于隐式网格 --&gt;
+  &lt;div class=&quot;content&quot;&gt;5&lt;/div&gt;
+  &lt;div class=&quot;content&quot;&gt;6&lt;/div&gt;
+  &lt;div class=&quot;content&quot;&gt;7&lt;/div&gt;
+&lt;/section&gt;
+</code></pre><p><img style="display:block;margin:0 auto;width:70%" src=/css-last/implicit-grid.png></p><p>grid-auto-flow 类似 flex-direction，控制着网格的排列流向：</p><pre><code class=language-html>&lt;style&gt;
+  .container {
+    display: grid;
+    grid-template: 1fr 1fr 1fr / 1fr 1fr 1fr;
+    gap: 8px;
+  }
+  .row {
+    grid-auto-flow: row;
+  }
+  .column {
+    grid-auto-flow: column;
+  }
+  .content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    outline: 1px solid;
+  }
+  .row .content {
+    outline-color: orchid;
+  }
+  .column .content {
+    outline-color: olivedrab;
+  }
+&lt;/style&gt;
+&lt;h3&gt;grid-auto-flow: row&lt;/h3&gt;
+&lt;section class=&quot;container row&quot;&gt;
+  &lt;div class=&quot;content&quot;&gt;1&lt;/div&gt;
+  &lt;div class=&quot;content&quot;&gt;2&lt;/div&gt;
+  &lt;div class=&quot;content&quot;&gt;3&lt;/div&gt;
+  &lt;div class=&quot;content&quot;&gt;4&lt;/div&gt;
+  &lt;div class=&quot;content&quot;&gt;5&lt;/div&gt;
+  &lt;div class=&quot;content&quot;&gt;6&lt;/div&gt;
+  &lt;div class=&quot;content&quot;&gt;7&lt;/div&gt;
+&lt;/section&gt;
+&lt;h3&gt;grid-auto-flow: column&lt;/h3&gt;
+&lt;section class=&quot;container column&quot;&gt;
+  &lt;div class=&quot;content&quot;&gt;1&lt;/div&gt;
+  &lt;div class=&quot;content&quot;&gt;2&lt;/div&gt;
+  &lt;div class=&quot;content&quot;&gt;3&lt;/div&gt;
+  &lt;div class=&quot;content&quot;&gt;4&lt;/div&gt;
+  &lt;div class=&quot;content&quot;&gt;5&lt;/div&gt;
+  &lt;div class=&quot;content&quot;&gt;6&lt;/div&gt;
+  &lt;div class=&quot;content&quot;&gt;7&lt;/div&gt;
+&lt;/section&gt;
+</code></pre><p><img style="display:block;margin:0 auto;width:70%" src=/css-last/grid-auto-flow.png></p><p>作用于 grid 子项上的 CSS 属性：</p><ul><li>grid-column-start/end，grid 子项所占据的<strong>行</strong>的起止范围；</li><li>grid-row-start/end，grid 子项所占据的<strong>列</strong>的起止范围，参数可以为整数（不为 0）、也可以为网格线名称：<ul><li>整数，表示起止于第几条网格线，可以是负整数（从右侧开始计数网格线）;</li><li>当浏览器找不到网格线时，会自动补全 -start/-end 后缀，继续寻找网格线；</li><li>span3，表示当前网格会自动跨越 3 个网格；</li><li>span &lt;name&gt;，表示当前网格会自动扩展，直到选中指定的网格线名称；</li><li>auto，默认值，默认跨度是 1 个格子。</li></ul></li><li>grid-column，grid-column-start/end 的缩写属性；</li><li>grid-row，grid-row-start/end 的缩写属性；</li><li><strong>grid-area</strong>，grid-column/row-start/end 四个属性的缩写，有两种属性值：<ul><li>&lt;area-name&gt;，由 grid-template-area 创建的区域名称；</li><li>&lt;row-start&gt;/&lt;column-start&gt;/&lt;row-end&gt;/&lt;column-end&gt;，占据网格区域的行列起止位置。</li></ul></li><li>justify-self，设置单个网格元素的水平对齐方式；</li><li>align-self，设置个网格元素的垂直对齐方式；</li><li>place-self，&lt;align-self&gt; &lt;justify-self&gt;?。</li></ul></div><div class=post_footer><div class=meta><div class=info><span class="field tags"><i class=remixicon-stack-line></i><a href=https://vikingama.github.io/tags/css/>CSS</a></span></div></div></div></div><div class=doc_comments><div class=comments_block_title>发表评论</div><div id=vcomments></div></div><link rel=stylesheet href=https://vikingama.github.io/css/comments.css><script src=//unpkg.com/valine></script><script type=text/javascript>new Valine({el:'#vcomments',avatar:'retro',recordIP:true,path:window.location.pathname,appId:'U06blUXOot4uJgfMu8I9xJXz-MdYXbMMI',appKey:'BnrXC06FJsvRNpr4aqb1HYPd',placeholder:'来都来了，不打个招呼吗？',visitor:'true',serverURLs:'https:\/\/u06bluxo.api.lncldglobal.com'});</script></div></div><a id=back_to_top href=# class=back_to_top><span>△</span></a></div><footer class=footer><div class=powered_by><a href=https://github.com/varkai/hugo-theme-zozo/ target=_blank>Designed by <span class=jitters>Zeuk</span>,</a>
+<a href=https://www.gohugo.io/ target=_blank>Built by <span class=jitters>Hugo</span>,</a>
+<a href=https://github.com/features/actions/ target=_blank>Deployed by <span class=jitters>Actions</span></a></div><div class=footer_slogan><span id=enter_time></span></div></footer><script src=//unpkg.com/jquery/dist/jquery.min.js></script><script src=//unpkg.com/@highlightjs/cdn-assets/highlight.min.js></script><script src=https://vikingama.github.io/js/zozo.js></script><script>hljs.highlightAll();</script><script type=application/javascript>var doNotTrack=false;if(!doNotTrack){window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;ga('create','G-CDS328YPMY','auto');ga('send','pageview');}</script><script async src=https://www.google-analytics.com/analytics.js></script></body></html>
