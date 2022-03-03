@@ -719,7 +719,7 @@ math {
   drumstick prosciutto ball tip tri-tip short loin chicken meatloaf swine strip
   steak flank.
 &lt;/div&gt;
-</code></pre><p><img style="display:block;margin:0 auto;width:70%" src=/css-last/shape-outside-image.png></p><h3 id=媒体查询>媒体查询</h3><p>@media 查询的规则由 4 部分组成：</p><ul><li>媒体查询修饰符：<ul><li>only，本身没有任何效果，主要是为了兼容过时的浏览器；</li><li>not，否定<strong>整个查询语句</strong>。</li></ul></li><li>媒体类型：<ul><li>screen，屏幕输出设备上生效；</li><li>print，打印（预览）时生效；</li><li>all，匹配所有设备。</li></ul></li><li>媒体条件：<ul><li>not，否定某个媒体特征；</li><li>and，同时满足；</li><li>or，满足之一。</li></ul></li><li>媒体特征：<ul><li>aspect-ratio，输出设备可视区域的宽度和高度的比例（可能受软键盘的影响）；</li><li>width，设备的宽度的查询与匹配；</li><li>height，设备的高度的查询与匹配；</li><li>orientation，判断设备是横屏还是竖屏（可能受软键盘的影响）：</li><li>landscape，横屏状态；</li><li>portrait，竖屏状态。</li><li>display-mode，Web 应用的显示模式：</li><li>fullscreen：全屏显示，没有任何浏览器部件；</li><li>browser：在浏览器中打开，是浏览器的一个标签页；</li><li>standalone：如同独立的应用程序，有独立的窗口，有自己的程序启动图标，没有导航元素，但是会有状态栏；</li><li>minimal-ui：如同独立的应用程序，但有一个用来导航的最小 UI 元素集，具体有什么元素在不同浏览器中是不一样的。</li><li>any-hover，是否有任意输入设备可以经过某个元素（可以用来检测『设备是否接入了鼠标』）：</li><li>none，没有输入装置可以实现悬停效果；</li><li>hover，可以触发元素的悬停交互效果。</li><li>hover，主输入设备是否可以经过某个元素，例如，是否连接了鼠标；</li><li>any-pointer，是否有任意输入设备可以触控操作，以及如果可以触控操作，精度应为多少：</li><li>none，没有可用的点击设备；</li><li>coarse，至少有一个设备的点击不是很精确（例如，手指点击）；</li><li>fine，有点击很精准的设备（例如，鼠标）。</li><li>pointer，主输入设备是否可以触控操作，以及如果可以触控操作，精度应为多少：</li><li>none，主输入装置点击不可用；</li><li>coarse，主输入装置点击不精确；</li><li>fine，主输入装置点击很精准。</li><li>prefers-color-scheme，用来检测用户是否使用了深色模式：</li><li>no-preference，系统没有告知使用的颜色方案；</li><li>light，系统当前使用了浅色模式；</li><li>dark，系统当前使用了深色模式。</li><li>prefers-reduced-motion，用来检测用户是否配置了没有必要的动画选项（类似于 iOS 中的『减弱动态效果』）：</li><li>no-preference，用户没有通知系统任何首选项；</li><li>reduced，用户已通知系统，需要减弱动态效果。</li></ul></li></ul><p>网页快速适配深色模式：</p><pre><code class=language-css>/* 这种『偷懒的技巧』在 Safari 中可能有渲染问题 */
+</code></pre><p><img style="display:block;margin:0 auto;width:70%" src=/css-last/shape-outside-image.png></p><h3 id=媒体查询>媒体查询</h3><p>@media 查询的规则由 4 部分组成：</p><p>媒体查询修饰符：</p><ul><li>only，本身没有任何效果，主要是为了兼容过时的浏览器；</li><li>not，否定<strong>整个查询语句</strong>。</li></ul><p>媒体类型：</p><ul><li>screen，屏幕输出设备上生效；</li><li>print，打印（预览）时生效；</li><li>all，匹配所有设备。</li></ul><p>媒体条件：</p><ul><li>not，否定某个媒体特征；</li><li>and，同时满足；</li><li>or，满足之一。</li></ul><p>媒体特征：</p><ul><li>aspect-ratio，输出设备可视区域的宽度和高度的比例（可能受软键盘的影响）；</li><li>width，设备的宽度的查询与匹配；</li><li>height，设备的高度的查询与匹配；</li><li>orientation，判断设备是横屏还是竖屏（可能受软键盘的影响）：<ul><li>landscape，横屏状态；</li><li>portrait，竖屏状态。</li></ul></li><li>display-mode，Web 应用的显示模式：<ul><li>fullscreen：全屏显示，没有任何浏览器部件；</li><li>browser：在浏览器中打开，是浏览器的一个标签页；</li><li>standalone：如同独立的应用程序，有独立的窗口，有自己的程序启动图标，没有导航元素，但是会有状态栏；</li><li>minimal-ui：如同独立的应用程序，但有一个用来导航的最小 UI 元素集，具体有什么元素在不同浏览器中是不一样的。</li></ul></li><li>any-hover，是否有任意输入设备可以经过某个元素（可以用来检测『设备是否接入了鼠标』）：<ul><li>none，没有输入装置可以实现悬停效果；</li><li>hover，可以触发元素的悬停交互效果。</li></ul></li><li>hover，主输入设备是否可以经过某个元素，例如，是否连接了鼠标；</li><li>any-pointer，是否有任意输入设备可以触控操作，以及如果可以触控操作，精度应为多少：<ul><li>none，没有可用的点击设备；</li><li>coarse，至少有一个设备的点击不是很精确（例如，手指点击）；</li><li>fine，有点击很精准的设备（例如，鼠标）。</li></ul></li><li>pointer，主输入设备是否可以触控操作，以及如果可以触控操作，精度应为多少：<ul><li>none，主输入装置点击不可用；</li><li>coarse，主输入装置点击不精确；</li><li>fine，主输入装置点击很精准。</li></ul></li><li>prefers-color-scheme，用来检测用户是否使用了深色模式：<ul><li>no-preference，系统没有告知使用的颜色方案；</li><li>light，系统当前使用了浅色模式；</li><li>dark，系统当前使用了深色模式。</li></ul></li><li>prefers-reduced-motion，用来检测用户是否配置了没有必要的动画选项（类似于 iOS 中的『减弱动态效果』）：<ul><li>no-preference，用户没有通知系统任何首选项；</li><li>reduced，用户已通知系统，需要减弱动态效果。</li></ul></li></ul><p>网页快速适配深色模式：</p><pre><code class=language-css>/* 这种『偷懒的技巧』在 Safari 中可能有渲染问题 */
 @media (prefers-color-scheme: dark) {
   body {
     filter: invert(1) hue-rotate(180deg);
@@ -735,6 +735,63 @@ math {
     transition: none;
   }
 }
+</code></pre><h3 id=touch-action>touch-action</h3><p>touch-action 是移动端中与<strong>手势触摸</strong>密切相关的 CSS，属性值为：</p><ul><li>auto，默认值，表示手势操作完全由浏览器决定；</li><li>none，表示不进行任何手势相关的行为，不能用手指滚动/缩放网页；</li><li><strong>manipulation</strong>，表示浏览器只允许进行滚动和持续缩放操作（双击缩放不被支持），可以用来解决点击后延时 300ms 的问题；</li><li>pan-x，表示支持手指<strong>水平移来移去</strong>的操作；</li><li>pan-y，表示支持手指<strong>垂直移来移去</strong>的操作；</li><li>pan-left，表示支持手指往左移动，移动开始后往右可以恢复的操作；</li><li>pan-right，表示支持手指往右移动，移动开始后往左可以恢复的操作；</li><li>pan-up，表示支持手指往上移动，移动开始后往下可以恢复的操作；</li><li>pan-down，表示支持手指往下移动，移动开始后往上可以恢复的操作；</li><li>pinch-zoom，表示支持手指缩放页面的操作。</li></ul><h3 id=image-set>image-set</h3><p>image-set 类似于 HTML 中的 srcset 属性，可以根据屏幕的<strong>像素密度</strong>来显示相应的背景图。</p><pre><code class=language-css>.example {
+  background-image: image-set(
+    url(origin.png) 1x,
+    url(origin-2x.png) 2x,
+    url(origin-print.png) 600dpi
+  );
+}
+</code></pre><h3 id=变量与自定义属性>变量与自定义属性</h3><p><strong>CSS 变量的声明</strong>由 CSS 自定义属性及其对应的值组成；<strong>CSS 变量的使用</strong>是通过变量函数 var() 调用 CSS 自定义属性实现。</p><pre><code class=language-css>/*
+  不支持包含 $、[、]、^、(、)、%、&quot; 等特殊字符的命名
+  要使用这些特殊字符，需要使用反斜杠转义
+*/
+:root {
+  --primary-color: blue;
+  --俄乌: 10px; /* CJK 文字 */
+  ---: orange; /* 短横线 */
+  --1: red; /* 数字 */
+  --: green; /* 空格 */
+}
+section {
+  background-color: var(--1);
+  border: var(--俄乌) solid var(---);
+  color: var(--primary-color);
+  outline: var(--俄乌) solid var(--);
+}
+</code></pre><p>var() 的第二个参数可以用来设置缺省值，当且仅当第一个参数解析无效时才起作用：</p><pre><code class=language-css>body {
+  --color: 20px;
+  background-color: black;
+  /*
+    由于第一个参数 --color 是可以呗正常解析的
+    所以 red 这个缺省值会被忽略
+    显然背景色 20px 是不合法的
+    所以会被解析为初始值
+    transparent
+  */
+  background-color: var(--color, red);
+}
+</code></pre><p>CSS 自定义属性是有作用域的，所以全局使用的自定义属性都定义在 :root 伪类中。</p><p>CSS 自定义属性不支持在媒体查询的查询条件中使用，也不支持 content 属性：</p><pre><code class=language-css>:root {
+  --maxWidth: 666px;
+  --percent: 60%;
+}
+/* 不可以，没用 */
+@media (max-width: var(--maxWidth)) {
+  body {
+    font-size: 21px;
+  }
+}
+/* 无效 */
+body::after {
+  content: var(--percent);
+}
+</code></pre><p>在 HTML 中的使用：</p><pre><code class=language-html>&lt;div style=&quot;--color: pink;&quot;&gt;
+  &lt;span style=&quot;outline: 1px solid var(--color);&quot;&gt;&lt;/span&gt;
+&lt;/div&gt;
+</code></pre><p>在 JS 中使用（需要借助 style 的 setProperty/getPropertyValue 方法）：</p><pre><code class=language-js>const divEle = document.querySelector('div');
+divEle.style.setProperty('--color', 'blue'); // 赋值
+divEle.style['--color'] = 'blue'; // 无效
+window.getComputedStyle(divEle).getPropertyValue('--color'); // 取值
 </code></pre></div><div class=post_footer><div class=meta><div class=info><span class="field tags"><i class=remixicon-stack-line></i><a href=https://vikingama.github.io/tags/css/>CSS</a></span></div></div></div></div><div class=doc_comments><div class=comments_block_title>发表评论</div><div id=vcomments></div></div><link rel=stylesheet href=https://vikingama.github.io/css/comments.css><script src=//unpkg.com/valine></script><script type=text/javascript>new Valine({el:'#vcomments',avatar:'retro',recordIP:true,path:window.location.pathname,appId:'U06blUXOot4uJgfMu8I9xJXz-MdYXbMMI',appKey:'BnrXC06FJsvRNpr4aqb1HYPd',placeholder:'来都来了，不打个招呼吗？',visitor:'true',serverURLs:'https:\/\/u06bluxo.api.lncldglobal.com'});</script></div></div><a id=back_to_top href=# class=back_to_top><span>△</span></a></div><footer class=footer><div class=powered_by><a href=https://github.com/varkai/hugo-theme-zozo/ target=_blank>Designed by <span class=jitters>Zeuk</span>,</a>
 <a href=https://www.gohugo.io/ target=_blank>Built by <span class=jitters>Hugo</span>,</a>
 <a href=https://github.com/features/actions/ target=_blank>Deployed by <span class=jitters>Actions</span></a></div><div class=footer_slogan><span id=enter_time></span></div></footer><script src=//unpkg.com/jquery/dist/jquery.min.js></script><script src=//unpkg.com/@highlightjs/cdn-assets/highlight.min.js></script><script src=https://vikingama.github.io/js/zozo.js></script><script>hljs.highlightAll();</script><script type=application/javascript>var doNotTrack=false;if(!doNotTrack){window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;ga('create','G-CDS328YPMY','auto');ga('send','pageview');}</script><script async src=https://www.google-analytics.com/analytics.js></script></body></html>
