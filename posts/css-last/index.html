@@ -792,6 +792,88 @@ body::after {
 divEle.style.setProperty('--color', 'blue'); // 赋值
 divEle.style['--color'] = 'blue'; // 无效
 window.getComputedStyle(divEle).getPropertyValue('--color'); // 取值
-</code></pre></div><div class=post_footer><div class=meta><div class=info><span class="field tags"><i class=remixicon-stack-line></i><a href=https://vikingama.github.io/tags/css/>CSS</a></span></div></div></div></div><div class=doc_comments><div class=comments_block_title>发表评论</div><div id=vcomments></div></div><link rel=stylesheet href=https://vikingama.github.io/css/comments.css><script src=//unpkg.com/valine></script><script type=text/javascript>new Valine({el:'#vcomments',avatar:'retro',recordIP:true,path:window.location.pathname,appId:'U06blUXOot4uJgfMu8I9xJXz-MdYXbMMI',appKey:'BnrXC06FJsvRNpr4aqb1HYPd',placeholder:'来都来了，不打个招呼吗？',visitor:'true',serverURLs:'https:\/\/u06bluxo.api.lncldglobal.com'});</script></div></div><a id=back_to_top href=# class=back_to_top><span>△</span></a></div><footer class=footer><div class=powered_by><a href=https://github.com/varkai/hugo-theme-zozo/ target=_blank>Designed by <span class=jitters>Zeuk</span>,</a>
+</code></pre><h3 id=object-fit>object-fit</h3><p>替换元素的内在尺寸适用于外部指定的尺寸，这就导致两个问题：</p><ol><li>外部指定的尺寸和内在尺寸有可能宽高比例不相符；</li><li>资源加载完毕之前，内在尺寸是 0；加载完毕之后，可能导致页面重绘。</li></ol><p>object-fit 就是为了解决这些问题的（有点像 background-size），其属性值有 5 个：</p><ul><li>fill，默认值，替换内容会填满 content-box，不保持内在比例；</li><li>contain，替换内容在 content-box 中完整显示，保持内在比例；</li><li>cover，替换内容会覆盖 content-box，保持内在比例并可能会让替换内容部分区域不可见；</li><li>none，替换内容显示为原始比例，无视外部尺寸限制；显示区域会大量留白（原始内容尺寸较小）或者被裁剪（原始内容尺寸较大）；</li><li>scale-down，替换内容尺寸为较大时，表现为 contain；尺寸较小时，表现为 none。</li></ul><p>&nbsp;</p><pre><code class=language-html>&lt;style&gt;
+  section {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  div {
+    width: 50vw;
+    height: 50vw;
+    box-sizing: border-box;
+    padding: 10px;
+    border: 10px solid palevioletred;
+    outline: 1px solid cadetblue;
+  }
+  img {
+    width: 100%;
+    height: 100%;
+  }
+&lt;/style&gt;
+&lt;section&gt;
+  &lt;div&gt;
+    &lt;img
+      src=&quot;../../themes/zozo/static/images/avatar.png&quot;
+      style=&quot;object-fit: fill&quot;
+    /&gt;
+  &lt;/div&gt;
+  &lt;div&gt;
+    &lt;img
+      src=&quot;../../themes/zozo/static/images/avatar.png&quot;
+      style=&quot;object-fit: contain&quot;
+    /&gt;
+  &lt;/div&gt;
+  &lt;div&gt;
+    &lt;img
+      src=&quot;../../themes/zozo/static/images/avatar.png&quot;
+      style=&quot;object-fit: cover&quot;
+    /&gt;
+  &lt;/div&gt;
+  &lt;div&gt;
+    &lt;img
+      src=&quot;../../themes/zozo/static/images/avatar.png&quot;
+      style=&quot;object-fit: none&quot;
+    /&gt;
+  &lt;/div&gt;
+  &lt;div&gt;
+    &lt;img
+      src=&quot;../../themes/zozo/static/images/avatar.png&quot;
+      style=&quot;object-fit: scale-down&quot;
+    /&gt;
+  &lt;/div&gt;
+  &lt;div&gt;
+    &lt;img
+      src=&quot;../../themes/zozo/static/images/favicon.ico&quot;
+      style=&quot;object-fit: scale-down&quot;
+    /&gt;
+  &lt;/div&gt;
+&lt;/section&gt;
+</code></pre><p><img style="display:block;margin:0 auto;width:70%" src=/css-last/object-fit.png></p><p>object-position 是一个使用场景比较少的属性，用于控制替换内容在替换元素中的位置（有点像 background-position）；初始值为 50% 50%，居中效果。</p><p>image-orientation 可以让浏览器识别图片 Exif 信息中的 Orientation 值来对图片方向进行修正：</p><ul><li>from-image，初始值，如果包含 Orientation，则对图片方向进行纠正；</li><li>none，不对图片方向进行纠正。</li></ul><p>element() 可以让页面中任意 DOM 元素的渲染效果变成图像，并且这个图像并不是静止的，而是随着原始元素的样式同步变化的；但是十年过去了，仅有 Firefox 支持此函数。</p><h3 id=filter>filter</h3><p>filter 支持 10 个滤镜函数：</p><ul><li>blur(5px)，模糊，不支持百分比，其参数值可以理解为屏幕上互相融合的像素数量，会有边缘泛白的问题；</li><li>brightness(2.4)，亮度，支持百分比，参数范围是 0 到无穷大，默认参数为 1；</li><li>contrast(200%)，对比度，支持百分比，参数范围是 0 到无穷大，默认参数为 1；</li><li>drop-shadow(x 偏移, y 偏移, 模糊大小, 色值)，投影；</li><li>grayscale(50%)，灰度，可以实现去色效果（特殊节日灰掉网页），让彩色值变为灰度值，支持百分比，参数范围是 0 到无穷大，默认参数为 0；</li><li>hue-rotate(90deg)，色调旋转，保持饱和度和亮度不变；</li><li>invert(75%)，反相，亮度和色调同时反转，支持百分比，参数范围是 0 到无穷大；</li><li>opacity(25%)，透明度，效果和 opacity 类似，两种属性同时使用，效果会叠加；</li><li>saturate(230%)，饱和度，支持百分比，参数范围是 0 到无穷大；</li><li>sepia(60%)，褐色，支持百分比，参数范围是 0 到无穷大。</li></ul><p>以上的滤镜效果是可以叠加的。</p><p>box-shadow 和 filter:drop-shadow() 的区别：</p><pre><code class=language-html>&lt;!-- 
+  1. filter:drop-shadow 没有内投影
+  2. filter:drop-shadow 没有扩散半径
+  3. filter:drop-shadow 不支持投影叠加
+  4. filter:drop-shadow 符合真实世界的表现
+--&gt;
+&lt;style&gt;
+  section {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  div {
+    margin: 8px 0 16px;
+    width: 80vw;
+    height: 50vw;
+    padding: 10px;
+    background-color: transparent;
+    box-sizing: border-box;
+    border: 10px dashed palevioletred;
+  }
+&lt;/style&gt;
+&lt;section&gt;
+  &lt;div style=&quot;box-shadow: 5px 5px 8px&quot;&gt;&lt;/div&gt;
+  &lt;div style=&quot;filter: drop-shadow(5px 5px 8px)&quot;&gt;&lt;/div&gt;
+&lt;/section&gt;
+</code></pre><p><img style="display:block;margin:0 auto;width:70%" src=/css-last/drop-shadow.png></p><p>backdrop-filter 和 filter 语法相似，可以轻松实现毛玻璃效果；他们的区别是，backdrop-filter 是让<strong>当前元素所在区域后面的内容</strong>应用滤镜效果，需要当前元素是半/完全透明的；filter 是让当前元素自身应用滤镜效果。</p><h3 id=混合模式>混合模式</h3><p>CSS 中有 3 个混合模式相关的属性：</p><ol><li>background-blend-mode，混合元素背景图案、渐变和颜色；</li><li>mix-blend-mode，元素与元素之间的混合；</li><li>isolation，应用于祖先元素，限制 mix-blend-mode。</li></ol><p>background-blend-mode 和 mix-blend-mode 支持的混合模式是一致的：</p><ul><li>normal，正常；</li><li>multiply，正片叠底；</li><li>screen，滤色；</li><li>overlay，叠加；</li><li>darken，变暗；</li><li>lighten，变亮；</li><li>color-dodge，颜色变淡；</li><li>color-burn，颜色加深；</li><li>hard-light，强光；</li><li>soft-light，柔光；</li><li>difference，差值；</li><li>exclusion，排除；</li><li>hue，色调；</li><li>saturation，饱和度；</li><li>color，颜色；</li><li>luminosity，亮度。</li></ul></div><div class=post_footer><div class=meta><div class=info><span class="field tags"><i class=remixicon-stack-line></i><a href=https://vikingama.github.io/tags/css/>CSS</a></span></div></div></div></div><div class=doc_comments><div class=comments_block_title>发表评论</div><div id=vcomments></div></div><link rel=stylesheet href=https://vikingama.github.io/css/comments.css><script src=//unpkg.com/valine></script><script type=text/javascript>new Valine({el:'#vcomments',avatar:'retro',recordIP:true,path:window.location.pathname,appId:'U06blUXOot4uJgfMu8I9xJXz-MdYXbMMI',appKey:'BnrXC06FJsvRNpr4aqb1HYPd',placeholder:'来都来了，不打个招呼吗？',visitor:'true',serverURLs:'https:\/\/u06bluxo.api.lncldglobal.com'});</script></div></div><a id=back_to_top href=# class=back_to_top><span>△</span></a></div><footer class=footer><div class=powered_by><a href=https://github.com/varkai/hugo-theme-zozo/ target=_blank>Designed by <span class=jitters>Zeuk</span>,</a>
 <a href=https://www.gohugo.io/ target=_blank>Built by <span class=jitters>Hugo</span>,</a>
 <a href=https://github.com/features/actions/ target=_blank>Deployed by <span class=jitters>Actions</span></a></div><div class=footer_slogan><span id=enter_time></span></div></footer><script src=//unpkg.com/jquery/dist/jquery.min.js></script><script src=//unpkg.com/@highlightjs/cdn-assets/highlight.min.js></script><script src=https://vikingama.github.io/js/zozo.js></script><script>hljs.highlightAll();</script><script type=application/javascript>var doNotTrack=false;if(!doNotTrack){window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;ga('create','G-CDS328YPMY','auto');ga('send','pageview');}</script><script async src=https://www.google-analytics.com/analytics.js></script></body></html>
