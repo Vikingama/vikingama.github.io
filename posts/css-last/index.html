@@ -874,6 +874,36 @@ window.getComputedStyle(divEle).getPropertyValue('--color'); // 取值
   &lt;div style=&quot;box-shadow: 5px 5px 8px&quot;&gt;&lt;/div&gt;
   &lt;div style=&quot;filter: drop-shadow(5px 5px 8px)&quot;&gt;&lt;/div&gt;
 &lt;/section&gt;
-</code></pre><p><img style="display:block;margin:0 auto;width:70%" src=/css-last/drop-shadow.png></p><p>backdrop-filter 和 filter 语法相似，可以轻松实现毛玻璃效果；他们的区别是，backdrop-filter 是让<strong>当前元素所在区域后面的内容</strong>应用滤镜效果，需要当前元素是半/完全透明的；filter 是让当前元素自身应用滤镜效果。</p><h3 id=混合模式>混合模式</h3><p>CSS 中有 3 个混合模式相关的属性：</p><ol><li>background-blend-mode，混合元素背景图案、渐变和颜色；</li><li>mix-blend-mode，元素与元素之间的混合；</li><li>isolation，应用于祖先元素，限制 mix-blend-mode。</li></ol><p>background-blend-mode 和 mix-blend-mode 支持的混合模式是一致的：</p><ul><li>normal，正常；</li><li>multiply，正片叠底；</li><li>screen，滤色；</li><li>overlay，叠加；</li><li>darken，变暗；</li><li>lighten，变亮；</li><li>color-dodge，颜色变淡；</li><li>color-burn，颜色加深；</li><li>hard-light，强光；</li><li>soft-light，柔光；</li><li>difference，差值；</li><li>exclusion，排除；</li><li>hue，色调；</li><li>saturation，饱和度；</li><li>color，颜色；</li><li>luminosity，亮度。</li></ul></div><div class=post_footer><div class=meta><div class=info><span class="field tags"><i class=remixicon-stack-line></i><a href=https://vikingama.github.io/tags/css/>CSS</a></span></div></div></div></div><div class=doc_comments><div class=comments_block_title>发表评论</div><div id=vcomments></div></div><link rel=stylesheet href=https://vikingama.github.io/css/comments.css><script src=//unpkg.com/valine></script><script type=text/javascript>new Valine({el:'#vcomments',avatar:'retro',recordIP:true,path:window.location.pathname,appId:'U06blUXOot4uJgfMu8I9xJXz-MdYXbMMI',appKey:'BnrXC06FJsvRNpr4aqb1HYPd',placeholder:'来都来了，不打个招呼吗？',visitor:'true',serverURLs:'https:\/\/u06bluxo.api.lncldglobal.com'});</script></div></div><a id=back_to_top href=# class=back_to_top><span>△</span></a></div><footer class=footer><div class=powered_by><a href=https://github.com/varkai/hugo-theme-zozo/ target=_blank>Designed by <span class=jitters>Zeuk</span>,</a>
+</code></pre><p><img style="display:block;margin:0 auto;width:70%" src=/css-last/drop-shadow.png></p><p>backdrop-filter 和 filter 语法相似，可以轻松实现毛玻璃效果；他们的区别是，backdrop-filter 是让<strong>当前元素所在区域后面的内容</strong>应用滤镜效果，需要当前元素是半/完全透明的；filter 是让当前元素自身应用滤镜效果。</p><h3 id=混合模式>混合模式</h3><p>CSS 中有 3 个混合模式相关的属性：</p><ol><li>mix-blend-mode，元素与元素之间的混合；</li><li>isolation，应用于祖先元素，限制 mix-blend-mode:<ul><li>auto，默认值，混合模式隔离与否根据具体情况而定；</li><li><a href=https://demo.cssworld.cn/new/11/5-1.php>isolate</a>，对混合模式进行隔离（通过创建新的层叠上下文）。</li></ul></li><li>background-blend-mode，混合元素背景图案、渐变和颜色。</li></ol><p>background-blend-mode 和 <a href=https://demo.cssworld.cn/new/11/3-1.php>mix-blend-mode</a> 支持的混合模式是一致的：</p><ul><li>normal，正常；</li><li><a href=https://demo.cssworld.cn/new/11/3-2.php>multiply</a>，正片叠底，混合后颜色变暗；</li><li><a href=https://demo.cssworld.cn/new/11/3-3.php>screen</a>，滤色，效果和 multiply 正好相反，混合后颜色变亮；</li><li><a href=https://demo.cssworld.cn/new/11/3-4.php>overlay</a>，叠加，根据下层元素色值和 128 的大小，采用“multiply”或“screen”算法；</li><li>darken，变暗，将两种颜色的 RGB 通道值依次进行比较，<strong>哪个色值小</strong>就使用哪个色值；</li><li><a href=https://demo.cssworld.cn/new/11/3-5.php>lighten</a>，变亮，将两种颜色的 RGB 通道值依次进行比较，<strong>哪个色值大</strong>就使用哪个色值；；</li><li>color-dodge，颜色变淡，混合区域的对比度降低；</li><li>color-burn，颜色加深，混合区域的对比度提升；</li><li>hard-light，强光，亮的地方更亮，暗的地方更暗；</li><li><a href=https://demo.cssworld.cn/new/11/3-6.php>soft-light</a>，柔光，效果同“hard-light”，只是没那么极端；</li><li><a href=https://demo.cssworld.cn/new/11/3-7.php>difference</a>，差值，最终颜色的色值是用较浅颜色的色值减去较深颜色的色值的结果；</li><li><a href=https://demo.cssworld.cn/new/11/3-8.php>exclusion</a>，排除，对比度要比“difference”低一些；</li><li>hue，色调混合，将颜色混合，使用底层元素的亮度和饱和度，以及上层元素的色调；</li><li>saturation，饱和度混合，混合后的颜色保留底图的亮度和色调，并使用顶图的饱和度；</li><li><a href=https://demo.cssworld.cn/new/11/3-9.php>color</a>，颜色混合，混合后的颜色保留底图的亮度，并使用顶图的色调和饱和度；</li><li>luminosity，亮度混合，混合后的颜色保留底图的色调和饱和度，并使用顶图的亮度。</li></ul><p>&nbsp;</p><pre><code class=language-html>&lt;style&gt;
+  /* 模拟晚上的场景 */
+  .normal {
+    float: left;
+    width: 400px;
+    height: 300px;
+    background-color: rgba(0, 40, 140, 0.6);
+    background-image: url(./normal.jpg);
+    background-size: cover;
+  }
+  .night {
+    background-blend-mode: darken;
+    filter: brightness(80%) grayscale(20%) contract(1.2);
+  }
+&lt;/style&gt;
+&lt;div class=&quot;normal&quot;&gt;&lt;/div&gt;
+&lt;div class=&quot;normal night&quot;&gt;&lt;/div&gt;
+</code></pre><p><img style="display:block;margin:0 auto;width:70%" src=/css-last/normal-night.png></p><h3 id=遮罩>遮罩</h3><p>mask-image，设置使用遮罩效果的图像：</p><ul><li>none，默认值，表示无遮罩图片；</li><li>图像数据类型，包括 CSS 渐变、url()、image-set()、cross-fade()、element() 等；</li><li>遮罩元素类型，主要指 SVG 遮罩元素。</li></ul><p>mask-mode（Chrome 不支持），设置遮罩模式：</p><ul><li>match-source，默认值，根据<strong>资源类型</strong>自动采用合适的遮罩模式；</li><li>luminance，基于<strong>亮度</strong>判断是否要进行遮罩；</li><li>alpha，基于<strong>透明度</strong>判断是否要进行遮罩。</li></ul><p>mask-composite，同时使用多张图片进行遮罩时的合成方式：</p><ul><li>add，默认值，遮罩累加，并集；</li><li>substract，遮罩相减，多张遮罩图片的重合区域不显示遮罩，遮罩图片越多，遮罩区域越小；</li><li>intersect，遮罩相交，多张遮罩图片的重合区域才显示遮罩，交集；</li><li>exclude，遮罩排除，多张遮罩图片的重合区域被当作透明的。</li></ul><p>&nbsp;</p><pre><code class=language-html>&lt;style&gt;
+  .mask-image {
+    width: 400px;
+    height: 400px;
+    /* mask-* 属性和 background-* 属性很像 */
+    -webkit-mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-position: center center;
+    /* 需要是透明背景的图片 */
+    -webkit-mask-image: url('./whale.png');
+  }
+&lt;/style&gt;
+&lt;img src=&quot;./husky.jpg&quot; class=&quot;mask-image&quot; alt=&quot;二哈&quot; /&gt;
+</code></pre><p><img style="display:block;margin:0 auto;width:70%" src=/css-last/hasky-whale.png></p></div><div class=post_footer><div class=meta><div class=info><span class="field tags"><i class=remixicon-stack-line></i><a href=https://vikingama.github.io/tags/css/>CSS</a></span></div></div></div></div><div class=doc_comments><div class=comments_block_title>发表评论</div><div id=vcomments></div></div><link rel=stylesheet href=https://vikingama.github.io/css/comments.css><script src=//unpkg.com/valine></script><script type=text/javascript>new Valine({el:'#vcomments',avatar:'retro',recordIP:true,path:window.location.pathname,appId:'U06blUXOot4uJgfMu8I9xJXz-MdYXbMMI',appKey:'BnrXC06FJsvRNpr4aqb1HYPd',placeholder:'来都来了，不打个招呼吗？',visitor:'true',serverURLs:'https:\/\/u06bluxo.api.lncldglobal.com'});</script></div></div><a id=back_to_top href=# class=back_to_top><span>△</span></a></div><footer class=footer><div class=powered_by><a href=https://github.com/varkai/hugo-theme-zozo/ target=_blank>Designed by <span class=jitters>Zeuk</span>,</a>
 <a href=https://www.gohugo.io/ target=_blank>Built by <span class=jitters>Hugo</span>,</a>
 <a href=https://github.com/features/actions/ target=_blank>Deployed by <span class=jitters>Actions</span></a></div><div class=footer_slogan><span id=enter_time></span></div></footer><script src=//unpkg.com/jquery/dist/jquery.min.js></script><script src=//unpkg.com/@highlightjs/cdn-assets/highlight.min.js></script><script src=https://vikingama.github.io/js/zozo.js></script><script>hljs.highlightAll();</script><script type=application/javascript>var doNotTrack=false;if(!doNotTrack){window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;ga('create','G-CDS328YPMY','auto');ga('send','pageview');}</script><script async src=https://www.google-analytics.com/analytics.js></script></body></html>
