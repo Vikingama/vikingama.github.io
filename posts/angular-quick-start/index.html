@@ -235,100 +235,100 @@ class ExampleComponent
      */
   }
 }
-</code></pre><h3 id=指令-没有-模版-的特殊组件>指令（没有“模版”的特殊组件）</h3><p>指令用来将自定义行为附加到 DOM 中：</p><ol><li>结构性指令：通过添加、移除、替换 DOM 来修改布局，例如：*ngIf、*ngFor、ngSwitch；</li><li><p>属性型指令：改变已有元素的外观或行为，例如：ngClass、ngStyle、<a href=https://angular.cn/guide/attribute-directives#deactivating-angular-processing-with-ngnonbindable>ngNonBindable</a>。</p><pre><code class=language-ts>@Directive({
-/**
-* 当前指令被模版引用变量
-* &lt;div [app-example] #exampleRef=&quot;example&quot;&gt;&lt;/div&gt;
-* 可以通过 exampleRef 获取到“当前指令的引用”
-*/
-exportAs: 'example',
-// 将类的属性映射到宿主元素的绑定
-host: {
-/**
- * 当宿主元素（绑定的元素）上的 click 事件被触发时
- * 调用当前指令内的 onClick 方法
- */
-'(click)': 'onClick()',
-// 宿主元素的 class 被设置为 class-name-example（this.innerClass 的值）
-'[class]': 'innerClass'
-},
-// 可以替代 @Input 装饰器
-inputs: [],
-// 可以替代 @Output 装饰器
-outputs: [],
-/**
-* 指令代码会被 AOT（ahead-of-time）编译器忽略
-* 也就是说相关代码不会被预编译（打包的时候编译）
-* 而是保留到运行时进行动态编译
-*/
-jit: true,
-// 依赖注入，详见“组件”
-providers: [],
-/**
-* 用来标记在哪些元素/组件上使用指令
-* &lt;div [app-example]&gt;&lt;/div&gt;
-*/
-selector: '[app-example]'
+</code></pre><h3 id=指令-没有-模版-的特殊组件>指令（没有“模版”的特殊组件）</h3><p>指令用来将自定义行为附加到 DOM 中：</p><ol><li>结构性指令：通过添加、移除、替换 DOM 来修改布局，例如：*ngIf、*ngFor、ngSwitch；</li><li>属性型指令：改变已有元素的外观或行为，例如：ngClass、ngStyle、<a href=https://angular.cn/guide/attribute-directives#deactivating-angular-processing-with-ngnonbindable>ngNonBindable</a>。</li></ol><p>&nbsp;</p><pre><code class=language-ts>@Directive({
+  /**
+   * 当前指令被模版引用变量
+   * &lt;div [app-example] #exampleRef=&quot;example&quot;&gt;&lt;/div&gt;
+   * 可以通过 exampleRef 获取到“当前指令的引用”
+   */
+  exportAs: 'example',
+  // 将类的属性映射到宿主元素的绑定
+  host: {
+    /**
+     * 当宿主元素（绑定的元素）上的 click 事件被触发时
+     * 调用当前指令内的 onClick 方法
+     */
+    '(click)': 'onClick()',
+    // 宿主元素的 class 被设置为 class-name-example（this.innerClass 的值）
+    '[class]': 'innerClass'
+  },
+  // 可以替代 @Input 装饰器
+  inputs: [],
+  // 可以替代 @Output 装饰器
+  outputs: [],
+  /**
+   * 指令代码会被 AOT（ahead-of-time）编译器忽略
+   * 也就是说相关代码不会被预编译（打包的时候编译）
+   * 而是保留到运行时进行动态编译
+   */
+  jit: true,
+  // 依赖注入，详见“组件”
+  providers: [],
+  /**
+   * 用来标记在哪些元素/组件上使用指令
+   * &lt;div [app-example]&gt;&lt;/div&gt;
+   */
+  selector: '[app-example]'
 })
 class ExampleDirective {
-// 也可以通过 @HostBinding 向宿主元素“绑定属性”
-@HostBinding('class') class = 'class-name';
-// 也可以通过 @HostListener 向宿主元素“绑定事件”
-@HostListener('input', ['$event']) onInput(event) {
-console.log(event);
+  // 也可以通过 @HostBinding 向宿主元素“绑定属性”
+  @HostBinding('class') class = 'class-name';
+  // 也可以通过 @HostListener 向宿主元素“绑定事件”
+  @HostListener('input', ['$event']) onInput(event) {
+    console.log(event);
+  }
+  constructor(el: ElementRef, render2: Renderer2) {
+    // 通过 ElementRef 可以拿到“宿主元素”的引用
+    el.nativeElement.style.backgroundColor = 'red';
+  }
+  innerClass: string = 'class-name-example';
+  onClick() {
+    console.log('宿主元素上触发了 click 事件');
+    // 借助于 Renderer2 可以修改 Angular 的默认渲染行为
+    this.render2.setStyle(this.el.nativeElement, 'color', 'red');
+  }
 }
-constructor(el: ElementRef, render2: Renderer2) {
-// 通过 ElementRef 可以拿到“宿主元素”的引用
-el.nativeElement.style.backgroundColor = 'red';
-}
-innerClass: string = 'class-name-example';
-onClick() {
-console.log('宿主元素上触发了 click 事件');
-// 借助于 Renderer2 可以修改 Angular 的默认渲染行为
-this.render2.setStyle(this.el.nativeElement, 'color', 'red');
-}
-}
-</code></pre></li></ol><p>Angular 的<a href=https://angular.cn/guide/built-in-directives>内置指令</a>有：</p><ul><li>*ngIf，条件渲染；</li><li>*ngFor，循环渲染；</li><li>[ngClass]，类名绑定；</li><li>[ngStyle]，样式绑定；</li><li>[ngSwitch]，匹配渲染；</li><li>[ngModel]，数据双向绑定；</li><li><p>ngNonBindable，在宿主元素上停用模板中的插值、指令和绑定。</p><pre><code class=language-ts>@Component({
-selector: 'my-app',
-// 模版中绑定的都是 DOM 属性，而非 HTML 属性
-template: `
-&lt;ul
-  [ngClass]=&quot;{
-  btn: true,
-  btn-success: success,
-  btn-failure: !success
-}&quot;
-&gt;
-  &lt;li *ngFor=&quot;let item of users; let i = index; trackBy: trackByFn&quot;&gt;
-    {{ i + 1 }}: {{ item.name }}
-  &lt;/li&gt;
-&lt;/ul&gt;
-&lt;div
-  [class]=&quot;divClass&quot;
-  [class.div-success]=&quot;success&quot;
-  [class.div-failure]=&quot;!success&quot;
-&gt;&lt;/div&gt;
-&lt;ng-container [ngSwitch]=&quot;local&quot;&gt;
-  &lt;local-one *ngSwitchCase=&quot;1&quot;&gt;&lt;/local-one&gt;
-  &lt;local-two *ngSwitchCase=&quot;2&quot;&gt;&lt;/local-two&gt;
-  &lt;local-other *ngSwitchDefault&gt;&lt;/local-other&gt;
-&lt;/ng-container&gt;
-`
+</code></pre><p>Angular 的<a href=https://angular.cn/guide/built-in-directives>内置指令</a>有：</p><ul><li>*ngIf，条件渲染；</li><li>*ngFor，循环渲染；</li><li>[ngClass]，类名绑定；</li><li>[ngStyle]，样式绑定；</li><li>[ngSwitch]，匹配渲染；</li><li>[ngModel]，数据双向绑定；</li><li>ngNonBindable，在宿主元素上停用模板中的插值、指令和绑定。</li></ul><p>&nbsp;</p><pre><code class=language-ts>@Component({
+  selector: 'my-app',
+  // 模版中绑定的都是 DOM 属性，而非 HTML 属性
+  template: `
+    &lt;ul
+      [ngClass]=&quot;{
+      btn: true,
+      btn-success: success,
+      btn-failure: !success
+    }&quot;
+    &gt;
+      &lt;li *ngFor=&quot;let item of users; let i = index; trackBy: trackByFn&quot;&gt;
+        {{ i + 1 }}: {{ item.name }}
+      &lt;/li&gt;
+    &lt;/ul&gt;
+    &lt;div
+      [class]=&quot;divClass&quot;
+      [class.div-success]=&quot;success&quot;
+      [class.div-failure]=&quot;!success&quot;
+    &gt;&lt;/div&gt;
+    &lt;ng-container [ngSwitch]=&quot;local&quot;&gt;
+      &lt;local-one *ngSwitchCase=&quot;1&quot;&gt;&lt;/local-one&gt;
+      &lt;local-two *ngSwitchCase=&quot;2&quot;&gt;&lt;/local-two&gt;
+      &lt;local-other *ngSwitchDefault&gt;&lt;/local-other&gt;
+    &lt;/ng-container&gt;
+  `
 })
 class AppComponent {
-divClass: 'div-class';
-success: boolean;
-users: any[];
-local;
-trackByFn(index: number, item): number {
-/**
- * 不同于 React 和 Vue 强制启用 key 的策略
- * trackBy 不强制使用
- */
-return item.id || index;
+  divClass: 'div-class';
+  success: boolean;
+  users: any[];
+  local;
+  trackByFn(index: number, item): number {
+    /**
+     * 不同于 React 和 Vue 强制启用 key 的策略
+     * trackBy 不强制使用
+     */
+    return item.id || index;
+  }
 }
-}
-</code></pre></li></ul><p>结构型指令的实现需要借助辅助类 TemplateRef 和 ViewContainerRef：</p><pre><code class=language-ts>// 一个“延迟渲染”的例子
+</code></pre><p>结构型指令的实现需要借助辅助类 TemplateRef 和 ViewContainerRef：</p><pre><code class=language-ts>// 一个“延迟渲染”的例子
 @Directive({
   selector: '[delayRender]'
 })
@@ -758,44 +758,44 @@ export class GeneralComponent implements OnInit {
     });
   }
 }
-</code></pre><h3 id=依赖注入>依赖注入</h3><p>依赖是指系统中的个个组成部分之间的相互关系；具体到 Angular，是指某个 class 执行其功能“所需的”服务（@Injectable）或对象。</p><p>在依赖注入模式中，依赖项会通过 constructor 注入（默认行为是 new 调用）；一般情况下，会保存在私有属性上。</p><p>当 class 需要某个依赖时，该依赖就会作为参数添加到 class 的构造函数中。当 Angular 实例化 class 时，DI 会在“注入器树”中查找（从局部开始，向上冒泡，直到 root）provider；如果没有找到 provider，会报错。</p><p>如果要保证外部注入的服务是自己（当前 class）独有的（<a href=https://angular.cn/guide/dependency-injection-in-action#multiple-service-instances-sandboxing>沙箱式隔离</a>），只需在自己的元数据 providers 中列出 Service 即可（就能拥有自己独有的服务实例）。</p><p>如果“允许依赖缺失”或者需要“限制依赖查找范围”，可以使用修饰符更改默认的依赖查找机制：</p><ul><li>@Host 表示禁止在“请求该依赖的组件”以上查找依赖；</li><li>@Self 表示只在该组件的注入器中查找提供者；</li><li>@SkipSelf 表示跳过局部注入器，向上查找；</li><li><p>@Optional 表示找不到依赖就返回 null。</p><pre><code class=language-ts>@Component({
-providers: [
-{
-  provide: AaService,
-  // 为 DI 令牌关联一个“固定的值”
-  useValue: 123
-},
-{
-  provide: BbService,
-  // 为公共类/默认类换上一个“替代实现”
-  useClass: CcService
-},
-{
-  provide: AliasService,
-  /**
-   * 为服务创建别名，提供了两种途径来访问同一服务对象
-   * 也可以用来“收窄/简化”BbService
-   */
-  useExisting: BbService
-},
-{
-  provide: Example,
-  // 通过“工厂函数”来创建依赖实例
-  useFactory: exampleFactory(),
-  // 用于指定“工厂函数”所使用的依赖
-  deps: []
-},
-DdService
-]
+</code></pre><h3 id=依赖注入>依赖注入</h3><p>依赖是指系统中的个个组成部分之间的相互关系；具体到 Angular，是指某个 class 执行其功能“所需的”服务（@Injectable）或对象。</p><p>在依赖注入模式中，依赖项会通过 constructor 注入（默认行为是 new 调用）；一般情况下，会保存在私有属性上。</p><p>当 class 需要某个依赖时，该依赖就会作为参数添加到 class 的构造函数中。当 Angular 实例化 class 时，DI 会在“注入器树”中查找（从局部开始，向上冒泡，直到 root）provider；如果没有找到 provider，会报错。</p><p>如果要保证外部注入的服务是自己（当前 class）独有的（<a href=https://angular.cn/guide/dependency-injection-in-action#multiple-service-instances-sandboxing>沙箱式隔离</a>），只需在自己的元数据 providers 中列出 Service 即可（就能拥有自己独有的服务实例）。</p><p>如果“允许依赖缺失”或者需要“限制依赖查找范围”，可以使用修饰符更改默认的依赖查找机制：</p><ul><li>@Host 表示禁止在“请求该依赖的组件”以上查找依赖；</li><li>@Self 表示只在该组件的注入器中查找提供者；</li><li>@SkipSelf 表示跳过局部注入器，向上查找；</li><li>@Optional 表示找不到依赖就返回 null。</li></ul><p>&nbsp;</p><pre><code class=language-ts>@Component({
+  providers: [
+    {
+      provide: AaService,
+      // 为 DI 令牌关联一个“固定的值”
+      useValue: 123
+    },
+    {
+      provide: BbService,
+      // 为公共类/默认类换上一个“替代实现”
+      useClass: CcService
+    },
+    {
+      provide: AliasService,
+      /**
+       * 为服务创建别名，提供了两种途径来访问同一服务对象
+       * 也可以用来“收窄/简化”BbService
+       */
+      useExisting: BbService
+    },
+    {
+      provide: Example,
+      // 通过“工厂函数”来创建依赖实例
+      useFactory: exampleFactory(),
+      // 用于指定“工厂函数”所使用的依赖
+      deps: []
+    },
+    DdService
+  ]
 })
 class ExampleComponent {
-constructor(
-private aa: AaService,
-private bb: BbService,
-private eg: Example
-) {}
+  constructor(
+    private aa: AaService,
+    private bb: BbService,
+    private eg: Example
+  ) {}
 }
-</code></pre></li></ul><h3 id=双向绑定>双向绑定</h3><p>Angular 也有 Vue 中的 v-model 机制（modelValue/update:modelValue），语法为 &#91;&#40;value&#41;&#93;；实现思路同样也是基于“组件传值”和“自定义事件”（语法糖）。</p><pre><code class=language-ts>@Component({
+</code></pre><h3 id=双向绑定>双向绑定</h3><p>Angular 也有 Vue 中的 v-model 机制（modelValue/update:modelValue），语法为 &#91;&#40;value&#41;&#93;；实现思路同样也是基于“组件传值”和“自定义事件”（语法糖）。</p><pre><code class=language-ts>@Component({
   template:
     '&lt;div&gt;&lt;app-input-model [(example)]=&quot;exampleValue&quot;&gt;&lt;/app-input-model&gt;&lt;span&gt;{{ exampleValue }}&lt;/span&gt;&lt;/div&gt;'
 })
@@ -816,15 +816,15 @@ class InputModelComponent {
     this.exampleChange.emit(e.target.value);
   }
 }
-</code></pre><h3 id=模版变量>模版变量</h3><p>模版变量，顾名思义，就是存在于组件模版中的变量；模版变量可以引用：元素、指令、组件等：</p><ul><li>如果在组件上声明变量，该变量就会引用该组件实例；</li><li>如果在原生 HTML 标签上声明变量，该变量就会引用该元素；</li><li>如果你在 &lt;ng-template/&gt; 上声明变量，该变量就会引用一个 TemplateRef 实例来代表此模板；</li><li><p>如果该变量在右侧指定了一个名字（例如，#var=&quot;ngModel&quot;），该变量就会引用所在元素上具有这个 exportAs 名字的指令或组件。</p><pre><code class=language-html>&lt;!-- # 声明了一个模版变量 phone --&gt;
+</code></pre><h3 id=模版变量>模版变量</h3><p>模版变量，顾名思义，就是存在于组件模版中的变量；模版变量可以引用：元素、指令、组件等：</p><ul><li>如果在组件上声明变量，该变量就会引用该组件实例；</li><li>如果在原生 HTML 标签上声明变量，该变量就会引用该元素；</li><li>如果你在 &lt;ng-template/&gt; 上声明变量，该变量就会引用一个 TemplateRef 实例来代表此模板；</li><li>如果该变量在右侧指定了一个名字（例如，#var=&quot;ngModel&quot;），该变量就会引用所在元素上具有这个 exportAs 名字的指令或组件。</li></ul><p>&nbsp;</p><pre><code class=language-html>&lt;!-- # 声明了一个模版变量 phone --&gt;
 &lt;input #phone type=&quot;text&quot; placeholder=&quot;phone number&quot; /&gt;
 &lt;!-- button 通过模版变量获取到了 input 的 value --&gt;
 &lt;button (click)=&quot;callPhone(phone.value)&quot;&gt;take a call&lt;/button&gt;
 &lt;!-- 模版输入变量 --&gt;
 &lt;ng-template #heroRef let-hero let-i=&quot;index&quot; let-even=&quot;!isOdd&quot;&gt;
-&lt;span [class]=&quot;{ 'even-row': even }&quot;&gt;{{ i }}: {{ hero.name }}&lt;/span&gt;
+  &lt;span [class]=&quot;{ 'even-row': even }&quot;&gt;{{ i }}: {{ hero.name }}&lt;/span&gt;
 &lt;/ng-template&gt;
-</code></pre></li></ul><p>模版变量可以在“包含此模板变量”的模板中的任何地方引用它；既然使用模版变量的前提是“包含此模板变量”，那么决定模版边界的“结构型指令（例如，ngIf、ngFor、&lt;ng-template/&gt;）”也决定了模版变量的<strong>作用域</strong>。</p><h3 id=网络请求>网络请求</h3><p>使用 HttpClient 需要导入 HttpClientModule；一般情况下，在 AppModule 导入：</p><pre><code class=language-ts>import { BrowserModule } from '@angular/platform-browser';
+</code></pre><p>模版变量可以在“包含此模板变量”的模板中的任何地方引用它；既然使用模版变量的前提是“包含此模板变量”，那么决定模版边界的“结构型指令（例如，ngIf、ngFor、&lt;ng-template/&gt;）”也决定了模版变量的<strong>作用域</strong>。</p><h3 id=网络请求>网络请求</h3><p>使用 HttpClient 需要导入 HttpClientModule；一般情况下，在 AppModule 导入：</p><pre><code class=language-ts>import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({

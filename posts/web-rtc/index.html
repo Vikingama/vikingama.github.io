@@ -1,149 +1,149 @@
-<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=cache-control content=no-store><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no,user-scalable=no"><meta name=author content=馬腊咯稽><meta name=description content="MediaRecorder 上手"><meta name=keywords content=WebRTC><link rel=canonical href=https://vikingama.github.io/posts/web-rtc/><link rel="shortcut icon" href=https://vikingama.github.io/images/favicon.ico><link rel=stylesheet href=https://vikingama.github.io/css/zozo.css><link rel=stylesheet href=https://vikingama.github.io/css/highlight.css><link rel=stylesheet href=https://vikingama.github.io/css/remixicon.css><title>MediaRecorder 上手 &middot; 看不见我的美 · 是你瞎了眼</title></head><body><div class="main animated"><div class="nav_container animated fadeInDown"><div class=site_nav id=site_nav><ul><li><a href=/>首页</a></li><li><a href=/posts/>归档</a></li><li><a href=/tags/>标签</a></li><li><a href=/inspires/>启发</a></li><li><a href=/command/>命令</a></li><li><a href=/about/>关于</a></li></ul></div><div class=menu_icon><a id=menu_icon><i class=remixicon-links-line></i></a></div></div><div class="header animated fadeInDown"><div class=site_title_container><div class=site_title><h1><a href=https://vikingama.github.io><img style=width:65px;height:auto;vertical-align:top src=https://vikingama.github.io/images/avatar.png></a></h1></div><div class=description><p class=sub_title>看不见我的美<br>是你瞎了眼</p><div class=my_socials><a href=https://www.douban.com/people/nicknoonan title=douban target=_blank><i class=remixicon-douban-fill></i></a><a href=https://github.com/Vikingama title=github target=_blank><i class=remixicon-github-fill></i></a><a href=https://weibo.com/vikingx title=weibo target=_blank><i class=remixicon-weibo-fill></i></a><a href=https://www.zhihu.com/people/vikingama title=zhihu target=_blank><i class=remixicon-zhihu-fill></i></a><a href=https://vikingama.github.io/index.xml type=application/rss+xml title=rss target=_blank><i class=remixicon-rss-fill></i></a></div></div></div></div><div class=content><div class=post_page><div class="post animated fadeInDown"><div class="post_title post_detail_title"><h2><a href=/posts/web-rtc/>MediaRecorder 上手</a></h2><span class=date>2022.04.25</span></div><div class="post_content markdown"><blockquote><p>本以为移动端的爆发式增长能给前端带来更好的开发体验。</p></blockquote><p>随着国家对个体户税收政策的收紧，公司需要采集客户的“话术视频”来作为规避业务风险的“凭据”。具体来说就是，需要用户在手机端录制一段“我已同意 xxx”的视频，并且录制完成之后，上传至服务器保存。</p><p>经过搜集信息，大致有两种实现思路：<a href=https://w3c.github.io/html-media-capture>基于 input&#91;capture&#93; 的实现</a>和<a href=https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API>基于 WebRTC 的实现</a>；input 这种不是本文重点，略过。</p><p>基于 WebRTC 的实现的基本思路是：</p><ol><li>调用 MediaDevices 获取设备相机和麦克风权限；</li><li>调用 getUserMedia 方法创建 MediaStream 数据流；</li><li>调用 MediaRecorder 捕获媒体流并对数据流捕获和缓存；</li><li>如果文件较大，可能需要 Blob 等 API 对媒体流进行分包上传；</li><li>如果产品有需要，可能后端要调用 ffmpeg 等工具对视频编码进行转换。</li></ol><h3 id=webrtc>WebRTC</h3><p>前端调用设备采集视频流主要采用的是 <a href=https://developer.mozilla.org/zh-CN/docs/Glossary/WebRTC>WebRTC 实时通讯技术</a>，它是一项可以用于视频聊天、音频聊天或 P2P 文件分享的技术。</p><p>整个 WebRTC 主要有以下几个 API 组成：</p><ul><li><a href=https://developer.mozilla.org/zh-CN/docs/Web/API/MediaDevices>MediaDevices</a>，提供访问连接媒体输入的设备（相机、麦克风以及屏幕共享等），可以使你取得任何硬件资源的媒体数据：<ul><li><a href=https://developer.mozilla.org/zh-CN/docs/Web/API/MediaDevices/getUserMedia>getUserMedia</a>，为 RTC 连接<strong>获取</strong>设备的摄像头与麦克风权限并<strong>接入</strong>设备信号；会提示用户给予使用媒体输入的许可；</li><li><a href=https://developer.mozilla.org/zh-CN/docs/Web/API/MediaDevices/getDisplayMedia>getDisplayMedia</a>，提示用户去选择和授权捕获<strong>屏幕内容</strong>在一个 MediaStream 里。</li></ul></li><li><a href=https://developer.mozilla.org/zh-CN/docs/Web/API/MediaStream>MediaStream</a> 是一个媒体内容的流，一个流包含几个轨道，比如视频和音频轨道；</li><li><a href=https://developer.mozilla.org/zh-CN/docs/Web/API/RTCDataChannel>RTCDataChannel</a>，用来设置 P2P 数据连接，在两者之间建立一个双向数据通道连接；</li><li><p><a href=https://developer.mozilla.org/zh-CN/docs/Web/API/RTCPeerConnection>RTCPeerConnection</a>，用于配置音频或视频聊天。</p><pre><code class=language-js>let media = null;
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=cache-control content=no-store><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no,user-scalable=no"><meta name=author content=馬腊咯稽><meta name=description content="WebRTC 初上手"><meta name=keywords content=WebRTC><link rel=canonical href=https://vikingama.github.io/posts/web-rtc/><link rel="shortcut icon" href=https://vikingama.github.io/images/favicon.ico><link rel=stylesheet href=https://vikingama.github.io/css/zozo.css><link rel=stylesheet href=https://vikingama.github.io/css/highlight.css><link rel=stylesheet href=https://vikingama.github.io/css/remixicon.css><title>WebRTC 初上手 &middot; 看不见我的美 · 是你瞎了眼</title></head><body><div class="main animated"><div class="nav_container animated fadeInDown"><div class=site_nav id=site_nav><ul><li><a href=/>首页</a></li><li><a href=/posts/>归档</a></li><li><a href=/tags/>标签</a></li><li><a href=/inspires/>启发</a></li><li><a href=/command/>命令</a></li><li><a href=/about/>关于</a></li></ul></div><div class=menu_icon><a id=menu_icon><i class=remixicon-links-line></i></a></div></div><div class="header animated fadeInDown"><div class=site_title_container><div class=site_title><h1><a href=https://vikingama.github.io><img style=width:65px;height:auto;vertical-align:top src=https://vikingama.github.io/images/avatar.png></a></h1></div><div class=description><p class=sub_title>看不见我的美<br>是你瞎了眼</p><div class=my_socials><a href=https://www.douban.com/people/nicknoonan title=douban target=_blank><i class=remixicon-douban-fill></i></a><a href=https://github.com/Vikingama title=github target=_blank><i class=remixicon-github-fill></i></a><a href=https://weibo.com/vikingx title=weibo target=_blank><i class=remixicon-weibo-fill></i></a><a href=https://www.zhihu.com/people/vikingama title=zhihu target=_blank><i class=remixicon-zhihu-fill></i></a><a href=https://vikingama.github.io/index.xml type=application/rss+xml title=rss target=_blank><i class=remixicon-rss-fill></i></a></div></div></div></div><div class=content><div class=post_page><div class="post animated fadeInDown"><div class="post_title post_detail_title"><h2><a href=/posts/web-rtc/>WebRTC 初上手</a></h2><span class=date>2022.04.25</span></div><div class="post_content markdown"><blockquote><p>本以为移动端的爆发式增长能给前端带来更好的开发体验。</p></blockquote><p>随着国家对个体户税收政策的收紧，公司需要采集客户的“话术视频”来作为规避业务风险的“凭据”。具体来说就是，需要用户在手机端录制一段“我已同意 xxx”的视频，并且录制完成之后，上传至服务器保存。</p><p>经过搜集信息，大致有两种实现思路：<a href=https://w3c.github.io/html-media-capture>基于 input&#91;capture&#93; 的实现</a>和<a href=https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API>基于 WebRTC 的实现</a>；input 这种不是本文重点，略过。</p><p>基于 WebRTC 的实现的基本思路是：</p><ol><li>调用 MediaDevices 获取设备相机和麦克风权限；</li><li>调用 getUserMedia 方法创建 MediaStream 数据流；</li><li>调用 MediaRecorder 捕获媒体流并对数据流捕获和缓存；</li><li>如果文件较大，可能需要 Blob 等 API 对媒体流进行分包上传；</li><li>如果产品有需要，可能后端要调用 ffmpeg 等工具对视频编码进行转换。</li></ol><h3 id=webrtc>WebRTC</h3><p>前端调用设备采集视频流主要采用的是 <a href=https://developer.mozilla.org/zh-CN/docs/Glossary/WebRTC>WebRTC 实时通讯技术</a>，它是一项可以用于视频聊天、音频聊天或 P2P 文件分享的技术。</p><p>整个 WebRTC 主要有以下几个 API 组成：</p><ul><li><a href=https://developer.mozilla.org/zh-CN/docs/Web/API/MediaDevices>MediaDevices</a>，提供访问连接媒体输入的设备（相机、麦克风以及屏幕共享等），可以使你取得任何硬件资源的媒体数据：<ul><li><a href=https://developer.mozilla.org/zh-CN/docs/Web/API/MediaDevices/getUserMedia>getUserMedia</a>，为 RTC 连接<strong>获取</strong>设备的摄像头与麦克风权限并<strong>接入</strong>设备信号；会提示用户给予使用媒体输入的许可；</li><li><a href=https://developer.mozilla.org/zh-CN/docs/Web/API/MediaDevices/getDisplayMedia>getDisplayMedia</a>，提示用户去选择和授权捕获<strong>屏幕内容</strong>在一个 MediaStream 里。</li></ul></li><li><a href=https://developer.mozilla.org/zh-CN/docs/Web/API/MediaStream>MediaStream</a> 是一个媒体内容的流，一个流包含几个轨道，比如视频和音频轨道；</li><li><a href=https://developer.mozilla.org/zh-CN/docs/Web/API/RTCDataChannel>RTCDataChannel</a>，用来设置 P2P 数据连接，在两者之间建立一个双向数据通道连接；</li><li><a href=https://developer.mozilla.org/zh-CN/docs/Web/API/RTCPeerConnection>RTCPeerConnection</a>，用于配置音频或视频聊天。</li></ul><p>&nbsp;</p><pre><code class=language-js>let media = null;
 // 请求当前设备可用的媒体输入输出设备
 const enumerateDevicesPromise = navigator.mediaDevices.enumerateDevices();
 enumerateDevicesPromise
-.then(mediaDevices =&gt; {
-if (!Array.isArray(mediaDevices)) {
-  throw new Error('未找到媒体设备');
-}
-mediaDevices.forEach(({ deviceId, groupId, kind, label }) =&gt; {
-  console.group('EnumerateDevices');
-  console.log('设备 ID', deviceId);
-  console.log('设备组 ID', groupId);
-  console.log('设备类型', kind);
-  console.log('设备名称', label);
-  console.groupEnd();
-});
-const mediaDevicesKinds = mediaDevices.map(({ kind }) =&gt; kind);
-if (!mediaDevicesKinds.includes('videoinput')) {
-  throw new Error('没有相机权限');
-}
-if (!mediaDevicesKinds.includes('audioinput')) {
-  throw new Error('没有麦克风权限');
-}
-})
-.catch(error =&gt; {
-console.error(error);
-});
+  .then(mediaDevices =&gt; {
+    if (!Array.isArray(mediaDevices)) {
+      throw new Error('未找到媒体设备');
+    }
+    mediaDevices.forEach(({ deviceId, groupId, kind, label }) =&gt; {
+      console.group('EnumerateDevices');
+      console.log('设备 ID', deviceId);
+      console.log('设备组 ID', groupId);
+      console.log('设备类型', kind);
+      console.log('设备名称', label);
+      console.groupEnd();
+    });
+    const mediaDevicesKinds = mediaDevices.map(({ kind }) =&gt; kind);
+    if (!mediaDevicesKinds.includes('videoinput')) {
+      throw new Error('没有相机权限');
+    }
+    if (!mediaDevicesKinds.includes('audioinput')) {
+      throw new Error('没有麦克风权限');
+    }
+  })
+  .catch(error =&gt; {
+    console.error(error);
+  });
 // 请求当前设备可用的 Constraints 属性
 const supportedConstraints = navigator.mediaDevices.getSupportedConstraints();
 const supportedConstraintsKey = Object.entries(supportedConstraints)
-.filter(item =&gt; item[1])
-.map(item =&gt; item[0]);
+  .filter(item =&gt; item[1])
+  .map(item =&gt; item[0]);
 // MediaStreamConstraints 对象，用于指定“请求的媒体类型和相对应的参数”
 const userMediaConstraints = {
-video: {
-width: { min: 1024, ideal: 1280, max: 1920 }, // 指定视频宽度
-height: { min: 776, ideal: 720, max: 1080 }, // 指定视频高度
-frameRate: { min: 15, ideal: 30, max: 60 }, // 指定视频帧率
-facingMode: { exact: 'environment' } // 强制使用后置摄像头
-// facingMode: 'user' // 优先使用前置摄像头
-},
-// video: true, // 不指定分辨率
-audio: true
+  video: {
+    width: { min: 1024, ideal: 1280, max: 1920 }, // 指定视频宽度
+    height: { min: 776, ideal: 720, max: 1080 }, // 指定视频高度
+    frameRate: { min: 15, ideal: 30, max: 60 }, // 指定视频帧率
+    facingMode: { exact: 'environment' } // 强制使用后置摄像头
+    // facingMode: 'user' // 优先使用前置摄像头
+  },
+  // video: true, // 不指定分辨率
+  audio: true
 };
 // 过滤 userMediaConstraints 中可用的属性
 Object.keys(userMediaConstraints).forEach(key =&gt; {
-if (!supportedConstraintsKey.includes(key)) {
-delete userMediaConstraints[key];
-}
+  if (!supportedConstraintsKey.includes(key)) {
+    delete userMediaConstraints[key];
+  }
 });
 // 返回的 promise 可能既不会 resolve 也不会 reject，因为现在的操作系统权限控制不是非黑即白的
 const userMediaPromise =
-navigator.mediaDevices.getUserMedia(userMediaConstraints);
+  navigator.mediaDevices.getUserMedia(userMediaConstraints);
 userMediaPromise
-.then(mediaStream =&gt; {
-// 如果用户授予了媒体权限，userMediaPromise 会 resolve 一个 MediaStream 对象
-const monitorEle = document.querySelector('.monitor');
-/**
- * 使用 srcObject 将不需要借助 URL.createObjectURL（搭配 src 属性）
- * 仅有 Safari 完整支持了 MediaStream、MediaSource、Blob、File
- * 大部分浏览器仅支持 MediaStream，不过对我们来说足够了
- */
-monitorEle.loop = false;
-monitorEle.muted = true;
-monitorEle.srcObject = mediaStream;
-monitorEle.onloadedmetadata = () =&gt; {
-  // 视频元数据加载完毕，开始播放
-  monitorEle.play();
-};
-})
-.catch(error =&gt; {
-// 如果用户拒绝了媒体权限，会 reject 一个 PermissionDeniedError/NotFoundError
-switch (error.name) {
-  case 'AbortError':
-    console.error('中止错误');
-    break;
-  case 'NotAllowedError':
-    console.error('拒绝错误，用户拒绝了媒体访问请求');
-    break;
-  case 'NotFoundError':
-    console.error('找不到错误');
-    break;
-  case 'NotReadableError':
-    console.error('无法读取错误，别的硬件、软件问题');
-    break;
-  case 'OverconstrainedError':
-    console.error('无法满足要求错误，无法满足 constraint 的要求');
-    break;
-  case 'SecurityError':
-    console.error('安全错误，设备媒体被禁止，和用户设置有关');
-    break;
-  case 'TypeError':
-    console.error('类型错误，constraint 设置问题');
-    break;
-  default:
-    // 建议将 error 上报
-    break;
-}
-});
+  .then(mediaStream =&gt; {
+    // 如果用户授予了媒体权限，userMediaPromise 会 resolve 一个 MediaStream 对象
+    const monitorEle = document.querySelector('.monitor');
+    /**
+     * 使用 srcObject 将不需要借助 URL.createObjectURL（搭配 src 属性）
+     * 仅有 Safari 完整支持了 MediaStream、MediaSource、Blob、File
+     * 大部分浏览器仅支持 MediaStream，不过对我们来说足够了
+     */
+    monitorEle.loop = false;
+    monitorEle.muted = true;
+    monitorEle.srcObject = mediaStream;
+    monitorEle.onloadedmetadata = () =&gt; {
+      // 视频元数据加载完毕，开始播放
+      monitorEle.play();
+    };
+  })
+  .catch(error =&gt; {
+    // 如果用户拒绝了媒体权限，会 reject 一个 PermissionDeniedError/NotFoundError
+    switch (error.name) {
+      case 'AbortError':
+        console.error('中止错误');
+        break;
+      case 'NotAllowedError':
+        console.error('拒绝错误，用户拒绝了媒体访问请求');
+        break;
+      case 'NotFoundError':
+        console.error('找不到错误');
+        break;
+      case 'NotReadableError':
+        console.error('无法读取错误，别的硬件、软件问题');
+        break;
+      case 'OverconstrainedError':
+        console.error('无法满足要求错误，无法满足 constraint 的要求');
+        break;
+      case 'SecurityError':
+        console.error('安全错误，设备媒体被禁止，和用户设置有关');
+        break;
+      case 'TypeError':
+        console.error('类型错误，constraint 设置问题');
+        break;
+      default:
+        // 建议将 error 上报
+        break;
+    }
+  });
 // 用来进行屏幕共享，当前业务场景下用不到
 let captureStream = null;
 const getDisplayMediaPromise =
-navigator.mediaDevices.getDisplayMedia(userMediaConstraints);
+  navigator.mediaDevices.getDisplayMedia(userMediaConstraints);
 getDisplayMediaPromise
-.then(mediaStream =&gt; {
-captureStream = mediaStream;
-})
-.catch(error =&gt; {
-switch (error.name) {
-  case 'AbortError':
-    console.error('中止错误');
-    break;
-  case 'InvalidStateError':
-    console.error('无效状态错误，当前页面处于非激活状态');
-    break;
-  case 'NotAllowedError':
-    console.error(
-      '拒绝错误，用户拒绝了访问屏幕区域的权限或者不允许当前浏览实例访问屏幕共享'
-    );
-    break;
-  case 'NotFoundError':
-    console.error('找不到错误，没有可用于捕获的屏幕视频源');
-    break;
-  case 'NotReadableError':
-    console.error(
-      '无法读取错误，发生了硬件或操作系统级别错误或锁定，从而预先占用了共享所选源'
-    );
-    break;
-  case 'OverconstrainedError':
-    console.error(
-      '转换错误，创建流后，由于无法生成兼容的流导致应用指定的 constraints 失效'
-    );
-    break;
-  case 'TypeError':
-    console.error('类型错误，constraint 设置问题');
-    break;
-  default:
-    // 建议将 error 上报
-    break;
-}
-})
-.finally(() =&gt; {
-// 保存 captureStream，保存至服务器
-});
+  .then(mediaStream =&gt; {
+    captureStream = mediaStream;
+  })
+  .catch(error =&gt; {
+    switch (error.name) {
+      case 'AbortError':
+        console.error('中止错误');
+        break;
+      case 'InvalidStateError':
+        console.error('无效状态错误，当前页面处于非激活状态');
+        break;
+      case 'NotAllowedError':
+        console.error(
+          '拒绝错误，用户拒绝了访问屏幕区域的权限或者不允许当前浏览实例访问屏幕共享'
+        );
+        break;
+      case 'NotFoundError':
+        console.error('找不到错误，没有可用于捕获的屏幕视频源');
+        break;
+      case 'NotReadableError':
+        console.error(
+          '无法读取错误，发生了硬件或操作系统级别错误或锁定，从而预先占用了共享所选源'
+        );
+        break;
+      case 'OverconstrainedError':
+        console.error(
+          '转换错误，创建流后，由于无法生成兼容的流导致应用指定的 constraints 失效'
+        );
+        break;
+      case 'TypeError':
+        console.error('类型错误，constraint 设置问题');
+        break;
+      default:
+        // 建议将 error 上报
+        break;
+    }
+  })
+  .finally(() =&gt; {
+    // 保存 captureStream，保存至服务器
+  });
 //
-</code></pre></li></ul><p>接下来就是使用 <a href=https://developer.mozilla.org/zh-CN/docs/Web/API/MediaRecorder>MediaRecorder</a> 进行视频流的录制：</p><pre><code class=language-js>let chunks = [];
+</code></pre><p>接下来就是使用 <a href=https://developer.mozilla.org/zh-CN/docs/Web/API/MediaRecorder>MediaRecorder</a> 进行视频流的录制：</p><pre><code class=language-js>let chunks = [];
 const { isTypeSupported } = MediaRecorder;
 const mimeType = isTypeSupported('video/mp4')
   ? 'video/mp4'
