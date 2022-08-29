@@ -2370,7 +2370,7 @@ export const createApp = ((...args) =&gt; {
   const createApp = createAppAPI(render);
   const app = createApp(...args);
   const { mount } = app;
-  // 根组件挂载节点，ShadowRoot 接口是一个 DOM 子树的根节点, 它与文档的主 DOM 树分开渲染
+  // 根组件挂载节点，ShadowRoot 接口是一个 DOM 子树的根节点，它与文档的主 DOM 树分开渲染
   app.mount = (containerOrSelector: Element | ShadowRoot | string): any =&gt; {
     const container = normalizeContainer(containerOrSelector); // HTMLElement || null
     if (!container) return;
@@ -4221,13 +4221,13 @@ export function cloneVNode(vnode) {
 ): VNode {
   if (!type || type === NULL_DYNAMIC_COMPONENT) {
     if (!type) {
-      warn(`非法 type 类型: ${type}.`);
+      warn(`非法 type 类型：${type}.`);
     }
     type = Comment;
   }
   if (isVNode(type)) {
     /**
-     * &lt;component :is=&quot;vnode&quot;/&gt;，这种情况下，createVNode接受一个存在的 VNode
+     * &lt;component :is=&quot;vnode&quot;/&gt;，这种情况下，createVNode 接受一个存在的 VNode
      * 在克隆前后时，合并 VNode 的 ref
      */
     const cloned = cloneVNode(type, props, true /* mergeRef: true */);

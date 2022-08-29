@@ -634,7 +634,7 @@ class SortedLinkedList extends LinkedList {
     return this.values().every(item =&gt; other.has(item));
   }
 }
-</code></pre><h3 id=字典>字典</h3><p>字典和集合很相似，集合以[值，值]的形式存储元素，字典则是以[键，值]的形式来存储元素；字典也称作映射、符号表或关联数组。</p><pre><code class=language-js>function defaultToString(s) {
+</code></pre><h3 id=字典>字典</h3><p>字典和集合很相似，集合以 [值，值] 的形式存储元素，字典则是以 [键，值] 的形式来存储元素；字典也称作映射、符号表或关联数组。</p><pre><code class=language-js>function defaultToString(s) {
   if (s === null) {
     return 'NULL';
   } else if (s == undefined) {
@@ -688,7 +688,7 @@ class Dictionary {
     this.table = {};
   }
   keyValues() {
-    // 返回[键，值]
+    // 返回 [键，值]
     return Object.values(this.table);
   }
   keys() {

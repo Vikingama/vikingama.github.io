@@ -244,7 +244,7 @@ npx lint-staged
   if (!value.find(item =&gt; action === item)) {
     return [
       false,
-      `提交的简要描述应该以中文动词加一个空格起头，动词可选值为[${value}]，当前值为 '${action}'`
+      `提交的简要描述应该以中文动词加一个空格起头，动词可选值为 [${value}]，当前值为 '${action}'`
     ];
   }
   if (!subject.startsWith(`${action} `) || subject.slice(3, 4) === ' ') {
@@ -399,12 +399,12 @@ module.exports = {
     }
   ],
   messages: {
-    type: '选择本次更改的提交类型: \n',
-    scope: '选择本次更改涉及模块: \n',
-    subject: '输入针对本次更改的简要说明: \n',
+    type: '选择本次更改的提交类型：\n',
+    scope: '选择本次更改涉及模块：\n',
+    subject: '输入针对本次更改的简要说明：\n',
     body: '输入针对本次更改的详细描述（非必须），使用&quot; | &quot;进行换行，每行长度不要超过 72: \n', // 这里有问题
     breaking:
-      '如果本次更改存在不兼容的修改，则须对更改的内容进行详细描述，否则无需填写: \n',
+      '如果本次更改存在不兼容的修改，则须对更改的内容进行详细描述，否则无需填写：\n',
     footer: '列举本次更改对应的 Tapd 缺陷 ID（比如 #31、#34）: \n',
     confirmCommit: '是否使用以上提交信息进行提交？'
   }

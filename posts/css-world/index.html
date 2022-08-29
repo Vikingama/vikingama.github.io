@@ -27,9 +27,10 @@
 &lt;/style&gt;
 &lt;body&gt;
   &lt;!-- 使用 dot 自定义元素，可以在 IE8 上实现优雅降级--&gt;
-  正在加载中&lt;dot&gt;...&lt;/dot&gt;
+  正在加载中
+  &lt;dot&gt;...&lt;/dot&gt;
 &lt;/body&gt;
-</code></pre><h3 id=元素尺寸>元素尺寸</h3><ol><li>元素偏移尺寸：offsetWidth/offsetHeight，元素的 border-box 尺寸；</li><li>元素可视尺寸：clientWidth/clientHeight ，元素的 padding-box 尺寸；</li><li>元素外部尺寸：元素的 margin-box 尺寸，有可能为负数。</li></ol><h3 id=min-max-width-min-max-height>min/max-width、min/max-height</h3><ol><li>min-* 的初始值是 none，max-* 的初始值是 auto；</li><li>如果 width &gt; max-width，width 的值会被 max-width 的值覆盖（即使 width 的权重是 !important）；</li><li>如果 min-width &gt; max-width，min-width 会覆盖 max-width 的值；</li><li>对于任意高度元素的展开收起动画，不妨试试 max-height（height:auto 不会触发过渡动画）。</li></ol><h3 id=margin>margin</h3><ol><li>margin 与 padding 百分比值无论是水平方向还是垂直方向都是相对于宽度计算的；</li><li>块级元素（不包括浮动和绝对定位元素）的上下外边距（margin-top/bottom）有时会合并为单个外边距；<ol><li>第一个/最后一个子元素与父元素；</li><li>上下排列的兄弟元素；</li><li>空的块级元素。</li></ol></li><li>margin 的合并只发生在和当前文档流方向的相垂直的方向上（默认文档流是水平流，可用 writing-mode 改写）；</li><li>阻止 margin 合并的方法：触发 BFC、设置 border、设置 padding、设置 height。</li></ol><h3 id=line-height>line-height</h3><ol><li>line-height 的定义就是两基线的间距，vertical-align 的默认值就是基线（字母 x 的下边缘线）;</li><li>x-height 指的是小写字母 x 的高度，术语描述就是基线和等分线（midline，也称作中线）之间的距离；</li><li>vertical-align:middle 跟上面的中线不是一个意思，middle 指的是基线往上 1/2 x-height 高度（字母 x 交叉点那个位置）；</li><li>vertical-align:middle 并不是绝对的垂直居中对齐，我们平常看到的 middle 效果只是一种近似效果；</li><li>ex 是 CSS 中的一个相对单位（相对于字体和字号），指的是小写字母 x 的高度；没错，就是指 x-height（1ch 表示一个阿拉伯数字 0 的宽度）。</li></ol><p>默认空 div 高度是 0，一旦里面写上几个文字，div 高度就有了；不少人会认为 div 高度是由里面的文字撑开的，也就是 font-size 决定的；但本质上是由 line-height 全权决定的，尽管某些场景确实与 font-size 大小有关。</p><pre><code class=language-html>&lt;style&gt;
+</code></pre><h3 id=元素尺寸>元素尺寸</h3><ol><li>元素偏移尺寸：offsetWidth/offsetHeight，元素的 border-box 尺寸；</li><li>元素可视尺寸：clientWidth/clientHeight，元素的 padding-box 尺寸；</li><li>元素外部尺寸：元素的 margin-box 尺寸，有可能为负数。</li></ol><h3 id=min-max-width-min-max-height>min/max-width、min/max-height</h3><ol><li>min-* 的初始值是 none，max-* 的初始值是 auto；</li><li>如果 width &gt; max-width，width 的值会被 max-width 的值覆盖（即使 width 的权重是 !important）；</li><li>如果 min-width &gt; max-width，min-width 会覆盖 max-width 的值；</li><li>对于任意高度元素的展开收起动画，不妨试试 max-height（height:auto 不会触发过渡动画）。</li></ol><h3 id=margin>margin</h3><ol><li>margin 与 padding 百分比值无论是水平方向还是垂直方向都是相对于宽度计算的；</li><li>块级元素（不包括浮动和绝对定位元素）的上下外边距（margin-top/bottom）有时会合并为单个外边距；<ol><li>第一个/最后一个子元素与父元素；</li><li>上下排列的兄弟元素；</li><li>空的块级元素。</li></ol></li><li>margin 的合并只发生在和当前文档流方向的相垂直的方向上（默认文档流是水平流，可用 writing-mode 改写）；</li><li>阻止 margin 合并的方法：触发 BFC、设置 border、设置 padding、设置 height。</li></ol><h3 id=line-height>line-height</h3><ol><li>line-height 的定义就是两基线的间距，vertical-align 的默认值就是基线（字母 x 的下边缘线）;</li><li>x-height 指的是小写字母 x 的高度，术语描述就是基线和等分线（midline，也称作中线）之间的距离；</li><li>vertical-align:middle 跟上面的中线不是一个意思，middle 指的是基线往上 1/2 x-height 高度（字母 x 交叉点那个位置）；</li><li>vertical-align:middle 并不是绝对的垂直居中对齐，我们平常看到的 middle 效果只是一种近似效果；</li><li>ex 是 CSS 中的一个相对单位（相对于字体和字号），指的是小写字母 x 的高度；没错，就是指 x-height（1ch 表示一个阿拉伯数字 0 的宽度）。</li></ol><p>默认空 div 高度是 0，一旦里面写上几个文字，div 高度就有了；不少人会认为 div 高度是由里面的文字撑开的，也就是 font-size 决定的；但本质上是由 line-height 全权决定的，尽管某些场景确实与 font-size 大小有关。</p><pre><code class=language-html>&lt;style&gt;
   .line-height-zero {
     outline: 1px solid red;
     line-height: 0;
@@ -65,7 +66,11 @@
   }
 &lt;/style&gt;
 &lt;span alt=&quot;没有内联元素&quot;&gt;&lt;/span&gt;
-&lt;span alt=&quot;最后一行内联元素的基线&quot;&gt;span&lt;br /&gt;span&lt;/span&gt;
+&lt;span alt=&quot;最后一行内联元素的基线&quot;&gt;
+  span
+  &lt;br /&gt;
+  span
+&lt;/span&gt;
 &lt;span alt=&quot;margin 底边缘&quot;&gt;&lt;/span&gt;
 </code></pre><p><img style="display:block;margin:0 auto;width:70%" src=/css-word/baseline.png></p><h3 id=float>float</h3><p>float 的特性：</p><ol><li>块状化并格式化上下文，元素一旦 float 的属性值不为 none，则其 display 计算值就是 block 或者 table；</li><li>破坏文档流，使父元素高度塌陷（这是标准不是 bug，浮动本来就是为了破坏文档流实现文字环绕效果）；</li><li>没有任何 margin 合并。</li></ol><p>&nbsp;</p><pre><code class=language-js>var span = document.createElement('span');
 document.body.appendChild(span);
@@ -96,7 +101,7 @@ console.log('2. ' + window.getComputedStyle(span).display);
   }
 &lt;/style&gt;
 &lt;div&gt;
-  &lt;img src=&quot;https://vikingama.github.io/images/avatar.png&quot; /&gt;
+  &lt;img src=&quot;/images/avatar.png&quot; /&gt;
   &lt;p&gt;
     Bacon ipsum dolor amet chislic beef ribs ball tip strip steak. Kevin alcatra
     tri-tip, sirloin ball tip prosciutto turducken venison pork loin corned beef
@@ -113,7 +118,7 @@ console.log('2. ' + window.getComputedStyle(span).display);
   }
 &lt;/style&gt;
 &lt;div&gt;
-  &lt;img src=&quot;https://vikingama.github.io/images/avatar.png&quot; /&gt;
+  &lt;img src=&quot;/images/avatar.png&quot; /&gt;
 &lt;/div&gt;
 </code></pre><p><img style="display:block;margin:0 auto;width:70%" src=/css-word/overflow-cut.png></p><p>对于 Webkit 浏览器，可以通过以下选择器修改滚动条样式：</p><ol><li>::-webkit-scrollbar，整个滚动条；</li><li>::-webkit-scrollbar-button，滚动条上的按钮（上下箭头）；</li><li>::-webkit-scrollbar-thumb，滚动条上的滚动滑块；</li><li>::-webkit-scrollbar-track，滚动条轨道；</li><li>::-webkit-scrollbar-track-piece，滚动条没有滑块的轨道部分；</li><li>::-webkit-scrollbar-corner，当同时有垂直滚动条和水平滚动条时交汇的部分；</li><li>::-webkit-resizer，某些元素的 corner 部分的部分样式（例，textarea 的可拖动按钮）。</li></ol><p>文本溢出省略：</p><pre><code class=language-html>&lt;style&gt;
   div {
@@ -159,7 +164,10 @@ console.log('2. ' + window.getComputedStyle(span).display);
     outline: 1px solid red;
   }
 &lt;/style&gt;
-&lt;h3&gt;标题：&lt;span&gt;span-element&lt;/span&gt;&lt;/h3&gt;
+&lt;h3&gt;
+  标题：
+  &lt;span&gt;span-element&lt;/span&gt;
+&lt;/h3&gt;
 &lt;h3&gt;
   标题：
   &lt;p&gt;p-element&lt;/p&gt;
@@ -188,7 +196,7 @@ console.log('2. ' + window.getComputedStyle(span).display);
   }
 &lt;/style&gt;
 &lt;div&gt;
-  &lt;img src=&quot;https://vikingama.github.io/images/avatar.png&quot; /&gt;
+  &lt;img src=&quot;/images/avatar.png&quot; /&gt;
 &lt;/div&gt;
 </code></pre><p><img style="display:block;margin:0 auto;width:70%" src=/css-word/center-absolute.png></p><p>当 absolute 遇到 left/top/right/bottom 属性的时候，absolute 元素才真正变成绝对定位元素。</p><pre><code class=language-html>&lt;style&gt;
   div {

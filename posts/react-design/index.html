@@ -445,8 +445,8 @@ function unstable_scheduleCallback(priorityLevel, callback, options) {
       timeout = LOW_PRIORITY_TIMEOUT; // 10000
       break;
     case NormalPriority:
-    default:
-      timeout = NORMAL_PRIORITY_TIMEOUT; // 5000
+    default: // 5000
+      timeout = NORMAL_PRIORITY_TIMEOUT;
       break;
   }
   // 任务过期时间（晚于这个时间必须立即执行 ）

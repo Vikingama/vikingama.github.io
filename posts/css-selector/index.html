@@ -117,7 +117,7 @@ Pork bacon chicken shankle, pastrami sirloin chislic.
       : '';
   });
 &lt;/script&gt;
-</code></pre><p>DEMO 在<a href=https://vikingama.github.io/demosforife/CSS%20Filter.html>这里</a>。</p><h3 id=伪类>伪类</h3><p>:focus 默认只能匹配特定的元素：</p><ol><li>设置了 contenteditable 属性的普通元素；</li><li>设置了 tabindex 属性的普通元素</li><li>非 disabled 状态的表单元素；</li><li>包含 href 属性的 a 元素；</li><li>area、summary 元素。</li></ol><dl><dt>:focus 只有在<strong>当前元素</strong>处于聚焦状态的时候才匹配，而 :focus-within 在<strong>当前元素或者是当前元素的任意子元素</strong>处于聚焦状态的时候都会匹配。换句话说，子元素聚焦，可以让父级元素的样式发生变化。:focus-within 的行为本质上是一种“父选择器”行为，子元素的状态会影响父元素的样式。</dt></dl><p>:focus-visible 可以让我们知道元素的聚焦行为到底是鼠标触发还是键盘触发；如果希望去除鼠标点击时候的 outline，而保留键盘访问时候的 outline，只要一条 CSS 规则就可以了：</p><pre><code class=language-css>:focus:not(:focus-visible) {
+</code></pre><p>DEMO 在<a href=/demosforife/CSS%20Filter.html>这里</a>。</p><h3 id=伪类>伪类</h3><p>:focus 默认只能匹配特定的元素：</p><ol><li>设置了 contenteditable 属性的普通元素；</li><li>设置了 tabindex 属性的普通元素</li><li>非 disabled 状态的表单元素；</li><li>包含 href 属性的 a 元素；</li><li>area、summary 元素。</li></ol><dl><dt>:focus 只有在<strong>当前元素</strong>处于聚焦状态的时候才匹配，而 :focus-within 在<strong>当前元素或者是当前元素的任意子元素</strong>处于聚焦状态的时候都会匹配。换句话说，子元素聚焦，可以让父级元素的样式发生变化。:focus-within 的行为本质上是一种“父选择器”行为，子元素的状态会影响父元素的样式。</dt></dl><p>:focus-visible 可以让我们知道元素的聚焦行为到底是鼠标触发还是键盘触发；如果希望去除鼠标点击时候的 outline，而保留键盘访问时候的 outline，只要一条 CSS 规则就可以了：</p><pre><code class=language-css>:focus:not(:focus-visible) {
   outline: 0;
 }
 </code></pre><p>a 标签的伪类要遵守『爱恨原则』，定义的顺序必须是 :link→:visited→:hover→:active：</p><pre><code class=language-html>&lt;style&gt;

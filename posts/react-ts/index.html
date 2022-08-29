@@ -64,7 +64,7 @@ export declare interface OtherProps {
 </code></pre><p>type 还是 interface：</p><ol><li>在定义库或者第三方环境类型时，使用 interface，因为它方便扩展；</li><li>在定义组件的 props 和 state 类型时，使用 type，因为它更具有约束性；</li><li>在定义联合类型时，type 非常有用；在描述数据结构；implement 或 extends 类型时，interface 更好。</li></ol><h3 id=函数组件>函数组件</h3><pre><code class=language-tsx>type Props = {
   message: string;
 };
-// 不推荐(https://github.com/facebook/create-react-app/pull/8177)
+// 不推荐 (https://github.com/facebook/create-react-app/pull/8177)
 const MessageOne: React.FC&lt;Props&gt; = ({ message }) =&gt; &lt;div&gt;{message}&lt;/div&gt;;
 // 推荐
 const MessageTwo = ({ message }: Props) =&gt; &lt;div&gt;{message}&lt;/div&gt;;
@@ -189,7 +189,8 @@ export function ConsumerExample() {
       onClick={event =&gt; {
         /* event 被自动推断为 React.MouseEvent&lt;HTMLButtonElement, MouseEvent&gt; */
         console.log(event);
-      }}&gt;
+      }}
+    &gt;
       {children}
     &lt;/button&gt;
   );

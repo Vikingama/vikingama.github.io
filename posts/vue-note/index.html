@@ -432,7 +432,7 @@ new Vue({
 &lt;/current-user&gt;
 </code></pre><p>为了让 user 在父级的插槽内容中可用，可以将 user 作为 &lt;slot&gt; 元素的一个属性绑定上去：</p><pre><code class=language-html>&lt;!-- &lt;current-user&gt; 组件 --&gt;
 &lt;span&gt;
-  &lt;slot v-bind:user=&quot;user&quot;&gt; {{ user.lastName }} &lt;/slot&gt;
+  &lt;slot v-bind:user=&quot;user&quot;&gt;{{ user.lastName }}&lt;/slot&gt;
 &lt;/span&gt;
 &lt;!-- 在父组件中 --&gt;
 &lt;current-user&gt;
@@ -442,14 +442,12 @@ new Vue({
       slotProps is NOT available here
     &lt;/template&gt;
   &lt;/template&gt;
-  &lt;template v-slot:two=&quot;twoSlotProps&quot;&gt;
-    slotProps is NOT available here
-  &lt;/template&gt;
+  &lt;template v-slot:two=&quot;twoSlotProps&quot;&gt;slotProps is NOT available here&lt;/template&gt;
 &lt;/current-user&gt;
 &lt;!-- 也可以酱 --&gt;
-&lt;current-user v-slot=&quot;{ user }&quot;&gt; {{ user.firstName }} &lt;/current-user&gt;
+&lt;current-user v-slot=&quot;{ user }&quot;&gt;{{ user.firstName }}&lt;/current-user&gt;
 &lt;!-- 也可以酱 --&gt;
-&lt;current-user v-slot=&quot;{ user: person }&quot;&gt; {{ person.firstName }} &lt;/current-user&gt;
+&lt;current-user v-slot=&quot;{ user: person }&quot;&gt;{{ person.firstName }}&lt;/current-user&gt;
 &lt;!-- 还可以定义后备内容 --&gt;
 &lt;current-user v-slot=&quot;{ user = { firstName: 'Guest' } }&quot;&gt;
   {{ user.firstName }}

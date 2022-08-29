@@ -1,0 +1,1146 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=cache-control content=no-store><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no,user-scalable=no"><meta name=author content=馬腊咯稽><meta name=description content="Angular 快速上手"><meta name=keywords content=Angular><link rel=canonical href=https://vikingama.github.io/posts/angular-quick-start/><link rel="shortcut icon" href=https://vikingama.github.io/images/favicon.ico><link rel=stylesheet href=https://vikingama.github.io/css/zozo.css><link rel=stylesheet href=https://vikingama.github.io/css/highlight.css><link rel=stylesheet href=https://vikingama.github.io/css/remixicon.css><title>Angular 快速上手 &middot; 看不见我的美 · 是你瞎了眼</title></head><body><div class="main animated"><div class="nav_container animated fadeInDown"><div class=site_nav id=site_nav><ul><li><a href=/>首页</a></li><li><a href=/posts/>归档</a></li><li><a href=/tags/>标签</a></li><li><a href=/inspires/>启发</a></li><li><a href=/command/>命令</a></li><li><a href=/about/>关于</a></li></ul></div><div class=menu_icon><a id=menu_icon><i class=remixicon-links-line></i></a></div></div><div class="header animated fadeInDown"><div class=site_title_container><div class=site_title><h1><a href=https://vikingama.github.io><img style=width:65px;height:auto;vertical-align:top src=https://vikingama.github.io/images/avatar.png></a></h1></div><div class=description><p class=sub_title>看不见我的美<br>是你瞎了眼</p><div class=my_socials><a href=https://www.douban.com/people/nicknoonan title=douban target=_blank><i class=remixicon-douban-fill></i></a><a href=https://github.com/Vikingama title=github target=_blank><i class=remixicon-github-fill></i></a><a href=https://weibo.com/vikingx title=weibo target=_blank><i class=remixicon-weibo-fill></i></a><a href=https://www.zhihu.com/people/vikingama title=zhihu target=_blank><i class=remixicon-zhihu-fill></i></a><a href=https://vikingama.github.io/index.xml type=application/rss+xml title=rss target=_blank><i class=remixicon-rss-fill></i></a></div></div></div></div><div class=content><div class=post_page><div class="post animated fadeInDown"><div class="post_title post_detail_title"><h2><a href=/posts/angular-quick-start/>Angular 快速上手</a></h2><span class=date>2022.03.16</span></div><div class="post_content markdown"><blockquote><p>鬼知道为什么这么喜欢给自己挖坑，换一份工作就换一种技术栈呀，摔。</p></blockquote><h3 id=视图-组件>（视图）组件</h3><p>在 Angular 中，组件是用来定义视图的，一个应用至少有一个根组件（属于根模块的一部分）；组件由三部分组成：组件类（控制组件模板渲染）、组件模板、组件样式（默认仅对当前组件生效，不会污染全局）；可以使用 ng generate 命令或<a href="https://marketplace.visualstudio.com/items?itemName=alexiv.vscode-angular2-files">编辑器扩展</a>快速新建组件（服务、管道...）：</p><ol><li>组件模板，等同于 VueTemplate 或者 JSX；语法和 HTML 几乎相同，多了一些 Angular 独有的指令和标签；</li><li>组件样式，作用域仅限于当前组件（可以通过“样式封装策略（encapsulation）”进行更改）；</li><li>组件类，就是普通的 class；组件类中声明的属性和方法会自动注入组件模板中。</li></ol><p>组件的父子关系是通过“组件的视图对象”间接建立的；每个组件都有一个宿主视图和一些内建视图。</p><pre><code class=language-ts>const slideMotion = trigger('slideMotion', [
+  // 创建一组有名字的 CSS 样式，它会在成功转换到指定的状态时应用到元素上
+  state(
+    'void',
+    // 定义一个或多个要用于动画中的 CSS 样式
+    style({
+      opacity: 0,
+      transform: 'scaleY(0.8)'
+    })
+  ),
+  state(
+    'enter',
+    style({
+      opacity: 1,
+      transform: 'scaleY(1)'
+    })
+  ),
+  // 定义两个命名状态之间的动画序列
+  transition('void =&gt; *', [animate('0.2s cubic-bezier(0.7, 0.3, 0.1, 1)')]),
+  transition('* =&gt; void', [animate('0.2s cubic-bezier(0.86, 0, 0.07, 1)')])
+]);
+// 组件类需要由 @Component 装饰器进行修饰
+@Component({
+  // 动画相关元数据，用来放置“定义动画的触发器”
+  animations: [slideMotion],
+  /**
+   * 变化检测策略：
+   * 1. ChangeDetectionStrategy.Default：异步逻辑结束，NgZone 会自上而下对整个组件树做变化检测
+   * 2. ChangeDetectionStrategy.OnPush：用来跳过某个组件及其子组件的变化检测（因为不是每个操作都需要进行变化检测）
+   * 在 OnPush 策略下，有四种情况仍旧可以触发变化检测：
+   * 1. 组件 @Input 引用变化
+   * 2. 组件及其子组件的 DOM 事件触发
+   * 3. 组件内 Observable 订阅事件，同时设置 AsyncPipe
+   * 4. 手动调用：
+   *      ChangeDetectorRef.detectChanges()，立即触发变化检测
+   *      ChangeDetectorRef.markForCheck()，等待应用的下一轮变化检测
+   *      ApplicationRef.tick()，触发整个应用的变化检测
+   */
+  changeDetection: ChangeDetectionStrategy.Default,
+  /**
+   * 样式封装策略：
+   * 1. ViewEncapsulation.ShadowDom，样式仅添加到 ShadowDOM 宿主中，基于 ShadowDOM 实现组件样式的封装与隔离；
+   * 2. ViewEncapsulation.Emulated，默认策略，样式会被添加到 &lt;head&gt; 中，基于 CSS 属性选择器来实现组件样式的封装与隔离；
+   * 3. ViewEncapsulation.None，样式会被添加到 &lt;head&gt; 中，不对样式进行封装与隔离，样式作用于全局（document）。
+   * ViewEncapsulation.ShadowDom 不是默认策略的原因是“并不是每个浏览器都支持 ShadowDOM”
+   */
+  encapsulation: ViewEncapsulation.Emulated,
+  /**
+   * 放置一些『被动态调用』的组件，这些组件没有“直接”在模板中使用，Ng 是不知道是否应该对这些组件进行编译的
+   * entryComponents 引入的组件会通过 ViewContainerRef.createComponent 方法被动态调用
+   * 编译器会将这些组件编译并为他们创建“工厂函数”
+   * 比如，一些在 Modal 中展示的组件
+   */
+  entryComponents: [],
+  // 改写默认的插值表达式起止分界符，在和第三方库冲突的时候才会修改
+  interpolation: [],
+  // 仅在 CommonJS 规范下有意义，用于解析组件模板和样式
+  moduleId: '',
+  // 是否从编译后的模板中移除多余的空白字符
+  preserveWhitespaces: false,
+  /**
+   * 组件“在模版中”只能以 &lt;app-example&gt;&lt;/app-example&gt; 的方式进行调用
+   * selector 决定了组件在模版中的调用方式
+   * 当 Angular 在模版中找到相应的标签时
+   * 就把该组件实例化在那里
+   */
+  selector: 'app-example',
+  // 组件“在模版中”只能以 &lt;xxx [app-example]&gt;&lt;/xxx&gt; 的方式进行调用
+  selector: '[app-example]',
+  // 内部样式字符串
+  styles: 'div{...} div&gt;p{...}',
+  // 外部样式路径
+  styleUrls: ['./app.component.scss'],
+  /**
+   * 内部模板字符串
+   * template 和 templateUrl 不能同时存在
+   */
+  template: '&lt;div&gt;&lt;p&gt;...&lt;/p&gt;&lt;/div&gt;',
+  // 外部模板路径
+  templateUrl: './app.component.html',
+  // viewProviders 注册的 provider 只对 viewChildren 可见，对 contentChildren 不可见
+  viewProviders: [BbService],
+  /**
+   * providers 注册的 provider 对 contentChildren 和 viewChildren 均可见
+   * 如果你愿意的话，可以总是使用 providers 而忽略 viewProviders
+   */
+  providers: [AaService]
+})
+class ExampleComponent
+  implements
+    OnChanges,
+    DoCheck,
+    OnDestroy,
+    OnInit,
+    AfterContentInit,
+    AfterContentChecked,
+    AfterViewInit,
+    AfterViewChecked
+{
+  private temp;
+  /**
+   * 使用 @Input 修饰组件要从外部接受的属性
+   * &lt;app-example [propOne]=&quot;someValue&quot;&gt;&lt;/app-example&gt;
+   */
+  @Input() propOne!: 'defaultPropOneValue';
+  /**
+   * 可以给 propTwo 起一个别名（风格指南并不推荐）
+   * &lt;app-example [prop-two]=&quot;someValue&quot;&gt;&lt;/app-example&gt;
+   * 在组件内部，仍可以用 this.propTwo 访问接受到的属性值
+   */
+  @Input('prop-two') propTwo!: 'defaultPropTwoValue';
+  /**
+   * 可以把 propThree 写成 getter/setter
+   * 来“监听”外部的值的变化
+   */
+  @Input('prop-three')
+  get propThree() {
+    return this.temp;
+  }
+  set propThree(value) {
+    // 可以执行一些别的逻辑
+    this.temp = value;
+  }
+  /**
+   * 使用 @Output 修饰组件上绑定的自定义事件
+   * 通过 this.updatePropOne.emit(newValue) 向外传值（$event 会接收到 newValue）
+   * &lt;app-example (updatePropOneAlias)=&quot;handleXXX($event)&quot;&gt;&lt;/app-example&gt;
+   * EventEmitter 继承了 RxJS 中的 Subject
+   * 在“服务”中不能使用 EventEmitter，可以使用 Subject 代替！！！
+   * export declare interface EventEmitter&lt;T&gt; extends Subject&lt;T&gt; {...}
+   */
+  @Output('updatePropOneAlias') updatePropOne = new EventEmitter&lt;any&gt;();
+  /**
+   * Angular 不会接管构造函数
+   * 组件初始化需要在生命周期函数中进行
+   * 这里仅仅用来注入一些组件需要依赖的服务
+   * 『依赖注入』机制会分析构造函数的『形参』
+   * 在 class 实例化的过程中，会向上查找 providers
+   * 并将查找的结果传递回构造函数
+   * 在构造完成之后才会设置指令的数据绑定输入属性
+   */
+  constructor(
+    /**
+     * Angular 的 DI 系统会自动帮我们实例化注入的 Service
+     * 并将服务实例绑定到当前实例上（也就是 this）
+     * 方便我们以 this.xxService 的方式调用
+     */
+    private aaService: AaService,
+    private bbService: BbService,
+    private ccService: CcService
+  ) {}
+  /**
+   * 生命周期钩子（属于变更检测的一部分，起始于组件实例化，结束于组件实例的销毁）的执行顺序：
+   * 1. ngOnChanges（可能执行多次，需注意逻辑精简，仅在有 @Input 属性的情况下）
+   * 2. ngOnInit
+   * 3. ngDoCheck（可能执行多次，需注意逻辑精简）
+   * 4. ngAfterContentInit
+   * 5. ngAfterContentChecked（可能执行多次，需注意逻辑精简）
+   * 6. ngAfterViewInit
+   * 7. ngAfterViewChecked（可能执行多次，需注意逻辑精简）
+   * 8. ngOnDestroy
+   */
+  ngOnChanges(
+    // changes 仅包含了每个『发生变化』的属性
+    changes: SimpleChanges
+  ): void {
+    /**
+     * 1. 如果组件绑定过输入属性，所绑定的一个或多个输入属性的值发生变化时都会调用
+     * 2. 如果绑定的是一个对象，如果对象的引用没变，ngOnChanges 就不会执行
+     * 3. 如果你的组件『没有输入属性』，框架就『不会调用该方法』
+     * 4. 在 ngOnInit 之前调用
+     */
+    for (const propName in changes) {
+      const { currentValue, previousValue, firstChange } = changes[propName];
+      console.log(
+        `current: ${currentValue}, previous: ${previousValue}, isFirstChange: ${firstChange}`
+      );
+    }
+    if ('propThree' in changes) {
+      // 除了 getter/setter，也可以酱紫“监听”变化
+    }
+  }
+  ngOnInit(): void {
+    /**
+     * 在 ngOnChanges 第一次完成调用之后执行（即使没有绑定任何输入属性）
+     * 用来执行复杂的在构造函数之外的组件初始化逻辑
+     * 获取初始数据的好地方
+     */
+    this.route.queryParams.subscribe(params =&gt; {
+      // 每当路由的查询参数变化，都重新获取数据
+      this.fetchData(params);
+    });
+  }
+  ngDoCheck(): void {
+    /**
+     * 用于检测 Angular 无法捕获的变更
+     * 紧跟在每次执行变更检测时的 ngOnChanges 和首次执行变更检测时的 ngOnInit 后调用
+     */
+  }
+  ngAfterContentInit(): void {
+    /**
+     * 当 Angular 把外部内容投影进组件视图或指令所在的视图之后调用
+     * ngDoCheck 首次调用之后调用
+     * 仅仅调用一次
+     */
+  }
+  ngAfterContentChecked(): void {
+    /**
+     * 每当 Angular 把外部内容投影进组件视图或指令所在的视图之后调用
+     * ngAfterContentInit 每次调用之后调用
+     * ngDoCheck 每次调用之后调用
+     */
+  }
+  ngAfterViewInit(): void {
+    /**
+     * 当 Angular 初始化完组件视图及其子视图或包含该指令的视图之后调用
+     * ngAfterContentChecked 首次调用之后调用
+     * 仅仅调用一次
+     */
+  }
+  ngAfterViewChecked(): void {
+    /**
+     * 每当 Angular 做完组件视图和子视图或包含该指令的视图的变更检测之后调用
+     * ngAfterContentChecked 每次调用之后调用
+     * ngAfterViewInit 每次调用之后调用
+     */
+  }
+  ngOnDestroy(): void {
+    /**
+     * 每当指令/组件销毁之前立即调用，用于释放不会被垃圾回收的资源：
+     * 1. 反注册在应用服务中注册的回调
+     * 2. 取消订阅可观察对象
+     * 3. 移除事件绑定
+     * 4. 清除计时器
+     */
+  }
+}
+</code></pre><h3 id=指令-没有-模版-的特殊组件>指令（没有“模版”的特殊组件）</h3><p>指令用来将自定义行为附加到 DOM 中：</p><ol><li>结构性指令：通过添加、移除、替换 DOM 来修改布局，例如：*ngIf、*ngFor、ngSwitch；</li><li><p>属性型指令：改变已有元素的外观或行为，例如：ngClass、ngStyle、<a href=https://angular.cn/guide/attribute-directives#deactivating-angular-processing-with-ngnonbindable>ngNonBindable</a>。</p><pre><code class=language-ts>@Directive({
+/**
+* 当前指令被模版引用变量
+* &lt;div [app-example] #exampleRef=&quot;example&quot;&gt;&lt;/div&gt;
+* 可以通过 exampleRef 获取到“当前指令的引用”
+*/
+exportAs: 'example',
+// 将类的属性映射到宿主元素的绑定
+host: {
+/**
+ * 当宿主元素（绑定的元素）上的 click 事件被触发时
+ * 调用当前指令内的 onClick 方法
+ */
+'(click)': 'onClick()',
+// 宿主元素的 class 被设置为 class-name-example（this.innerClass 的值）
+'[class]': 'innerClass'
+},
+// 可以替代 @Input 装饰器
+inputs: [],
+// 可以替代 @Output 装饰器
+outputs: [],
+/**
+* 指令代码会被 AOT（ahead-of-time）编译器忽略
+* 也就是说相关代码不会被预编译（打包的时候编译）
+* 而是保留到运行时进行动态编译
+*/
+jit: true,
+// 依赖注入，详见“组件”
+providers: [],
+/**
+* 用来标记在哪些元素/组件上使用指令
+* &lt;div [app-example]&gt;&lt;/div&gt;
+*/
+selector: '[app-example]'
+})
+class ExampleDirective {
+// 也可以通过 @HostBinding 向宿主元素“绑定属性”
+@HostBinding('class') class = 'class-name';
+// 也可以通过 @HostListener 向宿主元素“绑定事件”
+@HostListener('input', ['$event']) onInput(event) {
+console.log(event);
+}
+constructor(el: ElementRef, render2: Renderer2) {
+// 通过 ElementRef 可以拿到“宿主元素”的引用
+el.nativeElement.style.backgroundColor = 'red';
+}
+innerClass: string = 'class-name-example';
+onClick() {
+console.log('宿主元素上触发了 click 事件');
+// 借助于 Renderer2 可以修改 Angular 的默认渲染行为
+this.render2.setStyle(this.el.nativeElement, 'color', 'red');
+}
+}
+</code></pre></li></ol><p>Angular 的<a href=https://angular.cn/guide/built-in-directives>内置指令</a>有：</p><ul><li>*ngIf，条件渲染；</li><li>*ngFor，循环渲染；</li><li>[ngClass]，类名绑定；</li><li>[ngStyle]，样式绑定；</li><li>[ngSwitch]，匹配渲染；</li><li>[ngModel]，数据双向绑定；</li><li><p>ngNonBindable，在宿主元素上停用模板中的插值、指令和绑定。</p><pre><code class=language-ts>@Component({
+selector: 'my-app',
+// 模版中绑定的都是 DOM 属性，而非 HTML 属性
+template: `
+&lt;ul
+  [ngClass]=&quot;{
+  btn: true,
+  btn-success: success,
+  btn-failure: !success
+}&quot;
+&gt;
+  &lt;li *ngFor=&quot;let item of users; let i = index; trackBy: trackByFn&quot;&gt;
+    {{ i + 1 }}: {{ item.name }}
+  &lt;/li&gt;
+&lt;/ul&gt;
+&lt;div
+  [class]=&quot;divClass&quot;
+  [class.div-success]=&quot;success&quot;
+  [class.div-failure]=&quot;!success&quot;
+&gt;&lt;/div&gt;
+&lt;ng-container [ngSwitch]=&quot;local&quot;&gt;
+  &lt;local-one *ngSwitchCase=&quot;1&quot;&gt;&lt;/local-one&gt;
+  &lt;local-two *ngSwitchCase=&quot;2&quot;&gt;&lt;/local-two&gt;
+  &lt;local-other *ngSwitchDefault&gt;&lt;/local-other&gt;
+&lt;/ng-container&gt;
+`
+})
+class AppComponent {
+divClass: 'div-class';
+success: boolean;
+users: any[];
+local;
+trackByFn(index: number, item): number {
+/**
+ * 不同于 React 和 Vue 强制启用 key 的策略
+ * trackBy 不强制使用
+ */
+return item.id || index;
+}
+}
+</code></pre></li></ul><p>结构型指令的实现需要借助辅助类 TemplateRef 和 ViewContainerRef：</p><pre><code class=language-ts>// 一个“延迟渲染”的例子
+@Directive({
+  selector: '[delayRender]'
+})
+export class DelayRender {
+  constructor(
+    private templateRef: TemplateRef&lt;any&gt;, // 对 ng-template 的引用
+    private viewContainerRef: ViewContainerRef // 对容器 View 的引用
+  ) {}
+  @Input()
+  set delayRender(timer: number) {
+    this.viewContainerRef.clear();
+    setTimeout(() =&gt; {
+      this.viewContainerRef.createEmbeddedView(this.templateRef);
+    }, timer);
+  }
+}
+</code></pre><h3 id=管道-可以处理-异步-数据>管道（可以处理“异步”数据）</h3><p>无论是用法还是效果都和 Vue 3.0 中已经删除的 filter 很像，用于数据转换。需要开发者在 class 内部实现一个用于数据转换的 transform 方法。</p><p>Angular 内置了 async（从 Promise/Observable 中取值）、date、currency、json（JSON2String）、uppercase、lowercase、titlecase、precent 等管道。</p><p>有一点需要注意：管道操作符的优先级<strong>高于</strong>逻辑运算符。</p><pre><code class=language-ts>type NzSafeAny = any;
+type DomSanitizerType = 'html' | 'style' | 'js' | 'url' | 'resourceUrl';
+
+@Pipe({
+  // 管道名称
+  name: 'nzSanitizer',
+  /**
+   * 是否为“纯”管道：
+   * 1. “纯”管道只有在原始数据/对象的&quot;引用变更&quot;时才会执行；
+   * 2. “纯”管道会&quot;忽略引用类型内部属性&quot;的变化（引用没变）；
+   * 3. “纯”管道内部的的 transform 方法必须为“纯”函数；
+   * 4. “非纯”管道性能较差（任何交互行为都会触发执行）。
+   */
+  pure: true
+})
+export class NzSanitizerPipe implements PipeTransform {
+  constructor(protected sanitizer: DomSanitizer) {}
+  transform(value: NzSafeAny, type: 'html'): SafeHtml;
+  transform(value: NzSafeAny, type: 'style'): SafeStyle;
+  transform(value: NzSafeAny, type: 'js'): SafeScript;
+  transform(value: NzSafeAny, type: 'url'): SafeUrl;
+  transform(value: NzSafeAny, type: 'resourceUrl'): SafeResourceUrl;
+  transform(
+    value: NzSafeAny,
+    type: DomSanitizerType = 'html'
+  ): SafeHtml | SafeStyle | SafeScript | SafeUrl | SafeResourceUrl {
+    switch (type) {
+      case 'html': // 绕过安全检查，并信任给定的值是一个安全的 HTML
+        return this.sanitizer.bypassSecurityTrustHtml(value);
+      case 'style': // 绕过安全检查，并信任给定的值是一个安全的 CSS
+        return this.sanitizer.bypassSecurityTrustStyle(value);
+      case 'js': // 绕过安全检查，并信任给定的值是一个安全的 JS
+        return this.sanitizer.bypassSecurityTrustScript(value);
+      case 'url': // 绕过安全检查，并信任给定的值是一个安全的样式 URL（可以安全的用在 &lt;img src&gt; 中）
+        return this.sanitizer.bypassSecurityTrustUrl(value);
+      case 'resourceUrl': // 绕过安全检查，并信任给定的值是一个安全的资源 URL（可以安全的用在 &lt;script src&gt;、&lt;iframe src&gt; 中）
+        return this.sanitizer.bypassSecurityTrustResourceUrl(value);
+      default:
+        throw new Error(`指定的安全类型无效`);
+    }
+  }
+}
+</code></pre><h3 id=服务>服务</h3><p>服务是 Angular 的核心，他是专门用来处理某件事情的（数据请求等）、具有明确定义的 class；一般情况下，服务用来创建与视图无关但需要跨组件共享的数据/逻辑。</p><p>官方推崇“Component 处理页面展示，Service 处理内在逻辑”的原则（有点像 React 中的简单组件和逻辑组件）。</p><p>服务一般（具体看 providedIn 的取值）以单例的形式存在，实例化之后，应用于整个应用。</p><pre><code class=language-ts>// Injectable 表明，当前 class 可以被依赖注入到组件中
+@Injectable({
+  /**
+   * providedIn 有四种取值：
+   * 1. platform：平台级别注入，所有应用共享一个服务单例（仅适用于在一个 window 下运行多个 Angular 应用，有点像微服务的概念）；
+   * 2. root：应用程序（AppModule）/系统/全局/根级别注入，服务可以在整个应用中使用，而且共享同一个服务实例；
+   * 3. [NgModule]：仅注入指定的 NgModule 中，仅可在指定的 NgModule 中使用，有 TreeShaking 加成；
+   * 4. any：在每个注入的模块中，提供一个唯一的实例；
+   * 5. null：仅仅表明可注入。
+   */
+  providedIn: 'root'
+})
+class ApiPublicService {
+  // 服务也可依赖别的服务，这里就依赖了 HttpClient
+  constructor(private http: HttpClient) {}
+  private paginationData(data: any): PaginationData {
+    return {
+      total: data.total,
+      pageSize: data.size,
+      pageIndex: data.current
+    };
+  }
+  private buildResponse(response) {
+    const temp = {
+      success: response.success,
+      status: response.status,
+      data: response.data,
+      raw: response,
+      records: response?.data?.records || [],
+      objects: response?.data || {}
+    };
+    if (response.errorCode) {
+      temp.errorCode = response.errorCode;
+    }
+    if (response.errorMessage) {
+      temp.errorMessage = response.errorMessage;
+    }
+    return temp;
+  }
+  private toResponse() {
+    return pipe(
+      map(response =&gt; this.buildResponse(response)),
+      tap(response =&gt; {
+        if (response.errorCode === 'LOGIN_INVALID') {
+          // ...
+        } else if (!response.success) {
+          // ...
+        }
+      })
+    );
+  }
+  public fetchList(params: ApiParams) {
+    return this.http
+      .get(`${environment.apiHost}/api/v1/list`, {
+        params
+      })
+      .pipe(
+        this.toResponse(),
+        map(response =&gt; ({
+          paginationData: this.paginationData(response.data),
+          records: response.data.records,
+          pages: response.data.pages
+        }))
+      );
+  }
+}
+</code></pre><h3 id=模块>模块</h3><p>NgModule 是 Angular 的基本构造块（NgModule 和 ESModule 不同但互补），其为组件提供了编译上下文；一个 Angular 应用由至少一个根模块（AppModule）和多个特性模块组成。</p><p>NgModule 可以将组件及其相关代码（服务等）关联，形成功能单元（一般是按照业务划分的）；模块之间即相互独立又可通过 imports/exports 建立联系。</p><p>模块可以让代码更“内聚”。</p><pre><code class=language-ts>@NgModule({
+  /**
+   * 只有根模块（一个应用只有一个）才设置这个属性
+   * 表示该模块应用的主视图（一般是根组件）
+   * 同时也表明这个模块是“根模块”
+   * 一般使用：
+   * platformBrowserDynamic().bootstrapModule(AppModule)
+   * 启动根模块
+   */
+  bootstrap: [AppComponent],
+  /**
+   * 声明该模块包含了哪些组件、管道、指令
+   * 这些组件、管道、指令是当前模块“私有的”（如果没有放入 exports）
+   */
+  declarations: [ExampleComponent, ExamplePipe, ExampleDirective],
+  /**
+   * 如果组件没有直接在模版中使用，AOT 就不会提前编译组件
+   * 如果将组件添加到 entryComponents
+   * AOT 就会提前编译组件
+   */
+  entryComponents: [],
+  /**
+   * 当前 NgModule 在 getNgModuleById 中的名字或唯一标识符
+   * 如果为 undefined，则该模块不会被注册到 getNgModuleById 中
+   * 用到的不多，官网也没做过多介绍，Angular 会自动帮我们处理
+   */
+  id: undefined,
+  /**
+   * 导入其他的模块（当前模块运行需要依赖的模块）：
+   * 1. 被导入模块的 exports（低优先级）会和当前模块的 declarations（高优先级）合并
+   * 2. 被导入模块的 providers 会和当前模块的 providers 合并
+   * 3. 被导入模块的路由会和当前模块的路由合并
+   */
+  imports: [BrowserModule, OneModule, TwoModule],
+  /**
+   * 暴露（可以供其他模块使用的）当前模块中的一些组件、指令和管道
+   * 如果是根模块，就不需要此元数据
+   * 因为其他模块不需要导入根模块
+   */
+  exports: [],
+  // 编译器选项，详见“指令”
+  jit: true,
+  // 依赖注入，详见“组件”
+  providers: [],
+  /**
+   * 当前 NgModule 中允许使用的声明元素的 HTML 架构
+   * 当遇到不认识的元素时，怎么做处理
+   * 用于测试代码，业务中用不上
+   */
+  schemas: []
+})
+class ExampleModule {}
+</code></pre><h3 id=表单>表单</h3><p>Angular 提供了两种不同的方法来通过表单处理用户输入：响应式表单和模板驱动表单。两者都从视图中捕获用户输入事件、验证用户输入、创建表单模型、修改数据模型，并提供跟踪这些更改的途径。
+响应式表单：提供对底层表单对象模型直接、显式的访问；可伸缩性、可扩展性、可复用性和可测试性都更高；视图和数据模型之间使用同步数据流
+模版驱动表单：依赖模板中的指令来创建和操作底层的对象模型，在扩展性方面不如响应式表单，专注于简单场景，视图和数据模型之间使用异步数据流</p><pre><code class=language-ts>/**
+ * 使用“响应式表单”，需要在 NgModule 中导入 ReactiveFormsModule
+ * 否则，需要手动阻止表单提交的默认事件
+ * 也会报，formGroup 绑定错误
+ */
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators
+} from '@angular/forms';
+/**
+ * submit 与 ngSubmit 的区别：
+ * submit 是 DOM 事件，ngSubmit 是 Angular 事件；
+ * 阻止默认行为需要在 submit 中进行；
+ * ngSubmit 比 submit 先触发；
+ * 两者的事件对象是一样的。
+ */
+@Component({
+  selector: 'app-form',
+  template: `
+    &lt;form [formGroup]=&quot;validateForm&quot; (ngSubmit)=&quot;handleSubmit($event)&quot;&gt;
+      &lt;label for=&quot;name&quot;&gt;
+        &lt;span&gt;Name:&lt;/span&gt;
+        &lt;input id=&quot;name&quot; name=&quot;name&quot; type=&quot;text&quot; formControlName=&quot;name&quot; /&gt;
+      &lt;/label&gt;
+      &lt;label for=&quot;age&quot;&gt;
+        &lt;span&gt;Age:&lt;/span&gt;
+        &lt;input id=&quot;age&quot; name=&quot;age&quot; type=&quot;text&quot; formControlName=&quot;age&quot; /&gt;
+      &lt;/label&gt;
+      &lt;div formGroupName=&quot;address&quot; alt=&quot;嵌套表单组&quot;&gt;
+        &lt;label for=&quot;street&quot;&gt;
+          &lt;span&gt;Street:&lt;/span&gt;
+          &lt;input
+            id=&quot;street&quot;
+            name=&quot;street&quot;
+            type=&quot;text&quot;
+            formControlName=&quot;street&quot;
+          /&gt;
+        &lt;/label&gt;
+        &lt;label for=&quot;city&quot;&gt;
+          &lt;span&gt;City:&lt;/span&gt;
+          &lt;input id=&quot;city&quot; name=&quot;city&quot; type=&quot;text&quot; formControlName=&quot;city&quot; /&gt;
+        &lt;/label&gt;
+        &lt;label for=&quot;state&quot;&gt;
+          &lt;span&gt;State:&lt;/span&gt;
+          &lt;input id=&quot;state&quot; name=&quot;state&quot; type=&quot;text&quot; formControlName=&quot;state&quot; /&gt;
+        &lt;/label&gt;
+      &lt;/div&gt;
+      &lt;button (click)=&quot;handleFormUpdate()&quot;&gt;Update&lt;/button&gt;
+      &lt;button type=&quot;submit&quot;&gt;Submit&lt;/button&gt;
+    &lt;/form&gt;
+  `
+})
+class FormComponent implements OnInit {
+  validateForm: FormGroup;
+  constructor(private fb: FormBuilder) {}
+  ngOnInit() {
+    /**
+     * 一般使用这种，并且对于“动态表单”，最好在初始化的时候就将所有表单属性列出
+     * 而不是根据条件来动态的 addControl/removeControl
+     * 因为那样，整个表单会非常不直观和零散
+     */
+    this.validateForm = this.fb.group({
+      name: ['', Validators.required],
+      age: ['18', Validators.required],
+      address: this.fb.group({
+        street: ['', Validators.required],
+        city: ['', Validators.required],
+        state: ['', Validators.required]
+      })
+    });
+    // 很少使用这种
+    this.validateForm = new FormGroup({
+      name: new FormControl(''),
+      age: new FormControl('18'),
+      address: new FormGroup({
+        street: new FormControl(''),
+        city: new FormControl(''),
+        state: new FormControl('')
+      })
+    });
+    {
+      /**
+       * 表单不仅可以是一个对象，而且可以是一个数组
+       * 不过在表单验证的时候，可能需要类型断言
+       */
+      this.exampleForm = this.formBuilder.array([]);
+      /**
+       * 通过 push 向数组表单中添加表单项
+       * 还有 insert、removeAt 等方法
+       */
+      this.exampleForm.push(
+        this.formBuilder.group({
+          type: ['SELF_EMPLOYED', []],
+          accountName: [accountName, [Validators.required]],
+          accountNo: [accountNo, [Validators.required]],
+          bankName: [bankName, [Validators.required]],
+          bankBranchName: [bankBranchName, [Validators.required]]
+        })
+      );
+    }
+  }
+  handleSetDefault() {
+    // 单个赋值
+    this.validateForm.get('name').setValue('Bob');
+    this.validateForm.get('address').get('street').setValue('Gongshu');
+    // 批量赋值
+    this.validateForm.patchValue({
+      gender: 'male', // 不会抛出错误
+      age: '21',
+      address: {
+        city: 'Zhejiang'
+      }
+    });
+  }
+  handleSubmit($event) {
+    $event.preventDefault();
+    if (this.validateForm.status === 'VALID') {
+      console.log(this.validateForm.value);
+    }
+  }
+}
+</code></pre><h3 id=路由>路由</h3><p>Router 是一个提供导航和操纵 URL 能力的 NgModule；通过将浏览器 URL 解释为更改视图的操作指令来启用导航：</p><pre><code class=language-ts>interface Route {
+  canActivate?: any[]; // 调用 canActivate 钩子来确定“是否允许激活组件”
+  canActivateChild?: any[]; // 调用 canActivateChild 钩子来确定“是否允许激活组件的子组件”
+  canDeactivate?: any[]; // 调用 canActivate 钩子来确定“是否允许卸载组件”
+  canLoad?: any[]; // 调用 canActivate 钩子来确定“是否允许加载组件”
+  children?: Route[]; // 嵌套子路由配置
+  component?: Type&lt;any&gt;; // 匹配之后，要实例化的组件
+  data?: Data; // 携带的数据，可通过 ActivatedRoute 获取
+  loadChildren?: LoadChildren; // 懒加载模块
+  matcher?: UrlMatcher; // 自定义匹配算
+  outlet?: string; // 当同级有多个 &lt;router-outlet name=&quot;xxx&quot;/&gt; 时，指定从渲染出口
+  path?: string; // 匹配路径
+  pathMatch?: string; // 路径匹配策略，prefix（默认）｜full
+  redirectTo?: string; // 匹配之后，要重定向的路径
+  resolve?: ResolveData; // 与路由关联的解析数据
+  runGuardsAndResolvers?: RunGuardsAndResolvers; // 定义 Guards 和 Resolvers 的运行时机
+}
+// 路由配置
+const routes: Route[] = [
+  {
+    path: '/login',
+    canActivate: [LoginGuard],
+    // 懒加载只适用于“模块”，不适用于“组件”
+    loadChildren: () =&gt; import('./login/login.module').then(m =&gt; m.LoginModule)
+  },
+  // ...
+  {
+    path: '**',
+    component: NotFoundComponent
+  }
+];
+@NgModule({
+  imports: [
+    // forRoot 表示“这是一个根路由模块”，在一个应用中只会使用一次
+    RouterModule.forRoot(routes, {
+      /**
+       * enabled/enabledBlocking，引导程序被阻止，直到初始导航完成，一般 SSR 的时候才用得到
+       * enabledNonBlocking，引导程序不会被阻塞
+       * disabled，不执行初始导航
+       */
+      initialNavigation: 'enabledNonBlocking',
+      anchorScrolling: 'enabled', // 当 URL 中有锚点时，是否滚动到锚点（disabled | enabled | top）
+      enableTracing: false, // 为 true 时，可以用来 debug
+      onSameUrlNavigation: 'ignore', // 当导航到当前地址是的行为（'reload' | 'ignore'）
+      paramsInheritanceStrategy: 'emptyOnly', // 如何将参数、数据从父路由合并到子路由
+      preloadingStrategy: 'NoPreloading', // 预加载策略
+      scrollPositionRestoration: 'enabled', // 发生“导航回退”是否重置滚动位置（disabled | enabled | top）
+      relativeLinkResolution: 'legacy', // 相对路径的导航策略
+      urlUpdateStrategy: 'deferred', // 浏览器地址栏的更新策略（默认在导航成功之后再更新）
+      useHash: false, // 环境不支持 history API 时，可使用哈希导航
+      errorHandler: error =&gt; error, // 自定义错误处理
+      scrollOffset: () =&gt; [0, 0] // 路由导航后的滚动偏移量
+    })
+  ],
+  exports: [RouterModule]
+})
+export class AppRoutingModule {}
+</code></pre><p>路由钩子：</p><pre><code class=language-ts>@Injectable({
+  providedIn: 'root'
+})
+class LoginGuard implements CanActive, CanActiveChild {
+  canActive(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+    const auth = this.authService.currentAuth();
+    const user = this.authService.currentUser();
+
+    if (route.url[0].path === 'login') {
+      sessionStorage.removeItem('auth');
+      sessionStorage.removeItem('user');
+    } else if (!auth || !user) {
+      return false;
+    }
+
+    return true;
+  }
+}
+</code></pre><p>在组件中获取路由信息：</p><pre><code class=language-ts>import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+
+@Component({
+  selector: 'app-general'
+})
+export class GeneralComponent implements OnInit {
+  isExclusive: boolean;
+  get currentQueryParams() {
+    // 可以通过 router 获取查询参数
+    const { url, parseUrl } = this.router;
+    const { queryParams } = parseUrl(url);
+    return queryParams;
+  }
+  constructor(private route: ActivatedRoute, private router: Router) {}
+  ngOnInit() {
+    // 在组件初始化的时候，订阅路由查询参数的变化
+    this.route.queryParams.subscribe(params =&gt; {
+      this.handleFetchData(params);
+    });
+    // 订阅路由事件
+    this.router.events.subscribe(e =&gt; {
+      if (e instanceof NavigationEnd) {
+        this.handleNavigationEnd();
+      }
+    });
+  }
+  handleFetchData(params) {
+    // ...
+  }
+  handleNavigationEnd() {
+    // 在导航结束时
+    const { exclusive } = this.currentQueryParams;
+    this.isExclusive = String(exclusive) === 'true';
+  }
+  handleSwitchUrl($event, { exclusive = null, path = null }) {
+    $event.stopPropagation();
+    let temp = [];
+    let queryParams = null;
+    const queryParamsHandling = '';
+    if (path) {
+      temp = [path];
+    }
+    if (exclusive) {
+      queryParams = { exclusive };
+    }
+    // 相对于当前路由进行导航并重置 URL 中的查询参数
+    this.router.navigate(temp, {
+      relativeTo: this.route,
+      queryParams,
+      queryParamsHandling
+    });
+  }
+}
+</code></pre><h3 id=依赖注入>依赖注入</h3><p>依赖是指系统中的个个组成部分之间的相互关系；具体到 Angular，是指某个 class 执行其功能“所需的”服务（@Injectable）或对象。</p><p>在依赖注入模式中，依赖项会通过 constructor 注入（默认行为是 new 调用）；一般情况下，会保存在私有属性上。</p><p>当 class 需要某个依赖时，该依赖就会作为参数添加到 class 的构造函数中。当 Angular 实例化 class 时，DI 会在“注入器树”中查找（从局部开始，向上冒泡，直到 root）provider；如果没有找到 provider，会报错。</p><p>如果要保证外部注入的服务是自己（当前 class）独有的（<a href=https://angular.cn/guide/dependency-injection-in-action#multiple-service-instances-sandboxing>沙箱式隔离</a>），只需在自己的元数据 providers 中列出 Service 即可（就能拥有自己独有的服务实例）。</p><p>如果“允许依赖缺失”或者需要“限制依赖查找范围”，可以使用修饰符更改默认的依赖查找机制：</p><ul><li>@Host 表示禁止在“请求该依赖的组件”以上查找依赖；</li><li>@Self 表示只在该组件的注入器中查找提供者；</li><li>@SkipSelf 表示跳过局部注入器，向上查找；</li><li><p>@Optional 表示找不到依赖就返回 null。</p><pre><code class=language-ts>@Component({
+providers: [
+{
+  provide: AaService,
+  // 为 DI 令牌关联一个“固定的值”
+  useValue: 123
+},
+{
+  provide: BbService,
+  // 为公共类/默认类换上一个“替代实现”
+  useClass: CcService
+},
+{
+  provide: AliasService,
+  /**
+   * 为服务创建别名，提供了两种途径来访问同一服务对象
+   * 也可以用来“收窄/简化”BbService
+   */
+  useExisting: BbService
+},
+{
+  provide: Example,
+  // 通过“工厂函数”来创建依赖实例
+  useFactory: exampleFactory(),
+  // 用于指定“工厂函数”所使用的依赖
+  deps: []
+},
+DdService
+]
+})
+class ExampleComponent {
+constructor(
+private aa: AaService,
+private bb: BbService,
+private eg: Example
+) {}
+}
+</code></pre></li></ul><h3 id=双向绑定>双向绑定</h3><p>Angular 也有 Vue 中的 v-model 机制（modelValue/update:modelValue），语法为 &#91;&#40;value&#41;&#93;；实现思路同样也是基于“组件传值”和“自定义事件”（语法糖）。</p><pre><code class=language-ts>@Component({
+  template:
+    '&lt;div&gt;&lt;app-input-model [(example)]=&quot;exampleValue&quot;&gt;&lt;/app-input-model&gt;&lt;span&gt;{{ exampleValue }}&lt;/span&gt;&lt;/div&gt;'
+})
+class FormComponent {
+  exampleValue = null;
+}
+@Component({
+  template:
+    '&lt;input type=&quot;text&quot; [value]=&quot;example&quot; (input)=&quot;handleInput($event)&quot; /&gt;',
+  selector: 'app-input-model'
+})
+class InputModelComponent {
+  @Input() example;
+  // 事件名称必须和 @Input 属性相对应，为 xxxChange
+  @Output() exampleChange = new EventEmitter&lt;any&gt;();
+  handleInput(e) {
+    // 官方文档中，在这里直接对 example 进行了修改，我表示不理解
+    this.exampleChange.emit(e.target.value);
+  }
+}
+</code></pre><h3 id=模版变量>模版变量</h3><p>模版变量，顾名思义，就是存在于组件模版中的变量；模版变量可以引用：元素、指令、组件等：</p><ul><li>如果在组件上声明变量，该变量就会引用该组件实例；</li><li>如果在原生 HTML 标签上声明变量，该变量就会引用该元素；</li><li>如果你在 &lt;ng-template/&gt; 上声明变量，该变量就会引用一个 TemplateRef 实例来代表此模板；</li><li><p>如果该变量在右侧指定了一个名字（例如，#var=&quot;ngModel&quot;），该变量就会引用所在元素上具有这个 exportAs 名字的指令或组件。</p><pre><code class=language-html>&lt;!-- # 声明了一个模版变量 phone --&gt;
+&lt;input #phone type=&quot;text&quot; placeholder=&quot;phone number&quot; /&gt;
+&lt;!-- button 通过模版变量获取到了 input 的 value --&gt;
+&lt;button (click)=&quot;callPhone(phone.value)&quot;&gt;take a call&lt;/button&gt;
+&lt;!-- 模版输入变量 --&gt;
+&lt;ng-template #heroRef let-hero let-i=&quot;index&quot; let-even=&quot;!isOdd&quot;&gt;
+&lt;span [class]=&quot;{ 'even-row': even }&quot;&gt;{{ i }}: {{ hero.name }}&lt;/span&gt;
+&lt;/ng-template&gt;
+</code></pre></li></ul><p>模版变量可以在“包含此模板变量”的模板中的任何地方引用它；既然使用模版变量的前提是“包含此模板变量”，那么决定模版边界的“结构型指令（例如，ngIf、ngFor、&lt;ng-template/&gt;）”也决定了模版变量的<strong>作用域</strong>。</p><h3 id=网络请求>网络请求</h3><p>使用 HttpClient 需要导入 HttpClientModule；一般情况下，在 AppModule 导入：</p><pre><code class=language-ts>import { BrowserModule } from '@angular/platform-browser';
+import { HttpClientModule } from '@angular/common/http';
+
+@NgModule({
+  providers: [
+    { provide: NZ_I18N, useValue: zh_CN },
+    { provide: HTTP_INTERCEPTORS, useClass: SpinInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
+  ],
+  imports: [BrowserModule, HttpClientModule],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent]
+})
+export class AppModule {}
+</code></pre><p>发起请求：</p><pre><code class=language-ts>import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpHeaders,
+  HttpParams
+} from '@angular/common/http';
+import { catchError, retry, throwError } from 'rxjs/operators';
+
+@Injectable({})
+export class ApiService {
+  constructor(private http: HttpClient) {}
+  options = {
+    // 自定义请求头
+    headers: new HttpHeaders({
+      'Content-Type': 'multipart/form-data',
+      Authorization: 'au9mtPT3WwkDxfs'
+    }),
+    // 指定要返回的响应内容（联合类型：'body' | 'events' | 'response'）
+    observe: 'body' as const,
+    // 查询参数，会被 encode 进 URL 中
+    params: new HttpParams({}),
+    // 是否回报请求进度
+    reportProgress: true,
+    // 指定返回数据的格式（联合类型：'arraybuffer'|'blob'|'json'|'text'）
+    responseType: 'json' as const,
+    withCredentials: true
+  };
+  getConfig(params) {
+    return this.http
+      .get(`${environment.apiHost}/api/v1`, {
+        ...this.options,
+        params
+      })
+      .pipe(
+        retry(3), // 如果请求失败，最多重复请求三次
+        catchError(this.handleError) // 错误处理函数
+      );
+  }
+  updateConfig(body) {
+    return this.http.post(
+      `${environment.apiHost}/api/v1`,
+      body /* 请求体 */,
+      options /* 请求选项 */
+    );
+  }
+  modifyConfig(body) {
+    return this.http.put(
+      `${environment.apiHost}/api/v1`,
+      body /* 请求体 */,
+      options /* 请求选项 */
+    );
+  }
+  deleteConfig(params) {
+    return this.http.delete(`${environment.apiHost}/api/v1`, {
+      ...this.options,
+      params
+    });
+  }
+  handleError(error) {
+    if (error.status === 401) {
+      // ...
+    }
+    return throwError(() =&gt; error);
+  }
+}
+</code></pre><h3 id=特殊标签>特殊标签</h3><p>&lt;ng-container/&gt;，类似于 Vue 模版中的 &lt;template/&gt; 或者 React.Fragment；无实际意义，用来对模板片段按照展示逻辑进行<strong>分组</strong>：</p><pre><code class=language-html>&lt;!-- ng-container 最常使用的场景就是和 *ngFor 搭配 --&gt;
+&lt;nz-select&gt;
+  &lt;ng-container *ngFor=&quot;let item of branchList&quot;&gt;
+    &lt;nz-option
+      *ngIf=&quot;item.show&quot;
+      [nzValue]=&quot;item.brabank_id&quot;
+      [nzLabel]=&quot;item.brabank_name&quot;
+    &gt;&lt;/nz-option&gt;
+  &lt;/ng-container&gt;
+&lt;/nz-select&gt;
+</code></pre><p>&lt;ng-template/&gt;，用来<strong>定义</strong>（声明）模版片段；默认情况下，定义的模版片段不会直接渲染，需要指定渲染的位置；一般配合结构性指令使用：</p><pre><code class=language-html>&lt;!-- 当 seconds 被重置时，会条件渲染 #actionResendSMS 片段 --&gt;
+&lt;ng-container *ngIf=&quot;seconds !== 0; else actionResendSMS&quot;&gt;
+  &lt;span&gt;接受短信大约需要 {{ seconds }} 秒&lt;/span&gt;
+&lt;/ng-container&gt;
+&lt;ng-template #actionResendSMS&gt;
+  &lt;a (click)=&quot;handleSendSMS()&quot;&gt;重新获取验证码&lt;/a&gt;
+&lt;/ng-template&gt;
+&lt;!-- 
+  说到 ng-template 就不得不说 ngTemplateOutlet
+  ngTemplateOutlet 可以作为 ng-template 包含的“模版片段”的出口
+  并为包含的“模版片段”提供渲染上下文（有点儿“作用域插槽”的意思）
+  templateRenderContext 在这个例子中，是组件上下文中的一个对象
+  #exampleTemplate 中的 name、age 都是由 templateRenderContext 提供的
+  最终，#exampleTemplate 会渲染在 section 中
+--&gt;
+&lt;ng-template #exampleTemplate let-render&gt;
+  我需要 ngTemplateOutlet 给我提供渲染所需要的数据
+  &lt;br /&gt;
+  我的名字：{{ render.name }}
+  &lt;br /&gt;
+  我的年龄：{{ render.age }}
+&lt;/ng-template&gt;
+&lt;section
+  *ngTemplateOutlet=&quot;exampleTemplate; context: templateRenderContext&quot;
+&gt;&lt;/section&gt;
+</code></pre><p>&lt;ng-content/&gt;，使用在组件内部，可以使组件<a href=https://angular.cn/guide/content-projection>“接受外部插入进来的内容”</a>，相当于 Vue 模版中的 &lt;slot/&gt;：</p><ol><li>Angular 中并没有“<strong>具名插槽</strong>”的概念，但是 &lt;ng-content/&gt; 有一个 select 属性（CSS 选择器，不支持变量），可以起到对外部插入的内容进行<strong>过滤</strong>的作用；</li><li>相比于 &lt;router-outlet/&gt;，&lt;ng-content/&gt; 展示的内容是由<strong>外部插入</strong>的，&lt;router-outlet/&gt; 展示的内容是由路由表<strong>指定</strong>的；</li><li>如果你的组件包含不带 select 属性的 &lt;ng-content/&gt; 元素，则该实例将接收所有与其他 &lt;ng-content/&gt; 元素都不匹配的投影组件。</li></ol><p>&nbsp;</p><pre><code class=language-html>&lt;!-- 例如，nz-button 的 template --&gt;
+&lt;i nz-icon nzType=&quot;loading&quot; *ngIf=&quot;nzLoading&quot;&gt;&lt;/i&gt;
+&lt;ng-content&gt;&lt;/ng-content&gt;
+&lt;!-- 使用时 --&gt;
+&lt;a nz-button&gt;例子&lt;/a&gt;
+&lt;!-- 
+  渲染的结果，“例子”会被插入到 ng-content
+  当作 Vue 中的“具名插槽”理解就好
+--&gt;
+&lt;a nz-button&gt;
+  &lt;i nz-icon nzType=&quot;loading&quot; *ngIf=&quot;nzLoading&quot;&gt;&lt;/i&gt;
+  例子
+&lt;/a&gt;
+</code></pre><h3 id=特殊选择器>特殊选择器</h3><ul><li>::ng-deep、/deep/、&gt;&gt;&gt;，将样式应用到全局；所以请在 ::ng-deep 之前带上 :host，防止污染全局样式；</li><li>:host、:host(condition)，宿主元素选择器/当“宿主元素”满足 condition 时；</li><li>:host-context(condition)，当“宿主的祖先元素”满足 condition 时。</li></ul><h3 id=contentchild-与-viewchild>ContentChild 与 ViewChild</h3><p>@ViewChild() 从当前<strong>组件模版中</strong>获取组件对象（Vue/React 中 ref 的功能）：</p><pre><code class=language-ts>@Component({
+  selector: 'user-list',
+  template: '&lt;nz-spin&gt;&lt;form #form&gt;&lt;/form&gt;&lt;user-detail&gt;&lt;/user-detail&gt;&lt;/nz-spin&gt;'
+})
+export class UserListComponent implements OnInit, AfterViewInit {
+  @ViewChild(NzSpinComponent) nzSpinRef: NzSpinComponent;
+  @ViewChild('form') formRef: ElementRef;
+  ngOnInit() {
+    // 在 ngOnInit 钩子中是获取不到的
+    console.log(this.nzSpinRef); // undefined
+    console.log(this.formRef); // undefined
+  }
+  ngAfterViewInit() {
+    // 通过 ViewChild 从当前模版中获取组件实例
+    console.log(this.nzSpinRef);
+    console.log(this.formRef); // form 标签上的 #form 是必须的
+  }
+}
+</code></pre><p>@ContentChild() 从<strong>当前组件模版的 &lt;ng-content&gt;&lt;/ng-content&gt; 中</strong>获取组件对象：</p><pre><code class=language-ts>@Component({
+  selector: 'user-list',
+  template:
+    '&lt;user-detail&gt;&lt;span #span&gt;用户交易&lt;/span&gt;&lt;user-trade&gt;&lt;/user-trade&gt;&lt;/user-detail&gt;'
+})
+export class UserListComponent {}
+
+@Component({
+  selector: 'user-detail',
+  template:
+    &quot;&lt;h2&gt;用户详情&lt;/h2&gt;&lt;div class='user-detail'&gt;&lt;ng-content&gt;&lt;/ng-content&gt;&lt;/div&gt;&quot;
+})
+export class UserDetailComponent implements OnInit, AfterViewInit {
+  @ContentChild('span') spanRef: ElementRef;
+  @ContentChild(UserTradeComponent) userTradeRef: UserTradeComponent;
+  ngOnInit() {
+    // 在 ngOnInit 钩子中是获取不到的
+    console.log(this.spanRef); // undefined
+    console.log(this.userTradeRef); // undefined
+  }
+  ngAfterViewInit() {
+    // 从 ng-content 中获取组件/DOM 元素
+    console.log(this.spanRef); // span 标签上的 #span 是必须的
+    console.log(this.userTradeRef);
+  }
+}
+</code></pre><ul><li>ViewChild 相当于 ref，指向模版中的子组件，用来获取子组件实例；</li><li>ViewChild 对应的是 ngAfterViewInit、ngAfterViewChecked；</li><li>AfterView 钩子关心的是 ViewChildren，ViewChildren 的元素标签会出现在当前组件的模版中；</li><li>ContentChild 和 ViewChild 指向的类型不同（一个在当前模版中查找，一个在当前模版的 &lt;ng-content/&gt; 中查找）；</li><li>ContentChild 对应的是 ngAfterContentInit、ngAfterContentChecked；</li><li>AfterContent 钩子关心的是 ContentChildren，ContentChildren 被投射进当前组件中（ContentChildren 的元素标签会出现在当前组件模版中的 &lt;ng-content/&gt; 中）；</li><li>&lt;ng-content/&gt; 相当于 &lt;slot/&gt;，具体内容由父组件决定（插入）。</li></ul><h3 id=ngzone>NgZone</h3><p>NgZone 的引入是为了：</p><ol><li>解决脏检查的性能问题；</li><li>提供统一的异步错误处理机制；</li><li>解决异步逻辑中上下文变化的问题。</li></ol><h3 id=rx-reactivex-js>Rx(ReactiveX)JS</h3><p>RxJS 是 ReactiveX 在 JS 中的实现，相似的还有 RxJava、RxSwift...；ReactiveX 是 FRP（函数响应式编程）的践行者。</p><p>当可（被）观察对象（Observable）变化时，观察者（Subscriber）就可以得到通知。</p><p>数据序列被称为“流”；输入流可能有多个，输出流只会有一个。</p><pre><code class=language-ts>// 创建器，用来创建“流”，返回值是一个 Observable 对象
+import { def, from, interval, of, range, timer } from 'rxjs';
+import { fromPromise } from 'rxjs/internal/observable/fromPromise';
+// filter｜map 是操作符，用来处理“流”
+import { filter, map } from 'rxjs/operators';
+
+new Observable&lt;any&gt;((observer: Observer&lt;any&gt;) =&gt; {
+  setTimeout(() =&gt; {
+    /**
+     * 任何时间，都可以通过 next 将值传入“流”中
+     * 详情见 Angular 中的 Http 模块
+     * 当服务器响应时，将调用 next(response)，之后调用 complete()
+     * 当服务器出错时，将调用 error(response)
+     */
+    observer.next(1000);
+  }, 1000);
+});
+/**
+ * of 可以将“单一值”创建为“流”
+ * “单一值”可以为任何数据类型
+ * 这些“单一值”会被逐一放入“流”中
+ */
+of(1, 2, 3, 4, 5)
+  .pipe(
+    filter(item =&gt; item % 2 === 1),
+    map(item =&gt; item * 3)
+  )
+  /**
+   * Observable 必须被 subscribe 之后才会“产生”数据
+   * 如果没有 subscribe，之前的 pipe 就不会执行
+   * 所以，在 Angular 中，对同一接口多次 subscribe 会导致发起多次请求
+   * subscribe 表示“可观察对象”与“观察者”之间“建立了联系”
+   */
+  .subscribe(item =&gt; console.log(item)); // 3 9 15
+// from 可以将数组的每一项放入“流”中
+from([1, 2, 3, 4, 5])
+  .pipe(
+    filter(item =&gt; item % 2 === 1),
+    map(item =&gt; item * 3)
+  )
+  .subscribe(item =&gt; console.log(item)); // 3 9 15
+// range 可以从“范围”产生“流”
+range(1, 5)
+  .pipe(
+    filter(item =&gt; item % 2 === 1),
+    map(item =&gt; item * 3)
+  )
+  .subscribe(item =&gt; console.log(item)); // 3 9 15
+const p = new Promise((resolve, reject) =&gt; {
+  console.log('Promise Begin...');
+  setTimeout(() =&gt; resolve('Promise Resolved...'), 1000);
+});
+/**
+ * fromPromise 接受一个 Promise 实例
+ * 当这个 Promise 状态确定之后，将输出值放入“流”中
+ * 即使没有 subscribe，这个 Promise 也会执行
+ * 从 6.0 开始，可以使用 from 替代 fromPromise
+ */
+fromPromise(p).subscribe(item =&gt; console.log(item));
+/**
+ * defer 用来“惰性地”创建“流”
+ * 他接受一个“产生流”的“工厂函数”
+ * 当调用 defer 时，“流”还不存在，“流”会被“按需”创建
+ * 当“流”被“需要”的时候，才会调用“工厂函数”，产生“流”
+ * 只要没有 subscribe，“工厂函数”就不会执行，Promise 也就不会执行
+ */
+defer(() =&gt; from(p)).subscribe(item =&gt; console.log(item));
+/**
+ * timer（首次等待时间，重复间隔时间）用来创建“定时器流”
+ * 他创建的是一种“无尽流”（务必要在适当的时候取消订阅）
+ * 数据会不断重复的被放入“流”中
+ * 有点像 setInterval
+ */
+timer(3000, 1000).subscribe(item =&gt; console.log(item)); // 0 1 2 3...
+// interval（重复间隔时间），是 timer 的语法糖
+interval(1000).subscribe(item =&gt; console.log(item)); // 0 1 2 3...
+</code></pre><p>不同于创建器（调用后返回 Observable 对象），Subject 是一个“实现”了 Observable“接口”的“类”；需要先进行 new 调用，然后将数据“手动”放入“流”中（subject.next(value)）。</p><p>不同于普通的 Observable 对象（单播），new Subject 返回的是一个“多播”，可以被多次 subscribe，可以将值传递给多个观察者。</p><pre><code class=language-ts>import { Subject } from 'rxjs';
+
+const subject = new Subject&lt;unknown&gt;();
+subject.subscribe((res: unknown) =&gt; {
+  console.log('one', res);
+});
+subject.subscribe((res: unknown) =&gt; {
+  console.log('two', res);
+});
+// 每个 subscribe 都收到新值
+subject.next(1); // one 1, two 1
+subject.next(2); // one 2, two 2
+// 通过 subject 将 observable 转换为“多播”
+const observable = from([1, 2, 3]);
+observable.subscribe(subject);
+// one 1, two: 1
+// one 2, two: 2
+// one 3, two: 3
+</code></pre><p>操作符：</p><ul><li>retry，失败时重试；</li><li>repeat，成功时重试（一般配合 delay 使用，否则容易造成 DoS 攻击）；</li><li>delay，每当从输入流中读取一个数据之后，等待 x 毫秒，再放入到输出流中；</li><li>toArray，from 的逆运算，将“流”中的内容收集到数组中，一般用在“最后一步”；</li><li>debounceTime，防抖；</li><li>switchMap，接受从输入流中传来的数据，并<strong>异步</strong>转换成一个新的 Observable 对象（新的“流”）。</li></ul><p>subscribe 之后，其中传入的回调函数会在“流”中有数据时被调用；如果不“取消订阅”，相关内存就不会被释放（在等待新的数据传过来，只有当“流”结束或者主动取消订阅时，内存才会被释放）。</p><p>当 subscribe 被调用时，会返回一个“订阅凭证”；“订阅凭证”包含了一个 unsubscribe 方法，用来取消“订阅”（调用即可）。</p><pre><code class=language-ts>import {Observable} from &quot;rxjs
+
+let ob = new Observable(o =&gt; o.next(window.performance.now()));
+// 每次调用 subscribe 后生成了新的值，next 被调用了两次（数据产生于每次订阅后）
+ob.subscribe(value =&gt; console.log(value)); // 4491799.400000002
+ob.subscribe(value =&gt; console.log(value)); // 4491799.699999999
+</code></pre><p>冷可观察对象就是，当调用 subscribe 之后，才将“值”添加到“流”中；热可观察对象就是，在 subscribe 之前，已经产生了“值”。</p><p>Hot Observable 是主动的，尽管你并没有订阅事件，但是它会时刻推送，就像鼠标移动；而 Cold Observable 是被动的，只有当你订阅的时候，它才会发布消息。</p><h3 id=向路由渲染的组件添加-修改属性-方法>向路由渲染的组件添加/修改属性/方法</h3><p>并不能通过在 router-outlet 上绑定属性/自定义事件的方式向路由渲染的组件进行传值，只能通过 router-outlet 上的 activate 钩子曲线救国。</p><p>当 router-outlet 处于激活状态时，activate 便会触发；其参数为当前渲染的组件实例；我们便可以向“当前渲染的组件实例”动态注入属性或方法。</p><pre><code class=language-ts>@Component({
+  template: `
+    &lt;nz-tabset nzLinkRouter [nzLinkExact]=&quot;false&quot;&gt;...&lt;/nz-tabset&gt;
+    &lt;router-outlet
+      (activate)=&quot;handleRouterOutletActivate($event)&quot;
+    &gt;&lt;/router-outlet&gt;
+  `,
+  selector: 'app-example'
+})
+class ExampleComponent {
+  handleRouterOutletActivate(currentRenderComponent) {
+    // 我们便可以在“当前渲染的组件实例”中读取和调用“注入的属性和方法”
+    currentRenderComponent.propsOne = 12345;
+    currentRenderComponent.methodsOne = () =&gt; {
+      // ...
+    };
+  }
+}
+</code></pre><h3 id=aot-ahead-of-time-jit-just-in-time-编译>AOT（Ahead-Of-Time）/JIT（Just-In-Time）编译</h3><p>Angular 组件和模版需要经过编译，才能在浏览器中运行；Angular 提供了两种编译方式：</p><ul><li>AOT 预编译（在打包/构建时编译，Angular 9 之后）：<ul><li>和别的模版一样，*.vue 和 *.jsx 也需要进行编译才能在浏览器中运行；</li><li>可以尽早地检测到代码中的错误，用户体验更有保障；</li><li>省去了在运行时编译的开销，应用响应更快；</li><li>减少了受 XSS 攻击的风险；</li><li>可以减小应用的体积。</li></ul></li><li>JIT 即时编译（在运行时编译，Angular 9 之前）：<ul><li>代码修改之后不需要重新编译，编译会在代码执行之前进行（按需编译）；</li><li>编译工作大多在浏览器内部进行，编译时间更短；</li><li>在项目中，较少被用到的组件更适合即时编译。</li></ul></li></ul><p>AOT 预编译分为三个阶段：</p><ol><li>代码分析：收集元数据并检验元数据中的错误：<ul><li>被收集的元数据存在于类装饰器/构造函数中；</li><li>AOT 收集器会根据 TS 编译器生成的 *.d.ts 输出 *.metadata.json；</li><li>*.metadata.json 包括了全部装饰器的元数据，结构就像 AST 一样；</li><li>AOT 编译器不支持“箭头函数”，所以不要在元数据中使用“() =&gt; {}”。</li></ul></li><li>代码生成：解释元数据（*.metadata.json），并对含有 useClass、useValue、useFactory 和 data 的对象字面量进行特殊处理（元数据重写）；</li><li>模版类型检查：TS 编译器会验证模版中绑定的表达式。</li></ol><p>JIT 编译器可以替代 AOT 编译器，可以在“运行时”将模板编译为浏览器中的可执行模板代码。</p><h3 id=安全>安全</h3><p>为了防范 XSS，Angular 默认把所有值都认为是不可信任的；任何值在插入 DOM 之前，都会被进行“无害化（Sanitize）”处理（前提是使用 Angular 模版，如果在代码中直接使用 DOM API，将没有“无害化”处理）。</p><p>Angular 定义了四个安全上下文：</p><ul><li>HTML：被解释为 HTML 的值，例如被绑定到 innerHTML 的值；</li><li>CSS：作为 CSS 被绑定到 style 属性的值；</li><li>网址：作为 URL 使用的值，例如被绑定到 a 标签 href 属性的值；</li><li>资源：作为代码需要被下载并运行的值，例如被绑定到 script 标签 src 属性的值。</li></ul><p>&nbsp;</p><pre><code class=language-ts>@Component({
+  template: `
+    &lt;!-- {{ 插值中的内容总会被编码 }} --&gt;
+    &lt;p class=&quot;e2e-inner-html-interpolated&quot;&gt;{{ htmlSnippet }}&lt;/p&gt;
+    &lt;!--
+      绑定到 innerHTML 属性上的值，默认被认为是“不安全”的
+      会被自动进行“无害化处理”
+      &lt;script&gt; 会被移除
+    --&gt;
+    &lt;p class=&quot;e2e-inner-html-bound&quot; [innerHTML]=&quot;htmlSnippet&quot;&gt;&lt;/p&gt;
+  `
+})
+export class InnerHtmlComponent {
+  htmlSnippet = '&lt;script&gt;alert(&quot;...&quot;)&lt;/script&gt;&lt;b&gt;Syntax&lt;/b&gt;';
+}
+</code></pre><p>如果某个值被确认是可信的，可以通过 <a href=https://angular.cn/api/platform-browser/DomSanitizer>DomSanitizer 服务</a>将这个值标记为安全值，安全的值将不会被进行“无害化”处理。</p><p>DomSanitizer 提供了六种方法：</p><ul><li>sanitize(context, value)：根据给定的安全上下文 context，对 value 进行“无害化”处理；</li><li>bypassSecurityTrustHtml(value)：信任给定的值 value 是一个安全的 HTML；</li><li>bypassSecurityTrustStyle(value)：信任给定的值 value 是一个安全的样式；</li><li>bypassSecurityTrustScript(value)：信任给定的值 value 是一个安全的 JS；</li><li>bypassSecurityTrustUrl(value)：信任给定的值 value 是一个安全的 URL；</li><li>bypassSecurityTrustResourceUrl(value)：信任给定的值 value 是一个安全的资源。</li></ul><p>&nbsp;</p><pre><code class=language-ts>@Component({
+  template: `
+    &lt;h4&gt;自动无害化处理&lt;/h4&gt;
+    &lt;p&gt;&lt;a [href]=&quot;dangerousUrl&quot;&gt;Click Me&lt;/a&gt;&lt;/p&gt;
+    &lt;h4&gt;不会进行无害化处理&lt;/h4&gt;
+    &lt;p&gt;&lt;a [href]=&quot;trustedUrl&quot;&gt;Click Me&lt;/a&gt;&lt;/p&gt;
+  `
+})
+export class BypassSecurityTrustComponent {
+  constructor(private sanitizer: DomSanitizer) {}
+  dangerousUrl = 'javascript:alert(&quot;Hello&quot;)';
+  trustUrl = this.sanitizer.bypassSecurityTrustUrl(this.dangerousUrl);
+}
+</code></pre><h3 id=注意事项>注意事项</h3><ol><li>Angular 中，仅能对 Property 设置 [] 绑定，不能对 Attribute 设置绑定；</li><li>&#123;&#123; innerHTML &#125;&#125;、&#91;inneHTML&#93;=&quot;xxx&quot; 会对插入的 HTML“无害化”转译，如果不想做“无害化”处理，需要借助 DomSanitizer 服务；</li><li>默认情况下，&lt;ng-content/&gt; 只接收组件的“直接子节点”作为插入内容，可以使用 ngProjectAs 改变这一点；</li><li>组件上绑定的用于传值的自定义事件（@Output）最好不要与原生 DOM 事件名称相同，否则一些事件的默认行为（例如 form 内 button 元素的 click 事件默认会触发 form 的 submit）会导致 bug；</li><li>不要在元数据中使用“箭头函数”，因为 AOT 编译器不支持“函数表达式”和“箭头函数”。</li></ol><h5 id=参考-angular-change-detection-变化检测策略-https-limeii-github-io-2019-06-angular-changedetectionstrategy-onpush-viewproviders-vs-providers-https-blog-kevinyang-net-2018-01-19-angular-viewproviders-providers-improved-dependency-injection-with-the-new-providedin-scopes-any-and-platform-https-dev-to-christiankohler-improved-dependeny-injection-with-the-new-providedin-scopes-any-and-platform-30bb-使用-ng-content-进行组件内容投射-https-www-cnblogs-com-laixiangran-p-8723166-html-rxjs-快速入门-https-blog-ralph-wang-articles-23a34d9e-rxjs-e5-bf-ab-e9-80-9f-e5-85-a5-e9-97-a8-ng-template-ng-content-ng-container-https-juejin-cn-post-6869995328330792968-cold-vs-hot-observables-https-blog-thoughtram-io-angular-2016-06-16-cold-vs-hot-observables-html-what-is-aot-and-jit-compiler-in-angular-https-www-geeksforgeeks-org-what-is-aot-and-jit-compiler-in-angular>参考：<a href=https://limeii.github.io/2019/06/angular-changeDetectionStrategy-OnPush/>Angular Change Detection：变化检测策略</a>、<a href=https://blog.kevinyang.net/2018/01/19/angular-viewproviders-providers/>viewProviders vs providers</a>、<a href=https://dev.to/christiankohler/improved-dependeny-injection-with-the-new-providedin-scopes-any-and-platform-30bb>Improved Dependency Injection With The New ProvidedIn Scopes 'any' And 'platform'</a>、<a href=https://www.cnblogs.com/laixiangran/p/8723166.html>使用 ng-content 进行组件内容投射 </a>、<a href=https://blog.ralph.wang/articles/23a34d9e_RxJS_%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8>RxJS 快速入门</a>、<a href=https://juejin.cn/post/6869995328330792968>ng-template、ng-content、ng-container</a>、<a href=https://blog.thoughtram.io/angular/2016/06/16/cold-vs-hot-observables.html>Cold vs Hot Observables</a>、<a href=https://www.geeksforgeeks.org/what-is-aot-and-jit-compiler-in-angular/>What is AOT and JIT Compiler in Angular ?</a></h5></div><div class=post_footer><div class=meta><div class=info><span class="field tags"><i class=remixicon-stack-line></i><a href=https://vikingama.github.io/tags/angular/>Angular</a></span></div></div></div></div><div class=doc_comments><div class=comments_block_title>发表评论</div><div id=vcomments></div></div><link rel=stylesheet href=https://vikingama.github.io/css/comments.css><script src=//unpkg.com/valine></script><script type=text/javascript>new Valine({el:'#vcomments',avatar:'retro',recordIP:true,path:window.location.pathname,appId:'U06blUXOot4uJgfMu8I9xJXz-MdYXbMMI',appKey:'BnrXC06FJsvRNpr4aqb1HYPd',placeholder:'来都来了，不打个招呼吗？',visitor:'true',serverURLs:'https:\/\/u06bluxo.api.lncldglobal.com'});</script></div></div><a id=back_to_top href=# class=back_to_top><span>△</span></a></div><footer class=footer><div class=powered_by><a href=https://github.com/varkai/hugo-theme-zozo/ target=_blank>Designed by <span class=jitters>Zeuk</span>,</a>
+<a href=https://www.gohugo.io/ target=_blank>Built by <span class=jitters>Hugo</span>,</a>
+<a href=https://github.com/features/actions/ target=_blank>Deployed by <span class=jitters>Actions</span></a></div><div class=footer_slogan><span id=enter_time></span></div></footer><script src=//unpkg.com/jquery/dist/jquery.min.js></script><script src=//unpkg.com/@highlightjs/cdn-assets/highlight.min.js></script><script src=https://vikingama.github.io/js/zozo.js></script><script>hljs.highlightAll();</script><script type=application/javascript>var doNotTrack=false;if(!doNotTrack){window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;ga('create','G-CDS328YPMY','auto');ga('send','pageview');}</script><script async src=https://www.google-analytics.com/analytics.js></script></body></html>

@@ -386,7 +386,7 @@ function render(view, data) {
   let complied = new Function('obj', template);
   return complied(data);
 }
-</code></pre><h3 id=主从模式>主从模式</h3><p>Node 决定在 V8 上构建时就不得不面对两个问题：如何充分利用多核 CPU ？如何保证主进程的健壮性和稳定性？Node 的 child_process 模块提供了衍生子进程，可以实现对多个进程的控制。</p><p>Master-Worker 主从模式：</p><pre><code class=language-js>// master.js
+</code></pre><h3 id=主从模式>主从模式</h3><p>Node 决定在 V8 上构建时就不得不面对两个问题：如何充分利用多核 CPU？如何保证主进程的健壮性和稳定性？Node 的 child_process 模块提供了衍生子进程，可以实现对多个进程的控制。</p><p>Master-Worker 主从模式：</p><pre><code class=language-js>// master.js
 const fork = require('child_process').fork;
 const cpus = require('os').cpus();
 for (let i = 0; i &lt; cpus.length; i++) {
