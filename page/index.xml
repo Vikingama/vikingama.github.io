@@ -191,6 +191,15 @@
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">csrutil disable
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
+&lt;/div>&lt;h2 id="移除文件属性">移除文件属性&lt;/h2>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">xattr -c -r &lt;span class="si">${&lt;/span>&lt;span class="nv">文件路径&lt;/span>&lt;span class="si">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
 &lt;/div>&lt;h2 id="常用-git-命令">常用 git 命令&lt;/h2>
 &lt;div class="highlight">&lt;div class="chroma">
 &lt;table class="lntable">&lt;tr>&lt;td class="lntd">
@@ -312,15 +321,6 @@
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git status
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div>&lt;h2 id="移除文件属性">移除文件属性&lt;/h2>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">xattr -c -r &lt;span class="si">${&lt;/span>&lt;span class="nv">文件路径&lt;/span>&lt;span class="si">}&lt;/span>
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
 &lt;/div>&lt;h2 id="软件已损坏">软件已损坏&lt;/h2>
 &lt;div class="highlight">&lt;div class="chroma">
 &lt;table class="lntable">&lt;tr>&lt;td class="lntd">
@@ -328,6 +328,15 @@
 &lt;/span>&lt;/code>&lt;/pre>&lt;/td>
 &lt;td class="lntd">
 &lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo xattr -d com.apple.quarantine /Applications/&lt;span class="si">${&lt;/span>&lt;span class="nv">软件&lt;/span>&lt;span class="si">}&lt;/span>.app
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="代理终端">代理终端&lt;/h2>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="nb">export&lt;/span> &lt;span class="nv">https_proxy&lt;/span>&lt;span class="o">=&lt;/span>http://127.0.0.1:7890 &lt;span class="nv">http_proxy&lt;/span>&lt;span class="o">=&lt;/span>http://127.0.0.1:7890 &lt;span class="nv">all_proxy&lt;/span>&lt;span class="o">=&lt;/span>socks5://127.0.0.1:7890
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
 &lt;/div>&lt;h2 id="解压-pkg">解压 pkg&lt;/h2>
@@ -339,15 +348,6 @@
 &lt;td class="lntd">
 &lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 将 Edge.pkg 解压到同目录 Edge 文件夹下&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">pkgutil --expand Edge.pkg ./Edge
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;h2 id="代理终端">代理终端&lt;/h2>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="nb">export&lt;/span> &lt;span class="nv">https_proxy&lt;/span>&lt;span class="o">=&lt;/span>http://127.0.0.1:7890 &lt;span class="nv">http_proxy&lt;/span>&lt;span class="o">=&lt;/span>http://127.0.0.1:7890 &lt;span class="nv">all_proxy&lt;/span>&lt;span class="o">=&lt;/span>socks5://127.0.0.1:7890
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
 &lt;/div></description></item><item><title>简历 · 看不见我的美 · 是你瞎了眼</title><link>https://vikingama.github.io/%E7%AE%80%E5%8E%86/</link><pubDate>Tue, 10 Aug 2021 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/%E7%AE%80%E5%8E%86/</guid><description>&lt;h2 id="基本信息">基本信息&lt;/h2>
