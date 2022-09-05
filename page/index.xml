@@ -1,0 +1,454 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Pages on 馬腊咯稽</title><link>https://vikingama.github.io/page/</link><description>Recent content in Pages on 馬腊咯稽</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Thu, 01 Sep 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://vikingama.github.io/page/index.xml" rel="self" type="application/rss+xml"/><item><title>启发 · 看不见我的美 · 是你瞎了眼</title><link>https://vikingama.github.io/%E5%90%AF%E5%8F%91/</link><pubDate>Thu, 01 Sep 2022 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/%E5%90%AF%E5%8F%91/</guid><description/></item><item><title>命令 · 看不见我的美 · 是你瞎了眼</title><link>https://vikingama.github.io/%E5%91%BD%E4%BB%A4/</link><pubDate>Thu, 28 Oct 2021 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/%E5%91%BD%E4%BB%A4/</guid><description>&lt;h2 id="创建可引导的-macos-安装器">创建可引导的 macOS 安装器&lt;/h2>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># https://support.apple.com/zh-cn/HT201372&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sudo /Applications/Install&lt;span class="se">\ &lt;/span>macOS&lt;span class="se">\ &lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">版本名称&lt;/span>&lt;span class="p">，比如：Monterey&lt;/span>&lt;span class="si">}&lt;/span>.app/Contents/Resources/createinstallmedia --volume /Volumes/&lt;span class="si">${&lt;/span>&lt;span class="nv">U&lt;/span>&lt;span class="p"> 盘名称，比如：MyVolume&lt;/span>&lt;span class="si">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="bash-与-zsh-的相互切换">bash 与 zsh 的相互切换&lt;/h2>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 切换到 bash&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">chsh -s /bin/bash
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 切换到 zsh&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">chsh -s /bin/zsh
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="本地安装了哪些-brew-包">本地安装了哪些 brew 包&lt;/h2>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">brew list
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="本地安装了哪些-npm-包">本地安装了哪些 npm 包&lt;/h2>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">npm list -g --depth&lt;span class="o">=&lt;/span>&lt;span class="m">0&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="不检查-monterey-更新">不检查 Monterey 更新&lt;/h2>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 重置忽略的更新&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sudo softwareupdate --reset-ignored
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 忽略软件的更新&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sudo softwareupdate --ignore &lt;span class="s2">&amp;#34;macOS Monterey&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 清除菜单小红点&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">defaults write com.apple.systempreferences AttentionPrefBundleIDs &lt;span class="m">0&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="安装-hugo64056">安装 hugo@0.56&lt;/h2>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 1. brew tap &amp;lt;org&amp;gt;/&amp;lt;repo&amp;gt; https://github.com/&amp;lt;org&amp;gt;/&amp;lt;repo&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">brew tap gohugoio/hugo https://github.com/gohugoio/hugo
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 2. brew extract --version &amp;lt;version&amp;gt; &amp;lt;module name&amp;gt; &amp;lt;org&amp;gt;/&amp;lt;repo&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">brew extract --version 0.56.0 hugo gohugoio/hugo
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 3. brew install &amp;lt;module name&amp;gt;@&amp;lt;version&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">brew install hugo@0.56.0
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="获取项目目录结构">获取项目目录结构&lt;/h2>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">tree -I &lt;span class="s2">&amp;#34;node_modules&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="获取管理员权限">获取管理员权限&lt;/h2>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;span class="lnt">26
+&lt;/span>&lt;span class="lnt">27
+&lt;/span>&lt;span class="lnt">28
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-md" data-lang="md">&lt;span class="line">&lt;span class="cl">Windows Registry Editor Version 5.00
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">[HKEY_CLASSES_ROOT\*\shell\runas]
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">@=&amp;#34;获取管理员权限&amp;#34;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&amp;#34;Icon&amp;#34;=&amp;#34;C:\\Windows\\System32\\imageres.dll,102&amp;#34;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&amp;#34;NoWorkingDirectory&amp;#34;=&amp;#34;&amp;#34;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">[HKEY_CLASSES_ROOT\*\shell\runas\command]
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">@=&amp;#34;cmd.exe /c takeown /f \&amp;#34;%1\&amp;#34; &lt;span class="err">&amp;amp;&amp;amp;&lt;/span> icacls \&amp;#34;%1\&amp;#34; /grant administrators:F&amp;#34;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&amp;#34;IsolatedCommand&amp;#34;=&amp;#34;cmd.exe /c takeown /f \&amp;#34;%1\&amp;#34; &lt;span class="err">&amp;amp;&amp;amp;&lt;/span> icacls \&amp;#34;%1\&amp;#34; /grant administrators:F&amp;#34;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">[HKEY_CLASSES_ROOT\exefile\shell\runas2]
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">@=&amp;#34;获取管理员权限&amp;#34;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&amp;#34;Icon&amp;#34;=&amp;#34;C:\\Windows\\System32\\imageres.dll,102&amp;#34;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&amp;#34;NoWorkingDirectory&amp;#34;=&amp;#34;&amp;#34;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">[HKEY_CLASSES_ROOT\exefile\shell\runas2\command]
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">@=&amp;#34;cmd.exe /c takeown /f \&amp;#34;%1\&amp;#34; &lt;span class="err">&amp;amp;&amp;amp;&lt;/span> icacls \&amp;#34;%1\&amp;#34; /grant administrators:F&amp;#34;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&amp;#34;IsolatedCommand&amp;#34;=&amp;#34;cmd.exe /c takeown /f \&amp;#34;%1\&amp;#34; &lt;span class="err">&amp;amp;&amp;amp;&lt;/span> icacls \&amp;#34;%1\&amp;#34; /grant administrators:F&amp;#34;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">[HKEY_CLASSES_ROOT\Directory\shell\runas]
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">@=&amp;#34;获取管理员权限&amp;#34;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&amp;#34;Icon&amp;#34;=&amp;#34;C:\\Windows\\System32\\imageres.dll,102&amp;#34;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&amp;#34;NoWorkingDirectory&amp;#34;=&amp;#34;&amp;#34;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">[HKEY_CLASSES_ROOT\Directory\shell\runas\command]
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">@=&amp;#34;cmd.exe /c takeown /f \&amp;#34;%1\&amp;#34; /r /d y &lt;span class="err">&amp;amp;&amp;amp;&lt;/span> icacls \&amp;#34;%1\&amp;#34; /grant administrators:F /t&amp;#34;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&amp;#34;IsolatedCommand&amp;#34;=&amp;#34;cmd.exe /c takeown /f \&amp;#34;%1\&amp;#34; /r /d y &lt;span class="err">&amp;amp;&amp;amp;&lt;/span> icacls \&amp;#34;%1\&amp;#34; /grant administrators:F /t&amp;#34;
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="允许任何来源">允许“任何来源”&lt;/h2>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo spctl --master-disable
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="重置黑暗模式">重置“黑暗模式”&lt;/h2>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">defaults write -g NSRequiresAquaSystemAppearance -bool Yes
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">defaults delete -g NSRequiresAquaSystemAppearance
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="系统完整性保护">系统完整性保护&lt;/h2>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 查看 SIP&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">csrutil status
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 打开 SIP&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">csrutil &lt;span class="nb">enable&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 关闭 SIP&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">csrutil disable
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="常用-git-命令">常用 git 命令&lt;/h2>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;span class="lnt">26
+&lt;/span>&lt;span class="lnt">27
+&lt;/span>&lt;span class="lnt">28
+&lt;/span>&lt;span class="lnt">29
+&lt;/span>&lt;span class="lnt">30
+&lt;/span>&lt;span class="lnt">31
+&lt;/span>&lt;span class="lnt">32
+&lt;/span>&lt;span class="lnt">33
+&lt;/span>&lt;span class="lnt">34
+&lt;/span>&lt;span class="lnt">35
+&lt;/span>&lt;span class="lnt">36
+&lt;/span>&lt;span class="lnt">37
+&lt;/span>&lt;span class="lnt">38
+&lt;/span>&lt;span class="lnt">39
+&lt;/span>&lt;span class="lnt">40
+&lt;/span>&lt;span class="lnt">41
+&lt;/span>&lt;span class="lnt">42
+&lt;/span>&lt;span class="lnt">43
+&lt;/span>&lt;span class="lnt">44
+&lt;/span>&lt;span class="lnt">45
+&lt;/span>&lt;span class="lnt">46
+&lt;/span>&lt;span class="lnt">47
+&lt;/span>&lt;span class="lnt">48
+&lt;/span>&lt;span class="lnt">49
+&lt;/span>&lt;span class="lnt">50
+&lt;/span>&lt;span class="lnt">51
+&lt;/span>&lt;span class="lnt">52
+&lt;/span>&lt;span class="lnt">53
+&lt;/span>&lt;span class="lnt">54
+&lt;/span>&lt;span class="lnt">55
+&lt;/span>&lt;span class="lnt">56
+&lt;/span>&lt;span class="lnt">57
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">git add --all
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git add .
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git branch -d/D development
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git branch development
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git checkout -b/B development
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git checkout -f development
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git checkout -- index.md
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git checkout 3de4537
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git cherry-pick 3de4537
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git commit -am &lt;span class="s2">&amp;#34;用户子系统开发&amp;#34;&lt;/span> --no-verify
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git commit -m &lt;span class="s2">&amp;#34;修复登录失败&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git commit --amend
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git fetch origin development
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git fetch origin --prune
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git log --graph --pretty&lt;span class="o">=&lt;/span>oneline --abbrev-commit
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git log --pretty&lt;span class="o">=&lt;/span>format:&lt;span class="s2">&amp;#34;%h - %an, %ar : %s&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git log --pretty&lt;span class="o">=&lt;/span>oneline
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git log --pretty&lt;span class="o">=&lt;/span>short
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git log --stat
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git log -p
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git pull --merge
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git pull --rebase
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git pull --rebase --autostash
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git push origin --delete development
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git push --set-upstream origin development
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git push -f
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git rebase origin/development
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git rebase -i 3de4537
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git rebase -i --root
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git remote add origin https://github.com/source.git
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git remote prune origin
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git remote show origin
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git remote -v
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git reset --hard HEAD^
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git reset --mixed HEAD^
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git reset --soft HEAD^
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git revert 3de4537
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git stash apply
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git stash clear
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git stash list
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git stash pop
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git stash
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git status
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="移除文件属性">移除文件属性&lt;/h2>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">xattr -c -r &lt;span class="si">${&lt;/span>&lt;span class="nv">文件路径&lt;/span>&lt;span class="si">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="软件已损坏">软件已损坏&lt;/h2>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo xattr -d com.apple.quarantine /Applications/&lt;span class="si">${&lt;/span>&lt;span class="nv">软件&lt;/span>&lt;span class="si">}&lt;/span>.app
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="解压-pkg">解压 pkg&lt;/h2>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 将 Edge.pkg 解压到同目录 Edge 文件夹下&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">pkgutil --expand Edge.pkg ./Edge
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="代理终端">代理终端&lt;/h2>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="nb">export&lt;/span> &lt;span class="nv">https_proxy&lt;/span>&lt;span class="o">=&lt;/span>http://127.0.0.1:7890 &lt;span class="nv">http_proxy&lt;/span>&lt;span class="o">=&lt;/span>http://127.0.0.1:7890 &lt;span class="nv">all_proxy&lt;/span>&lt;span class="o">=&lt;/span>socks5://127.0.0.1:7890
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>简历 · 看不见我的美 · 是你瞎了眼</title><link>https://vikingama.github.io/%E7%AE%80%E5%8E%86/</link><pubDate>Tue, 10 Aug 2021 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/%E7%AE%80%E5%8E%86/</guid><description>&lt;h2 id="基本信息">基本信息&lt;/h2>
+&lt;table style="width: 100%;">
+&lt;tr style="background: transparent;border: none;">
+&lt;td style="border: none;text-align: right;white-space: nowrap;word-break: keep-all;">姓名：&lt;/td>
+&lt;td style="border: none;">李霄汉&lt;/td>
+&lt;td style="border: none;text-align: right;white-space: nowrap;word-break: keep-all;">学历：&lt;/td>
+&lt;td style="border: none;">统招本科&lt;/td>
+&lt;/tr>
+&lt;tr style="background: transparent;border: none;">
+&lt;td style="border: none;text-align: right;white-space: nowrap;word-break: keep-all;">手机：&lt;/td>
+&lt;td style="border: none;">&lt;a href="tel:186-6819-8984">186-6819-8984&lt;/a>&lt;/td>
+&lt;td style="border: none;text-align: right;white-space: nowrap;word-break: keep-all;">专业：&lt;/td>
+&lt;td style="border: none;">信息管理与信息系统&lt;/td>
+&lt;/tr>
+&lt;tr style="background: transparent;border: none;">
+&lt;td style="border: none;text-align: right;white-space: nowrap;word-break: keep-all;">邮箱：&lt;/td>
+&lt;td style="border: none;">&lt;a href="mailto:pavilion0321@gmail.com">pavilion0321@gmail.com&lt;/a>&lt;/td>
+&lt;td style="border: none;text-align: right;white-space: nowrap;word-break: keep-all;">英文等级：&lt;/td>
+&lt;td style="border: none;">CET-6&lt;/td>
+&lt;/tr>
+&lt;tr style="background: transparent;border: none;">
+&lt;td style="border: none;text-align: right;white-space: nowrap;word-break: keep-all;">现居地：&lt;/td>
+&lt;td style="border: none;">浙江省杭州市&lt;/td>
+&lt;td style="border: none;text-align: right;white-space: nowrap;word-break: keep-all;">博客：&lt;/td>
+&lt;td style="border: none;">&lt;a href="https://vikingama.github.io/">https://vikingama.github.io/&lt;/a>&lt;/td>
+&lt;/tr>
+&lt;/table>
+&lt;h2 id="职业技能">职业技能&lt;/h2>
+&lt;ul>
+&lt;li>熟练掌握 HTML、CSS、JS&lt;/li>
+&lt;li>熟练使用 React、Vue&lt;/li>
+&lt;li>熟练使用 Git&lt;/li>
+&lt;li>了解 TS&lt;/li>
+&lt;/ul>
+&lt;h2 id="项目经验">项目经验&lt;/h2>
+&lt;h3 id="lstack-混合云管平台">LStack 混合云管平台&lt;/h3>
+&lt;blockquote>
+&lt;p>时间：2020 年 5 月 – 2021 年 7 月&lt;/p>
+&lt;p>描述：面向开发者的云原生应用管理工具&lt;/p>
+&lt;p>技术栈：Vue、VueRouter、Vuex、ElementUI、ECharts、Lerna&lt;/p>
+&lt;ul>
+&lt;li>负责官网、云市场、费用中心、运营管理模块，公司内部运营后台&lt;/li>
+&lt;li>基于 Lerna 和 yarn 的 monorepo 的项目管理方式&lt;/li>
+&lt;li>通过 lint-staged 对暂存区文件进行格式化和校验&lt;/li>
+&lt;li>使用基于 slot 的 renderless 数据渲染方式&lt;/li>
+&lt;li>通过预渲染插件对官网进行 SEO 优化&lt;/li>
+&lt;li>使用 husky 规范 commit 信息&lt;/li>
+&lt;li>使用 ECharts 展示用户数据&lt;/li>
+&lt;li>基于路由的权限管理&lt;/li>
+&lt;/ul>
+&lt;/blockquote>
+&lt;h3 id="花瓣站长平台">花瓣站长平台&lt;/h3>
+&lt;blockquote>
+&lt;p>时间：2019 年 7 月 – 2019 年 8 月&lt;/p>
+&lt;p>描述：供合作伙伴查询推广流量的工具&lt;/p>
+&lt;p>技术栈：React、ReactRouter、Redux、AntDesign、StyledComponents、BizCharts&lt;/p>
+&lt;ul>
+&lt;li>使用 AntDesign 作为基础组件库&lt;/li>
+&lt;li>使用 BizCharts 展示流量数据&lt;/li>
+&lt;li>使用 CSS IN JS 的样式管理&lt;/li>
+&lt;li>使用 Redux 管理全局状态&lt;/li>
+&lt;li>基于路由的代码懒加载&lt;/li>
+&lt;/ul>
+&lt;/blockquote>
+&lt;h3 id="聚拍-action">聚拍 Action&lt;/h3>
+&lt;blockquote>
+&lt;p>时间：2018 年 4 月 – 2018 年 5 月（v1）、2018 年 8 月 - 2018 年 8 月（v2）&lt;/p>
+&lt;p>描述：供剧组使用的财务系统&lt;/p>
+&lt;p>技术栈：Vue、VueRouter、Vuex、iView、MintUI、G2&lt;/p>
+&lt;ul>
+&lt;li>引入 Vuex 管理用户信息、登录信息、微信分享配置&lt;/li>
+&lt;li>将微信分享、时间戳转换等功能封装为插件&lt;/li>
+&lt;li>使用自定义指令控制 SVG 进度条长度&lt;/li>
+&lt;li>使用路由懒加载来减少首屏加载时间&lt;/li>
+&lt;li>使用路由钩子管理用户权限&lt;/li>
+&lt;li>使用 G2 展示财务数据&lt;/li>
+&lt;/ul>
+&lt;/blockquote>
+&lt;h2 id="工作经历">工作经历&lt;/h2>
+&lt;table style="width: 100%;">
+&lt;tr style="background: transparent;border: none;">
+&lt;td style="border: none;text-align: left;">2020.05 – 2021.07&lt;/td>
+&lt;td style="border: none;text-align: center;">杭州朗澈科技有限公司&lt;/td>
+&lt;td style="border: none;text-align: center;">Web 前端开发&lt;/td>
+&lt;/tr>
+&lt;tr style="background: transparent;border: none;">
+&lt;td style="border: none;text-align: left;">2019.06 – 2020.01&lt;/td>
+&lt;td style="border: none;text-align: center;">杭州纬音智网络有限公司&lt;/td>
+&lt;td style="border: none;text-align: center;">Web 前端开发&lt;/td>
+&lt;/tr>
+&lt;tr style="background: transparent;border: none;">
+&lt;td style="border: none;text-align: left;">2017.08 – 2019.04&lt;/td>
+&lt;td style="border: none;text-align: center;">杭州聚米生活服务有限公司&lt;/td>
+&lt;td style="border: none;text-align: center;">Web 前端开发&lt;/td>
+&lt;/tr>
+&lt;/table></description></item><item><title>归档 · 看不见我的美 · 是你瞎了眼</title><link>https://vikingama.github.io/archives/</link><pubDate>Tue, 28 May 2019 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/archives/</guid><description/></item><item><title>搜索 · 看不见我的美 · 是你瞎了眼</title><link>https://vikingama.github.io/search/</link><pubDate>Tue, 28 May 2019 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/search/</guid><description/></item><item><title>关于 · 看不见我的美 · 是你瞎了眼</title><link>https://vikingama.github.io/%E5%85%B3%E4%BA%8E/</link><pubDate>Mon, 06 May 2019 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/%E5%85%B3%E4%BA%8E/</guid><description>&lt;p>九零后天蝎，患有轻度郁闷和重度强迫症，外表肥宅内心戏精，面试会变傻&amp;hellip;&lt;/p>
+&lt;p>喜欢拿自己的脸实验各种护肤品，喜欢看欧美烂片、听烂俗音乐&amp;hellip;&lt;/p>
+&lt;p>成长经历导致有点孩子气，没办法恋爱，不相信婚姻&amp;hellip;&lt;/p>
+&lt;p>不善言辞，性格各色，实在无可救药&amp;hellip;&lt;/p>
+&lt;p>来杭多年，积蓄为“淋”&amp;hellip;&lt;/p>
+&lt;p>请让我自生自灭&amp;hellip;&lt;/p>
+&lt;p>啾咪&amp;hellip;&lt;/p></description></item></channel></rss>
