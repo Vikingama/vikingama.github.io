@@ -1952,7 +1952,7 @@
 </span></span><span class=line><span class=cl>  <span class=p>}</span>
 </span></span><span class=line><span class=cl>  <span class=c1>// ...
 </span></span></span><span class=line><span class=cl><span class=c1></span><span class=p>}</span>
-</span></span></code></pre></td></tr></table></div></div><h2 id=时间空间复杂度>时间/空间复杂度</h2><p>复杂度表示了一种增长趋势；大 O 表示法表示的是时间/空间复杂度和参数的关系。</p><p>常用的时间复杂度：</p><ul><li>O(1)：和参数无关，比如加减乘除等基本运算；</li><li>O(n)：复杂度与参数呈线性关系，比如循环；</li><li>O(n²)：比如两个循环进行嵌套；</li><li>O(logN)、O(nlogN)、O(n^k)&mldr;</li></ul><p>常用的空间复杂度：</p><ul><li>O(1)：比如简单的赋值操作；</li><li>O(n)：比如对长度为 n 的数组进行循环；</li><li>O(n²)：比如进行二维矩阵的计算。</li></ul><h2 id=排序>排序</h2><p>冒泡排序，复杂度 O(n²)：</p><ul><li>依次比较相邻的两个数，如果不符合排序规则，则调换两个数的位置；</li><li>再对最后一位以外的数组，重复前面的过程，直至全部排序完成。</li></ul><p><img src=/img/data-structures-algorithms/%e5%86%92%e6%b3%a1%e6%8e%92%e5%ba%8f.gif loading=lazy></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span></span></code></pre></td></tr></table></div></div><h2 id=时间空间复杂度>时间/空间复杂度</h2><p>复杂度表示了一种增长趋势；大 O 表示法表示的是时间/空间复杂度和参数的关系。</p><p>常用的时间复杂度：</p><ul><li>O(1)：和参数无关，比如加减乘除等基本运算；</li><li>O(n)：复杂度与参数呈线性关系，比如循环；</li><li>O(n²)：比如两个循环进行嵌套；</li><li>O(logN)、O(nlogN)、O(n^k)&mldr;</li></ul><p>常用的空间复杂度：</p><ul><li>O(1)：比如简单的赋值操作；</li><li>O(n)：比如对长度为 n 的数组进行循环；</li><li>O(n²)：比如进行二维矩阵的计算。</li></ul><h2 id=排序>排序</h2><p>冒泡排序，复杂度 O(n²)：</p><ul><li>依次比较相邻的两个数，如果不符合排序规则，则调换两个数的位置；</li><li>再对最后一位以外的数组，重复前面的过程，直至全部排序完成。</li></ul><p><img src=/img/post/data-structures-algorithms/%e5%86%92%e6%b3%a1%e6%8e%92%e5%ba%8f.gif loading=lazy></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -1988,7 +1988,7 @@
 </span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=nx>arr</span><span class=p>;</span>
 </span></span><span class=line><span class=cl><span class=p>}</span>
 </span></span><span class=line><span class=cl><span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=nx>bubbleSort</span><span class=p>(</span><span class=nx>example</span><span class=p>));</span>
-</span></span></code></pre></td></tr></table></div></div><p>选择排序，复杂度 O(n²)：</p><p><img src=/img/data-structures-algorithms/%e9%80%89%e6%8b%a9%e6%8e%92%e5%ba%8f.gif loading=lazy></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span></span></code></pre></td></tr></table></div></div><p>选择排序，复杂度 O(n²)：</p><p><img src=/img/post/data-structures-algorithms/%e9%80%89%e6%8b%a9%e6%8e%92%e5%ba%8f.gif loading=lazy></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -2028,7 +2028,7 @@
 </span></span><span class=line><span class=cl>  <span class=p>}</span>
 </span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=nx>arr</span><span class=p>;</span>
 </span></span><span class=line><span class=cl><span class=p>}</span>
-</span></span></code></pre></td></tr></table></div></div><p>插入排序，从前到后一次处理未排好序的元素，对于每个元素，我们将它与之前排好序的元素进行比较，找到对应位置并插入（时间复杂度：O(n²)，空间复杂度：O(1)）：</p><p><img src=/img/data-structures-algorithms/%e6%8f%92%e5%85%a5%e6%8e%92%e5%ba%8f.gif loading=lazy></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span></span></code></pre></td></tr></table></div></div><p>插入排序，从前到后一次处理未排好序的元素，对于每个元素，我们将它与之前排好序的元素进行比较，找到对应位置并插入（时间复杂度：O(n²)，空间复杂度：O(1)）：</p><p><img src=/img/post/data-structures-algorithms/%e6%8f%92%e5%85%a5%e6%8e%92%e5%ba%8f.gif loading=lazy></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -2060,7 +2060,7 @@
 </span></span><span class=line><span class=cl>  <span class=p>}</span>
 </span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=nx>array</span><span class=p>;</span>
 </span></span><span class=line><span class=cl><span class=p>}</span>
-</span></span></code></pre></td></tr></table></div></div><p>快速排序，一种分治算法，大问题化小，小问题化了；选取一个目标元素，将目标元素放到正确的位置；根据排好序的元素，将数组切为两个数组，用相同的方法，在没有排好序的范围使用相同的操作（时间复杂度：O(n²)，平均时间复杂度：O(nlogN)；空间复杂度：O(n)，平均空间复杂度：O(logN)）：</p><ul><li>对于当前数组，选取一个元素为基准数（位置随便）；</li><li>将所有比基准数小的元素排到基准数之前，比基准数大的元素排到基准数之后；</li><li>当基准数被放到准确的位置之后，根据基准数位置，将数组分为前后两个子数组；</li><li>对子数组进行 1-3 的递归操作，直到子数组的长度小于等于 1 为止。</li></ul><p><img src=/img/data-structures-algorithms/%e5%bf%ab%e9%80%9f%e6%8e%92%e5%ba%8f.gif loading=lazy></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span></span></code></pre></td></tr></table></div></div><p>快速排序，一种分治算法，大问题化小，小问题化了；选取一个目标元素，将目标元素放到正确的位置；根据排好序的元素，将数组切为两个数组，用相同的方法，在没有排好序的范围使用相同的操作（时间复杂度：O(n²)，平均时间复杂度：O(nlogN)；空间复杂度：O(n)，平均空间复杂度：O(logN)）：</p><ul><li>对于当前数组，选取一个元素为基准数（位置随便）；</li><li>将所有比基准数小的元素排到基准数之前，比基准数大的元素排到基准数之后；</li><li>当基准数被放到准确的位置之后，根据基准数位置，将数组分为前后两个子数组；</li><li>对子数组进行 1-3 的递归操作，直到子数组的长度小于等于 1 为止。</li></ul><p><img src=/img/post/data-structures-algorithms/%e5%bf%ab%e9%80%9f%e6%8e%92%e5%ba%8f.gif loading=lazy></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -2090,7 +2090,7 @@
 </span></span><span class=line><span class=cl>  <span class=p>});</span>
 </span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=nx>quickSort</span><span class=p>(</span><span class=nx>left</span><span class=p>).</span><span class=nx>concat</span><span class=p>([</span><span class=nx>pivot</span><span class=p>],</span> <span class=nx>quickSort</span><span class=p>(</span><span class=nx>right</span><span class=p>));</span>
 </span></span><span class=line><span class=cl><span class=p>}</span>
-</span></span></code></pre></td></tr></table></div></div><p>归并排序，将一个数组分为两个子数组，通过递归将数组切分到只剩下一个元素为止；然后将每个子数组中的元素排序后合并，通过不断合并数组，最后会拿到一个排好序的大数组（时间复杂度：O(nlogN)，空间复杂度：O(n)）：</p><p><img src=/img/data-structures-algorithms/%e5%bd%92%e5%b9%b6%e6%8e%92%e5%ba%8f.gif loading=lazy></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span></span></code></pre></td></tr></table></div></div><p>归并排序，将一个数组分为两个子数组，通过递归将数组切分到只剩下一个元素为止；然后将每个子数组中的元素排序后合并，通过不断合并数组，最后会拿到一个排好序的大数组（时间复杂度：O(nlogN)，空间复杂度：O(n)）：</p><p><img src=/img/post/data-structures-algorithms/%e5%bd%92%e5%b9%b6%e6%8e%92%e5%ba%8f.gif loading=lazy></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4

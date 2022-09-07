@@ -2117,7 +2117,7 @@ target="_blank" rel="noopener"
 &lt;li>依次比较相邻的两个数，如果不符合排序规则，则调换两个数的位置；&lt;/li>
 &lt;li>再对最后一位以外的数组，重复前面的过程，直至全部排序完成。&lt;/li>
 &lt;/ul>
-&lt;p>&lt;img src="https://vikingama.github.io/img/data-structures-algorithms/%e5%86%92%e6%b3%a1%e6%8e%92%e5%ba%8f.gif"
+&lt;p>&lt;img src="https://vikingama.github.io/img/post/data-structures-algorithms/%e5%86%92%e6%b3%a1%e6%8e%92%e5%ba%8f.gif"
 loading="lazy"
 >
 &lt;/p>
@@ -2164,7 +2164,7 @@ loading="lazy"
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
 &lt;/div>&lt;p>选择排序，复杂度 O(n²)：&lt;/p>
-&lt;p>&lt;img src="https://vikingama.github.io/img/data-structures-algorithms/%e9%80%89%e6%8b%a9%e6%8e%92%e5%ba%8f.gif"
+&lt;p>&lt;img src="https://vikingama.github.io/img/post/data-structures-algorithms/%e9%80%89%e6%8b%a9%e6%8e%92%e5%ba%8f.gif"
 loading="lazy"
 >
 &lt;/p>
@@ -2215,7 +2215,7 @@ loading="lazy"
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
 &lt;/div>&lt;p>插入排序，从前到后一次处理未排好序的元素，对于每个元素，我们将它与之前排好序的元素进行比较，找到对应位置并插入（时间复杂度：O(n²)，空间复杂度：O(1)）：&lt;/p>
-&lt;p>&lt;img src="https://vikingama.github.io/img/data-structures-algorithms/%e6%8f%92%e5%85%a5%e6%8e%92%e5%ba%8f.gif"
+&lt;p>&lt;img src="https://vikingama.github.io/img/post/data-structures-algorithms/%e6%8f%92%e5%85%a5%e6%8e%92%e5%ba%8f.gif"
 loading="lazy"
 >
 &lt;/p>
@@ -2264,7 +2264,7 @@ loading="lazy"
 &lt;li>当基准数被放到准确的位置之后，根据基准数位置，将数组分为前后两个子数组；&lt;/li>
 &lt;li>对子数组进行 1-3 的递归操作，直到子数组的长度小于等于 1 为止。&lt;/li>
 &lt;/ul>
-&lt;p>&lt;img src="https://vikingama.github.io/img/data-structures-algorithms/%e5%bf%ab%e9%80%9f%e6%8e%92%e5%ba%8f.gif"
+&lt;p>&lt;img src="https://vikingama.github.io/img/post/data-structures-algorithms/%e5%bf%ab%e9%80%9f%e6%8e%92%e5%ba%8f.gif"
 loading="lazy"
 >
 &lt;/p>
@@ -2305,7 +2305,7 @@ loading="lazy"
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
 &lt;/div>&lt;p>归并排序，将一个数组分为两个子数组，通过递归将数组切分到只剩下一个元素为止；然后将每个子数组中的元素排序后合并，通过不断合并数组，最后会拿到一个排好序的大数组（时间复杂度：O(nlogN)，空间复杂度：O(n)）：&lt;/p>
-&lt;p>&lt;img src="https://vikingama.github.io/img/data-structures-algorithms/%e5%bd%92%e5%b9%b6%e6%8e%92%e5%ba%8f.gif"
+&lt;p>&lt;img src="https://vikingama.github.io/img/post/data-structures-algorithms/%e5%bd%92%e5%b9%b6%e6%8e%92%e5%ba%8f.gif"
 loading="lazy"
 >
 &lt;/p>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>React on 馬腊咯稽</title><link>https://vikingama.github.io/categories/react/</link><description>Recent content in React on 馬腊咯稽</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Mon, 17 Jan 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://vikingama.github.io/categories/react/index.xml" rel="self" type="application/rss+xml"/><item><title>TS 在 React 中的简单应用 · 看不见我的美 · 是你瞎了眼</title><link>https://vikingama.github.io/p/ts-%E5%9C%A8-react-%E4%B8%AD%E7%9A%84%E7%AE%80%E5%8D%95%E5%BA%94%E7%94%A8/</link><pubDate>Mon, 17 Jan 2022 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/p/ts-%E5%9C%A8-react-%E4%B8%AD%E7%9A%84%E7%AE%80%E5%8D%95%E5%BA%94%E7%94%A8/</guid><description>&lt;h2 id="导入方式">导入方式&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>React on 馬腊咯稽</title><link>https://vikingama.github.io/categories/react/</link><description>Recent content in React on 馬腊咯稽</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Mon, 17 Jan 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://vikingama.github.io/categories/react/index.xml" rel="self" type="application/rss+xml"/><item><title>TS 在 React 中的简单应用 · 看不见我的美 · 是你瞎了眼</title><link>https://vikingama.github.io/p/ts-%E5%9C%A8-react-%E4%B8%AD%E7%9A%84%E7%AE%80%E5%8D%95%E5%BA%94%E7%94%A8/</link><pubDate>Mon, 17 Jan 2022 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/p/ts-%E5%9C%A8-react-%E4%B8%AD%E7%9A%84%E7%AE%80%E5%8D%95%E5%BA%94%E7%94%A8/</guid><description>&lt;img src="https://vikingama.github.io/img/cover/react.png" alt="TS 在 React 中的简单应用" />&lt;h2 id="导入方式">导入方式&lt;/h2>
 &lt;p>在 19/20 版本，默认导出可能不可用。&lt;/p>
 &lt;div class="highlight">&lt;div class="chroma">
 &lt;table class="lntable">&lt;tr>&lt;td class="lntd">
@@ -673,7 +673,7 @@ target="_blank" rel="noopener"
 React TypeScript Cheatsheet
 &lt;/a>
 &lt;/li>
-&lt;/ul></description></item><item><title>「转」我在函数组件中可以随便写，最通俗异步组件原理 · 看不见我的美 · 是你瞎了眼</title><link>https://vikingama.github.io/p/%E8%BD%AC%E6%88%91%E5%9C%A8%E5%87%BD%E6%95%B0%E7%BB%84%E4%BB%B6%E4%B8%AD%E5%8F%AF%E4%BB%A5%E9%9A%8F%E4%BE%BF%E5%86%99%E6%9C%80%E9%80%9A%E4%BF%97%E5%BC%82%E6%AD%A5%E7%BB%84%E4%BB%B6%E5%8E%9F%E7%90%86/</link><pubDate>Fri, 31 Dec 2021 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/p/%E8%BD%AC%E6%88%91%E5%9C%A8%E5%87%BD%E6%95%B0%E7%BB%84%E4%BB%B6%E4%B8%AD%E5%8F%AF%E4%BB%A5%E9%9A%8F%E4%BE%BF%E5%86%99%E6%9C%80%E9%80%9A%E4%BF%97%E5%BC%82%E6%AD%A5%E7%BB%84%E4%BB%B6%E5%8E%9F%E7%90%86/</guid><description>&lt;p>我可以认真的说，看完这篇文章，你将掌握：&lt;/p>
+&lt;/ul></description></item><item><title>「转」我在函数组件中可以随便写，最通俗异步组件原理 · 看不见我的美 · 是你瞎了眼</title><link>https://vikingama.github.io/p/%E8%BD%AC%E6%88%91%E5%9C%A8%E5%87%BD%E6%95%B0%E7%BB%84%E4%BB%B6%E4%B8%AD%E5%8F%AF%E4%BB%A5%E9%9A%8F%E4%BE%BF%E5%86%99%E6%9C%80%E9%80%9A%E4%BF%97%E5%BC%82%E6%AD%A5%E7%BB%84%E4%BB%B6%E5%8E%9F%E7%90%86/</link><pubDate>Fri, 31 Dec 2021 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/p/%E8%BD%AC%E6%88%91%E5%9C%A8%E5%87%BD%E6%95%B0%E7%BB%84%E4%BB%B6%E4%B8%AD%E5%8F%AF%E4%BB%A5%E9%9A%8F%E4%BE%BF%E5%86%99%E6%9C%80%E9%80%9A%E4%BF%97%E5%BC%82%E6%AD%A5%E7%BB%84%E4%BB%B6%E5%8E%9F%E7%90%86/</guid><description>&lt;img src="https://vikingama.github.io/img/cover/react.png" alt="「转」我在函数组件中可以随便写，最通俗异步组件原理" />&lt;p>我可以认真的说，看完这篇文章，你将掌握：&lt;/p>
 &lt;ol>
 &lt;li>componentDidCatch 原理；&lt;/li>
 &lt;li>Suspense 原理；&lt;/li>
@@ -1455,7 +1455,7 @@ target="_blank" rel="noopener"
 我在函数组件中可以随便写，最通俗异步组件原理
 &lt;/a>
 &lt;/li>
-&lt;/ul></description></item><item><title>React 复习笔记（下，基于源码） · 看不见我的美 · 是你瞎了眼</title><link>https://vikingama.github.io/p/react-%E5%A4%8D%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8B%E5%9F%BA%E4%BA%8E%E6%BA%90%E7%A0%81/</link><pubDate>Sun, 10 Oct 2021 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/p/react-%E5%A4%8D%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8B%E5%9F%BA%E4%BA%8E%E6%BA%90%E7%A0%81/</guid><description>&lt;h2 id="调用-reactdomrender-发生了什么">调用 ReactDOM.render 发生了什么？&lt;/h2>
+&lt;/ul></description></item><item><title>React 复习笔记（下，基于源码） · 看不见我的美 · 是你瞎了眼</title><link>https://vikingama.github.io/p/react-%E5%A4%8D%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8B%E5%9F%BA%E4%BA%8E%E6%BA%90%E7%A0%81/</link><pubDate>Sun, 10 Oct 2021 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/p/react-%E5%A4%8D%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8B%E5%9F%BA%E4%BA%8E%E6%BA%90%E7%A0%81/</guid><description>&lt;img src="https://vikingama.github.io/img/cover/react.png" alt="React 复习笔记（下，基于源码）" />&lt;h2 id="调用-reactdomrender-发生了什么">调用 ReactDOM.render 发生了什么？&lt;/h2>
 &lt;ol>
 &lt;li>确定应用渲染方式；&lt;/li>
 &lt;li>创建 fiberRoot 和 rootFiberNode，并将两者用指针指向彼此；&lt;/li>
@@ -8294,7 +8294,7 @@ target="_blank" rel="noopener"
 Renderless Components In Vue.js
 &lt;/a>
 &lt;/li>
-&lt;/ul></description></item><item><title>React 复习笔记（中） · 看不见我的美 · 是你瞎了眼</title><link>https://vikingama.github.io/p/react-%E5%A4%8D%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%AD/</link><pubDate>Thu, 27 Feb 2020 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/p/react-%E5%A4%8D%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%AD/</guid><description>&lt;h2 id="hook-产生的动机">Hook 产生的动机&lt;/h2>
+&lt;/ul></description></item><item><title>React 复习笔记（中） · 看不见我的美 · 是你瞎了眼</title><link>https://vikingama.github.io/p/react-%E5%A4%8D%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%AD/</link><pubDate>Thu, 27 Feb 2020 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/p/react-%E5%A4%8D%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%AD/</guid><description>&lt;img src="https://vikingama.github.io/img/cover/react.png" alt="React 复习笔记（中）" />&lt;h2 id="hook-产生的动机">Hook 产生的动机&lt;/h2>
 &lt;ul>
 &lt;li>代码层次更清晰；在类组件中，共属于一个功能的代码分散在各个钩子函数中；&lt;/li>
 &lt;li>更好的&lt;strong>状态逻辑&lt;/strong>复用，renderProps 和高阶组件不是那么&lt;strong>好用&lt;/strong>；&lt;/li>
@@ -8832,7 +8832,7 @@ Renderless Components In Vue.js
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div></description></item><item><title>React 复习笔记（上） · 看不见我的美 · 是你瞎了眼</title><link>https://vikingama.github.io/p/react-%E5%A4%8D%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8A/</link><pubDate>Tue, 25 Feb 2020 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/p/react-%E5%A4%8D%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8A/</guid><description>&lt;h2 id="jsx-与-react-元素">JSX 与 React 元素&lt;/h2>
+&lt;/div></description></item><item><title>React 复习笔记（上） · 看不见我的美 · 是你瞎了眼</title><link>https://vikingama.github.io/p/react-%E5%A4%8D%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8A/</link><pubDate>Tue, 25 Feb 2020 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/p/react-%E5%A4%8D%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8A/</guid><description>&lt;img src="https://vikingama.github.io/img/cover/react.png" alt="React 复习笔记（上）" />&lt;h2 id="jsx-与-react-元素">JSX 与 React 元素&lt;/h2>
 &lt;p>JSX 是一个 JavaScript 的语法扩展；在编译之后，JSX 会被 Babel 转为函数调用，对其取值后得到 JS 对象。JSX 使用 camelCase 来定义属性的名称，而不使用 HTML 属性名称的命名约定。&lt;/p>
 &lt;p>对于 React，JSX 仅仅是 React.createElement(component, props, &amp;hellip;children) 函数的语法糖；包含在开始和结束标签之间的 JSX 表达式内容将作为特定属性 props.children 传递给外层组件。&lt;/p>
 &lt;p>与浏览器的 DOM 元素不同，React 元素是不可变对象；一旦被创建，就无法更改它的子元素或者属性；一个元素就像电影的单帧：它代表了某个特定时刻的 UI。React 元素是创建开销极小的普通对象；ReactDOM 会将元素和它的子元素与它们之前的状态进行比较，通过 Diff 算法使 DOM 与 React 元素保持一致。&lt;/p>

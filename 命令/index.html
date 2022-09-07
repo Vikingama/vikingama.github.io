@@ -28,18 +28,6 @@
 </span></span><span class=line><span class=cl>sudo softwareupdate --ignore <span class=s2>&#34;macOS Monterey&#34;</span>
 </span></span><span class=line><span class=cl><span class=c1># 清除菜单小红点</span>
 </span></span><span class=line><span class=cl>defaults write com.apple.systempreferences AttentionPrefBundleIDs <span class=m>0</span>
-</span></span></code></pre></td></tr></table></div></div><h2 id=安装-hugo64056>安装 hugo@0.56</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
-</span><span class=lnt>2
-</span><span class=lnt>3
-</span><span class=lnt>4
-</span><span class=lnt>5
-</span><span class=lnt>6
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 1. brew tap &lt;org&gt;/&lt;repo&gt; https://github.com/&lt;org&gt;/&lt;repo&gt;</span>
-</span></span><span class=line><span class=cl>brew tap gohugoio/hugo https://github.com/gohugoio/hugo
-</span></span><span class=line><span class=cl><span class=c1># 2. brew extract --version &lt;version&gt; &lt;module name&gt; &lt;org&gt;/&lt;repo&gt;</span>
-</span></span><span class=line><span class=cl>brew extract --version 0.56.0 hugo gohugoio/hugo
-</span></span><span class=line><span class=cl><span class=c1># 3. brew install &lt;module name&gt;@&lt;version&gt;</span>
-</span></span><span class=line><span class=cl>brew install hugo@0.56.0
 </span></span></code></pre></td></tr></table></div></div><h2 id=获取项目目录结构>获取项目目录结构</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
 </span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>tree -I <span class=s2>&#34;node_modules&#34;</span>
 </span></span></code></pre></td></tr></table></div></div><h2 id=获取管理员权限>获取管理员权限</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
@@ -98,12 +86,6 @@
 </span></span><span class=line><span class=cl>[HKEY_CLASSES_ROOT\Directory\shell\runas\command]
 </span></span><span class=line><span class=cl>@=&#34;cmd.exe /c takeown /f \&#34;%1\&#34; /r /d y <span class=err>&amp;&amp;</span> icacls \&#34;%1\&#34; /grant administrators:F /t&#34;
 </span></span><span class=line><span class=cl>&#34;IsolatedCommand&#34;=&#34;cmd.exe /c takeown /f \&#34;%1\&#34; /r /d y <span class=err>&amp;&amp;</span> icacls \&#34;%1\&#34; /grant administrators:F /t&#34;
-</span></span></code></pre></td></tr></table></div></div><h2 id=允许任何来源>允许“任何来源”</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>sudo spctl --master-disable
-</span></span></code></pre></td></tr></table></div></div><h2 id=重置黑暗模式>重置“黑暗模式”</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
-</span><span class=lnt>2
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>defaults write -g NSRequiresAquaSystemAppearance -bool Yes
-</span></span><span class=line><span class=cl>defaults delete -g NSRequiresAquaSystemAppearance
 </span></span></code></pre></td></tr></table></div></div><h2 id=系统完整性保护>系统完整性保护</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span><span class=lnt>3
@@ -116,6 +98,24 @@
 </span></span><span class=line><span class=cl>csrutil <span class=nb>enable</span>
 </span></span><span class=line><span class=cl><span class=c1># 关闭 SIP</span>
 </span></span><span class=line><span class=cl>csrutil disable
+</span></span></code></pre></td></tr></table></div></div><h2 id=安装-hugo64056>安装 hugo@0.56</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 1. brew tap &lt;org&gt;/&lt;repo&gt; https://github.com/&lt;org&gt;/&lt;repo&gt;</span>
+</span></span><span class=line><span class=cl>brew tap gohugoio/hugo https://github.com/gohugoio/hugo
+</span></span><span class=line><span class=cl><span class=c1># 2. brew extract --version &lt;version&gt; &lt;module name&gt; &lt;org&gt;/&lt;repo&gt;</span>
+</span></span><span class=line><span class=cl>brew extract --version 0.56.0 hugo gohugoio/hugo
+</span></span><span class=line><span class=cl><span class=c1># 3. brew install &lt;module name&gt;@&lt;version&gt;</span>
+</span></span><span class=line><span class=cl>brew install hugo@0.56.0
+</span></span></code></pre></td></tr></table></div></div><h2 id=允许任何来源>允许“任何来源”</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>sudo spctl --master-disable
+</span></span></code></pre></td></tr></table></div></div><h2 id=重置黑暗模式>重置“黑暗模式”</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>defaults write -g NSRequiresAquaSystemAppearance -bool Yes
+</span></span><span class=line><span class=cl>defaults delete -g NSRequiresAquaSystemAppearance
 </span></span></code></pre></td></tr></table></div></div><h2 id=移除文件属性>移除文件属性</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
 </span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>xattr -c -r <span class=si>${</span><span class=nv>文件路径</span><span class=si>}</span>
 </span></span></code></pre></td></tr></table></div></div><h2 id=常用-git-命令>常用 git 命令</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
@@ -246,5 +246,5 @@
 <button class="pswp__button pswp__button--share" title=Share></button>
 <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
 <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
-<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">目录</h2><div class=widget--toc><nav id=TableOfContents><ol><li><a href=#创建可引导的-macos-安装器>创建可引导的 macOS 安装器</a></li><li><a href=#bash-与-zsh-的相互切换>bash 与 zsh 的相互切换</a></li><li><a href=#本地安装了哪些-brew-包>本地安装了哪些 brew 包</a></li><li><a href=#本地安装了哪些-npm-包>本地安装了哪些 npm 包</a></li><li><a href=#不检查-monterey-更新>不检查 Monterey 更新</a></li><li><a href=#安装-hugo64056>安装 hugo@0.56</a></li><li><a href=#获取项目目录结构>获取项目目录结构</a></li><li><a href=#获取管理员权限>获取管理员权限</a></li><li><a href=#允许任何来源>允许“任何来源”</a></li><li><a href=#重置黑暗模式>重置“黑暗模式”</a></li><li><a href=#系统完整性保护>系统完整性保护</a></li><li><a href=#移除文件属性>移除文件属性</a></li><li><a href=#常用-git-命令>常用 git 命令</a></li><li><a href=#软件已损坏>软件已损坏</a></li><li><a href=#代理终端>代理终端</a></li><li><a href=#解压-pkg>解压 pkg</a></li></ol></nav></div></section></aside></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=/ts/main.js defer></script>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">目录</h2><div class=widget--toc><nav id=TableOfContents><ol><li><a href=#创建可引导的-macos-安装器>创建可引导的 macOS 安装器</a></li><li><a href=#bash-与-zsh-的相互切换>bash 与 zsh 的相互切换</a></li><li><a href=#本地安装了哪些-brew-包>本地安装了哪些 brew 包</a></li><li><a href=#本地安装了哪些-npm-包>本地安装了哪些 npm 包</a></li><li><a href=#不检查-monterey-更新>不检查 Monterey 更新</a></li><li><a href=#获取项目目录结构>获取项目目录结构</a></li><li><a href=#获取管理员权限>获取管理员权限</a></li><li><a href=#系统完整性保护>系统完整性保护</a></li><li><a href=#安装-hugo64056>安装 hugo@0.56</a></li><li><a href=#允许任何来源>允许“任何来源”</a></li><li><a href=#重置黑暗模式>重置“黑暗模式”</a></li><li><a href=#移除文件属性>移除文件属性</a></li><li><a href=#常用-git-命令>常用 git 命令</a></li><li><a href=#软件已损坏>软件已损坏</a></li><li><a href=#代理终端>代理终端</a></li><li><a href=#解压-pkg>解压 pkg</a></li></ol></nav></div></section></aside></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=/ts/main.js defer></script>
 <script>(function(){const e=document.createElement("link");e.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",e.type="text/css",e.rel="stylesheet",document.head.appendChild(e)})()</script></body></html>
