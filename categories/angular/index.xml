@@ -251,6 +251,14 @@ target="_blank" rel="noopener"
 &lt;/span>&lt;span class="lnt">235
 &lt;/span>&lt;span class="lnt">236
 &lt;/span>&lt;span class="lnt">237
+&lt;/span>&lt;span class="lnt">238
+&lt;/span>&lt;span class="lnt">239
+&lt;/span>&lt;span class="lnt">240
+&lt;/span>&lt;span class="lnt">241
+&lt;/span>&lt;span class="lnt">242
+&lt;/span>&lt;span class="lnt">243
+&lt;/span>&lt;span class="lnt">244
+&lt;/span>&lt;span class="lnt">245
 &lt;/span>&lt;/code>&lt;/pre>&lt;/td>
 &lt;td class="lntd">
 &lt;pre tabindex="0" class="chroma">&lt;code class="language-ts" data-lang="ts">&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">slideMotion&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">trigger&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;slideMotion&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="p">[&lt;/span>
@@ -387,15 +395,18 @@ target="_blank" rel="noopener"
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">@Output&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;updatePropOneAlias&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="nx">updatePropOne&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="nx">EventEmitter&lt;/span>&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">any&lt;/span>&lt;span class="p">&amp;gt;();&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="cm">/**
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * Angular 不会接管构造函数
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * 在构建组件树的时候会被调用
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * 此时，还不能访问组件 DOM（ngOnInit 可以访问 DOM）
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * 组件初始化需要在生命周期函数中进行
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * 这里仅仅用来注入一些组件需要依赖的服务
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * 『依赖注入』机制会分析构造函数的『形参』
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * 调用时，已经处理好根/父级 injectors 了
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * 在 class 实例化的过程中，会向上查找 providers
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * 并将查找的结果传递回构造函数
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * 在构造完成之后才会设置指令的数据绑定输入属性
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * 并将查找的结果传递回构造函数，在构造完成之后才会设置指令的数据绑定输入属性
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> */&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kr">constructor&lt;/span>&lt;span class="p">(&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="cm">/**
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * conastructor 是在 injector 上下文中调用的唯一方法
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * Angular 的 DI 系统会自动帮我们实例化注入的 Service
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * 并将服务实例绑定到当前实例上（也就是 this）
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * 方便我们以 this.xxService 的方式调用
@@ -405,6 +416,9 @@ target="_blank" rel="noopener"
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kr">private&lt;/span> &lt;span class="nx">ccService&lt;/span>: &lt;span class="kt">CcService&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">)&lt;/span> &lt;span class="p">{}&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="cm">/**
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * Angular 的运行机制分为两部分：
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * 1. 构建组件树；（调用 contructor）
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * 2. 执行脏检查。（调用生命周期函数）
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * 生命周期钩子（属于变更检测的一部分，起始于组件实例化，结束于组件实例的销毁）的执行顺序：
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * 1. ngOnChanges（可能执行多次，需注意逻辑精简，仅在有 @Input 属性的情况下）
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * 2. ngOnInit
@@ -414,6 +428,8 @@ target="_blank" rel="noopener"
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * 6. ngAfterViewInit
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * 7. ngAfterViewChecked（可能执行多次，需注意逻辑精简）
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * 8. ngOnDestroy
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * Compiler 会检查组件的钩子函数，给组件赋予不同的 NodeFlags
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * 在“脏检查”阶段，Angular 会根据组件的 NodeFlags 来调用对应的 钩子
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> */&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">ngOnChanges&lt;/span>&lt;span class="p">(&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// changes 仅包含了每个『发生变化』的属性
@@ -807,6 +823,7 @@ target="_blank" rel="noopener"
 &lt;/span>&lt;span class="lnt">40
 &lt;/span>&lt;span class="lnt">41
 &lt;/span>&lt;span class="lnt">42
+&lt;/span>&lt;span class="lnt">43
 &lt;/span>&lt;/code>&lt;/pre>&lt;/td>
 &lt;td class="lntd">
 &lt;pre tabindex="0" class="chroma">&lt;code class="language-ts" data-lang="ts">&lt;span class="line">&lt;span class="cl">&lt;span class="kr">type&lt;/span> &lt;span class="nx">NzSafeAny&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="kt">any&lt;/span>&lt;span class="p">;&lt;/span>
@@ -826,6 +843,7 @@ target="_blank" rel="noopener"
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">})&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">export&lt;/span> &lt;span class="kr">class&lt;/span> &lt;span class="nx">NzSanitizerPipe&lt;/span> &lt;span class="kr">implements&lt;/span> &lt;span class="nx">PipeTransform&lt;/span> &lt;span class="p">{&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kr">constructor&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kr">protected&lt;/span> &lt;span class="nx">sanitizer&lt;/span>: &lt;span class="kt">DomSanitizer&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">transform&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">value&lt;/span>: &lt;span class="kt">NzSafeAny&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kr">type&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="s1">&amp;#39;html&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nx">SafeHtml&lt;/span>&lt;span class="p">;&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">transform&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">value&lt;/span>: &lt;span class="kt">NzSafeAny&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kr">type&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="s1">&amp;#39;style&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nx">SafeStyle&lt;/span>&lt;span class="p">;&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">transform&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">value&lt;/span>: &lt;span class="kt">NzSafeAny&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kr">type&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="s1">&amp;#39;js&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nx">SafeScript&lt;/span>&lt;span class="p">;&lt;/span>
@@ -850,6 +868,195 @@ target="_blank" rel="noopener"
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">throw&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="nb">Error&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="sb">`指定的安全类型无效`&lt;/span>&lt;span class="p">);&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>通常我们会在 ngOnInit 中的进行数据请求：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-ts" data-lang="ts">&lt;span class="line">&lt;span class="cl">&lt;span class="kr">class&lt;/span> &lt;span class="nx">TicketListComponent&lt;/span> &lt;span class="kr">implements&lt;/span> &lt;span class="nx">OnInit&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">data&lt;/span>: &lt;span class="kt">Array&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">id&lt;/span>: &lt;span class="kt">number&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">title&lt;/span>: &lt;span class="kt">srting&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kr">constructor&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kr">private&lt;/span> &lt;span class="nx">route&lt;/span>: &lt;span class="kt">ActivatedRoute&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kr">private&lt;/span> &lt;span class="nx">apiService&lt;/span>: &lt;span class="kt">ApiService&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">ngOnInit() {&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">this&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">apiService&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">fetchTickets1&lt;/span>&lt;span class="p">().&lt;/span>&lt;span class="nx">subscribe&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">list&lt;/span> &lt;span class="o">=&amp;gt;&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="k">this&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">data&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">list&lt;/span> &lt;span class="o">||&lt;/span> &lt;span class="p">[]));&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 或者
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="k">this&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">route&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">queryParams&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">subscribe&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">params&lt;/span> &lt;span class="o">=&amp;gt;&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">this&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">apiService&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="nx">fetchTickets2&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">params&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">id&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="nx">subscribe&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">list&lt;/span> &lt;span class="o">=&amp;gt;&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="k">this&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">data&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">list&lt;/span> &lt;span class="o">||&lt;/span> &lt;span class="p">[]));&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">});&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>AsyncPipe 可以替代 ngOnInit 完成这部分逻辑：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;span class="lnt">26
+&lt;/span>&lt;span class="lnt">27
+&lt;/span>&lt;span class="lnt">28
+&lt;/span>&lt;span class="lnt">29
+&lt;/span>&lt;span class="lnt">30
+&lt;/span>&lt;span class="lnt">31
+&lt;/span>&lt;span class="lnt">32
+&lt;/span>&lt;span class="lnt">33
+&lt;/span>&lt;span class="lnt">34
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-ts" data-lang="ts">&lt;span class="line">&lt;span class="cl">&lt;span class="kr">interface&lt;/span> &lt;span class="nx">Seller&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">id&lt;/span>: &lt;span class="kt">number&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">name&lt;/span>: &lt;span class="kt">srting&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">interface&lt;/span> &lt;span class="nx">Ticket&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">id&lt;/span>: &lt;span class="kt">number&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">title&lt;/span>: &lt;span class="kt">string&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">@Component&lt;/span>&lt;span class="p">({&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">template&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="sb">`
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="sb"> &amp;lt;p&amp;gt;
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="sb"> &amp;lt;span&amp;gt;{{ (firstSeller$ | async).name }}&amp;lt;/span&amp;gt;
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="sb"> &amp;lt;/p&amp;gt;
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="sb"> // 借助 as 将其重命名为 list
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="sb"> &amp;lt;ul *ngIf=&amp;#34;tickets$ | async as list&amp;#34;&amp;gt;
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="sb"> &amp;lt;li *ngFor=&amp;#34;let item of list&amp;#34;&amp;gt;{{ item.title | emptyValue }}&amp;lt;/li&amp;gt;
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="sb"> &amp;lt;/ul&amp;gt;
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="sb"> `&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">})&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">class&lt;/span> &lt;span class="nx">SellerComponent&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 借助 pipe + map 对数据进行处理
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="kr">readonly&lt;/span> &lt;span class="nx">firstSeller$&lt;/span>: &lt;span class="kt">Seller&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="k">this&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">apiService&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">fetchSellers&lt;/span>&lt;span class="p">().&lt;/span>&lt;span class="nx">pipe&lt;/span>&lt;span class="p">(&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">map&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">list&lt;/span> &lt;span class="o">=&amp;gt;&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kr">const&lt;/span> &lt;span class="p">{&lt;/span> &lt;span class="nx">id&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">name&lt;/span> &lt;span class="p">}&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">list&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="p">];&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="p">{&lt;/span> &lt;span class="nx">id&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">name&lt;/span> &lt;span class="p">};&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">})&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 借助 switchMap 获取路由参数
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="kr">readonly&lt;/span> &lt;span class="nx">tickets$&lt;/span>: &lt;span class="kt">Ticket&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="k">this&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">route&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">queryParams&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">pipe&lt;/span>&lt;span class="p">(&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">switchMap&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">params&lt;/span> &lt;span class="o">=&amp;gt;&lt;/span> &lt;span class="k">this&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">apiService&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">fetchTickets&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">params&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">id&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kr">constructor&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kr">private&lt;/span> &lt;span class="nx">route&lt;/span>: &lt;span class="kt">ActivatedRoute&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kr">private&lt;/span> &lt;span class="nx">apiService&lt;/span>: &lt;span class="kt">ApiService&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>如果不喜欢模版中出现太多 async，可以借助 combineLatest 将多个 Observable 合并：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;span class="lnt">26
+&lt;/span>&lt;span class="lnt">27
+&lt;/span>&lt;span class="lnt">28
+&lt;/span>&lt;span class="lnt">29
+&lt;/span>&lt;span class="lnt">30
+&lt;/span>&lt;span class="lnt">31
+&lt;/span>&lt;span class="lnt">32
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-ts" data-lang="ts">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">@Component&lt;/span>&lt;span class="p">({&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">template&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="sb">`
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="sb"> &amp;lt;ng-container *ngIf=&amp;#34;vm$ | async as vm&amp;#34;&amp;gt;
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="sb"> &amp;lt;ul&amp;gt;
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="sb"> &amp;lt;li *ngFor=&amp;#34;let item of vm.boys&amp;#34;&amp;gt;{{ item.name }}&amp;lt;/li&amp;gt;
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="sb"> &amp;lt;/ul&amp;gt;
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="sb"> &amp;lt;ul&amp;gt;
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="sb"> &amp;lt;li *ngFor=&amp;#34;let item of vm.girls&amp;#34;&amp;gt;{{ item.name }}&amp;lt;/li&amp;gt;
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="sb"> &amp;lt;/ul&amp;gt;
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="sb"> &amp;lt;ul&amp;gt;
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="sb"> &amp;lt;li *ngFor=&amp;#34;let item of vm.dogs&amp;#34;&amp;gt;{{ item.nickName }}&amp;lt;/li&amp;gt;
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="sb"> &amp;lt;/ul&amp;gt;
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="sb"> &amp;lt;ul&amp;gt;
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="sb"> &amp;lt;li *ngFor=&amp;#34;let item of vm.cats&amp;#34;&amp;gt;{{ item.nickName }}&amp;lt;/li&amp;gt;
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="sb"> &amp;lt;/ul&amp;gt;
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="sb"> &amp;lt;/ng-container&amp;gt;
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="sb"> `&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">})&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">class&lt;/span> &lt;span class="nx">BuyerComponent&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kr">readonly&lt;/span> &lt;span class="nx">vm$&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">combineLatest&lt;/span>&lt;span class="p">({&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">boys&lt;/span>: &lt;span class="kt">this.route.queryParams.pipe&lt;/span>&lt;span class="p">(&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">switchMap&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">params&lt;/span> &lt;span class="o">=&amp;gt;&lt;/span> &lt;span class="k">this&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">apiService&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">fetchBoys&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">params&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">id&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">),&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">girls&lt;/span>: &lt;span class="kt">this.route.queryParams.pipe&lt;/span>&lt;span class="p">(&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">switchMap&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">params&lt;/span> &lt;span class="o">=&amp;gt;&lt;/span> &lt;span class="k">this&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">apiService&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">fetchGirls&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">params&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">id&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">),&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">dogs&lt;/span>: &lt;span class="kt">this.apiService.fetchDogs&lt;/span>&lt;span class="p">(),&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">cats&lt;/span>: &lt;span class="kt">this.apiService.fetchCats&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}).&lt;/span>&lt;span class="nx">pipe&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">map&lt;/span>&lt;span class="p">(({&lt;/span> &lt;span class="nx">boys&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">girls&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">dogs&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">cats&lt;/span> &lt;span class="p">})&lt;/span> &lt;span class="o">=&amp;gt;&lt;/span> &lt;span class="p">({&lt;/span> &lt;span class="nx">boys&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">girls&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">dogs&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">cats&lt;/span> &lt;span class="p">})));&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kr">constructor&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kr">private&lt;/span> &lt;span class="nx">route&lt;/span>: &lt;span class="kt">ActivatedRoute&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kr">private&lt;/span> &lt;span class="nx">apiService&lt;/span>: &lt;span class="kt">ApiService&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{}&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
@@ -2478,6 +2685,7 @@ target="_blank" rel="noopener"
 &lt;/div>
 &lt;/div>&lt;p>不同于创建器（调用后返回 Observable 对象），Subject 是一个“实现”了 Observable“接口”的“类”；需要先进行 new 调用，然后将数据“手动”放入“流”中（subject.next(value)）。&lt;/p>
 &lt;p>不同于普通的 Observable 对象（单播），new Subject 返回的是一个“多播”，可以被多次 subscribe，可以将值传递给多个观察者。&lt;/p>
+&lt;p>因为 new Subject 返回的是一个“多播”，所以常常被用来存放应用状态。&lt;/p>
 &lt;div class="highlight">&lt;div class="chroma">
 &lt;table class="lntable">&lt;tr>&lt;td class="lntd">
 &lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
@@ -2629,7 +2837,7 @@ target="_blank" rel="noopener"
 &lt;li>代码生成：解释元数据（*.metadata.json），并对含有 useClass、useValue、useFactory 和 data 的对象字面量进行特殊处理（元数据重写）；&lt;/li>
 &lt;li>模版类型检查：TS 编译器会验证模版中绑定的表达式。&lt;/li>
 &lt;/ol>
-&lt;p>JIT 编译器可以替代 AOT 编译器，可以在“运行时”将模板编译为浏览器中的可执行模板代码。&lt;/p>
+&lt;p>JIT 编译器可以替代 AOT 编译器，在“运行时”将模板编译（需要将 compiler 打包）为浏览器中的可执行模板代码。&lt;/p>
 &lt;h2 id="安全">安全&lt;/h2>
 &lt;p>为了防范 XSS，Angular 默认把所有值都认为是不可信任的；任何值在插入 DOM 之前，都会被进行“无害化（Sanitize）”处理（前提是使用 Angular 模版，如果在代码中直接使用 DOM API，将没有“无害化”处理）。&lt;/p>
 &lt;p>Angular 定义了四个安全上下文：&lt;/p>
@@ -2734,6 +2942,13 @@ DomSanitizer 服务
 &lt;h2 id="参考">参考&lt;/h2>
 &lt;ul>
 &lt;li>&lt;a class="link"
+href="https://indepth.dev/posts/1508/structure-initialization-logic-without-ngoninit-utilize-observables-and-ngonchanges"
+target="_blank" rel="noopener"
+>
+Component Initialization Without ngOnInit With Async Pipes For Observables And ngOnChanges
+&lt;/a>
+&lt;/li>
+&lt;li>&lt;a class="link"
 href="https://dev.to/christiankohler/improved-dependeny-injection-with-the-new-providedin-scopes-any-and-platform-30bb"
 target="_blank" rel="noopener"
 >
@@ -2751,7 +2966,7 @@ Angular Change Detection：变化检测策略
 href="https://www.geeksforgeeks.org/what-is-aot-and-jit-compiler-in-angular/"
 target="_blank" rel="noopener"
 >
-What is AOT and JIT Compiler in Angular?
+What Is AOT And JIT Compiler In Angular?
 &lt;/a>
 &lt;/li>
 &lt;li>&lt;a class="link"
