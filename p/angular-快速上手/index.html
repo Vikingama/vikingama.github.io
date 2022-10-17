@@ -2021,7 +2021,21 @@ ngNonBindable</a>
 </span></span><span class=line><span class=cl>    <span class=p>&gt;&lt;/</span><span class=nt>nz-option</span><span class=p>&gt;</span>
 </span></span><span class=line><span class=cl>  <span class=p>&lt;/</span><span class=nt>ng-container</span><span class=p>&gt;</span>
 </span></span><span class=line><span class=cl><span class=p>&lt;/</span><span class=nt>nz-select</span><span class=p>&gt;</span>
-</span></span></code></pre></td></tr></table></div></div><p>&lt;ng-template/>，用来<strong>定义</strong>（声明）模版片段；默认情况下，定义的模版片段不会直接渲染，需要指定渲染的位置；一般配合结构性指令使用：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span></span></code></pre></td></tr></table></div></div><p>&lt;ng-template/>，用来<strong>定义</strong>（声明）模版片段；默认情况下，定义的模版片段不会直接渲染，需要指定渲染的位置；一般配合结构性指令使用：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-html data-lang=html><span class=line><span class=cl><span class=c>&lt;!-- 当 seconds 被重置时，会条件渲染 #actionResendSMS 片段 --&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;</span><span class=nt>ng-container</span> <span class=err>*</span><span class=na>ngIf</span><span class=o>=</span><span class=s>&#34;seconds !== 0; else actionResendSMS&#34;</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  <span class=p>&lt;</span><span class=nt>span</span><span class=p>&gt;</span>接受短信大约需要 {{ seconds }} 秒<span class=p>&lt;/</span><span class=nt>span</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;/</span><span class=nt>ng-container</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;</span><span class=nt>ng-template</span> <span class=err>#</span><span class=na>actionResendSMS</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  <span class=p>&lt;</span><span class=nt>a</span> <span class=err>(</span><span class=na>click</span><span class=err>)=&#34;</span><span class=na>handleSendSMS</span><span class=err>()&#34;</span><span class=p>&gt;</span>重新获取验证码<span class=p>&lt;/</span><span class=nt>a</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;/</span><span class=nt>ng-template</span><span class=p>&gt;</span>
+</span></span></code></pre></td></tr></table></div></div><p>&lt;ng-container/> 搭配 &lt;ng-template/> 可以构造<strong>作用域插槽</strong>，实现逻辑与 UI 的分离，从而实现更好的逻辑复用：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -2046,31 +2060,135 @@ ngNonBindable</a>
 </span><span class=lnt>23
 </span><span class=lnt>24
 </span><span class=lnt>25
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-html data-lang=html><span class=line><span class=cl><span class=c>&lt;!-- 当 seconds 被重置时，会条件渲染 #actionResendSMS 片段 --&gt;</span>
-</span></span><span class=line><span class=cl><span class=p>&lt;</span><span class=nt>ng-container</span> <span class=err>*</span><span class=na>ngIf</span><span class=o>=</span><span class=s>&#34;seconds !== 0; else actionResendSMS&#34;</span><span class=p>&gt;</span>
-</span></span><span class=line><span class=cl>  <span class=p>&lt;</span><span class=nt>span</span><span class=p>&gt;</span>接受短信大约需要 {{ seconds }} 秒<span class=p>&lt;/</span><span class=nt>span</span><span class=p>&gt;</span>
-</span></span><span class=line><span class=cl><span class=p>&lt;/</span><span class=nt>ng-container</span><span class=p>&gt;</span>
-</span></span><span class=line><span class=cl><span class=p>&lt;</span><span class=nt>ng-template</span> <span class=err>#</span><span class=na>actionResendSMS</span><span class=p>&gt;</span>
-</span></span><span class=line><span class=cl>  <span class=p>&lt;</span><span class=nt>a</span> <span class=err>(</span><span class=na>click</span><span class=err>)=&#34;</span><span class=na>handleSendSMS</span><span class=err>()&#34;</span><span class=p>&gt;</span>重新获取验证码<span class=p>&lt;/</span><span class=nt>a</span><span class=p>&gt;</span>
-</span></span><span class=line><span class=cl><span class=p>&lt;/</span><span class=nt>ng-template</span><span class=p>&gt;</span>
-</span></span><span class=line><span class=cl><span class=c>&lt;!-- 
-</span></span></span><span class=line><span class=cl><span class=c>  说到 ng-template 就不得不说 ngTemplateOutlet
-</span></span></span><span class=line><span class=cl><span class=c>  ngTemplateOutlet 可以作为 ng-template 包含的“模版片段”的出口
-</span></span></span><span class=line><span class=cl><span class=c>  并为包含的“模版片段”提供渲染上下文（有点儿“作用域插槽”的意思）
-</span></span></span><span class=line><span class=cl><span class=c>  templateRenderContext 在这个例子中，是组件上下文中的一个对象
-</span></span></span><span class=line><span class=cl><span class=c>  #exampleTemplate 中的 name、age 都是由 templateRenderContext 提供的
-</span></span></span><span class=line><span class=cl><span class=c>  最终，#exampleTemplate 会渲染在 section 中
-</span></span></span><span class=line><span class=cl><span class=c>--&gt;</span>
-</span></span><span class=line><span class=cl><span class=p>&lt;</span><span class=nt>ng-template</span> <span class=err>#</span><span class=na>exampleTemplate</span> <span class=na>let-render</span><span class=p>&gt;</span>
-</span></span><span class=line><span class=cl>  我需要 ngTemplateOutlet 给我提供渲染所需要的数据
-</span></span><span class=line><span class=cl>  <span class=p>&lt;</span><span class=nt>br</span> <span class=p>/&gt;</span>
-</span></span><span class=line><span class=cl>  我的名字：{{ render.name }}
-</span></span><span class=line><span class=cl>  <span class=p>&lt;</span><span class=nt>br</span> <span class=p>/&gt;</span>
-</span></span><span class=line><span class=cl>  我的年龄：{{ render.age }}
-</span></span><span class=line><span class=cl><span class=p>&lt;/</span><span class=nt>ng-template</span><span class=p>&gt;</span>
-</span></span><span class=line><span class=cl><span class=p>&lt;</span><span class=nt>section</span>
-</span></span><span class=line><span class=cl>  <span class=err>*</span><span class=na>ngTemplateOutlet</span><span class=o>=</span><span class=s>&#34;exampleTemplate; context: templateRenderContext&#34;</span>
-</span></span><span class=line><span class=cl><span class=p>&gt;&lt;/</span><span class=nt>section</span><span class=p>&gt;</span>
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span><span class=lnt>55
+</span><span class=lnt>56
+</span><span class=lnt>57
+</span><span class=lnt>58
+</span><span class=lnt>59
+</span><span class=lnt>60
+</span><span class=lnt>61
+</span><span class=lnt>62
+</span><span class=lnt>63
+</span><span class=lnt>64
+</span><span class=lnt>65
+</span><span class=lnt>66
+</span><span class=lnt>67
+</span><span class=lnt>68
+</span><span class=lnt>69
+</span><span class=lnt>70
+</span><span class=lnt>71
+</span><span class=lnt>72
+</span><span class=lnt>73
+</span><span class=lnt>74
+</span><span class=lnt>75
+</span><span class=lnt>76
+</span><span class=lnt>77
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-ts data-lang=ts><span class=line><span class=cl><span class=c1>// 封装逻辑
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kd>@Component</span><span class=p>({</span>
+</span></span><span class=line><span class=cl>  <span class=nx>selector</span><span class=o>:</span> <span class=s1>&#39;app-user-list-slot&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nx>template</span><span class=o>:</span> <span class=sb>`
+</span></span></span><span class=line><span class=cl><span class=sb>    &lt;ng-container
+</span></span></span><span class=line><span class=cl><span class=sb>      *ngTemplateOutlet=&#34;userListSlot; context: temp&#34;
+</span></span></span><span class=line><span class=cl><span class=sb>    &gt;&lt;/ng-container&gt;
+</span></span></span><span class=line><span class=cl><span class=sb>  `</span>
+</span></span><span class=line><span class=cl><span class=p>})</span>
+</span></span><span class=line><span class=cl><span class=kr>class</span> <span class=nx>UserListSlotComponent</span> <span class=kr>implements</span> <span class=nx>OnChange</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=kd>@Input</span><span class=p>()</span> <span class=nx>userListSlot</span>: <span class=kt>TemplateRef</span><span class=p>&lt;</span><span class=nt>any</span><span class=p>&gt;;</span>
+</span></span><span class=line><span class=cl>  <span class=kd>@Input</span><span class=p>()</span> <span class=nx>formatFn</span> <span class=o>=</span> <span class=nx>v</span> <span class=o>=&gt;</span> <span class=nx>v</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=kd>@Input</span><span class=p>()</span> <span class=nx>groupId</span> <span class=o>=</span> <span class=kc>null</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=kd>@Output</span><span class=p>()</span> <span class=nx>updated</span> <span class=o>=</span> <span class=k>new</span> <span class=nx>EventEmitter</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=nx>temp</span> <span class=o>=</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>loading</span>: <span class=kt>false</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nx>list</span><span class=o>:</span> <span class=p>[]</span>
+</span></span><span class=line><span class=cl>  <span class=p>};</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=kr>constructor</span><span class=p>(</span><span class=kr>private</span> <span class=nx>apiService</span>: <span class=kt>ApiService</span><span class=p>)</span> <span class=p>{}</span>
+</span></span><span class=line><span class=cl>  <span class=nx>ngOnChanges</span><span class=p>(</span><span class=nx>changes</span>: <span class=kt>SimpleChanges</span><span class=p>)</span><span class=o>:</span> <span class=k>void</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=nx>changes</span><span class=o>?</span><span class=p>.</span><span class=nx>groupId</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=k>this</span><span class=p>.</span><span class=nx>fetchUserList</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=nx>fetchUserList() {</span>
+</span></span><span class=line><span class=cl>    <span class=k>this</span><span class=p>.</span><span class=nx>temp</span><span class=p>.</span><span class=nx>loading</span> <span class=o>=</span> <span class=kc>true</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>this</span><span class=p>.</span><span class=nx>apiService</span>
+</span></span><span class=line><span class=cl>      <span class=p>.</span><span class=nx>getUserList</span><span class=p>({</span> <span class=nx>groupId</span>: <span class=kt>this.groupId</span> <span class=p>})</span>
+</span></span><span class=line><span class=cl>      <span class=p>.</span><span class=nx>subscribe</span><span class=p>(({</span> <span class=nx>success</span> <span class=o>=</span> <span class=kc>false</span><span class=p>,</span> <span class=nx>data</span> <span class=o>=</span> <span class=p>[]</span> <span class=p>})</span> <span class=o>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=p>(</span><span class=nx>success</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>          <span class=k>this</span><span class=p>.</span><span class=nx>temp</span><span class=p>.</span><span class=nx>list</span> <span class=o>=</span> <span class=nx>data</span><span class=p>.</span><span class=nx>map</span><span class=p>(</span><span class=k>this</span><span class=p>.</span><span class=nx>formatFn</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span><span class=line><span class=cl>        <span class=k>this</span><span class=p>.</span><span class=nx>temp</span><span class=p>.</span><span class=nx>list</span> <span class=o>=</span> <span class=p>[];</span>
+</span></span><span class=line><span class=cl>        <span class=k>this</span><span class=p>.</span><span class=nx>temp</span><span class=p>.</span><span class=nx>loading</span> <span class=o>=</span> <span class=kc>false</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=k>this</span><span class=p>.</span><span class=nx>updated</span><span class=p>.</span><span class=nx>emit</span><span class=p>({</span>
+</span></span><span class=line><span class=cl>          <span class=p>...</span><span class=nx>temp</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>          <span class=nx>originalData</span>: <span class=kt>data</span>
+</span></span><span class=line><span class=cl>        <span class=p>});</span>
+</span></span><span class=line><span class=cl>      <span class=p>});</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=c1>// 使用插槽
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kd>@Component</span><span class=p>({</span>
+</span></span><span class=line><span class=cl>  <span class=nx>template</span><span class=o>:</span> <span class=sb>`
+</span></span></span><span class=line><span class=cl><span class=sb>    &lt;div&gt;...&lt;/div&gt;
+</span></span></span><span class=line><span class=cl><span class=sb>    &lt;app-user-list-slot
+</span></span></span><span class=line><span class=cl><span class=sb>      [userListSlot]=&#34;userListTemplate&#34;
+</span></span></span><span class=line><span class=cl><span class=sb>      [formatFn]=&#34;userListFormatter&#34;
+</span></span></span><span class=line><span class=cl><span class=sb>      [groupId]=&#34;groupId&#34;
+</span></span></span><span class=line><span class=cl><span class=sb>      (updated)=&#34;(handleUserListUpdated)&#34;
+</span></span></span><span class=line><span class=cl><span class=sb>    &gt;
+</span></span></span><span class=line><span class=cl><span class=sb>      &lt;ng-template
+</span></span></span><span class=line><span class=cl><span class=sb>        #userListTemplate
+</span></span></span><span class=line><span class=cl><span class=sb>        let-userList=&#34;list&#34;
+</span></span></span><span class=line><span class=cl><span class=sb>        let-loadingUserList=&#34;loading&#34;
+</span></span></span><span class=line><span class=cl><span class=sb>      &gt;
+</span></span></span><span class=line><span class=cl><span class=sb>        &lt;nz-select [nzLoading]=&#34;loadingUserList&#34;&gt;
+</span></span></span><span class=line><span class=cl><span class=sb>          &lt;nz-option
+</span></span></span><span class=line><span class=cl><span class=sb>            [nzValue]=&#34;option.id&#34;
+</span></span></span><span class=line><span class=cl><span class=sb>            [nzLabel]=&#34;option.name&#34;
+</span></span></span><span class=line><span class=cl><span class=sb>            *ngFor=&#34;let option of userList&#34;
+</span></span></span><span class=line><span class=cl><span class=sb>          &gt;&lt;/nz-option&gt;
+</span></span></span><span class=line><span class=cl><span class=sb>        &lt;/nz-select&gt;
+</span></span></span><span class=line><span class=cl><span class=sb>      &lt;/ng-template&gt;
+</span></span></span><span class=line><span class=cl><span class=sb>    &lt;/app-user-list-slot&gt;
+</span></span></span><span class=line><span class=cl><span class=sb>    &lt;div&gt;...&lt;/div&gt;
+</span></span></span><span class=line><span class=cl><span class=sb>  `</span>
+</span></span><span class=line><span class=cl><span class=p>})</span>
+</span></span><span class=line><span class=cl><span class=kr>class</span> <span class=nx>DormitoryConfigureComponent</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>groupId</span> <span class=o>=</span> <span class=mi>21</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=nx>userListFormatter</span> <span class=o>=</span> <span class=p>({</span> <span class=nx>id</span><span class=p>,</span> <span class=nx>name</span> <span class=p>})</span> <span class=o>=&gt;</span> <span class=p>({</span> <span class=nx>id</span><span class=p>,</span> <span class=nx>name</span> <span class=p>});</span>
+</span></span><span class=line><span class=cl>  <span class=nx>handleUserListUpdated</span><span class=p>({</span> <span class=nx>originalData</span> <span class=p>})</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=nx>originalData</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
 </span></span></code></pre></td></tr></table></div></div><p>&lt;ng-content/>，使用在组件内部，可以使组件<a class=link href=https://angular.cn/guide/content-projection target=_blank rel=noopener>
 “接受外部插入进来的内容”</a>
 ，相当于 Vue 模版中的 &lt;slot/>：</p><ol><li>Angular 中并没有“<strong>具名插槽</strong>”的概念，但是 &lt;ng-content/> 有一个 select 属性（CSS 选择器，不支持变量），可以起到对外部插入的内容进行<strong>过滤</strong>的作用；</li><li>相比于 &lt;router-outlet/>，&lt;ng-content/> 展示的内容是由<strong>外部插入</strong>的，&lt;router-outlet/> 展示的内容是由路由表<strong>指定</strong>的；</li><li>如果你的组件包含不带 select 属性的 &lt;ng-content/> 元素，则该实例将接收所有与其他 &lt;ng-content/> 元素都不匹配的投影组件。</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
