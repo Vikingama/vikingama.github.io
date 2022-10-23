@@ -174,6 +174,26 @@
 </span><span class=lnt>55
 </span><span class=lnt>56
 </span><span class=lnt>57
+</span><span class=lnt>58
+</span><span class=lnt>59
+</span><span class=lnt>60
+</span><span class=lnt>61
+</span><span class=lnt>62
+</span><span class=lnt>63
+</span><span class=lnt>64
+</span><span class=lnt>65
+</span><span class=lnt>66
+</span><span class=lnt>67
+</span><span class=lnt>68
+</span><span class=lnt>69
+</span><span class=lnt>70
+</span><span class=lnt>71
+</span><span class=lnt>72
+</span><span class=lnt>73
+</span><span class=lnt>74
+</span><span class=lnt>75
+</span><span class=lnt>76
+</span><span class=lnt>77
 </span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>git add --all
 </span></span><span class=line><span class=cl>git add .
 </span></span><span class=line><span class=cl>
@@ -189,6 +209,7 @@
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl>git commit -am <span class=s2>&#34;用户子系统开发&#34;</span> --no-verify
 </span></span><span class=line><span class=cl>git commit -m <span class=s2>&#34;修复登录失败&#34;</span>
+</span></span><span class=line><span class=cl>git commit --amend --no-edit
 </span></span><span class=line><span class=cl>git commit --amend
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl>git fetch origin development
@@ -209,6 +230,9 @@
 </span></span><span class=line><span class=cl>git push --set-upstream origin development
 </span></span><span class=line><span class=cl>git push -f
 </span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>git rebase origin/development --no-reapply-cherry-picks
+</span></span><span class=line><span class=cl>git rebase origin/development --reapply-cherry-picks
+</span></span><span class=line><span class=cl>git rebase origin/development --autostash
 </span></span><span class=line><span class=cl>git rebase origin/development
 </span></span><span class=line><span class=cl>git rebase -i 3de4537
 </span></span><span class=line><span class=cl>git rebase -i --root
@@ -231,6 +255,22 @@
 </span></span><span class=line><span class=cl>git stash
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl>git status
+</span></span><span class=line><span class=cl><span class=c1># 附注标签</span>
+</span></span><span class=line><span class=cl>git tag -a v1.4 -m <span class=s2>&#34;version 1.4&#34;</span>
+</span></span><span class=line><span class=cl><span class=c1># 轻量标签</span>
+</span></span><span class=line><span class=cl>git tag v1.4
+</span></span><span class=line><span class=cl><span class=c1># 在之前 commit 处打标签</span>
+</span></span><span class=line><span class=cl>git tag -a v1.2 9fceb02
+</span></span><span class=line><span class=cl><span class=c1># 删除远程标签</span>
+</span></span><span class=line><span class=cl>git push origin :refs/tags/v1.4
+</span></span><span class=line><span class=cl>git push origin --delete v1.4
+</span></span><span class=line><span class=cl><span class=c1># 删除本地标签</span>
+</span></span><span class=line><span class=cl>git tag -d v1.4
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>git tag -l <span class=s2>&#34;v1.8*&#34;</span>
+</span></span><span class=line><span class=cl>git tag --list
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>git show v1.4
 </span></span></code></pre></td></tr></table></div></div><h2 id=软件已损坏>软件已损坏</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
 </span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>sudo xattr -d com.apple.quarantine /Applications/<span class=si>${</span><span class=nv>软件</span><span class=si>}</span>.app
 </span></span></code></pre></td></tr></table></div></div><h2 id=代理终端>代理终端</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1

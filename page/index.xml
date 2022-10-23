@@ -260,6 +260,26 @@
 &lt;/span>&lt;span class="lnt">55
 &lt;/span>&lt;span class="lnt">56
 &lt;/span>&lt;span class="lnt">57
+&lt;/span>&lt;span class="lnt">58
+&lt;/span>&lt;span class="lnt">59
+&lt;/span>&lt;span class="lnt">60
+&lt;/span>&lt;span class="lnt">61
+&lt;/span>&lt;span class="lnt">62
+&lt;/span>&lt;span class="lnt">63
+&lt;/span>&lt;span class="lnt">64
+&lt;/span>&lt;span class="lnt">65
+&lt;/span>&lt;span class="lnt">66
+&lt;/span>&lt;span class="lnt">67
+&lt;/span>&lt;span class="lnt">68
+&lt;/span>&lt;span class="lnt">69
+&lt;/span>&lt;span class="lnt">70
+&lt;/span>&lt;span class="lnt">71
+&lt;/span>&lt;span class="lnt">72
+&lt;/span>&lt;span class="lnt">73
+&lt;/span>&lt;span class="lnt">74
+&lt;/span>&lt;span class="lnt">75
+&lt;/span>&lt;span class="lnt">76
+&lt;/span>&lt;span class="lnt">77
 &lt;/span>&lt;/code>&lt;/pre>&lt;/td>
 &lt;td class="lntd">
 &lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">git add --all
@@ -277,6 +297,7 @@
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git commit -am &lt;span class="s2">&amp;#34;用户子系统开发&amp;#34;&lt;/span> --no-verify
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git commit -m &lt;span class="s2">&amp;#34;修复登录失败&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git commit --amend --no-edit
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git commit --amend
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git fetch origin development
@@ -297,6 +318,9 @@
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git push --set-upstream origin development
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git push -f
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git rebase origin/development --no-reapply-cherry-picks
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git rebase origin/development --reapply-cherry-picks
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git rebase origin/development --autostash
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git rebase origin/development
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git rebase -i 3de4537
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git rebase -i --root
@@ -319,6 +343,22 @@
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git stash
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git status
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 附注标签&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git tag -a v1.4 -m &lt;span class="s2">&amp;#34;version 1.4&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 轻量标签&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git tag v1.4
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 在之前 commit 处打标签&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git tag -a v1.2 9fceb02
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 删除远程标签&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git push origin :refs/tags/v1.4
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git push origin --delete v1.4
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 删除本地标签&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git tag -d v1.4
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git tag -l &lt;span class="s2">&amp;#34;v1.8*&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git tag --list
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git show v1.4
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
 &lt;/div>&lt;h2 id="软件已损坏">软件已损坏&lt;/h2>
