@@ -1343,7 +1343,7 @@ loading="lazy"
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
 &lt;/div>&lt;h2 id="runoutsideangular">runOutsideAngular&lt;/h2>
-&lt;p>在 Angular 中，DOM 事件的触发会导致 Ng 进行“变化检测”；如果该事件的副作用最终没有造成“绑定值”的更新；那么当前的“变化监测”就是多余的。&lt;/p>
+&lt;p>在 Angular 中，DOM 事件的触发会导致 Ng 进行“变更检测”；如果该事件的副作用最终没有造成“绑定值”的更新；那么当前的“变更检测”就是多余的。&lt;/p>
 &lt;div class="highlight">&lt;div class="chroma">
 &lt;table class="lntable">&lt;tr>&lt;td class="lntd">
 &lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
@@ -1382,7 +1382,7 @@ loading="lazy"
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">})&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">export&lt;/span> &lt;span class="kr">class&lt;/span> &lt;span class="nx">EventListenerComponent&lt;/span> &lt;span class="kr">implements&lt;/span> &lt;span class="nx">AfterViewChecked&lt;/span> &lt;span class="p">{&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">ngAfterViewChecked&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="k">void&lt;/span> &lt;span class="p">{&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 每次“变化检测”之后调用
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 每次“变更检测”之后调用
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="nx">console&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">log&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;AfterViewChecked&amp;#39;&lt;/span>&lt;span class="p">);&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">handleClick&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">e&lt;/span>: &lt;span class="kt">MouseEvent&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
@@ -1398,7 +1398,7 @@ loading="lazy"
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> */&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div>&lt;p>这么看来，最理想的状态是，只对&lt;strong>会造成“绑定值”更新的副作用&lt;/strong>进行“变化检测”（这不就是 Vue 吗？）；好在 NgZone 提供了一个 runOutsideAngular 方法，可以使副作用的执行不触发“变化检测”：&lt;/p>
+&lt;/div>&lt;p>这么看来，最理想的状态是，只对&lt;strong>会造成“绑定值”更新的副作用&lt;/strong>进行“变更检测”（这不就是 Vue 吗？）；好在 NgZone 提供了一个 runOutsideAngular 方法，可以使副作用的执行不触发“变更检测”：&lt;/p>
 &lt;div class="highlight">&lt;div class="chroma">
 &lt;table class="lntable">&lt;tr>&lt;td class="lntd">
 &lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
@@ -1441,7 +1441,7 @@ loading="lazy"
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">export&lt;/span> &lt;span class="kr">class&lt;/span> &lt;span class="nx">EventListenerComponent&lt;/span> &lt;span class="kr">implements&lt;/span> &lt;span class="nx">AfterViewChecked&lt;/span> &lt;span class="p">{&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kr">constructor&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kr">private&lt;/span> &lt;span class="nx">zone&lt;/span>: &lt;span class="kt">NgZone&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{}&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">ngAfterViewChecked&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="k">void&lt;/span> &lt;span class="p">{&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 每次“变化检测”之后调用
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 每次“变更检测”之后调用
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="nx">console&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">log&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;AfterViewChecked&amp;#39;&lt;/span>&lt;span class="p">);&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">handleClick&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">e&lt;/span>: &lt;span class="kt">MouseEvent&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
@@ -1736,7 +1736,64 @@ EventManager
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">export&lt;/span> &lt;span class="kr">class&lt;/span> &lt;span class="nx">AppModule&lt;/span> &lt;span class="p">{}&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div>&lt;h2 id="参考">参考&lt;/h2>
+&lt;/div>&lt;h2 id="expressionchangedafterithasbeencheckederror">ExpressionChangedAfterItHasBeenCheckedError&lt;/h2>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-ts" data-lang="ts">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">@Component&lt;/span>&lt;span class="p">({&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">template&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="sb">`
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="sb"> &amp;lt;label nz-checkbox [(ngModel)]=&amp;#34;checkbox&amp;#34;&amp;gt;
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="sb"> &amp;lt;span [textContent]=&amp;#34;time | date : &amp;#39;hh:mm:ss:SSS&amp;#39;&amp;#34;&amp;gt;&amp;lt;/span&amp;gt;
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="sb"> &amp;lt;/label&amp;gt;
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="sb"> `&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">selector&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="s1">&amp;#39;app-example&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">})&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">export&lt;/span> &lt;span class="kr">class&lt;/span> &lt;span class="nx">ListComponent&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">checkbox&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="kc">false&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kr">get&lt;/span> &lt;span class="nx">time() {&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="nb">Date&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">now&lt;/span>&lt;span class="p">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm">/**
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * 每次勾选多选框，控制台输出：
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * NG0100: ExpressionChangedAfterItHasBeenCheckedError: Expression has changed after it was checked.
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * ...
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> */&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>控制台会报**&lt;a class="link"
+href="https://angular.cn/errors/NG0100"
+target="_blank" rel="noopener"
+>
+NG100 错误
+&lt;/a>
+**，原因是多选框的勾选会改变 checkbox，从而触发“变更检测”，导致 DOM 更新，在 DOM 重新渲染的过程中，timeGetter 的返回值和在“变更检测”过程中的返回值不同；渲染前后的值的不同被“发现”了，导致错误被抛出。&lt;/p>
+&lt;p>值的变化是什么时候被发现的呢？在组件被渲染到页面的过程中，组件内部会有一个被称为 View 的数据结构，保存着&lt;strong>对组件实例的引用&lt;/strong>和&lt;strong>绑定表达式的值&lt;/strong>；在变更检测过程中，编译器会将需要更新的 DOM 属性打上标记；对于每个被标记的属性，编译器都会创建一个绑定，该绑定定义了&lt;strong>要更新的属性名称&lt;/strong>以及&lt;strong>用来获取新值的表达式&lt;/strong>。&lt;/p>
+&lt;p>在“变更检测”过程中，会运行&lt;strong>编译器为视图生成的&lt;/strong>所有绑定表达式，并将执行结果和&lt;strong>储存在 View 中的 oldValue&lt;/strong>进行比较，这就是“脏”检查的由来；如果值有变化，那么就会更新“界面”和“oldValue”；当前组件的“变更检测”进行完毕，就会对“子组件”进行相同的操作。&lt;/p>
+&lt;p>在上述例子中，Angular 在 spanView 和 timeGetter 之间建立了一种绑定关系；在每次检测过程中，绑定表达式被执行，timeGetter 返回的时间戳并被日期管道处理，日期管道返回的值会和 oldValue 进行比较，如果检测到值的差异，spanView 的 textContent 会被更新。&lt;/p>
+&lt;p>在开发环境中，每个“变更检测周期（整个组件树完成变更检测）”之后会&lt;strong>同步&lt;/strong>进行一次“额外的检测”，以确保“最终值”和变更检测过程中的值一致；不同于“变更检测”，在“额外检测”过程中，如果检测到“值的不同”，不会进行&lt;strong>视图更新&lt;/strong>，而是抛出&lt;strong>ExpressionChangedAfterItHasBeenCheckedError&lt;/strong>错误。&lt;/p>
+&lt;p>简单的说，如果值&lt;strong>总是&lt;/strong>在“变更检测”期间发生变化，就会造成“变更检测死循环”；“ExpressionChangedAfterItHasBeenCheckedError”错误就是在出现“变更检测死循环”的情况下被抛出的；或者说，当应用&lt;strong>内部状态&lt;/strong>和&lt;strong>渲染结果&lt;/strong>不匹配时，就会抛出“ExpressionChangedAfterItHasBeenCheckedError”。&lt;/p>
+&lt;h2 id="参考">参考&lt;/h2>
 &lt;ul>
 &lt;li>&lt;a class="link"
 href="https://indepth.dev/posts/1467/how-to-use-controlvalueaccessor-to-enhance-date-input-with-automatic-conversion-and-validation"
@@ -1749,7 +1806,14 @@ How To Use ControlValueAccessor To Enhance Date Input With Automatic Conversion 
 href="https://indepth.dev/posts/1508/structure-initialization-logic-without-ngoninit-utilize-observables-and-ngonchanges"
 target="_blank" rel="noopener"
 >
-Component initialization Without ngOnInit With Async Pipes For Observables And ngOnChanges
+Component Initialization Without ngOnInit With Async Pipes For Observables And ngOnChanges
+&lt;/a>
+&lt;/li>
+&lt;li>&lt;a class="link"
+href="https://indepth.dev/posts/1058/a-gentle-introduction-into-change-detection-in-angular"
+target="_blank" rel="noopener"
+>
+A Gentle Introduction Into Change Detection in Angular
 &lt;/a>
 &lt;/li>
 &lt;li>&lt;a class="link"
@@ -2056,17 +2120,17 @@ target="_blank" rel="noopener"
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 动画相关元数据，用来放置“定义动画的触发器”
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="nx">animations&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="p">[&lt;/span>&lt;span class="nx">slideMotion&lt;/span>&lt;span class="p">],&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="cm">/**
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * 变化检测策略：
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * 1. ChangeDetectionStrategy.Default：异步逻辑结束（事件、请求等等），NgZone 会自上而下对整个组件树做变化检测
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * 2. ChangeDetectionStrategy.OnPush：用来跳过某些变化检测（因为不是每个操作都需要进行变化检测，React 也有类似的机制）
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * 在 OnPush 策略下，有四种情况仍旧可以触发变化检测：
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * 变更检测策略：
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * 1. ChangeDetectionStrategy.Default：异步逻辑结束（事件、请求等等），NgZone 会自上而下对整个组件树做变更检测
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * 2. ChangeDetectionStrategy.OnPush：用来跳过某些变更检测（因为不是每个操作都需要进行变更检测，React 也有类似的机制）
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * 在 OnPush 策略下，有四种情况仍旧可以触发变更检测：
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * 1. 组件 @Input 引用变化（这种情况下，搭配 Immutable.js 使用更佳）
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * 2. 组件及其子组件的 DOM 事件触发（计时器、Promise、请求均不会触发检测）
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * 3. 组件内 Observable 订阅事件，同时设置 AsyncPipe
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * 4. 手动调用：
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * ChangeDetectorRef.detectChanges()，立即触发组件的变化检测
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * ChangeDetectorRef.markForCheck()，等待应用的下一轮变化检测
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * ApplicationRef.tick()，触发整个应用的变化检测
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * ChangeDetectorRef.detectChanges()，立即触发组件的变更检测
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * ChangeDetectorRef.markForCheck()，等待应用的下一轮变更检测
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * ApplicationRef.tick()，触发整个应用的变更检测
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> */&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">changeDetection&lt;/span>: &lt;span class="kt">ChangeDetectionStrategy.Default&lt;/span>&lt;span class="p">,&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="cm">/**
@@ -2721,8 +2785,8 @@ target="_blank" rel="noopener"
 &lt;/div>
 &lt;/div>&lt;p>自从 Angular 的编译和渲染引擎切换到 Ivy 之后：&lt;/p>
 &lt;ol>
-&lt;li>ChangeDetectionStrategy.Default 策略下，在每次“变化检测”的过程中，“纯”管道的 transform 方法，只有在入参发生变化的情况下才会被调用；&lt;/li>
-&lt;li>ChangeDetectionStrategy.Default 策略下，在每次“变化检测”的过程中，“非纯”管道的 transform 方法都会被调用；&lt;/li>
+&lt;li>ChangeDetectionStrategy.Default 策略下，在每次“变更检测”的过程中，“纯”管道的 transform 方法，只有在入参发生变化的情况下才会被调用；&lt;/li>
+&lt;li>ChangeDetectionStrategy.Default 策略下，在每次“变更检测”的过程中，“非纯”管道的 transform 方法都会被调用；&lt;/li>
 &lt;li>当使用 async 管道时（它是“非纯”的），最好使用 ChangeDetectionStrategy.OnPush 策略；&lt;/li>
 &lt;li>无论是否是“纯”管道，每个管道都会有自己的实例（View Engine 时期，“纯”管道是共享实例的）；&lt;/li>
 &lt;li>在同一模版中，使用了两次 A 管道，则会有两个 A 管道的实例存在。&lt;/li>
@@ -4336,11 +4400,11 @@ target="_blank" rel="noopener"
 &lt;p>Angular 的默认检测机制是：当一个组件发生变更时，无论它在组件树的什么位置，都会触发树中的所有的变更检测器；Ng 会从“自顶向下”，扫描树所有节点。&lt;/p>
 &lt;p>ChangeDetectorRef 为组件实例提供了&lt;strong>自定义变更检测功能&lt;/strong>，可以将组件从&lt;strong>变更检测树&lt;/strong>中添加或删除；ChangeDetectorRef 提供了五个方法：&lt;/p>
 &lt;ol>
-&lt;li>markForCheck()，在 ChangeDetectionStrategy.OnPush 策略下，将视图标记为“需要变化检测”；&lt;/li>
-&lt;li>detach()，将组件从&lt;strong>变更检测树&lt;/strong>中&lt;strong>删除&lt;/strong>，在 reattach 被调用之前，不会再进行变化检测；&lt;/li>
+&lt;li>markForCheck()，在 ChangeDetectionStrategy.OnPush 策略下，将视图标记为“需要变更检测”；&lt;/li>
+&lt;li>detach()，将组件从&lt;strong>变更检测树&lt;/strong>中&lt;strong>删除&lt;/strong>，在 reattach 被调用之前，不会再进行变更检测；&lt;/li>
 &lt;li>reattach()，将之前被 detach 的组件&lt;strong>添加&lt;/strong>到&lt;strong>变更检测树&lt;/strong>中；&lt;/li>
-&lt;li>checkNoChanges()，对该视图及其子视图进行变化检测，如有变化，报异常（仅在开发环境有效）；&lt;/li>
-&lt;li>detectChanges()，对该视图及其子视图&lt;strong>手动&lt;/strong>进行一次变化检测。&lt;/li>
+&lt;li>checkNoChanges()，对该视图及其子视图进行变更检测，如有变化，报异常（仅在开发环境有效）；&lt;/li>
+&lt;li>detectChanges()，对该视图及其子视图&lt;strong>手动&lt;/strong>进行一次变更检测。&lt;/li>
 &lt;/ol>
 &lt;div class="highlight">&lt;div class="chroma">
 &lt;table class="lntable">&lt;tr>&lt;td class="lntd">
@@ -4457,7 +4521,7 @@ NG100 错误
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">handleChecked&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nx">v&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">o&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">=&amp;gt;&lt;/span> &lt;span class="k">this&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">handleChecked&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">o&lt;/span>&lt;span class="p">),&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">$implicit&lt;/span>: &lt;span class="kt">this.list&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">});&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 渲染完后，进行一次变化检测
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 渲染完后，进行一次变更检测
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="k">this&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">cdf&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">detectChanges&lt;/span>&lt;span class="p">();&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// ...
@@ -4826,7 +4890,7 @@ Improved Dependency Injection With The New ProvidedIn Scopes &amp;lsquo;any&amp;
 href="https://limeii.github.io/2019/06/angular-changeDetectionStrategy-OnPush/"
 target="_blank" rel="noopener"
 >
-Angular Change Detection：变化检测策略
+Angular Change Detection：变更检测策略
 &lt;/a>
 &lt;/li>
 &lt;li>&lt;a class="link"
