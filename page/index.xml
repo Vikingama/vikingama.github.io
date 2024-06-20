@@ -419,7 +419,7 @@
 &lt;/tr>
 &lt;tr style="background: transparent;border: none;">
 &lt;td style="border: none;text-align: right;white-space: nowrap;word-break: keep-all;">邮箱：&lt;/td>
-&lt;td style="border: none;">&lt;a href="mailto:pavilion0321@gmail.com">pavilion0321@gmail.com&lt;/a>&lt;/td>
+&lt;td style="border: none;">&lt;a href="mailto:Pavilion0321@gmail.com">Pavilion0321@gmail.com&lt;/a>&lt;/td>
 &lt;td style="border: none;text-align: right;white-space: nowrap;word-break: keep-all;">英文等级：&lt;/td>
 &lt;td style="border: none;">CET-6&lt;/td>
 &lt;/tr>
@@ -432,20 +432,42 @@
 &lt;/table>
 &lt;h2 id="职业技能">职业技能&lt;/h2>
 &lt;ul>
-&lt;li>熟练掌握 HTML、CSS、JS&lt;/li>
-&lt;li>熟练使用 React、Vue&lt;/li>
+&lt;li>熟练使用 Angular、React、Vue&lt;/li>
+&lt;li>熟练使用 RxJS&lt;/li>
 &lt;li>熟练使用 Git&lt;/li>
-&lt;li>了解 TS&lt;/li>
 &lt;/ul>
 &lt;h2 id="项目经验">项目经验&lt;/h2>
+&lt;h3 id="蓝犀共享经济服务平台">蓝犀共享经济服务平台&lt;/h3>
+&lt;blockquote>
+&lt;p>时间：2022 年 3 月 – 2024 年 5 月&lt;/p>
+&lt;p>描述：智能财税平台，可完成商户入驻、自由职业者结算/开票流程&lt;/p>
+&lt;p>技术栈：Angula、NgZorro、OpenTelemetry、RxJS、TS&lt;/p>
+&lt;ul>
+&lt;li>使用 NgZorro 作为基础组件库&lt;/li>
+&lt;li>负责精确到按钮粒度的权限管理&lt;/li>
+&lt;li>重构自由职业者充值提现模块&lt;/li>
+&lt;li>接入 OTLP，打通前后端链路&lt;/li>
+&lt;li>配置 ESLint 与 Prettier&lt;/li>
+&lt;/ul>
+&lt;/blockquote>
+&lt;h3 id="自由职业者签约平台">自由职业者签约平台&lt;/h3>
+&lt;blockquote>
+&lt;p>时间：2022 年 3 月 – 2024 年 5 月&lt;/p>
+&lt;p>描述：帮助个体户/自由职业者完成签约流程&lt;/p>
+&lt;p>技术栈：Vue、Vite、OpenTelemetry&lt;/p>
+&lt;ul>
+&lt;li>接入 OTLP，打通前后端链路&lt;/li>
+&lt;li>迁移脚手架至 Vite@3&lt;/li>
+&lt;li>参与 JSBridge 开发&lt;/li>
+&lt;li>配置 ESLint&lt;/li>
+&lt;/ul>
+&lt;/blockquote>
 &lt;h3 id="lstack-混合云管平台">LStack 混合云管平台&lt;/h3>
 &lt;blockquote>
-&lt;p>时间：2020 年 5 月 – 2021 年 7 月&lt;/p>
+&lt;p>时间：2020 年 5 月 – 2022 年 1 月&lt;/p>
 &lt;p>描述：面向开发者的云原生应用管理工具&lt;/p>
 &lt;p>技术栈：Vue、VueRouter、Vuex、ElementUI、ECharts、Lerna&lt;/p>
 &lt;ul>
-&lt;li>负责官网、云市场、费用中心、运营管理模块，公司内部运营后台&lt;/li>
-&lt;li>基于 Lerna 和 yarn 的 monorepo 的项目管理方式&lt;/li>
 &lt;li>通过 lint-staged 对暂存区文件进行格式化和校验&lt;/li>
 &lt;li>使用基于 slot 的 renderless 数据渲染方式&lt;/li>
 &lt;li>通过预渲染插件对官网进行 SEO 优化&lt;/li>
@@ -467,22 +489,13 @@
 &lt;li>基于路由的代码懒加载&lt;/li>
 &lt;/ul>
 &lt;/blockquote>
-&lt;h3 id="聚拍-action">聚拍 Action&lt;/h3>
-&lt;blockquote>
-&lt;p>时间：2018 年 4 月 – 2018 年 5 月（v1）、2018 年 8 月 - 2018 年 8 月（v2）&lt;/p>
-&lt;p>描述：供剧组使用的财务系统&lt;/p>
-&lt;p>技术栈：Vue、VueRouter、Vuex、iView、MintUI、G2&lt;/p>
-&lt;ul>
-&lt;li>引入 Vuex 管理用户信息、登录信息、微信分享配置&lt;/li>
-&lt;li>将微信分享、时间戳转换等功能封装为插件&lt;/li>
-&lt;li>使用自定义指令控制 SVG 进度条长度&lt;/li>
-&lt;li>使用路由懒加载来减少首屏加载时间&lt;/li>
-&lt;li>使用路由钩子管理用户权限&lt;/li>
-&lt;li>使用 G2 展示财务数据&lt;/li>
-&lt;/ul>
-&lt;/blockquote>
 &lt;h2 id="工作经历">工作经历&lt;/h2>
 &lt;table style="width: 100%;">
+&lt;tr style="background: transparent;border: none;">
+&lt;td style="border: none;text-align: left;">2022.03 – 2024.05&lt;/td>
+&lt;td style="border: none;text-align: center;">浙江河马管家网络科技有限公司&lt;/td>
+&lt;td style="border: none;text-align: center;">Web 前端开发&lt;/td>
+&lt;/tr>
 &lt;tr style="background: transparent;border: none;">
 &lt;td style="border: none;text-align: left;">2020.05 – 2021.07&lt;/td>
 &lt;td style="border: none;text-align: center;">杭州朗澈科技有限公司&lt;/td>
