@@ -43,7 +43,7 @@
 &lt;h3 id="四网络请求都是单独的线程">四、网络请求都是单独的线程&lt;/h3>
 &lt;p>每次网络请求时都需要开辟单独的线程进行，如果 URL 解析到 HTTP 协议，就会新建一个网络线程去处理资源下载。&lt;/p>
 &lt;p>更多参考：&lt;a class="link"
-href="https://segmentfault.com/a/1190000012925872"
+href="https://www.dailichun.com/2018/01/21/js_singlethread_eventloop.html"
 target="_blank" rel="noopener"
 >
 从浏览器多进程到 JS 单线程，JS 运行机制最全面的一次梳理
@@ -112,7 +112,7 @@ dns-prefetch
 &lt;h3 id="二后台处理">二、后台处理&lt;/h3>
 &lt;p>一般后台都是部署到容器中的，所以一般为：&lt;/p>
 &lt;ul>
-&lt;li>先是容器接受到请求（如 tomcat）；&lt;/li>
+&lt;li>先是容器接受到请求（如 Tomcat）；&lt;/li>
 &lt;li>对应容器中的后台程序接收到请求（如 Java）；&lt;/li>
 &lt;li>后台会有自己的统一处理，处理完后响应结果。&lt;/li>
 &lt;/ul>
@@ -212,7 +212,7 @@ dns-prefetch
 &lt;li>此时就需要用到一种优化方案：dns-prefetch（让浏览器空闲时提前解析 DNS 域名，勿滥用）。&lt;/li>
 &lt;/ul>
 &lt;h3 id="三gzip-压缩">三、gzip 压缩&lt;/h3>
-&lt;p>首先，明确 gzip 是一种压缩格式，需要浏览器支持才有效，而且 gzip 压缩效率很好（高达 70% 左右）；gzip 一般是由 apache、tomcat 等服务器开启。&lt;/p>
+&lt;p>首先，明确 gzip 是一种压缩格式，需要浏览器支持才有效，而且 gzip 压缩效率很好（高达 70% 左右）；gzip 一般是由 Apache、Tomcat 等服务器开启。&lt;/p>
 &lt;p>除了 gzip 外，也还会有其它压缩格式（如 deflate，没有 gzip 高效，且不流行），所以一般只需要在服务器上开启了 gzip 压缩，之后的请求就都是基于 gzip 压缩格式的，非常方便。&lt;/p>
 &lt;p>gzip 有（0~9）10 个压缩机别，压缩级别越高，压缩效果越好，也越占 CPU；考虑都性能和压缩率的取舍，压缩级别不易设的太高。&lt;/p>
 &lt;h3 id="四长连接与短连接">四、长连接与短连接&lt;/h3>
@@ -382,7 +382,7 @@ dns-prefetch
 &lt;li>简单图层中，就算是 position:absolute 等布局，变化时不影响整体的回流；但是由于在同一个图层中，仍然是会影响绘制的，因此做动画时性能仍然很低；而复合层是独立的，所以一般做动画推荐使用硬件加速。&lt;/li>
 &lt;/ul>
 &lt;p>更多参考：&lt;a class="link"
-href="https://segmentfault.com/a/1190000012925872#articleHeader16"
+href="https://www.dailichun.com/2018/01/21/js_singlethread_eventloop.html"
 target="_blank" rel="noopener"
 >
 普通图层和复合图层
@@ -434,8 +434,8 @@ target="_blank" rel="noopener"
 &lt;li>position:fixed 的包含块是当前可视窗口；&lt;/li>
 &lt;li>position:absolute 的包含块由它最近的 position:absolute/relative/fixed 的祖先元素创建：
 &lt;ul>
-&lt;li>如果祖先元素是行内元素，则包含块取决于其祖先元素的 direction 特性；&lt;/li>
-&lt;li>如果祖先元素不是行内元素，那么包含块的区域应该是祖先元素的内边距边界。&lt;/li>
+&lt;li>如果祖先元素不是行内元素，那么包含块的区域应该是祖先元素的内边距边界；&lt;/li>
+&lt;li>如果祖先元素是行内元素，则包含块取决于其祖先元素的 direction 特性。&lt;/li>
 &lt;/ul>
 &lt;/li>
 &lt;/ul>
@@ -471,7 +471,7 @@ target="_blank" rel="noopener"
 &lt;p>BFC 特点：&lt;/p>
 &lt;ul>
 &lt;li>内部 Box 在垂直方向，一个接一个的放置；&lt;/li>
-&lt;li>Box 的垂直方向由 margin 决定，属于同一个 BFC 的两个 Box 间的 margin 会重叠；&lt;/li>
+&lt;li>属于同一个 BFC 的两个 Box 间的 margin 会重叠；&lt;/li>
 &lt;li>BFC 区域不会与 FloatBox 重叠；&lt;/li>
 &lt;li>BFC 就是页面上的一个隔离的独立容器，容器里面的子元素不会影响到外面的元素，反之也如此；&lt;/li>
 &lt;li>计算 BFC 的高度时，浮动元素也参与计算（不会浮动坍塌）。&lt;/li>
@@ -512,7 +512,7 @@ target="_blank" rel="noopener"
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
 &lt;/div>&lt;p>原因就是 JS 解释器有一个 &lt;a class="link"
-href="http://inimino.org/~inimino/blog/javascript_semicolons"
+href="https://inimino.org/~inimino/blog/javascript_semicolons"
 target="_blank" rel="noopener"
 >
 Semicolon Insertion
@@ -635,7 +635,7 @@ V8 内存浅析
 &lt;p>譬如发出网络请求时，会用 ajax，如果接口跨域，就会遇到跨域问题，可以参考：&lt;/p>
 &lt;ul>
 &lt;li>&lt;a class="link"
-href="https://segmentfault.com/a/1190000012469713"
+href="https://www.dailichun.com/2017/03/22/ajaxCrossDomainSolution.html"
 target="_blank" rel="noopener"
 >
 ajax 跨域，这应该是最全的解决方案了

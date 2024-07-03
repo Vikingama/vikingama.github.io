@@ -307,7 +307,7 @@ CSS 值类型文档大全
 &lt;/div>&lt;img style="display: block;margin: 0 auto;width: 70%;" src="min-content.png"/>
 &lt;p>在实际开发中是不会使用 min-content 关键字的，但是会非常频繁地遇到 min-content 的表现场景。&lt;/p>
 &lt;p>max-content 表示最大内容宽度；作用是让元素尽可能大，保证图文内容在一行显示，哪怕最终的宽度溢出外部容器元素。&lt;/p>
-&lt;p>所有需要使用 max-content 的场景，都能使用 white-space:nowrap 实现一模一样的效果，并且兼容性更好；所以实际上 max-content 没有任何实用价值。&lt;/p>
+&lt;p>所有需要使用 max-content 的场景，都能使用 white-space:nowrap 实现一模一样的效果，并且兼容性更好；所以，实际上 max-content 没有任何实用价值。&lt;/p>
 &lt;h2 id="positionsticky">position:sticky&lt;/h2>
 &lt;p>黏性定位效果底层的渲染规则&lt;strong>和固定定位没有任何关系&lt;/strong>，而是&lt;strong>相对定位的延伸&lt;/strong>：&lt;/p>
 &lt;ol>
@@ -703,8 +703,7 @@ CSS 值类型文档大全
 &lt;li>block，字体阻塞时段较短，字体交换时段无限；适合&lt;strong>图标字体&lt;/strong>场景；&lt;/li>
 &lt;li>swap，字体阻塞时段极短（不超过 100ms），字体交换时段无限；适合用在&lt;strong>小段文本同时文本内容对页面非常重要&lt;/strong>的场景；&lt;/li>
 &lt;li>fallback，字体阻塞时段极短（不超过 100ms），字体交换时段较短；适合用于&lt;strong>大段文本同时对字体效果比较看重&lt;/strong>的场景；&lt;/li>
-&lt;li>optional，字体阻塞时段极短（不超过 100ms），没有字体交换时段；如果字体瞬间被加载（被缓存），则浏览器使用该字体，否则使用回退字
-体；日常 Web 开发更推荐。&lt;/li>
+&lt;li>optional，字体阻塞时段极短（不超过 100ms），没有字体交换时段；如果字体瞬间被加载（被缓存），则浏览器使用该字体，否则使用回退字体；日常 Web 开发更推荐。&lt;/li>
 &lt;/ul>
 &lt;p>font-display 属性只能用在 @font-face 规则中；如果你的自定义字体是用于字体呈现，就使用 optional，否则使用默认值。&lt;/p>
 &lt;h2 id="中断与换行">中断与换行&lt;/h2>
@@ -714,7 +713,13 @@ CSS 值类型文档大全
 &lt;li>文字可以在 CJK 文本、普通空格和短横线连字符处换行，连续英文单词和数字不换行。&lt;/li>
 &lt;/ul>
 &lt;p>word-break:keep-all 可以让 CJK 文本&lt;strong>不换行排版&lt;/strong>，同时又&lt;strong>不影响&lt;/strong>非 CJK 文本的排版行为。&lt;/p>
-&lt;p>hyphens 是专为英文场景设计的一个 CSS 属性，可以让英文单词&lt;strong>断开换行的时候带上连字符&lt;/strong>。&lt;/p>
+&lt;p>&lt;a class="link"
+href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/hyphens"
+target="_blank" rel="noopener"
+>
+hyphens
+&lt;/a>
+是专为英文场景设计的一个 CSS 属性，可以让英文单词&lt;strong>断开换行的时候带上连字符&lt;/strong>。&lt;/p>
 &lt;p>&amp;lt;wbr/&amp;gt; 表示有机会就断开换行（如果宽度足够就不换行）；而 &amp;lt;br/&amp;gt; 则是直接换行显示，无论宽度是否足够。&lt;/p>
 &lt;h2 id="text-decoration">text-decoration&lt;/h2>
 &lt;p>text-decoration 是一个缩写属性：&lt;/p>
@@ -1255,7 +1260,6 @@ href="https://vikingama.github.io/demosforife/Design%20B.html"
 &lt;/span>&lt;span class="lnt">21
 &lt;/span>&lt;span class="lnt">22
 &lt;/span>&lt;span class="lnt">23
-&lt;/span>&lt;span class="lnt">24
 &lt;/span>&lt;/code>&lt;/pre>&lt;/td>
 &lt;td class="lntd">
 &lt;pre tabindex="0" class="chroma">&lt;code class="language-html" data-lang="html">&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">style&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
@@ -1270,7 +1274,6 @@ href="https://vikingama.github.io/demosforife/Design%20B.html"
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c">&amp;lt;!--
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c"> 这里的 2 就是『匿名内联元素』
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c"> 在弹性容器中，2 变成了『匿名块级元素』
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c"> 因此，vertical-align 在这里没有用
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c">--&amp;gt;&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">section&lt;/span> &lt;span class="na">class&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;container&amp;#34;&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">div&lt;/span> &lt;span class="na">class&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;content&amp;#34;&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>1&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">div&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
@@ -1402,9 +1405,27 @@ href="https://vikingama.github.io/demosforife/Design%20B.html"
 &lt;/ul>
 &lt;p>flex 是 flex-grow、flex-shrink 和 flex-basis 的简写：&lt;/p>
 &lt;ul>
-&lt;li>flex-grow，弹性容器在主轴方向上剩余空间&lt;strong>多余&lt;/strong>时分配规则；默认 0，表示不分配；&lt;/li>
-&lt;li>flex-shrink，弹性容器在主轴方向上剩余空间&lt;strong>不足&lt;/strong>时分配规则；默认 1，表示分配；&lt;/li>
-&lt;li>flex-basis，空间分配的基础尺寸；作用在 content-box 上，默认 auto；&lt;/li>
+&lt;li>&lt;a class="link"
+href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/flex-grow"
+target="_blank" rel="noopener"
+>
+flex-grow
+&lt;/a>
+，弹性容器在主轴方向上剩余空间&lt;strong>多余&lt;/strong>时分配规则；默认 0，表示不分配；&lt;/li>
+&lt;li>&lt;a class="link"
+href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/flex-shrink"
+target="_blank" rel="noopener"
+>
+flex-shrink
+&lt;/a>
+，弹性容器在主轴方向上剩余空间&lt;strong>不足&lt;/strong>时分配规则；默认 1，表示分配；&lt;/li>
+&lt;li>&lt;a class="link"
+href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/flex-basis"
+target="_blank" rel="noopener"
+>
+flex-basis
+&lt;/a>
+，空间分配的基础尺寸；作用在 content-box 上，默认 auto；&lt;/li>
 &lt;li>flex:initial，等同于 flex:0 1 auto，&lt;strong>不抢&lt;/strong>多余空间，可以在空间不足时收缩；&lt;/li>
 &lt;li>flex:auto，等同于 flex:1 1 auto，子项&lt;strong>自动拉伸/收缩&lt;/strong>来填满剩余空间，在容器尺寸不足时会优先最大化内容尺寸；&lt;/li>
 &lt;li>flex:none，等同于 flex:0 0 auto，子项&lt;strong>没有弹性&lt;/strong>，子项表现为&lt;strong>最大内容宽度&lt;/strong>；&lt;/li>
@@ -1666,7 +1687,7 @@ href="https://vikingama.github.io/demosforife/Design%20B.html"
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">grid-template-columns&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="nf">repeat&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">3&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="n">fr&lt;/span>&lt;span class="p">);&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">grid-template-rows&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="nf">repeat&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">4&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="n">fr&lt;/span>&lt;span class="p">);&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">grid-template-areas&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="s1">&amp;#39;蛙 蛙 蛙&amp;#39;&lt;/span> &lt;span class="s1">&amp;#39;虾 鱼 鱼&amp;#39;&lt;/span> &lt;span class="s1">&amp;#39;虾 鱼 鱼&amp;#39;&lt;/span> &lt;span class="s1">&amp;#39;蟹 蟹 蟹&amp;#39;&lt;/span>&lt;span class="p">;&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">gap&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="mi">8&lt;/span>&lt;span class="kt">px&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">gap&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="mi">8&lt;/span>&lt;span class="kt">px&lt;/span>&lt;span class="p">;&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="nc">content&lt;/span> &lt;span class="p">{&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">display&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="kc">flex&lt;/span>&lt;span class="p">;&lt;/span>
@@ -1729,7 +1750,7 @@ href="https://vikingama.github.io/demosforife/Design%20B.html"
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">grid-template&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="n">fr&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="n">fr&lt;/span> &lt;span class="o">/&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="n">fr&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="n">fr&lt;/span>&lt;span class="p">;&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c">/* 隐式网格高度为 50px */&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">grid-auto-rows&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="mi">50&lt;/span>&lt;span class="kt">px&lt;/span>&lt;span class="p">;&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">gap&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="mi">8&lt;/span>&lt;span class="kt">px&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">gap&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="mi">8&lt;/span>&lt;span class="kt">px&lt;/span>&lt;span class="p">;&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="nc">content&lt;/span> &lt;span class="p">{&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">display&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="kc">flex&lt;/span>&lt;span class="p">;&lt;/span>
@@ -1805,7 +1826,7 @@ href="https://vikingama.github.io/demosforife/Design%20B.html"
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="nc">container&lt;/span> &lt;span class="p">{&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">display&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="k">grid&lt;/span>&lt;span class="p">;&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">grid-template&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="n">fr&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="n">fr&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="n">fr&lt;/span> &lt;span class="o">/&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="n">fr&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="n">fr&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="n">fr&lt;/span>&lt;span class="p">;&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">gap&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="mi">8&lt;/span>&lt;span class="kt">px&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">gap&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="mi">8&lt;/span>&lt;span class="kt">px&lt;/span>&lt;span class="p">;&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="nc">row&lt;/span> &lt;span class="p">{&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">grid-auto-flow&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="kc">row&lt;/span>&lt;span class="p">;&lt;/span>
@@ -1874,7 +1895,7 @@ href="https://vikingama.github.io/demosforife/Design%20B.html"
 &lt;li>place-self，&amp;lt;align-self&amp;gt; &amp;lt;justify-self&amp;gt;?。&lt;/li>
 &lt;/ul>
 &lt;h2 id="shapes-布局">Shapes 布局&lt;/h2>
-&lt;p>Shapes 需要 float 的配合，可以实现不规则的图文环绕效果；其相关的 CSS 属性有 3 个，shape-outside、shape-margin、shape-image-threshold。&lt;/p>
+&lt;p>Shapes 需要 float 的配合，可以实现不规则的图文环绕效果；其相关的 CSS 属性有 3 个：shape-outside、shape-margin、shape-image-threshold。&lt;/p>
 &lt;p>shape-outside 支持的属性值：&lt;/p>
 &lt;ul>
 &lt;li>none，普通矩形环绕；&lt;/li>
@@ -2129,7 +2150,7 @@ href="https://vikingama.github.io/demosforife/Design%20B.html"
 &lt;li>minimal-ui：如同独立的应用程序，但有一个用来导航的最小 UI 元素集，具体有什么元素在不同浏览器中是不一样的。&lt;/li>
 &lt;/ul>
 &lt;/li>
-&lt;li>any-hover，是否有任意输入设备可以经过某个元素（可以用来检测『设备是否接入了鼠标』）：
+&lt;li>any-hover，是否有任意输入设备可以经过某个元素：
 &lt;ul>
 &lt;li>none，没有输入装置可以实现悬停效果；&lt;/li>
 &lt;li>hover，可以触发元素的悬停交互效果。&lt;/li>
@@ -2305,7 +2326,13 @@ href="https://vikingama.github.io/demosforife/Design%20B.html"
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div>&lt;p>CSS 自定义属性是有作用域的，所以全局使用的自定义属性都定义在 :root 伪类中。&lt;/p>
+&lt;/div>&lt;p>CSS 自定义属性是有作用域的，所以全局使用的自定义属性都定义在 &lt;a class="link"
+href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/:root"
+target="_blank" rel="noopener"
+>
+:root
+&lt;/a>
+伪类中。&lt;/p>
 &lt;p>CSS 自定义属性不支持在媒体查询的查询条件中使用，也不支持 content 属性：&lt;/p>
 &lt;div class="highlight">&lt;div class="chroma">
 &lt;table class="lntable">&lt;tr>&lt;td class="lntd">
@@ -2942,11 +2969,41 @@ proximity
 &lt;p>CSS 是有局部作用域的（ShadowDOM）。&lt;/p>
 &lt;p>CSS 选择符有五种：&lt;/p>
 &lt;ol>
-&lt;li>后代关系（空格）；&lt;/li>
-&lt;li>父子关系（&amp;gt;）；&lt;/li>
-&lt;li>相邻兄弟关系（+）；&lt;/li>
-&lt;li>随后兄弟关系（~）；&lt;/li>
-&lt;li>列关系（||）。&lt;/li>
+&lt;li>&lt;a class="link"
+href="https://developer.mozilla.org/zh-CN/docs/Learn/CSS/Building_blocks/Selectors/Combinators#%E5%90%8E%E4%BB%A3%E9%80%89%E6%8B%A9%E5%99%A8"
+target="_blank" rel="noopener"
+>
+后代关系（空格）
+&lt;/a>
+；&lt;/li>
+&lt;li>&lt;a class="link"
+href="https://developer.mozilla.org/zh-CN/docs/Learn/CSS/Building_blocks/Selectors/Combinators#%E5%AD%90%E4%BB%A3%E5%85%B3%E7%B3%BB%E9%80%89%E6%8B%A9%E5%99%A8"
+target="_blank" rel="noopener"
+>
+父子关系（&amp;gt;）
+&lt;/a>
+；&lt;/li>
+&lt;li>&lt;a class="link"
+href="https://developer.mozilla.org/zh-CN/docs/Learn/CSS/Building_blocks/Selectors/Combinators#%E9%82%BB%E6%8E%A5%E5%85%84%E5%BC%9F"
+target="_blank" rel="noopener"
+>
+相邻兄弟关系（+）
+&lt;/a>
+；&lt;/li>
+&lt;li>&lt;a class="link"
+href="https://developer.mozilla.org/zh-CN/docs/Learn/CSS/Building_blocks/Selectors/Combinators#%E9%80%9A%E7%94%A8%E5%85%84%E5%BC%9F"
+target="_blank" rel="noopener"
+>
+随后兄弟关系（~）
+&lt;/a>
+；&lt;/li>
+&lt;li>&lt;a class="link"
+href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/Column_combinator"
+target="_blank" rel="noopener"
+>
+列关系（||）
+&lt;/a>
+。&lt;/li>
 &lt;/ol>
 &lt;p>CSS 优先级有六种：&lt;/p>
 &lt;ol>
@@ -3175,7 +3232,7 @@ proximity
 &lt;/div>&lt;p>&lt;img src="https://vikingama.github.io/p/css-%E9%80%89%E6%8B%A9%E5%99%A8%E4%B8%96%E7%95%8C%E7%AC%94%E8%AE%B0/near-sibling-selector.png"
 width="1672"
 height="508"
-srcset="https://vikingama.github.io/p/css-%E9%80%89%E6%8B%A9%E5%99%A8%E4%B8%96%E7%95%8C%E7%AC%94%E8%AE%B0/near-sibling-selector_hufec67835ee692a6339d9f6b87e5380a9_70830_480x0_resize_box_3.png 480w, https://vikingama.github.io/p/css-%E9%80%89%E6%8B%A9%E5%99%A8%E4%B8%96%E7%95%8C%E7%AC%94%E8%AE%B0/near-sibling-selector_hufec67835ee692a6339d9f6b87e5380a9_70830_1024x0_resize_box_3.png 1024w"
+srcset="https://vikingama.github.io/p/css-%E9%80%89%E6%8B%A9%E5%99%A8%E4%B8%96%E7%95%8C%E7%AC%94%E8%AE%B0/near-sibling-selector_hu8b199f91f4cf5c453c4c4979f4867723_43508_480x0_resize_box_3.png 480w, https://vikingama.github.io/p/css-%E9%80%89%E6%8B%A9%E5%99%A8%E4%B8%96%E7%95%8C%E7%AC%94%E8%AE%B0/near-sibling-selector_hu8b199f91f4cf5c453c4c4979f4867723_43508_1024x0_resize_box_3.png 1024w"
 class="gallery-image"
 data-flex-grow="329"
 data-flex-basis="789px"
@@ -3452,7 +3509,7 @@ target="_blank" rel="noopener"
 &lt;p>:lang() 用来匹配指定语言环境下的元素。&lt;/p></description></item><item><title>《CSS 世界》笔记 · 看不见我的美 · 是你瞎了眼</title><link>https://vikingama.github.io/p/css-%E4%B8%96%E7%95%8C%E7%AC%94%E8%AE%B0/</link><pubDate>Sun, 02 Jan 2022 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/p/css-%E4%B8%96%E7%95%8C%E7%AC%94%E8%AE%B0/</guid><description>&lt;img src="https://vikingama.github.io/img/cover/css.png" alt="《CSS 世界》笔记" />&lt;h2 id="文档流">文档流&lt;/h2>
 &lt;p>&lt;strong>文档流&lt;/strong>是指 CSS 中引导元素排列和定位的一条看不见的“水流”。&lt;/p>
 &lt;p>CSS 的基石是 HTML，所以 HTML 默认的表现符合“流”，可以通过破坏“流”来实现特殊布局。&lt;/p>
-&lt;p>文档流的流向是可以改变的，这种改变可以让 CSS 的展现更为丰富；因此，“文档流从左往右自上而下”这种说法是不严谨的。&lt;/p>
+&lt;p>文档流的流向是可以改变的（column、display、float、position&amp;hellip;），这种改变可以让 CSS 的展现更为丰富；因此，“文档流从左往右自上而下”这种说法是不严谨的。&lt;/p>
 &lt;p>&lt;strong>流体布局&lt;/strong>指的是利用元素“流”的特性实现的各类布局效果；因为“流”本身具有自适应特性，所以“流体布局”往往都是具有自适应性的。&lt;/p>
 &lt;p>&lt;strong>流动性&lt;/strong>是一种 margin/border/padding 和 content &lt;strong>自动分配水平空间&lt;/strong>的机制；如果手动设置宽度，就完全就不像“水流”那样完全利用容器空间，即所谓的&lt;strong>流动性丢失&lt;/strong>。&lt;/p>
 &lt;h2 id="块级元素">块级元素&lt;/h2>
@@ -3640,7 +3697,7 @@ target="_blank" rel="noopener"
 &lt;p>在 CSS 中，行距的上下等分机制（line-height=height 时可以实现近似垂直居中的效果），行距分散在文字的上方和下方（Adobe InDesign 的“行距”是加在文字上方的），行距=(line-height)-(font-size)。&lt;/p>
 &lt;p>line-height 的属性值：&lt;/p>
 &lt;ol>
-&lt;li>normal 和 font-family 相关联的一个变量，具体解析值还和系统、浏览器有关；&lt;/li>
+&lt;li>normal，和 font-family 相关联的一个变量，具体解析值还和系统、浏览器有关；&lt;/li>
 &lt;li>数值（1.5），解析值是和当前 font-size 相乘后的值，所有子元素继承的是 1.5 这个值；&lt;/li>
 &lt;li>百分比（150%），解析值是和当前 font-size 相乘后的值，所有子元素继承的是解析值；&lt;/li>
 &lt;li>长度值（21px），所有子元素继承的是解析值（21px）；&lt;/li>
@@ -3759,7 +3816,7 @@ target="_blank" rel="noopener"
 &lt;img style="display: block;margin: 0 auto;width: 70%;" src="float-anchor.png"/>
 &lt;p>“浮动锚点”的作用就是产生“行框盒子”，因为“浮动锚点”表现如同一个空的内联元素，有内联元素自然就有“行框盒子”；于是，float 元素对齐的参考实体“行框盒子”对于块状元素也同样适用了，只不过这个“行框盒子”由于没有任何内容，所以无尺寸，看不见也摸不着罢了。&lt;/p>
 &lt;h2 id="块级格式化上下文">块级格式化上下文&lt;/h2>
-&lt;p>如果一个元素具有 BFC，内部子元素再怎么翻江倒海、翻云覆雨，都不会影响外部的元素。所以，BFC 元素是不可能发生 margin 重叠的，因为 margin 重叠是会影响外面的元素的；BFC 元素也可以用来清除浮动的影响，因为如果不清除，子元素浮动则父元素高度塌陷，必然会影响后面元素布局和定位，这显然有违 BFC 元素的子元素不会影响外部元素的设定。&lt;/p>
+&lt;p>如果一个元素具有 BFC，内部子元素再怎么翻江倒海，都不会影响外部的元素。所以，BFC 元素是不可能发生 margin 重叠的，因为 margin 重叠是会影响外面的元素的；BFC 元素也可以用来清除浮动的影响，因为如果不清除，子元素浮动则父元素高度塌陷，必然会影响后面元素布局和定位，这显然有违 BFC 元素的子元素不会影响外部元素的设定。&lt;/p>
 &lt;p>创建块级格式化上下文：&lt;/p>
 &lt;ol>
 &lt;li>根元素，html；&lt;/li>
@@ -4149,7 +4206,7 @@ target="_blank" rel="noopener"
 &lt;li>每个层叠上下文和兄弟元素独立，也就是说，当进行层叠变化或渲染的时候，只需要考虑后代元素；&lt;/li>
 &lt;li>每个层叠上下文是自成体系的，当元素发生层叠的时候，整个元素被认为是在父层叠上下文的层叠顺序中。&lt;/li>
 &lt;/ul>
-&lt;p>&lt;strong>根层叠上下文&lt;/strong>指的是页面根元素，可以看成是 &amp;lt;html&amp;lt;元素。因此，页面中所有的元素一定处于至少一个“层叠结界”中。&lt;/p>
+&lt;p>&lt;strong>根层叠上下文&lt;/strong>指的是页面根元素，可以看成是 &amp;lt;html&amp;gt;元素。因此，页面中所有的元素一定处于至少一个“层叠结界”中。&lt;/p>
 &lt;p>对于 position:relative/absolute 以及 Firefox/IE 下含有 position:fixed 声明的&lt;strong>定位元素&lt;/strong>，当其 z-index 值&lt;strong>不是 auto&lt;/strong> 的时候，会创建层叠上下文。&lt;/p>
 &lt;div class="highlight">&lt;div class="chroma">
 &lt;table class="lntable">&lt;tr>&lt;td class="lntd">
@@ -4282,7 +4339,7 @@ target="_blank" rel="noopener"
 &lt;/div>
 &lt;/div>&lt;img style="display: block;margin: 0 auto;width: 70%;" src="z-index--1.png"/>
 &lt;img style="display: block;margin: 0 auto;width: 70%;" src="opacity-0.99.png"/>
-&lt;p>z-index 负值可以隐藏元素，只需要层叠上下文内的某一个父元素加个背景色就可以。它与 clip 隐藏相比的一个优势是，元素无须绝对定位，设置 position:relative 也可以隐藏，另一个优势是它对原来的布局以及元素的行为没有任何影响，而 clip 隐藏会导致控件 focus 的焦点发生细微的变化，在特定条件下是有体验问题的。它的不足之处就是不具有普遍适用性，需要其他元素配合进行隐藏。&lt;/p>
+&lt;p>z-index 负值可以隐藏元素，只需要层叠上下文内的某一个父元素加个背景色就可以。它与 clip 隐藏相比的一个优势是，元素无须绝对定位，设置 position:relative 也可以隐藏；另一个优势是，它对原来的布局以及元素的行为没有任何影响，而 clip 隐藏会导致控件 focus 的焦点发生细微的变化，在特定条件下是有体验问题的。它的不足之处就是不具有普遍适用性，需要其他元素配合进行隐藏。&lt;/p>
 &lt;h2 id="font">font&lt;/h2>
 &lt;p>font-size 的关键字属性分为两类：&lt;/p>
 &lt;ol>
@@ -4357,7 +4414,7 @@ target="_blank" rel="noopener"
 &lt;/div>&lt;p>衬线字体，通俗讲就是笔画开始、结束的地方有额外装饰而且笔画的粗细会有所不同的字体。比如：宋体、Times New Roman、Georgia 等。无衬线字体没有这些额外的装饰，而且笔画的粗细差不多，比如：雅黑、Arial、Verdana、Tahoma、Helivetica 等。在大多数浏览器下，写在 serif 和 sans-serif 后面的所有字体都会被忽略。&lt;/p>
 &lt;p>所谓等宽字体，一般是针对英文字体而言的。东亚字体应该都是等宽的，就是每个字符在同等 font-size 下占据的宽度是一样的。但是英文字体就不一定了。&lt;/p>
 &lt;p>微软正黑体是一款全面支持 ClearType 技术的 TrueType 无衬线字体，用于繁体中文系统；对于微软雅黑和微软正黑，这两套字体都同时包含了比较完整的简体和繁体汉字，但这两套字形在正式场合是不能混淆使用的。&lt;/p>
-&lt;p>平常所说的“宋体”，指的都是“中易宋体”，英文名称 SimSun。macOS 内置的“宋体-简”和我们平常所说的“宋体”并不是同一个字体，其英文名称是“Songti SC”，字形表现也有差异。&lt;/p>
+&lt;p>平常所说的“宋体”，指的都是“中易宋体”，英文名称 SimSun。macOS 内置的“宋体 - 简”和我们平常所说的“宋体”并不是同一个字体，其英文名称是“Songti SC”，字形表现也有差异。&lt;/p>
 &lt;p>font-weight 如果使用数值作为属性值，必须是 100-900 的整百数，没有 x50 这种东西；font-weight:400 等同于 font-weight:normal；font-weight:700 等同于 font-weight:bold。浏览器支持 100-900 的整百数，没有效果是因为系统缺乏对应粗细的字体。&lt;/p>
 &lt;div class="highlight">&lt;div class="chroma">
 &lt;table class="lntable">&lt;tr>&lt;td class="lntd">
@@ -4591,7 +4648,7 @@ target="_blank" rel="noopener"
 &lt;li>默认值是 normal 而不是 0，虽然说正常情况下，normal 的计算值就是 0，但在有些场景下，letter-spacing 会调整 normal 的计算值以实现更好的版面布局；&lt;/li>
 &lt;li>支持负值，且值足够大的时候，会让字符形成重叠，甚至反向排列（非 IE）；&lt;/li>
 &lt;li>和 text-indent 属性一样，无论值多大或多小，第一行一定会保留至少一个字符。在默认的左对齐情况下，无论值如何设置，第一个字符的位置一定是纹丝不动的；&lt;/li>
-&lt;li>支持小数值，即使 0.1px 也是支持的，但并不总能看到效果，这与屏幕的密度有关。对普通的桌面显示器，设备像素比是 1，最小渲染单位是 1px，因此，需要至少连续 10 个字符，才能看到 0.1px 产生的 1px 间距变化，如果是 9 个字符，则不会有效果，这很可能会让人误以为 letter-spacing 不支持非常小的数值，实际上是支持的；&lt;/li>
+&lt;li>支持小数值，即使 0.1px 也是支持的，但并不总能看到效果，这与屏幕的像素密度有关。对普通的桌面显示器，设备像素比是 1，最小渲染单位是 1px，因此，需要至少连续 10 个字符，才能看到 0.1px 产生的 1px 间距变化，如果是 9 个字符，则不会有效果，这很可能会让人误以为 letter-spacing 不支持非常小的数值，实际上是支持的；&lt;/li>
 &lt;li>暂不支持百分比值。&lt;/li>
 &lt;/ol>
 &lt;h2 id="word-spacing">word-spacing&lt;/h2>
@@ -4748,7 +4805,7 @@ target="_blank" rel="noopener"
 &lt;p>&lt;img src="https://vikingama.github.io/p/css-%E4%B8%96%E7%95%8C%E7%AC%94%E8%AE%B0/display-opacity-visibility.png"
 width="1818"
 height="384"
-srcset="https://vikingama.github.io/p/css-%E4%B8%96%E7%95%8C%E7%AC%94%E8%AE%B0/display-opacity-visibility_hu166131e53a66c7130dc29ccad2618879_93820_480x0_resize_box_3.png 480w, https://vikingama.github.io/p/css-%E4%B8%96%E7%95%8C%E7%AC%94%E8%AE%B0/display-opacity-visibility_hu166131e53a66c7130dc29ccad2618879_93820_1024x0_resize_box_3.png 1024w"
+srcset="https://vikingama.github.io/p/css-%E4%B8%96%E7%95%8C%E7%AC%94%E8%AE%B0/display-opacity-visibility_hu1b16cd2149df0587995ec485d7b7c16e_58154_480x0_resize_box_3.png 480w, https://vikingama.github.io/p/css-%E4%B8%96%E7%95%8C%E7%AC%94%E8%AE%B0/display-opacity-visibility_hu1b16cd2149df0587995ec485d7b7c16e_58154_1024x0_resize_box_3.png 1024w"
 class="gallery-image"
 data-flex-grow="473"
 data-flex-basis="1136px"
@@ -4815,7 +4872,7 @@ loading="lazy"
 &lt;/div>&lt;img style="display: block;margin: 0 auto;width: 70%;" src="show-style-script.png"/>
 &lt;h2 id="cursor">cursor&lt;/h2>
 &lt;p>cursor:none 可以隐藏用户鼠标光标，全屏看视频时，可以判断用户行为，自动隐藏鼠标。&lt;/p>
-&lt;p>cursor:context-menu 适用于自定义上下文菜单的情形，例如，邮箱、网盘等场景。&lt;/p>
+&lt;p>cursor:context-menu 适用于自定义上下文菜单的情形，例如，邮箱、网盘等。&lt;/p>
 &lt;p>cursor:default 常搭配 user-select:none 属性使用，表示当前内容不可选。&lt;/p>
 &lt;p>cursor:cell 可以让光标变为 Excel 里的样式。&lt;/p>
 &lt;h2 id="direction">direction&lt;/h2>

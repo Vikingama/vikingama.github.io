@@ -78,17 +78,17 @@
 &lt;/div>&lt;p>Lerna 两种模式：&lt;/p>
 &lt;ul>
 &lt;li>固定模式，项目统一单个版本（所有的包使用一个版本号，Babel 使用的这种模式），版本信息保存在根目录下的 lerna.json 中；如果主版本号为 0，任何更新都将被视为不兼容更新；&lt;/li>
-&lt;li>独立模式，每个包的版本号是独立的（公司使用的这种模式，因为每个包是一个独立的项目、不是一个完整功能的一部分，搭配 yarn 干活不累）；发包时，需要指定此次更新的粒度（修复、小版本、大版本？）。&lt;/li>
+&lt;li>独立模式，每个包的版本号是独立的（公司使用的这种模式，因为每个包是一个独立的项目、不是一个完整功能的一部分）；发包时，需要指定此次更新的粒度（修复、小版本、大版本？）。&lt;/li>
 &lt;/ul>
 &lt;p>Lerna 常用命令：&lt;/p>
 &lt;ul>
 &lt;li>lerna init 创建/升级为 Lerna 仓库；
 &lt;ul>
-&lt;li>&amp;ndash;independent/-i 使用独立的 版本控制模式&lt;/li>
+&lt;li>&amp;ndash;independent/-i 使用独立的版本控制模式&lt;/li>
 &lt;/ul>
 &lt;/li>
 &lt;li>lerna bootstrap 进入引导流程，安装所有依赖并链接交叉依赖；&lt;/li>
-&lt;li>lerna create [name] [loc] 创建新的包，名字为 name 位置在 loc；&lt;/li>
+&lt;li>lerna create [name] [loc] 创建新的包，名字为 name，位置在 loc；&lt;/li>
 &lt;li>lerna import [pathToRepo] 导入本地路径中的 repo 并提交 commit；&lt;/li>
 &lt;li>lerna exec &amp;ndash; [command] [..args] 对每个包中执行任意命令；
 &lt;ul>
@@ -133,7 +133,7 @@
 &lt;p>对于需要多人维护的复杂项目，相同的代码样式和具体的提交信息是必要的；借助 husky 和 lint-staged（相似的工具还有 pretty-quick，不过只能调用 Prettier，不能调用 Lints），可以对待提交的文件进行校验、格式化，也可以对 commit message 进行约束。&lt;/p>
 &lt;h3 id="提交工作流钩子">提交工作流钩子&lt;/h3>
 &lt;ul>
-&lt;li>pre-commit：在键入提交信息前运行；它用于检查即将提交的快照，例如，检查是否有所遗漏，确保测试运行，以及核查代码；不过你可以用 git commit &amp;ndash;no-verify 来绕过这个环节。你可以利用该钩子来检查代码风格是否一致（运行类似 lint 的程序）等；&lt;/li>
+&lt;li>pre-commit：在提交信息前运行；它用于检查即将提交的快照；例如，检查是否有所遗漏，确保测试运行，以及核查代码；不过你可以用 git commit &amp;ndash;no-verify 来绕过这个环节。你可以利用该钩子来检查代码风格是否一致（运行类似 lint 的程序）等；&lt;/li>
 &lt;li>prepare-commit-msg：在启动提交信息编辑器之前，默认信息被创建之后运行；它允许你编辑提交者所看到的默认信息。它对一般的提交来说并没有什么用；然而对那些会自动产生默认信息的提交，如提交信息模板、合并提交、压缩提交和修订提交等非常实用；&lt;/li>
 &lt;li>commit-msg：接收一个参数（存有当前提交信息的临时文件的路径）。可以用来在提交通过前验证项目状态或提交信息；&lt;/li>
 &lt;li>post-commit：在整个提交过程完成后运行；该钩子一般用于通知之类的事情。&lt;/li>
@@ -583,7 +583,7 @@
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
 &lt;/div>&lt;h3 id="commitlint-配置">commitlint 配置&lt;/h3>
-&lt;p>commitlint.rules：&lt;/p>
+&lt;p>commitlint.rules:&lt;/p>
 &lt;div class="highlight">&lt;div class="chroma">
 &lt;table class="lntable">&lt;tr>&lt;td class="lntd">
 &lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
@@ -664,7 +664,7 @@
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">};&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div>&lt;p>commitlint.config：&lt;/p>
+&lt;/div>&lt;p>commitlint.config:&lt;/p>
 &lt;div class="highlight">&lt;div class="chroma">
 &lt;table class="lntable">&lt;tr>&lt;td class="lntd">
 &lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1

@@ -535,7 +535,7 @@
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
 &lt;/div>&lt;h2 id="组合模式">组合模式&lt;/h2>
-&lt;p>将对象组合成树形结构，以表示“部分-整体”的层次结构；通过对象的多态性表现，使得用户对单个对象和组合对象的使用具有一致性。&lt;/p>
+&lt;p>将对象组合成树形结构，以表示“部分 - 整体”的层次结构；通过对象的多态性表现，使得用户对单个对象和组合对象的使用具有一致性。&lt;/p>
 &lt;div class="highlight">&lt;div class="chroma">
 &lt;table class="lntable">&lt;tr>&lt;td class="lntd">
 &lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1

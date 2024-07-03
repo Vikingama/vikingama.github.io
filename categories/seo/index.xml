@@ -10,7 +10,7 @@
 &lt;p>&lt;img src="https://vikingama.github.io/p/spa-%E7%9A%84-seo-%E5%AE%9E%E8%B7%B5/googlebot-crawl-render.png"
 width="1607"
 height="884"
-srcset="https://vikingama.github.io/p/spa-%E7%9A%84-seo-%E5%AE%9E%E8%B7%B5/googlebot-crawl-render_hu83afdb6f9352772769f9d8e77b5ab8d0_35773_480x0_resize_box_3.png 480w, https://vikingama.github.io/p/spa-%E7%9A%84-seo-%E5%AE%9E%E8%B7%B5/googlebot-crawl-render_hu83afdb6f9352772769f9d8e77b5ab8d0_35773_1024x0_resize_box_3.png 1024w"
+srcset="https://vikingama.github.io/p/spa-%E7%9A%84-seo-%E5%AE%9E%E8%B7%B5/googlebot-crawl-render_huf74340f63266f25da69db6b60087d9ce_18196_480x0_resize_box_3.png 480w, https://vikingama.github.io/p/spa-%E7%9A%84-seo-%E5%AE%9E%E8%B7%B5/googlebot-crawl-render_huf74340f63266f25da69db6b60087d9ce_18196_1024x0_resize_box_3.png 1024w"
 alt="蜘蛛抓取过程"
 class="gallery-image"
 data-flex-grow="181"
@@ -55,7 +55,7 @@ target="_blank" rel="noopener"
 &lt;/ul>
 &lt;p>缺点：&lt;/p>
 &lt;ul>
-&lt;li>无法实时更新静态服务器端 HTML 的内容（除非在数据发生变动时重新打包部署）。&lt;/li>
+&lt;li>无法实时更新静态服务器端 HTML 的内容（除非在数据发生变动时重新打包部署）；&lt;/li>
 &lt;li>无法用于不可穷举的动态路由场景；&lt;/li>
 &lt;li>不支持哈希路由。&lt;/li>
 &lt;/ul>
@@ -260,7 +260,7 @@ target="_blank" rel="noopener"
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">},&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 是否显示浏览器（多用于调试，开启之后部分打包环境会打包失败）
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="nx">headless&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="kc">true&lt;/span>&lt;span class="p">,&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 在预渲染之前等待的事件
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 在预渲染之前等待的时间
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="nx">renderAfterTime&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="mi">500&lt;/span>&lt;span class="p">,&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 最多同时渲染多少个路由
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="nx">maxConcurrentRoutes&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="p">,&lt;/span>
@@ -291,7 +291,7 @@ target="_blank" rel="noopener"
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">};&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div>&lt;p>为了 SEO，你可能需要 extract-text-webpack-plugin 将样式单独打包。&lt;/p>
+&lt;/div>&lt;p>为了 SEO，你可能需要 extract-text-webpack-plugin 将样式单独打包；减少 HTML 中的无语意字符。&lt;/p>
 &lt;h3 id="prerenderspaplugin-逻辑">PrerenderSPAPlugin 逻辑&lt;/h3>
 &lt;div class="highlight">&lt;div class="chroma">
 &lt;table class="lntable">&lt;tr>&lt;td class="lntd">

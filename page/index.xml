@@ -293,9 +293,13 @@
 &lt;/span>&lt;span class="lnt">75
 &lt;/span>&lt;span class="lnt">76
 &lt;/span>&lt;span class="lnt">77
+&lt;/span>&lt;span class="lnt">78
+&lt;/span>&lt;span class="lnt">79
 &lt;/span>&lt;/code>&lt;/pre>&lt;/td>
 &lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">git add --all
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">ssh-keygen -t rsa -C &lt;span class="s2">&amp;#34;hahaha@hotmail.com&amp;#34;&lt;/span> -f &lt;span class="s2">&amp;#34;hahaha_ref&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git add --all
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git add .
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git branch -d/D development
@@ -323,9 +327,9 @@
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git log --stat
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git log -p
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git pull --merge
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git pull --rebase
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git pull --rebase --autostash
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git pull --rebase
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git pull --merge
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git push origin --delete development
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git push --set-upstream origin development

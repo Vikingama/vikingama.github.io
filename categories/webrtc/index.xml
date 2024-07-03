@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>WebRTC on 馬腊咯稽</title><link>https://vikingama.github.io/categories/webrtc/</link><description>Recent content in WebRTC on 馬腊咯稽</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Mon, 25 Apr 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://vikingama.github.io/categories/webrtc/index.xml" rel="self" type="application/rss+xml"/><item><title>WebRTC 初上手 · 看不见我的美 · 是你瞎了眼</title><link>https://vikingama.github.io/p/webrtc-%E5%88%9D%E4%B8%8A%E6%89%8B/</link><pubDate>Mon, 25 Apr 2022 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/p/webrtc-%E5%88%9D%E4%B8%8A%E6%89%8B/</guid><description>&lt;img src="https://vikingama.github.io/img/cover/webrtc.png" alt="WebRTC 初上手" />&lt;h2 id="需求">需求&lt;/h2>
-&lt;p>随着国家对个体户税收政策的收紧，公司需要采集客户的“话术视频”来作为规避业务风险的“凭据”。具体来说就是，需要用户在手机端录制一段“我已同意 xxx”的视频，并且录制完成之后，上传至服务器保存。&lt;/p>
-&lt;p>经过搜集信息，大致有两种实现思路：&lt;a class="link"
+&lt;p>随着政府对个体户税收政策的收紧，公司需要采集客户的“话术视频”来作为规避业务风险的“凭据”。具体来说就是，需要用户在手机端录制一段“我已同意 xxx”的视频，并且录制完成之后，上传至服务器保存。&lt;/p>
+&lt;p>经过调研搜集，大致有两种实现思路：&lt;a class="link"
 href="https://w3c.github.io/html-media-capture"
 target="_blank" rel="noopener"
 >
@@ -309,7 +309,7 @@ RTCPeerConnection
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">console&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">error&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;找不到错误&amp;#39;&lt;/span>&lt;span class="p">);&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">break&lt;/span>&lt;span class="p">;&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">case&lt;/span> &lt;span class="s1">&amp;#39;NotReadableError&amp;#39;&lt;/span>&lt;span class="o">:&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">console&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">error&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;无法读取错误，别的硬件、软件问题&amp;#39;&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">console&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">error&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;无法读取错误，可能是硬件、软件问题&amp;#39;&lt;/span>&lt;span class="p">);&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">break&lt;/span>&lt;span class="p">;&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">case&lt;/span> &lt;span class="s1">&amp;#39;OverconstrainedError&amp;#39;&lt;/span>&lt;span class="o">:&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">console&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">error&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;无法满足要求错误，无法满足 constraint 的要求&amp;#39;&lt;/span>&lt;span class="p">);&lt;/span>
@@ -325,7 +325,7 @@ RTCPeerConnection
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="k">break&lt;/span>&lt;span class="p">;&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">});&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 用来进行屏幕共享，当前业务场景下用不到
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 用来进行屏幕共享/录屏，当前业务场景下用不到
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="kd">let&lt;/span> &lt;span class="nx">captureStream&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="kc">null&lt;/span>&lt;span class="p">;&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">getDisplayMediaPromise&lt;/span> &lt;span class="o">=&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">navigator&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">mediaDevices&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">getDisplayMedia&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">userMediaConstraints&lt;/span>&lt;span class="p">);&lt;/span>
@@ -513,6 +513,7 @@ target="_blank" rel="noopener"
 Agora WebRTC Precall Test
 &lt;/a>
 检测当前环境对 WebRTC 的支持情况。&lt;/p>
+&lt;p>小米部分机型不识别 MediaStream，并且没有对应的开发文档。&lt;/p>
 &lt;p>如果 iOS 不能实时预览和回放，请&lt;a class="link"
 href="https://developer.apple.com/documentation/webkit/delivering_video_content_for_safari"
 target="_blank" rel="noopener"
@@ -520,7 +521,6 @@ target="_blank" rel="noopener"
 参阅
 &lt;/a>
 。&lt;/p>
-&lt;p>小米部分机型不识别 MediaStream，并且没有对应的开发文档。&lt;/p>
 &lt;p>DEMO 在&lt;a class="link"
 href="https://vikingama.github.io/demosforife/MediaRecorder.html"
 >
