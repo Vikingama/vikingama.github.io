@@ -1,4 +1,112 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Pages on 馬腊咯稽</title><link>https://vikingama.github.io/page/</link><description>Recent content in Pages on 馬腊咯稽</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Thu, 01 Sep 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://vikingama.github.io/page/index.xml" rel="self" type="application/rss+xml"/><item><title>启发 · 看不见我的美 · 是你瞎了眼</title><link>https://vikingama.github.io/%E5%90%AF%E5%8F%91/</link><pubDate>Thu, 01 Sep 2022 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/%E5%90%AF%E5%8F%91/</guid><description/></item><item><title>命令 · 看不见我的美 · 是你瞎了眼</title><link>https://vikingama.github.io/%E5%91%BD%E4%BB%A4/</link><pubDate>Thu, 28 Oct 2021 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/%E5%91%BD%E4%BB%A4/</guid><description>&lt;h2 id="创建可引导的-macos-安装器">创建可引导的 macOS 安装器&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Pages on 馬腊咯稽</title><link>https://vikingama.github.io/page/</link><description>Recent content in Pages on 馬腊咯稽</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Sat, 01 Jun 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://vikingama.github.io/page/index.xml" rel="self" type="application/rss+xml"/><item><title>简历 · 看不见我的美 · 是你瞎了眼</title><link>https://vikingama.github.io/%E7%AE%80%E5%8E%86/</link><pubDate>Sat, 01 Jun 2024 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/%E7%AE%80%E5%8E%86/</guid><description>&lt;h2 id="基本信息">基本信息&lt;/h2>
+&lt;table style="width: 100%;">
+&lt;tr style="background: transparent;border: none;">
+&lt;td style="border: none;text-align: right;white-space: nowrap;word-break: keep-all;">姓名：&lt;/td>
+&lt;td style="border: none;">李霄汉&lt;/td>
+&lt;td style="border: none;text-align: right;white-space: nowrap;word-break: keep-all;">学历：&lt;/td>
+&lt;td style="border: none;">统招本科&lt;/td>
+&lt;/tr>
+&lt;tr style="background: transparent;border: none;">
+&lt;td style="border: none;text-align: right;white-space: nowrap;word-break: keep-all;">手机：&lt;/td>
+&lt;td style="border: none;">&lt;a href="tel:186-6819-8984">186-6819-8984&lt;/a>&lt;/td>
+&lt;td style="border: none;text-align: right;white-space: nowrap;word-break: keep-all;">专业：&lt;/td>
+&lt;td style="border: none;">信息管理与信息系统&lt;/td>
+&lt;/tr>
+&lt;tr style="background: transparent;border: none;">
+&lt;td style="border: none;text-align: right;white-space: nowrap;word-break: keep-all;">邮箱：&lt;/td>
+&lt;td style="border: none;">&lt;a href="mailto:Pavilion0321@gmail.com">Pavilion0321@gmail.com&lt;/a>&lt;/td>
+&lt;td style="border: none;text-align: right;white-space: nowrap;word-break: keep-all;">英文等级：&lt;/td>
+&lt;td style="border: none;">CET-6&lt;/td>
+&lt;/tr>
+&lt;tr style="background: transparent;border: none;">
+&lt;td style="border: none;text-align: right;white-space: nowrap;word-break: keep-all;">现居地：&lt;/td>
+&lt;td style="border: none;">浙江省杭州市&lt;/td>
+&lt;td style="border: none;text-align: right;white-space: nowrap;word-break: keep-all;">博客：&lt;/td>
+&lt;td style="border: none;">&lt;a href="https://vikingama.github.io/">https://vikingama.github.io/&lt;/a>&lt;/td>
+&lt;/tr>
+&lt;/table>
+&lt;h2 id="职业技能">职业技能&lt;/h2>
+&lt;ul>
+&lt;li>熟练使用 Angular、React、Vue&lt;/li>
+&lt;li>熟练使用 RxJS&lt;/li>
+&lt;li>熟练使用 Git&lt;/li>
+&lt;/ul>
+&lt;h2 id="项目经验">项目经验&lt;/h2>
+&lt;h3 id="蓝犀共享经济服务平台">蓝犀共享经济服务平台&lt;/h3>
+&lt;blockquote>
+&lt;p>时间：2022 年 3 月 – 2024 年 5 月&lt;/p>
+&lt;p>描述：智能财税平台，可完成商户入驻、自由职业者结算/开票流程&lt;/p>
+&lt;p>技术栈：Angula、NgZorro、OpenTelemetry、RxJS、TS&lt;/p>
+&lt;ul>
+&lt;li>使用 NgZorro 作为基础组件库&lt;/li>
+&lt;li>负责精确到按钮粒度的权限管理&lt;/li>
+&lt;li>重构自由职业者充值提现模块&lt;/li>
+&lt;li>接入 OTLP，打通前后端链路&lt;/li>
+&lt;li>配置 ESLint 与 Prettier&lt;/li>
+&lt;/ul>
+&lt;/blockquote>
+&lt;h3 id="自由职业者签约平台">自由职业者签约平台&lt;/h3>
+&lt;blockquote>
+&lt;p>时间：2022 年 3 月 – 2024 年 5 月&lt;/p>
+&lt;p>描述：帮助个体户/自由职业者完成签约流程&lt;/p>
+&lt;p>技术栈：Vue、Vite、OpenTelemetry&lt;/p>
+&lt;ul>
+&lt;li>接入 OTLP，打通前后端链路&lt;/li>
+&lt;li>迁移脚手架至 Vite@3&lt;/li>
+&lt;li>参与 JSBridge 开发&lt;/li>
+&lt;li>配置 ESLint&lt;/li>
+&lt;/ul>
+&lt;/blockquote>
+&lt;h3 id="lstack-混合云管平台">LStack 混合云管平台&lt;/h3>
+&lt;blockquote>
+&lt;p>时间：2020 年 5 月 – 2022 年 1 月&lt;/p>
+&lt;p>描述：面向开发者的云原生应用管理工具&lt;/p>
+&lt;p>技术栈：Vue、VueRouter、Vuex、ElementUI、ECharts、Lerna&lt;/p>
+&lt;ul>
+&lt;li>通过 lint-staged 对暂存区文件进行格式化和校验&lt;/li>
+&lt;li>使用基于 slot 的 renderless 数据渲染方式&lt;/li>
+&lt;li>通过预渲染插件对官网进行 SEO 优化&lt;/li>
+&lt;li>使用 husky 规范 commit 信息&lt;/li>
+&lt;li>使用 ECharts 展示用户数据&lt;/li>
+&lt;li>基于路由的权限管理&lt;/li>
+&lt;/ul>
+&lt;/blockquote>
+&lt;h3 id="花瓣站长平台">花瓣站长平台&lt;/h3>
+&lt;blockquote>
+&lt;p>时间：2019 年 7 月 – 2019 年 8 月&lt;/p>
+&lt;p>描述：供合作伙伴查询推广流量的工具&lt;/p>
+&lt;p>技术栈：React、ReactRouter、Redux、AntDesign、StyledComponents、BizCharts&lt;/p>
+&lt;ul>
+&lt;li>使用 AntDesign 作为基础组件库&lt;/li>
+&lt;li>使用 BizCharts 展示流量数据&lt;/li>
+&lt;li>使用 CSS IN JS 的样式管理&lt;/li>
+&lt;li>使用 Redux 管理全局状态&lt;/li>
+&lt;li>基于路由的代码懒加载&lt;/li>
+&lt;/ul>
+&lt;/blockquote>
+&lt;h2 id="工作经历">工作经历&lt;/h2>
+&lt;table style="width: 100%;">
+&lt;tr style="background: transparent;border: none;">
+&lt;td style="border: none;text-align: left;">2022.03 – 2024.05&lt;/td>
+&lt;td style="border: none;text-align: center;">浙江河马管家网络科技有限公司&lt;/td>
+&lt;td style="border: none;text-align: center;">Web 前端开发&lt;/td>
+&lt;/tr>
+&lt;tr style="background: transparent;border: none;">
+&lt;td style="border: none;text-align: left;">2020.05 – 2021.07&lt;/td>
+&lt;td style="border: none;text-align: center;">杭州朗澈科技有限公司&lt;/td>
+&lt;td style="border: none;text-align: center;">Web 前端开发&lt;/td>
+&lt;/tr>
+&lt;tr style="background: transparent;border: none;">
+&lt;td style="border: none;text-align: left;">2019.06 – 2020.01&lt;/td>
+&lt;td style="border: none;text-align: center;">杭州纬音智网络有限公司&lt;/td>
+&lt;td style="border: none;text-align: center;">Web 前端开发&lt;/td>
+&lt;/tr>
+&lt;tr style="background: transparent;border: none;">
+&lt;td style="border: none;text-align: left;">2017.08 – 2019.04&lt;/td>
+&lt;td style="border: none;text-align: center;">杭州聚米生活服务有限公司&lt;/td>
+&lt;td style="border: none;text-align: center;">Web 前端开发&lt;/td>
+&lt;/tr>
+&lt;/table></description></item><item><title>启发 · 看不见我的美 · 是你瞎了眼</title><link>https://vikingama.github.io/%E5%90%AF%E5%8F%91/</link><pubDate>Thu, 01 Sep 2022 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/%E5%90%AF%E5%8F%91/</guid><description/></item><item><title>命令 · 看不见我的美 · 是你瞎了眼</title><link>https://vikingama.github.io/%E5%91%BD%E4%BB%A4/</link><pubDate>Thu, 28 Oct 2021 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/%E5%91%BD%E4%BB%A4/</guid><description>&lt;h2 id="创建可引导的-macos-安装器">创建可引导的 macOS 安装器&lt;/h2>
 &lt;div class="highlight">&lt;div class="chroma">
 &lt;table class="lntable">&lt;tr>&lt;td class="lntd">
 &lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
@@ -407,115 +515,7 @@
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">pkgutil --expand Edge.pkg ./Edge
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div></description></item><item><title>简历 · 看不见我的美 · 是你瞎了眼</title><link>https://vikingama.github.io/%E7%AE%80%E5%8E%86/</link><pubDate>Tue, 10 Aug 2021 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/%E7%AE%80%E5%8E%86/</guid><description>&lt;h2 id="基本信息">基本信息&lt;/h2>
-&lt;table style="width: 100%;">
-&lt;tr style="background: transparent;border: none;">
-&lt;td style="border: none;text-align: right;white-space: nowrap;word-break: keep-all;">姓名：&lt;/td>
-&lt;td style="border: none;">李霄汉&lt;/td>
-&lt;td style="border: none;text-align: right;white-space: nowrap;word-break: keep-all;">学历：&lt;/td>
-&lt;td style="border: none;">统招本科&lt;/td>
-&lt;/tr>
-&lt;tr style="background: transparent;border: none;">
-&lt;td style="border: none;text-align: right;white-space: nowrap;word-break: keep-all;">手机：&lt;/td>
-&lt;td style="border: none;">&lt;a href="tel:186-6819-8984">186-6819-8984&lt;/a>&lt;/td>
-&lt;td style="border: none;text-align: right;white-space: nowrap;word-break: keep-all;">专业：&lt;/td>
-&lt;td style="border: none;">信息管理与信息系统&lt;/td>
-&lt;/tr>
-&lt;tr style="background: transparent;border: none;">
-&lt;td style="border: none;text-align: right;white-space: nowrap;word-break: keep-all;">邮箱：&lt;/td>
-&lt;td style="border: none;">&lt;a href="mailto:Pavilion0321@gmail.com">Pavilion0321@gmail.com&lt;/a>&lt;/td>
-&lt;td style="border: none;text-align: right;white-space: nowrap;word-break: keep-all;">英文等级：&lt;/td>
-&lt;td style="border: none;">CET-6&lt;/td>
-&lt;/tr>
-&lt;tr style="background: transparent;border: none;">
-&lt;td style="border: none;text-align: right;white-space: nowrap;word-break: keep-all;">现居地：&lt;/td>
-&lt;td style="border: none;">浙江省杭州市&lt;/td>
-&lt;td style="border: none;text-align: right;white-space: nowrap;word-break: keep-all;">博客：&lt;/td>
-&lt;td style="border: none;">&lt;a href="https://vikingama.github.io/">https://vikingama.github.io/&lt;/a>&lt;/td>
-&lt;/tr>
-&lt;/table>
-&lt;h2 id="职业技能">职业技能&lt;/h2>
-&lt;ul>
-&lt;li>熟练使用 Angular、React、Vue&lt;/li>
-&lt;li>熟练使用 RxJS&lt;/li>
-&lt;li>熟练使用 Git&lt;/li>
-&lt;/ul>
-&lt;h2 id="项目经验">项目经验&lt;/h2>
-&lt;h3 id="蓝犀共享经济服务平台">蓝犀共享经济服务平台&lt;/h3>
-&lt;blockquote>
-&lt;p>时间：2022 年 3 月 – 2024 年 5 月&lt;/p>
-&lt;p>描述：智能财税平台，可完成商户入驻、自由职业者结算/开票流程&lt;/p>
-&lt;p>技术栈：Angula、NgZorro、OpenTelemetry、RxJS、TS&lt;/p>
-&lt;ul>
-&lt;li>使用 NgZorro 作为基础组件库&lt;/li>
-&lt;li>负责精确到按钮粒度的权限管理&lt;/li>
-&lt;li>重构自由职业者充值提现模块&lt;/li>
-&lt;li>接入 OTLP，打通前后端链路&lt;/li>
-&lt;li>配置 ESLint 与 Prettier&lt;/li>
-&lt;/ul>
-&lt;/blockquote>
-&lt;h3 id="自由职业者签约平台">自由职业者签约平台&lt;/h3>
-&lt;blockquote>
-&lt;p>时间：2022 年 3 月 – 2024 年 5 月&lt;/p>
-&lt;p>描述：帮助个体户/自由职业者完成签约流程&lt;/p>
-&lt;p>技术栈：Vue、Vite、OpenTelemetry&lt;/p>
-&lt;ul>
-&lt;li>接入 OTLP，打通前后端链路&lt;/li>
-&lt;li>迁移脚手架至 Vite@3&lt;/li>
-&lt;li>参与 JSBridge 开发&lt;/li>
-&lt;li>配置 ESLint&lt;/li>
-&lt;/ul>
-&lt;/blockquote>
-&lt;h3 id="lstack-混合云管平台">LStack 混合云管平台&lt;/h3>
-&lt;blockquote>
-&lt;p>时间：2020 年 5 月 – 2022 年 1 月&lt;/p>
-&lt;p>描述：面向开发者的云原生应用管理工具&lt;/p>
-&lt;p>技术栈：Vue、VueRouter、Vuex、ElementUI、ECharts、Lerna&lt;/p>
-&lt;ul>
-&lt;li>通过 lint-staged 对暂存区文件进行格式化和校验&lt;/li>
-&lt;li>使用基于 slot 的 renderless 数据渲染方式&lt;/li>
-&lt;li>通过预渲染插件对官网进行 SEO 优化&lt;/li>
-&lt;li>使用 husky 规范 commit 信息&lt;/li>
-&lt;li>使用 ECharts 展示用户数据&lt;/li>
-&lt;li>基于路由的权限管理&lt;/li>
-&lt;/ul>
-&lt;/blockquote>
-&lt;h3 id="花瓣站长平台">花瓣站长平台&lt;/h3>
-&lt;blockquote>
-&lt;p>时间：2019 年 7 月 – 2019 年 8 月&lt;/p>
-&lt;p>描述：供合作伙伴查询推广流量的工具&lt;/p>
-&lt;p>技术栈：React、ReactRouter、Redux、AntDesign、StyledComponents、BizCharts&lt;/p>
-&lt;ul>
-&lt;li>使用 AntDesign 作为基础组件库&lt;/li>
-&lt;li>使用 BizCharts 展示流量数据&lt;/li>
-&lt;li>使用 CSS IN JS 的样式管理&lt;/li>
-&lt;li>使用 Redux 管理全局状态&lt;/li>
-&lt;li>基于路由的代码懒加载&lt;/li>
-&lt;/ul>
-&lt;/blockquote>
-&lt;h2 id="工作经历">工作经历&lt;/h2>
-&lt;table style="width: 100%;">
-&lt;tr style="background: transparent;border: none;">
-&lt;td style="border: none;text-align: left;">2022.03 – 2024.05&lt;/td>
-&lt;td style="border: none;text-align: center;">浙江河马管家网络科技有限公司&lt;/td>
-&lt;td style="border: none;text-align: center;">Web 前端开发&lt;/td>
-&lt;/tr>
-&lt;tr style="background: transparent;border: none;">
-&lt;td style="border: none;text-align: left;">2020.05 – 2021.07&lt;/td>
-&lt;td style="border: none;text-align: center;">杭州朗澈科技有限公司&lt;/td>
-&lt;td style="border: none;text-align: center;">Web 前端开发&lt;/td>
-&lt;/tr>
-&lt;tr style="background: transparent;border: none;">
-&lt;td style="border: none;text-align: left;">2019.06 – 2020.01&lt;/td>
-&lt;td style="border: none;text-align: center;">杭州纬音智网络有限公司&lt;/td>
-&lt;td style="border: none;text-align: center;">Web 前端开发&lt;/td>
-&lt;/tr>
-&lt;tr style="background: transparent;border: none;">
-&lt;td style="border: none;text-align: left;">2017.08 – 2019.04&lt;/td>
-&lt;td style="border: none;text-align: center;">杭州聚米生活服务有限公司&lt;/td>
-&lt;td style="border: none;text-align: center;">Web 前端开发&lt;/td>
-&lt;/tr>
-&lt;/table></description></item><item><title>归档 · 看不见我的美 · 是你瞎了眼</title><link>https://vikingama.github.io/archives/</link><pubDate>Tue, 28 May 2019 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/archives/</guid><description/></item><item><title>搜索 · 看不见我的美 · 是你瞎了眼</title><link>https://vikingama.github.io/search/</link><pubDate>Tue, 28 May 2019 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/search/</guid><description/></item><item><title>关于 · 看不见我的美 · 是你瞎了眼</title><link>https://vikingama.github.io/%E5%85%B3%E4%BA%8E/</link><pubDate>Mon, 06 May 2019 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/%E5%85%B3%E4%BA%8E/</guid><description>&lt;p>九零后天蝎，患有轻度郁闷和重度强迫症，外表肥宅内心戏精，面试会变傻&amp;hellip;&lt;/p>
+&lt;/div></description></item><item><title>归档 · 看不见我的美 · 是你瞎了眼</title><link>https://vikingama.github.io/archives/</link><pubDate>Tue, 28 May 2019 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/archives/</guid><description/></item><item><title>搜索 · 看不见我的美 · 是你瞎了眼</title><link>https://vikingama.github.io/search/</link><pubDate>Tue, 28 May 2019 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/search/</guid><description/></item><item><title>关于 · 看不见我的美 · 是你瞎了眼</title><link>https://vikingama.github.io/%E5%85%B3%E4%BA%8E/</link><pubDate>Mon, 06 May 2019 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/%E5%85%B3%E4%BA%8E/</guid><description>&lt;p>九零后天蝎，患有轻度郁闷和重度强迫症，外表肥宅内心戏精，面试会变傻&amp;hellip;&lt;/p>
 &lt;p>喜欢拿自己的脸实验各种护肤品，喜欢看欧美烂片、听烂俗音乐&amp;hellip;&lt;/p>
 &lt;p>成长经历导致有点孩子气，没办法恋爱，不相信婚姻&amp;hellip;&lt;/p>
 &lt;p>不善言辞，性格各色，实在无可救药&amp;hellip;&lt;/p>
