@@ -1705,6 +1705,7 @@
 </span><span class=lnt>33
 </span><span class=lnt>34
 </span><span class=lnt>35
+</span><span class=lnt>36
 </span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-ts data-lang=ts><span class=line><span class=cl><span class=c1>// zoneless-event.service.ts
 </span></span></span><span class=line><span class=cl><span class=c1></span><span class=kd>@Injectable</span><span class=p>({</span>
 </span></span><span class=line><span class=cl>  <span class=nx>providedIn</span><span class=o>:</span> <span class=s1>&#39;root&#39;</span>
@@ -1733,7 +1734,8 @@
 </span></span><span class=line><span class=cl>  <span class=nx>imports</span><span class=o>:</span> <span class=p>[</span><span class=nx>BrowserModule</span><span class=p>],</span>
 </span></span><span class=line><span class=cl>  <span class=nx>providers</span><span class=o>:</span> <span class=p>[</span>
 </span></span><span class=line><span class=cl>    <span class=p>{</span>
-</span></span><span class=line><span class=cl>      <span class=nx>provide</span>: <span class=kt>EVENT_MANAGER_PLUGINS</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>      <span class=c1>// @Inject(EVENT_MANAGER_PLUGINS) 就可以拿到 ZonelessEventService
+</span></span></span><span class=line><span class=cl><span class=c1></span>      <span class=nx>provide</span>: <span class=kt>EVENT_MANAGER_PLUGINS</span><span class=p>,</span>
 </span></span><span class=line><span class=cl>      <span class=nx>useClass</span>: <span class=kt>ZonelessEventService</span><span class=p>,</span>
 </span></span><span class=line><span class=cl>      <span class=nx>multi</span>: <span class=kt>true</span>
 </span></span><span class=line><span class=cl>    <span class=p>}</span>

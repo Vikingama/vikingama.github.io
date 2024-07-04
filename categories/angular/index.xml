@@ -1823,6 +1823,7 @@ EventManager
 &lt;/span>&lt;span class="lnt">33
 &lt;/span>&lt;span class="lnt">34
 &lt;/span>&lt;span class="lnt">35
+&lt;/span>&lt;span class="lnt">36
 &lt;/span>&lt;/code>&lt;/pre>&lt;/td>
 &lt;td class="lntd">
 &lt;pre tabindex="0" class="chroma">&lt;code class="language-ts" data-lang="ts">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// zoneless-event.service.ts
@@ -1853,7 +1854,8 @@ EventManager
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">imports&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="p">[&lt;/span>&lt;span class="nx">BrowserModule&lt;/span>&lt;span class="p">],&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">providers&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="p">[&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">provide&lt;/span>: &lt;span class="kt">EVENT_MANAGER_PLUGINS&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// @Inject(EVENT_MANAGER_PLUGINS) 就可以拿到 ZonelessEventService
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="nx">provide&lt;/span>: &lt;span class="kt">EVENT_MANAGER_PLUGINS&lt;/span>&lt;span class="p">,&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">useClass&lt;/span>: &lt;span class="kt">ZonelessEventService&lt;/span>&lt;span class="p">,&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">multi&lt;/span>: &lt;span class="kt">true&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
@@ -2672,6 +2674,7 @@ target="_blank" rel="noopener"
 &lt;/span>&lt;span class="lnt">40
 &lt;/span>&lt;span class="lnt">41
 &lt;/span>&lt;span class="lnt">42
+&lt;/span>&lt;span class="lnt">43
 &lt;/span>&lt;/code>&lt;/pre>&lt;/td>
 &lt;td class="lntd">
 &lt;pre tabindex="0" class="chroma">&lt;code class="language-ts" data-lang="ts">&lt;span class="line">&lt;span class="cl">&lt;span class="kr">type&lt;/span> &lt;span class="nx">DomSanitizerType&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s1">&amp;#39;html&amp;#39;&lt;/span> &lt;span class="o">|&lt;/span> &lt;span class="s1">&amp;#39;style&amp;#39;&lt;/span> &lt;span class="o">|&lt;/span> &lt;span class="s1">&amp;#39;js&amp;#39;&lt;/span> &lt;span class="o">|&lt;/span> &lt;span class="s1">&amp;#39;url&amp;#39;&lt;/span> &lt;span class="o">|&lt;/span> &lt;span class="s1">&amp;#39;resourceUrl&amp;#39;&lt;/span>&lt;span class="p">;&lt;/span>
@@ -2689,7 +2692,8 @@ target="_blank" rel="noopener"
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">pure&lt;/span>: &lt;span class="kt">true&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">})&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">export&lt;/span> &lt;span class="kr">class&lt;/span> &lt;span class="nx">SanitizerPipe&lt;/span> &lt;span class="kr">implements&lt;/span> &lt;span class="nx">PipeTransform&lt;/span> &lt;span class="p">{&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kr">constructor&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kr">protected&lt;/span> &lt;span class="nx">sanitizer&lt;/span>: &lt;span class="kt">DomSanitizer&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 实现一个“管道”，需要 implements PipeTransform 并实现 transform 方法
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="kr">constructor&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kr">protected&lt;/span> &lt;span class="nx">sanitizer&lt;/span>: &lt;span class="kt">DomSanitizer&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{}&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">transform&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">value&lt;/span>: &lt;span class="kt">NzSafeAny&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kr">type&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="s1">&amp;#39;html&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nx">SafeHtml&lt;/span>&lt;span class="p">;&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">transform&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">value&lt;/span>: &lt;span class="kt">NzSafeAny&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kr">type&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="s1">&amp;#39;style&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nx">SafeStyle&lt;/span>&lt;span class="p">;&lt;/span>

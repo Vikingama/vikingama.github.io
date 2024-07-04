@@ -683,6 +683,7 @@
 </span><span class=lnt>40
 </span><span class=lnt>41
 </span><span class=lnt>42
+</span><span class=lnt>43
 </span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-ts data-lang=ts><span class=line><span class=cl><span class=kr>type</span> <span class=nx>DomSanitizerType</span> <span class=o>=</span> <span class=s1>&#39;html&#39;</span> <span class=o>|</span> <span class=s1>&#39;style&#39;</span> <span class=o>|</span> <span class=s1>&#39;js&#39;</span> <span class=o>|</span> <span class=s1>&#39;url&#39;</span> <span class=o>|</span> <span class=s1>&#39;resourceUrl&#39;</span><span class=p>;</span>
 </span></span><span class=line><span class=cl><span class=kr>type</span> <span class=nx>NzSafeAny</span> <span class=o>=</span> <span class=kt>any</span><span class=p>;</span>
 </span></span><span class=line><span class=cl>
@@ -698,7 +699,8 @@
 </span></span><span class=line><span class=cl>  <span class=nx>pure</span>: <span class=kt>true</span>
 </span></span><span class=line><span class=cl><span class=p>})</span>
 </span></span><span class=line><span class=cl><span class=kr>export</span> <span class=kr>class</span> <span class=nx>SanitizerPipe</span> <span class=kr>implements</span> <span class=nx>PipeTransform</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl>  <span class=kr>constructor</span><span class=p>(</span><span class=kr>protected</span> <span class=nx>sanitizer</span>: <span class=kt>DomSanitizer</span><span class=p>)</span> <span class=p>{}</span>
+</span></span><span class=line><span class=cl>  <span class=c1>// 实现一个“管道”，需要 implements PipeTransform 并实现 transform 方法
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=kr>constructor</span><span class=p>(</span><span class=kr>protected</span> <span class=nx>sanitizer</span>: <span class=kt>DomSanitizer</span><span class=p>)</span> <span class=p>{}</span>
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl>  <span class=nx>transform</span><span class=p>(</span><span class=nx>value</span>: <span class=kt>NzSafeAny</span><span class=p>,</span> <span class=kr>type</span><span class=o>:</span> <span class=s1>&#39;html&#39;</span><span class=p>)</span><span class=o>:</span> <span class=nx>SafeHtml</span><span class=p>;</span>
 </span></span><span class=line><span class=cl>  <span class=nx>transform</span><span class=p>(</span><span class=nx>value</span>: <span class=kt>NzSafeAny</span><span class=p>,</span> <span class=kr>type</span><span class=o>:</span> <span class=s1>&#39;style&#39;</span><span class=p>)</span><span class=o>:</span> <span class=nx>SafeStyle</span><span class=p>;</span>

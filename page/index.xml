@@ -38,9 +38,9 @@
 &lt;p>描述：智能财税平台，可完成商户入驻、自由职业者结算/开票流程&lt;/p>
 &lt;p>技术栈：Angula、NgZorro、OpenTelemetry、RxJS、TS&lt;/p>
 &lt;ul>
+&lt;li>负责精确到按钮粒度的权限管理的开发&lt;/li>
+&lt;li>使用 renderless 进行逻辑封装&lt;/li>
 &lt;li>使用 NgZorro 作为基础组件库&lt;/li>
-&lt;li>负责精确到按钮粒度的权限管理&lt;/li>
-&lt;li>重构自由职业者充值提现模块&lt;/li>
 &lt;li>接入 OTLP，打通前后端链路&lt;/li>
 &lt;li>配置 ESLint 与 Prettier&lt;/li>
 &lt;/ul>
@@ -49,7 +49,7 @@
 &lt;blockquote>
 &lt;p>时间：2022 年 3 月 – 2024 年 5 月&lt;/p>
 &lt;p>描述：帮助个体户/自由职业者完成签约流程&lt;/p>
-&lt;p>技术栈：Vue、Vite、OpenTelemetry&lt;/p>
+&lt;p>技术栈：Vue@2、Vite、OpenTelemetry&lt;/p>
 &lt;ul>
 &lt;li>接入 OTLP，打通前后端链路&lt;/li>
 &lt;li>迁移脚手架至 Vite@3&lt;/li>
@@ -61,13 +61,12 @@
 &lt;blockquote>
 &lt;p>时间：2020 年 5 月 – 2022 年 1 月&lt;/p>
 &lt;p>描述：面向开发者的云原生应用管理工具&lt;/p>
-&lt;p>技术栈：Vue、VueRouter、Vuex、ElementUI、ECharts、Lerna&lt;/p>
+&lt;p>技术栈：Vue@2、VueRouter、Vuex、ElementUI、ECharts、Lerna&lt;/p>
 &lt;ul>
 &lt;li>通过 lint-staged 对暂存区文件进行格式化和校验&lt;/li>
 &lt;li>使用基于 slot 的 renderless 数据渲染方式&lt;/li>
 &lt;li>通过预渲染插件对官网进行 SEO 优化&lt;/li>
 &lt;li>使用 husky 规范 commit 信息&lt;/li>
-&lt;li>使用 ECharts 展示用户数据&lt;/li>
 &lt;li>基于路由的权限管理&lt;/li>
 &lt;/ul>
 &lt;/blockquote>
@@ -98,7 +97,7 @@
 &lt;/tr>
 &lt;tr style="background: transparent;border: none;">
 &lt;td style="border: none;text-align: left;">2019.06 – 2020.01&lt;/td>
-&lt;td style="border: none;text-align: center;">杭州纬音智网络有限公司&lt;/td>
+&lt;td style="border: none;text-align: center;">花瓣网&lt;/td>
 &lt;td style="border: none;text-align: center;">Web 前端开发&lt;/td>
 &lt;/tr>
 &lt;tr style="background: transparent;border: none;">
