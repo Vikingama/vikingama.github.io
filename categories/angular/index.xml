@@ -2990,6 +2990,7 @@ target="_blank" rel="noopener"
 &lt;/span>&lt;span class="lnt">63
 &lt;/span>&lt;span class="lnt">64
 &lt;/span>&lt;span class="lnt">65
+&lt;/span>&lt;span class="lnt">66
 &lt;/span>&lt;/code>&lt;/pre>&lt;/td>
 &lt;td class="lntd">
 &lt;pre tabindex="0" class="chroma">&lt;code class="language-ts" data-lang="ts">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">@Injectable&lt;/span>&lt;span class="p">({&lt;/span>
@@ -3000,6 +3001,7 @@ target="_blank" rel="noopener"
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * 3. [NgModule]：仅注入指定的 NgModule 中，仅可在指定的 NgModule 中使用，有 TreeShaking 加成；
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * 4. any：在每个注入的模块中，提供一个唯一的实例；
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * 5. null：仅仅表明可注入。
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * 这种方式要优于 @NgModule({providers: [xxx]})，因为可以被 Tree Shaking
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> */&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">providedIn&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="s1">&amp;#39;root&amp;#39;&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">})&lt;/span>
@@ -3775,9 +3777,9 @@ target="_blank" rel="noopener"
 &lt;p>如果“允许依赖缺失”或者需要“限制依赖查找范围”，可以使用修饰符更改默认的依赖查找机制：&lt;/p>
 &lt;ul>
 &lt;li>@Host 表示禁止在“请求该依赖的组件”以上查找依赖；&lt;/li>
-&lt;li>@Self 表示只在该组件的注入器中查找提供者；&lt;/li>
-&lt;li>@SkipSelf 表示跳过局部注入器，向上查找；&lt;/li>
-&lt;li>@Optional 表示找不到依赖就返回 null。&lt;/li>
+&lt;li>@Self 表示只在该组件的注入器中查找提供者，就是仅在 @Component({providers:[]}) 中查找，找不到就报错；&lt;/li>
+&lt;li>@SkipSelf 表示跳过局部注入器，向上查找，与 @Self 相反；&lt;/li>
+&lt;li>@Optional 表示找不到依赖就返回 null，即使找不到，也不报错。&lt;/li>
 &lt;/ul>
 &lt;div class="highlight">&lt;div class="chroma">
 &lt;table class="lntable">&lt;tr>&lt;td class="lntd">
@@ -3826,9 +3828,19 @@ target="_blank" rel="noopener"
 &lt;/span>&lt;span class="lnt">43
 &lt;/span>&lt;span class="lnt">44
 &lt;/span>&lt;span class="lnt">45
+&lt;/span>&lt;span class="lnt">46
+&lt;/span>&lt;span class="lnt">47
+&lt;/span>&lt;span class="lnt">48
+&lt;/span>&lt;span class="lnt">49
+&lt;/span>&lt;span class="lnt">50
 &lt;/span>&lt;/code>&lt;/pre>&lt;/td>
 &lt;td class="lntd">
 &lt;pre tabindex="0" class="chroma">&lt;code class="language-ts" data-lang="ts">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">@Component&lt;/span>&lt;span class="p">({&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="cm">/**
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * 如果不需要“独有”服务实例，就不需要 providers
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * 在每个 @Component({providers:[xxx]}) 中单独声明
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * 每个 Component 就独享这个 Service 实例
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> */&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">providers&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="p">[&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">provide&lt;/span>: &lt;span class="kt">AaService&lt;/span>&lt;span class="p">,&lt;/span>
@@ -4015,6 +4027,17 @@ target="_blank" rel="noopener"
 &lt;/span>&lt;span class="lnt">12
 &lt;/span>&lt;span class="lnt">13
 &lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
 &lt;/span>&lt;/code>&lt;/pre>&lt;/td>
 &lt;td class="lntd">
 &lt;pre tabindex="0" class="chroma">&lt;code class="language-ts" data-lang="ts">&lt;span class="line">&lt;span class="cl">&lt;span class="kr">import&lt;/span> &lt;span class="p">{&lt;/span> &lt;span class="nx">BrowserModule&lt;/span> &lt;span class="p">}&lt;/span> &lt;span class="kr">from&lt;/span> &lt;span class="s1">&amp;#39;@angular/platform-browser&amp;#39;&lt;/span>&lt;span class="p">;&lt;/span>
@@ -4022,7 +4045,18 @@ target="_blank" rel="noopener"
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">@NgModule&lt;/span>&lt;span class="p">({&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">providers&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="p">[&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="cm">/**
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * HTTP_INTERCEPTORS 是 InjectionToken 实例
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * 可以作为各个依赖项的唯一标识，方便依赖项被查找
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * 当然，唯一标识不一定要是 InjectionToken 实例
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * 可以被“唯一识别”就好，比如，NZ_I18N
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> */&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span> &lt;span class="nx">provide&lt;/span>: &lt;span class="kt">NZ_I18N&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">useValue&lt;/span>: &lt;span class="kt">zh_CN&lt;/span> &lt;span class="p">},&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="cm">/**
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * 使用一个 InjectionToken 初始化多个 provider
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * 酱紫就可以通过 @Inject(HTTP_INTERCEPTORS) 获取多个 provider
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * 如果 multi: false，后边的 provide 会覆盖前边的 provider
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> */&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span> &lt;span class="nx">provide&lt;/span>: &lt;span class="kt">HTTP_INTERCEPTORS&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">useClass&lt;/span>: &lt;span class="kt">SpinInterceptor&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">multi&lt;/span>: &lt;span class="kt">true&lt;/span> &lt;span class="p">},&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span> &lt;span class="nx">provide&lt;/span>: &lt;span class="kt">HTTP_INTERCEPTORS&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">useClass&lt;/span>: &lt;span class="kt">ErrorInterceptor&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">multi&lt;/span>: &lt;span class="kt">true&lt;/span> &lt;span class="p">}&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">],&lt;/span>
@@ -4101,6 +4135,11 @@ target="_blank" rel="noopener"
 &lt;/span>&lt;span class="lnt">63
 &lt;/span>&lt;span class="lnt">64
 &lt;/span>&lt;span class="lnt">65
+&lt;/span>&lt;span class="lnt">66
+&lt;/span>&lt;span class="lnt">67
+&lt;/span>&lt;span class="lnt">68
+&lt;/span>&lt;span class="lnt">69
+&lt;/span>&lt;span class="lnt">70
 &lt;/span>&lt;/code>&lt;/pre>&lt;/td>
 &lt;td class="lntd">
 &lt;pre tabindex="0" class="chroma">&lt;code class="language-ts" data-lang="ts">&lt;span class="line">&lt;span class="cl">&lt;span class="kr">import&lt;/span> &lt;span class="p">{&lt;/span>
@@ -4113,6 +4152,11 @@ target="_blank" rel="noopener"
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">@Injectable&lt;/span>&lt;span class="p">({})&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">export&lt;/span> &lt;span class="kr">class&lt;/span> &lt;span class="nx">ApiService&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="cm">/**
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * HttpClient 返回的 Observer 是“冷的”，不需要手动 unsubscribe
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * 请求成功时，会在 responseObserver.next 调用之后，调用 responseObserver.complete
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * 请求失败时，会调用 responseObserver.error
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> */&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kr">constructor&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kr">private&lt;/span> &lt;span class="nx">http&lt;/span>: &lt;span class="kt">HttpClient&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{}&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">options&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">{&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 自定义请求头
@@ -5315,14 +5359,15 @@ NG100 错误
 &lt;/div>
 &lt;/div>&lt;p>“可观察对象”的分类：&lt;/p>
 &lt;ul>
-&lt;li>“冷”可观察对象，在 subscribe 之后，才将“值”添加到“流”中；有多少个订阅就会生成多少个订阅实例（单播，订阅接收到的值是相同的）；&lt;/li>
-&lt;li>“热”可观察对象，在 subscribe 之前，已经产生了“值”；多个订阅共享同一个实例（多播，订阅接收到的值取决于什么时间开始订阅的）。&lt;/li>
+&lt;li>“冷”可观察对象，在 &lt;strong>subscribe&lt;/strong> 之后，才将“值”添加到“流”中；有多少个订阅就会生成多少个订阅实例（单播，订阅接收到的值是相同的）；&lt;/li>
+&lt;li>“热”可观察对象，在&lt;strong>创建&lt;/strong>之后，&lt;strong>立即&lt;/strong>产生了“值”；多个订阅共享同一个实例（多播，订阅接收到的值取决于什么时间开始订阅的）。&lt;/li>
 &lt;/ul>
 &lt;p>特殊的“可观察对象”：&lt;/p>
 &lt;ul>
-&lt;li>AsyncSubject，多播；只有当 complete 时，才会将“最后一个值”发送给订阅者；&lt;/li>
-&lt;li>BehaviorSubject，多播；保存了发送出去的“最后一个值”，“新的”订阅者会接收到这个值；&lt;/li>
-&lt;li>ReplaySubject，多播；保存了发送出去的“所有值”，“新的”订阅者会接收到所有“旧”值。&lt;/li>
+&lt;li>AsyncSubject，多播；需要初始值；只有当 complete 时，才会将“最后一个值”发送给订阅者；&lt;/li>
+&lt;li>BehaviorSubject，多播；需要初始值；保存了发送出去的“最后一个值”，“新的”订阅者会接收到这个值；&lt;/li>
+&lt;li>ReplaySubject，多播；需要初始值；保存了发送出去的“所有值”，“新的”订阅者会接收到所有“旧”值；&lt;/li>
+&lt;li>Subject，多播；不需要初始值；不会保存之前的任何值。&lt;/li>
 &lt;/ul>
 &lt;div class="highlight">&lt;div class="chroma">
 &lt;table class="lntable">&lt;tr>&lt;td class="lntd">
@@ -5380,10 +5425,32 @@ NG100 错误
 &lt;/span>&lt;span class="lnt">52
 &lt;/span>&lt;span class="lnt">53
 &lt;/span>&lt;span class="lnt">54
+&lt;/span>&lt;span class="lnt">55
+&lt;/span>&lt;span class="lnt">56
+&lt;/span>&lt;span class="lnt">57
+&lt;/span>&lt;span class="lnt">58
+&lt;/span>&lt;span class="lnt">59
+&lt;/span>&lt;span class="lnt">60
+&lt;/span>&lt;span class="lnt">61
+&lt;/span>&lt;span class="lnt">62
+&lt;/span>&lt;span class="lnt">63
+&lt;/span>&lt;span class="lnt">64
+&lt;/span>&lt;span class="lnt">65
 &lt;/span>&lt;/code>&lt;/pre>&lt;/td>
 &lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-ts" data-lang="ts">&lt;span class="line">&lt;span class="cl">&lt;span class="kr">import&lt;/span> &lt;span class="p">{&lt;/span> &lt;span class="nx">AsyncSubject&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">EMPTY&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">Observable&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">throwError&lt;/span> &lt;span class="p">}&lt;/span> &lt;span class="kr">from&lt;/span> &lt;span class="s1">&amp;#39;rxjs&amp;#39;&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-ts" data-lang="ts">&lt;span class="line">&lt;span class="cl">&lt;span class="kr">import&lt;/span> &lt;span class="p">{&lt;/span> &lt;span class="nx">AsyncSubject&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">EMPTY&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">Observable&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">Subject&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">throwError&lt;/span> &lt;span class="p">}&lt;/span> &lt;span class="kr">from&lt;/span> &lt;span class="s1">&amp;#39;rxjs&amp;#39;&lt;/span>&lt;span class="p">;&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">mySubject&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="nx">Subject&lt;/span>&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">number&lt;/span>&lt;span class="p">&amp;gt;();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nx">mySubject&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">next&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">10&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nx">mySubject&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">subscribe&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">v&lt;/span> &lt;span class="o">=&amp;gt;&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="cm">/**
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * 因为 20 是 subscribe 才后放入流的
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * 而 10 是 subscribe 才前放入流的
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * 只会打印 20，没有接收到 10
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> */&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">console&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">log&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">v&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">});&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nx">mySubject&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">next&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">20&lt;/span>&lt;span class="p">);&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">let&lt;/span> &lt;span class="nx">outter&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="mi">0&lt;/span>&lt;span class="p">;&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">cold&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="nx">Observable&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">sub&lt;/span> &lt;span class="o">=&amp;gt;&lt;/span> &lt;span class="p">{&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">outter&lt;/span>&lt;span class="o">++&lt;/span>&lt;span class="p">;&lt;/span>
@@ -5572,6 +5639,13 @@ href="https://dev.to/christiankohler/improved-dependeny-injection-with-the-new-p
 target="_blank" rel="noopener"
 >
 Improved Dependency Injection With The New ProvidedIn Scopes &amp;lsquo;any&amp;rsquo; And &amp;lsquo;platform&amp;rsquo;
+&lt;/a>
+&lt;/li>
+&lt;li>&lt;a class="link"
+href="https://juejin.cn/post/7012492445506093092"
+target="_blank" rel="noopener"
+>
+深入理解 Angular 依赖注入（二）：依赖注入在 Angular 中的应用
 &lt;/a>
 &lt;/li>
 &lt;li>&lt;a class="link"

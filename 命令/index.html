@@ -214,9 +214,17 @@
 </span><span class=lnt>77
 </span><span class=lnt>78
 </span><span class=lnt>79
+</span><span class=lnt>80
+</span><span class=lnt>81
+</span><span class=lnt>82
+</span><span class=lnt>83
+</span><span class=lnt>84
 </span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>ssh-keygen -t rsa -C <span class=s2>&#34;hahaha@hotmail.com&#34;</span> -f <span class=s2>&#34;hahaha_ref&#34;</span>
-</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 添加更改（增、删、改）到暂存区（工作区所有目录）</span>
 </span></span><span class=line><span class=cl>git add --all
+</span></span><span class=line><span class=cl><span class=c1># 添加已追踪的文件更改到暂存区（工作区所有目录）</span>
+</span></span><span class=line><span class=cl>git add --update
+</span></span><span class=line><span class=cl><span class=c1># 添加更改（增、改）到暂存区（当前目录及子目录）</span>
 </span></span><span class=line><span class=cl>git add .
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl>git branch -d/D development
@@ -264,8 +272,10 @@
 </span></span><span class=line><span class=cl>git remote show origin
 </span></span><span class=line><span class=cl>git remote -v
 </span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl>git reset --hard HEAD^
 </span></span><span class=line><span class=cl>git reset --mixed HEAD^
+</span></span><span class=line><span class=cl><span class=c1># 删除最近一个 commit，不保留更改</span>
+</span></span><span class=line><span class=cl>git reset --hard HEAD^
+</span></span><span class=line><span class=cl><span class=c1># 删除最近一个 commit，保留更改</span>
 </span></span><span class=line><span class=cl>git reset --soft HEAD^
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl>git revert 3de4537
