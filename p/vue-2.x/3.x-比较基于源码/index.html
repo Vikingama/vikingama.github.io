@@ -2622,7 +2622,7 @@
 </span></span><span class=line><span class=cl>    <span class=kr>const</span> <span class=nx>parentProvides</span> <span class=o>=</span>
 </span></span><span class=line><span class=cl>      <span class=nx>currentInstance</span><span class=p>.</span><span class=nx>parent</span> <span class=o>&amp;&amp;</span> <span class=nx>currentInstance</span><span class=p>.</span><span class=nx>parent</span><span class=p>.</span><span class=nx>provides</span><span class=p>;</span> <span class=c1>// 找到父级的 provides
 </span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=k>if</span> <span class=p>(</span><span class=nx>parentProvides</span> <span class=o>===</span> <span class=nx>provides</span><span class=p>)</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl>      <span class=c1>// 基于父级的 povides 创建自己的 provides
+</span></span><span class=line><span class=cl>      <span class=c1>// 基于父级的 provides 创建自己的 provides
 </span></span></span><span class=line><span class=cl><span class=c1></span>      <span class=nx>provides</span> <span class=o>=</span> <span class=nx>currentInstance</span><span class=p>.</span><span class=nx>provides</span> <span class=o>=</span> <span class=nb>Object</span><span class=p>.</span><span class=nx>create</span><span class=p>(</span><span class=nx>parentProvides</span><span class=p>);</span>
 </span></span><span class=line><span class=cl>    <span class=p>}</span>
 </span></span><span class=line><span class=cl>    <span class=nx>provides</span><span class=p>[</span><span class=nx>key</span><span class=p>]</span> <span class=o>=</span> <span class=nx>value</span><span class=p>;</span>
