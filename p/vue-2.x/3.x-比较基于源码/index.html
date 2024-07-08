@@ -1063,12 +1063,18 @@
 </span><span class=lnt>122
 </span><span class=lnt>123
 </span><span class=lnt>124
+</span><span class=lnt>125
+</span><span class=lnt>126
+</span><span class=lnt>127
+</span><span class=lnt>128
+</span><span class=lnt>129
 </span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-ts data-lang=ts><span class=line><span class=cl><span class=kr>export</span> <span class=kd>function</span> <span class=nx>reactive</span><span class=p>(</span><span class=nx>target</span><span class=p>)</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>  <span class=c1>// readonly 数据直接返回
 </span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=k>if</span> <span class=p>(</span><span class=nx>target</span> <span class=o>&amp;&amp;</span> <span class=nx>target</span><span class=p>.</span><span class=nx>__v_isReadonly</span><span class=p>)</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=nx>target</span><span class=p>;</span>
 </span></span><span class=line><span class=cl>  <span class=p>}</span>
-</span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=nx>createReactiveObject</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>  <span class=c1>// 使用 Proxy 对 target 进行处理
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=k>return</span> <span class=nx>createReactiveObject</span><span class=p>(</span>
 </span></span><span class=line><span class=cl>    <span class=nx>target</span><span class=p>,</span>
 </span></span><span class=line><span class=cl>    <span class=kc>false</span><span class=p>,</span>
 </span></span><span class=line><span class=cl>    <span class=cm>/**
@@ -1092,7 +1098,7 @@
 </span></span><span class=line><span class=cl>          <span class=c1>// arrayInstrumentations 包含了对数组方法的劫持
 </span></span></span><span class=line><span class=cl><span class=c1></span>          <span class=k>return</span> <span class=nx>Reflect</span><span class=p>.</span><span class=kr>get</span><span class=p>(</span><span class=nx>arrayInstrumentations</span><span class=p>,</span> <span class=nx>key</span><span class=p>,</span> <span class=nx>receiver</span><span class=p>);</span>
 </span></span><span class=line><span class=cl>        <span class=p>}</span>
-</span></span><span class=line><span class=cl>        <span class=c1>// 保存正常的结果
+</span></span><span class=line><span class=cl>        <span class=c1>// 获取正常的结果
 </span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=kr>const</span> <span class=nx>res</span> <span class=o>=</span> <span class=nx>Reflect</span><span class=p>.</span><span class=kr>get</span><span class=p>(</span><span class=nx>target</span><span class=p>,</span> <span class=nx>key</span><span class=p>,</span> <span class=nx>receiver</span><span class=p>);</span>
 </span></span><span class=line><span class=cl>        <span class=c1>// 如果 key 是内建 Symbol 或者是 __proto__/__v_isRef，不需要依赖收集，直接返回
 </span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=k>if</span> <span class=p>(</span>
@@ -1111,8 +1117,12 @@
 </span></span></span><span class=line><span class=cl><span class=c1></span>          <span class=k>return</span> <span class=nx>shouldUnwrap</span> <span class=o>?</span> <span class=nx>res.value</span> : <span class=kt>res</span><span class=p>;</span>
 </span></span><span class=line><span class=cl>        <span class=p>}</span>
 </span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=p>(</span><span class=nx>isObject</span><span class=p>(</span><span class=nx>res</span><span class=p>))</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl>          <span class=c1>// 惰性 proxy，用到了再 reactive(res)
-</span></span></span><span class=line><span class=cl><span class=c1></span>          <span class=k>return</span> <span class=nx>reactive</span><span class=p>(</span><span class=nx>res</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>          <span class=cm>/**
+</span></span></span><span class=line><span class=cl><span class=cm>           * reactive 是深层的
+</span></span></span><span class=line><span class=cl><span class=cm>           * 如果是 res 是 Object
+</span></span></span><span class=line><span class=cl><span class=cm>           * 对 res 调用 reactive
+</span></span></span><span class=line><span class=cl><span class=cm>           */</span>
+</span></span><span class=line><span class=cl>          <span class=k>return</span> <span class=nx>reactive</span><span class=p>(</span><span class=nx>res</span><span class=p>);</span>
 </span></span><span class=line><span class=cl>        <span class=p>}</span>
 </span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=nx>res</span><span class=p>;</span>
 </span></span><span class=line><span class=cl>      <span class=p>},</span>
