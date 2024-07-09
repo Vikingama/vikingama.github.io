@@ -117,6 +117,11 @@
 </span><span class=lnt>32
 </span><span class=lnt>33
 </span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
 </span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-html data-lang=html><span class=line><span class=cl><span class=p>&lt;</span><span class=nt>body</span><span class=p>&gt;</span>
 </span></span><span class=line><span class=cl>  <span class=p>&lt;</span><span class=nt>input</span> <span class=na>type</span><span class=o>=</span><span class=s>&#34;text&#34;</span> <span class=na>id</span><span class=o>=</span><span class=s>&#34;model&#34;</span> <span class=p>/&gt;</span>
 </span></span><span class=line><span class=cl>  <span class=p>&lt;</span><span class=nt>p</span> <span class=na>id</span><span class=o>=</span><span class=s>&#34;word&#34;</span><span class=p>&gt;&lt;/</span><span class=nt>p</span><span class=p>&gt;</span>
@@ -130,6 +135,11 @@
 </span></span><span class=line><span class=cl>      <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=s1>&#39;get&#39;</span><span class=p>);</span>
 </span></span><span class=line><span class=cl>      <span class=nx>console</span><span class=p>.</span><span class=nx>info</span><span class=p>(</span><span class=nx>target</span><span class=p>);</span>
 </span></span><span class=line><span class=cl>      <span class=nx>console</span><span class=p>.</span><span class=nx>info</span><span class=p>(</span><span class=nx>key</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>      <span class=cm>/**
+</span></span></span><span class=line><span class=cl><span class=cm>       * receiver 指向 this
+</span></span></span><span class=line><span class=cl><span class=cm>       * 访问 o1.xxx，receiver 指向 o1
+</span></span></span><span class=line><span class=cl><span class=cm>       * 访问 o2.xxx，receiver 指向 o2
+</span></span></span><span class=line><span class=cl><span class=cm>       */</span>
 </span></span><span class=line><span class=cl>      <span class=nx>console</span><span class=p>.</span><span class=nx>info</span><span class=p>(</span><span class=nx>receiver</span><span class=p>);</span>
 </span></span><span class=line><span class=cl>      <span class=k>return</span> <span class=nx>Reflect</span><span class=p>.</span><span class=nx>get</span><span class=p>(</span><span class=nx>target</span><span class=p>,</span> <span class=nx>key</span><span class=p>,</span> <span class=nx>receiver</span><span class=p>);</span>
 </span></span><span class=line><span class=cl>    <span class=p>},</span>

@@ -1349,6 +1349,7 @@
 </span><span class=lnt>26
 </span><span class=lnt>27
 </span><span class=lnt>28
+</span><span class=lnt>29
 </span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-ts data-lang=ts><span class=line><span class=cl><span class=kd>function</span> <span class=nx>createRef</span><span class=p>(</span><span class=nx>rawValue</span><span class=p>,</span> <span class=nx>shallow</span> <span class=o>=</span> <span class=kc>false</span><span class=p>)</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>  <span class=k>if</span> <span class=p>(</span><span class=nx>rawValue</span> <span class=o>&amp;&amp;</span> <span class=nx>rawValue</span><span class=p>.</span><span class=nx>__v_isRef</span> <span class=o>===</span> <span class=kc>true</span><span class=p>)</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=nx>rawValue</span><span class=p>;</span> <span class=c1>// 已经是包装类型，就别来凑热闹了
@@ -1362,7 +1363,8 @@
 </span></span><span class=line><span class=cl>    <span class=k>this</span><span class=p>.</span><span class=nx>_value</span> <span class=o>=</span> <span class=nx>_shallow</span>
 </span></span><span class=line><span class=cl>      <span class=o>?</span> <span class=nx>_rawValue</span>
 </span></span><span class=line><span class=cl>      : <span class=kt>isObject</span><span class=p>(</span><span class=nx>_rawValue</span><span class=p>)</span>
-</span></span><span class=line><span class=cl>      <span class=o>?</span> <span class=nx>reactive</span><span class=p>(</span><span class=nx>_rawValue</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>      <span class=o>?</span> <span class=c1>// 如果 _rawValue 是对象，调用 reactive 深度转换
+</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=nx>reactive</span><span class=p>(</span><span class=nx>_rawValue</span><span class=p>)</span>
 </span></span><span class=line><span class=cl>      <span class=o>:</span> <span class=nx>_rawValue</span><span class=p>;</span>
 </span></span><span class=line><span class=cl>  <span class=p>}</span>
 </span></span><span class=line><span class=cl>  <span class=kr>get</span> <span class=nx>value() {</span>
