@@ -1831,6 +1831,7 @@
 </span><span class=lnt>94
 </span><span class=lnt>95
 </span><span class=lnt>96
+</span><span class=lnt>97
 </span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-ts data-lang=ts><span class=line><span class=cl><span class=kd>let</span> <span class=nx>uid</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>
 </span></span><span class=line><span class=cl><span class=kr>const</span> <span class=nx>effectStack</span>: <span class=kt>ReactiveEffect</span><span class=p>[]</span> <span class=o>=</span> <span class=p>[];</span>
 </span></span><span class=line><span class=cl><span class=kr>export</span> <span class=kr>interface</span> <span class=nx>ReactiveEffect</span><span class=p>&lt;</span><span class=nt>T</span> <span class=err>=</span> <span class=na>any</span><span class=p>&gt;</span> <span class=p>{</span>
@@ -1875,7 +1876,8 @@
 </span></span><span class=line><span class=cl>      <span class=k>return</span> <span class=nx>options</span><span class=p>.</span><span class=nx>scheduler</span> <span class=o>?</span> <span class=kc>undefined</span> <span class=o>:</span> <span class=nx>fn</span><span class=p>();</span>
 </span></span><span class=line><span class=cl>    <span class=p>}</span>
 </span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=o>!</span><span class=nx>effectStack</span><span class=p>.</span><span class=nx>includes</span><span class=p>(</span><span class=nx>effect</span><span class=p>))</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl>      <span class=nx>cleanup</span><span class=p>(</span><span class=nx>effect</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>      <span class=c1>// 先清除上一次被收集的结果
+</span></span></span><span class=line><span class=cl><span class=c1></span>      <span class=nx>cleanup</span><span class=p>(</span><span class=nx>effect</span><span class=p>);</span>
 </span></span><span class=line><span class=cl>      <span class=k>try</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>        <span class=nx>enableTracking</span><span class=p>();</span>
 </span></span><span class=line><span class=cl>        <span class=nx>effectStack</span><span class=p>.</span><span class=nx>push</span><span class=p>(</span><span class=nx>effect</span><span class=p>);</span>
