@@ -3006,7 +3006,7 @@ JS 中随机排列数组顺序（经典洗牌算法）和数组的排序方法
 &lt;/a>
 &lt;/li>
 &lt;/ul></description></item><item><title>JS 的事件循环机制 · 看不见我的美 · 是你瞎了眼</title><link>https://vikingama.github.io/p/js-%E7%9A%84%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF%E6%9C%BA%E5%88%B6/</link><pubDate>Mon, 13 May 2019 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/p/js-%E7%9A%84%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF%E6%9C%BA%E5%88%B6/</guid><description>&lt;img src="https://vikingama.github.io/img/cover/javascript.png" alt="JS 的事件循环机制" />&lt;h2 id="浏览器">浏览器&lt;/h2>
-&lt;p>浏览器是多进程（CPU 资源分配的最小单位）的，新开一个 Tab 页其实就是创建了一个浏览器&lt;strong>渲染进程&lt;/strong>（记得很早之前，FF 是多个 Tab 共用一个进程，导致一个页面的假死会使整个浏览器崩掉）；一个进程中包含了多个线程（CPU 资源调度的最小单位），比如渲染线程、JS 线程、HTTP 请求线程等。当你发起一个请求时，其实就是创建了一个线程，当请求结束后，该线程可能就会被销毁。一个浏览器渲染进程通常由以下常驻线程组成：&lt;/p>
+&lt;p>浏览器是多进程（CPU 资源分配的最小单位）的，新开一个 Tab 页其实就是创建了一个浏览器&lt;strong>渲染进程&lt;/strong>（记得很早之前，FF 是多个 Tab 共用一个进程，导致一个页面的假死会使整个浏览器崩掉）；一个进程中包含了多个线程（CPU 资源调度的最小单位），比如渲染线程、JS 线程、HTTP 请求线程等。当你发起一个请求时，其实就是创建了一个请求线程，当请求结束后，该线程可能就会被销毁。一个浏览器渲染进程通常由以下常驻线程组成：&lt;/p>
 &lt;ul>
 &lt;li>GUI 渲染线程：
 &lt;ul>
@@ -3024,13 +3024,13 @@ JS 中随机排列数组顺序（经典洗牌算法）和数组的排序方法
 &lt;ul>
 &lt;li>负责 JS 代码的解析和执行，每个 Tab 只有一个 JS 线程在运行；&lt;/li>
 &lt;li>JS 代码的执行会阻塞页面的渲染；&lt;/li>
-&lt;li>空闲的时候，会轮训任务队列。&lt;/li>
+&lt;li>空闲的时候，会轮询任务队列。&lt;/li>
 &lt;/ul>
 &lt;/li>
 &lt;li>定时触发器线程：
 &lt;ul>
 &lt;li>负责执行异步定时器（setTimeout、setInterval）的线程；&lt;/li>
-&lt;li>当计时完毕后，回调逻辑会被加入到任务队列，等待被执行。&lt;/li>
+&lt;li>当计时完毕后，回调会被加入到任务队列，等待被执行。&lt;/li>
 &lt;/ul>
 &lt;/li>
 &lt;li>事件触发线程：负责任务队列的维护和事件循环的控制。&lt;/li>
@@ -3057,13 +3057,13 @@ JS 中随机排列数组顺序（经典洗牌算法）和数组的排序方法
 &lt;li>判断页面是否需要更新渲染（不一定存在于每轮事件循环，根据屏幕刷新率、页面性能、页面是否在后台运行来共同决定）；&lt;/li>
 &lt;li>宏任务队列里取出一个宏任务执行；&lt;/li>
 &lt;li>一旦调用栈中的任务执行完毕，系统就会读取任务队列，将任务压入调用栈执行；&lt;/li>
-&lt;li>JS 线程不断重复上面的步骤（执行一个宏任务-&amp;gt;执行微任务队列里的所有任务-&amp;gt;(渲染工作，可能没有)-&amp;gt;执行下一个宏任务-&amp;gt;&amp;hellip;）。&lt;/li>
+&lt;li>JS 线程不断重复上面的步骤（执行一个宏任务-&amp;gt;执行微任务队列里的所有任务-&amp;gt;渲染工作-&amp;gt;执行下一个宏任务-&amp;gt;&amp;hellip;）。&lt;/li>
 &lt;/ol>
 &lt;h2 id="注意">注意&lt;/h2>
 &lt;ol>
-&lt;li>process.nextTick 队列中的任务会比 Promise 队列中的任务先入栈，Promise 队列中的任务会比 MutationObserver 队列中的任务先入栈（尽管他们都是微任务队列）；&lt;/li>
-&lt;li>MessageChannel 队列中的任务会比 setInterval/setTimeout 队列中的任务先入栈（尽管他们都是宏任务队列）；&lt;/li>
-&lt;li>setInterval/setTimeout 队列中的任务会比 setImmediate 队列中的任务先入栈（尽管他们都是宏任务队列）；&lt;/li>
+&lt;li>process.nextTick 队列中的任务会比 Promise 队列中的任务先入栈，Promise 队列中的任务会比 MutationObserver 队列中的任务先入栈（尽管他们都是微任务）；&lt;/li>
+&lt;li>MessageChannel 队列中的任务会比 setInterval/setTimeout 队列中的任务先入栈（尽管他们都是宏任务）；&lt;/li>
+&lt;li>setInterval/setTimeout 队列中的任务会比 setImmediate 队列中的任务先入栈（尽管他们都是宏任务）；&lt;/li>
 &lt;li>浏览器会尽可能的保持帧率稳定，如果页面性能无法维持 60fps，那么浏览器就会选择 30fps 的更新速率，而不是偶尔丢帧；&lt;/li>
 &lt;li>如果更新渲染不会带来视觉上的改变或者帧动画队列为空，浏览器会跳过当前帧的更新；&lt;/li>
 &lt;li>如果浏览器上下文不可见，那么页面会降低到 4fps 左右甚至更低。&lt;/li>

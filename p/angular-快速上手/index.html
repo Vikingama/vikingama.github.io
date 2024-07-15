@@ -286,7 +286,7 @@
 </span></span><span class=line><span class=cl>  <span class=cm>/**
 </span></span></span><span class=line><span class=cl><span class=cm>   * 变更检测策略：
 </span></span></span><span class=line><span class=cl><span class=cm>   *  1. ChangeDetectionStrategy.Default：异步逻辑结束（事件、请求等等），NgZone 会自上而下对整个组件树做变更检测
-</span></span></span><span class=line><span class=cl><span class=cm>   *  2. ChangeDetectionStrategy.OnPush：用来跳过某些变更检测（因为不是每个操作都需要进行变更检测，React 也有类似的机制）
+</span></span></span><span class=line><span class=cl><span class=cm>   *  2. ChangeDetectionStrategy.OnPush：用来跳过某些变更检测（因为不是每个操作都需要进行变更检测）
 </span></span></span><span class=line><span class=cl><span class=cm>   * 在 OnPush 策略下，有四种情况仍旧可以触发变更检测：
 </span></span></span><span class=line><span class=cl><span class=cm>   *  1. 组件 @Input 引用变化（这种情况下，搭配 Immutable.js 使用更佳）
 </span></span></span><span class=line><span class=cl><span class=cm>   *  2. 组件及其子组件的 DOM 事件触发（计时器、异步请求、Promise 均不会触发检测）
@@ -824,7 +824,7 @@
 </span></span><span class=line><span class=cl>      <span class=k>return</span> <span class=p>{</span> <span class=nx>id</span><span class=p>,</span> <span class=nx>name</span> <span class=p>};</span>
 </span></span><span class=line><span class=cl>    <span class=p>})</span>
 </span></span><span class=line><span class=cl>  <span class=p>);</span>
-</span></span><span class=line><span class=cl>  <span class=c1>// 借助 switchMap 获取路由参数
+</span></span><span class=line><span class=cl>  <span class=c1>// 借助 switchMap 切换数据流
 </span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=kr>readonly</span> <span class=nx>tickets$</span>: <span class=kt>Ticket</span> <span class=o>=</span> <span class=k>this</span><span class=p>.</span><span class=nx>route</span><span class=p>.</span><span class=nx>queryParams</span><span class=p>.</span><span class=nx>pipe</span><span class=p>(</span>
 </span></span><span class=line><span class=cl>    <span class=nx>switchMap</span><span class=p>(</span><span class=nx>params</span> <span class=o>=&gt;</span> <span class=k>this</span><span class=p>.</span><span class=nx>apiService</span><span class=p>.</span><span class=nx>fetchTickets</span><span class=p>(</span><span class=nx>params</span><span class=p>.</span><span class=nx>id</span><span class=p>))</span>
 </span></span><span class=line><span class=cl>  <span class=p>);</span>
@@ -863,6 +863,13 @@
 </span><span class=lnt>30
 </span><span class=lnt>31
 </span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
 </span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-ts data-lang=ts><span class=line><span class=cl><span class=kd>@Component</span><span class=p>({</span>
 </span></span><span class=line><span class=cl>  <span class=nx>template</span><span class=o>:</span> <span class=sb>`
 </span></span></span><span class=line><span class=cl><span class=sb>    &lt;ng-container *ngIf=&#34;vm$ | async as vm&#34;&gt;
@@ -891,7 +898,14 @@
 </span></span><span class=line><span class=cl>    <span class=p>),</span>
 </span></span><span class=line><span class=cl>    <span class=k>this</span><span class=p>.</span><span class=nx>apiService</span><span class=p>.</span><span class=nx>fetchDogs</span><span class=p>(),</span>
 </span></span><span class=line><span class=cl>    <span class=k>this</span><span class=p>.</span><span class=nx>apiService</span><span class=p>.</span><span class=nx>fetchCats</span><span class=p>()</span>
-</span></span><span class=line><span class=cl>  <span class=p>]).</span><span class=nx>pipe</span><span class=p>(</span><span class=nx>map</span><span class=p>(([</span><span class=nx>boys</span><span class=p>,</span> <span class=nx>girls</span><span class=p>,</span> <span class=nx>dogs</span><span class=p>,</span> <span class=nx>cats</span><span class=p>])</span> <span class=o>=&gt;</span> <span class=p>({</span> <span class=nx>boys</span><span class=p>,</span> <span class=nx>girls</span><span class=p>,</span> <span class=nx>dogs</span><span class=p>,</span> <span class=nx>cats</span> <span class=p>})));</span>
+</span></span><span class=line><span class=cl>  <span class=p>]).</span><span class=nx>pipe</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>    <span class=nx>map</span><span class=p>(([</span><span class=nx>boys</span> <span class=o>=</span> <span class=p>[],</span> <span class=nx>girls</span> <span class=o>=</span> <span class=p>[],</span> <span class=nx>dogs</span> <span class=o>=</span> <span class=p>[],</span> <span class=nx>cats</span> <span class=o>=</span> <span class=p>[]])</span> <span class=o>=&gt;</span> <span class=p>({</span>
+</span></span><span class=line><span class=cl>      <span class=nx>boys</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>      <span class=nx>girls</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>      <span class=nx>dogs</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>      <span class=nx>cats</span>
+</span></span><span class=line><span class=cl>    <span class=p>}))</span>
+</span></span><span class=line><span class=cl>  <span class=p>);</span>
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl>  <span class=kr>constructor</span><span class=p>(</span><span class=kr>private</span> <span class=nx>route</span>: <span class=kt>ActivatedRoute</span><span class=p>,</span> <span class=kr>private</span> <span class=nx>apiService</span>: <span class=kt>ApiService</span><span class=p>)</span> <span class=p>{}</span>
 </span></span><span class=line><span class=cl><span class=p>}</span>
@@ -1282,7 +1296,7 @@
 </span></span></span><span class=line><span class=cl><span class=cm> * 所以，一般不用显式添加 ngForm 指令。
 </span></span></span><span class=line><span class=cl><span class=cm> */</span>
 </span></span><span class=line><span class=cl><span class=kr>import</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl>  <span class=nx>FormBuilder</span><span class=p>,</span> <span class=c1>// 提供一种更方便使用 FormGroup、FormAArray 和 FormControl 的方式
+</span></span><span class=line><span class=cl>  <span class=nx>FormBuilder</span><span class=p>,</span> <span class=c1>// 提供一种更方便使用 FormGroup、FormArray 和 FormControl 的方式
 </span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=nx>FormControl</span><span class=p>,</span> <span class=c1>// 保存了字段的值和状态（是否合法、是否修改、是否禁用等）
 </span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=nx>FormGroup</span><span class=p>,</span> <span class=c1>// 用来创建和管理一组 FormControl
 </span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=nx>Validators</span>
@@ -1923,7 +1937,7 @@
 </span></span><span class=line><span class=cl>  <span class=nx>bootstrap</span><span class=o>:</span> <span class=p>[</span><span class=nx>AppComponent</span><span class=p>]</span>
 </span></span><span class=line><span class=cl><span class=p>})</span>
 </span></span><span class=line><span class=cl><span class=kr>export</span> <span class=kr>class</span> <span class=nx>AppModule</span> <span class=p>{}</span>
-</span></span></code></pre></td></tr></table></div></div><p>发起 Http 请求：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span></span></code></pre></td></tr></table></div></div><p>发起 HTTP 请求：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -2769,7 +2783,7 @@ NG100 错误
 </span></span><span class=line><span class=cl>    <span class=nx>map</span><span class=p>(</span><span class=nx>item</span> <span class=o>=&gt;</span> <span class=nx>item</span> <span class=o>*</span> <span class=mi>3</span><span class=p>)</span>
 </span></span><span class=line><span class=cl>  <span class=p>)</span>
 </span></span><span class=line><span class=cl>  <span class=cm>/**
-</span></span></span><span class=line><span class=cl><span class=cm>   * Observable 必须被 subscribe 之后才会“产生”数据
+</span></span></span><span class=line><span class=cl><span class=cm>   * 冷 Observable 必须被 subscribe 之后才会“产生”数据
 </span></span></span><span class=line><span class=cl><span class=cm>   * 如果没有 subscribe，之前的 pipe 就不会执行
 </span></span></span><span class=line><span class=cl><span class=cm>   * 所以，在 Angular 中，对同一接口多次 subscribe 会导致发起多次请求
 </span></span></span><span class=line><span class=cl><span class=cm>   * subscribe 表示“可观察对象”与“观察者”之间“建立了联系”
@@ -2812,7 +2826,7 @@ NG100 错误
 </span></span></span><span class=line><span class=cl><span class=cm> */</span>
 </span></span><span class=line><span class=cl><span class=nx>defer</span><span class=p>(()</span> <span class=o>=&gt;</span> <span class=kr>from</span><span class=p>(</span><span class=nx>p</span><span class=p>)).</span><span class=nx>subscribe</span><span class=p>(</span><span class=nx>item</span> <span class=o>=&gt;</span> <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=nx>item</span><span class=p>));</span>
 </span></span><span class=line><span class=cl><span class=cm>/**
-</span></span></span><span class=line><span class=cl><span class=cm> * timer（首次等待时间，重复间隔时间）用来创建“定时器流”
+</span></span></span><span class=line><span class=cl><span class=cm> * timer(首次等待时间，重复间隔时间) 用来创建“定时器流”
 </span></span></span><span class=line><span class=cl><span class=cm> * 他创建的是一种“无尽流”（务必要在适当的时候取消订阅）
 </span></span></span><span class=line><span class=cl><span class=cm> * 数据会不断重复的被放入“流”中
 </span></span></span><span class=line><span class=cl><span class=cm> * 有点像 setInterval

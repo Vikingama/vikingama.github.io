@@ -39,7 +39,7 @@
 &lt;p>技术栈：Angula、NgZorro、OpenTelemetry、RxJS、TS&lt;/p>
 &lt;ul>
 &lt;li>负责精确到按钮粒度的权限管理的开发&lt;/li>
-&lt;li>使用 renderless 进行逻辑封装&lt;/li>
+&lt;li>使用 ContentChiid 进行逻辑封装&lt;/li>
 &lt;li>使用 NgZorro 作为基础组件库&lt;/li>
 &lt;li>接入 OTLP，打通前后端链路&lt;/li>
 &lt;li>配置 ESLint 与 Prettier&lt;/li>

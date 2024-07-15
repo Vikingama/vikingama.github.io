@@ -905,6 +905,9 @@
 </span><span class=lnt>44
 </span><span class=lnt>45
 </span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
 </span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-ts data-lang=ts><span class=line><span class=cl><span class=kr>interface</span> <span class=nx>Person</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>  <span class=nx>name</span>: <span class=kt>string</span><span class=p>;</span>
 </span></span><span class=line><span class=cl>  <span class=nx>age</span>: <span class=kt>number</span><span class=p>;</span>
@@ -912,8 +915,11 @@
 </span></span><span class=line><span class=cl><span class=kr>const</span> <span class=nx>person</span> <span class=o>=</span> <span class=p>{}</span> <span class=kr>as</span> <span class=nx>Person</span><span class=p>;</span>
 </span></span><span class=line><span class=cl><span class=nx>person</span><span class=p>.</span><span class=nx>name</span> <span class=o>=</span> <span class=s1>&#39;hahasha&#39;</span><span class=p>;</span>
 </span></span><span class=line><span class=cl><span class=nx>person</span><span class=p>.</span><span class=nx>age</span> <span class=o>=</span> <span class=mi>18</span><span class=p>;</span>
-</span></span><span class=line><span class=cl><span class=c1>// 双重断言
-</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kr>const</span> <span class=nx>anyPerson</span> <span class=o>=</span> <span class=s1>&#39;hahasha&#39;</span> <span class=kr>as</span> <span class=kt>any</span> <span class=kr>as</span> <span class=nx>Person</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=cm>/**
+</span></span></span><span class=line><span class=cl><span class=cm> * 断言的前提是“值的类型需要和断言的类型兼容”
+</span></span></span><span class=line><span class=cl><span class=cm> * 如果不兼容，可以使用双重断言
+</span></span></span><span class=line><span class=cl><span class=cm> */</span>
+</span></span><span class=line><span class=cl><span class=kr>const</span> <span class=nx>anyPerson</span> <span class=o>=</span> <span class=s1>&#39;hahasha&#39;</span> <span class=kr>as</span> <span class=kt>any</span> <span class=kr>as</span> <span class=nx>Person</span><span class=p>;</span>
 </span></span><span class=line><span class=cl><span class=c1>// 类型守卫，缩小类型范围
 </span></span></span><span class=line><span class=cl><span class=c1></span><span class=kr>class</span> <span class=nx>Person</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>  <span class=nx>name</span> <span class=o>=</span> <span class=s1>&#39;xiaomuzhu&#39;</span><span class=p>;</span>

@@ -484,6 +484,8 @@ URLScheme
 </span><span class=lnt>54
 </span><span class=lnt>55
 </span><span class=lnt>56
+</span><span class=lnt>57
+</span><span class=lnt>58
 </span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-ts data-lang=ts><span class=line><span class=cl><span class=kr>interface</span> <span class=nx>UploadParams</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>  <span class=nx>chooseType</span><span class=o>:</span> <span class=s1>&#39;Camera&#39;</span> <span class=o>|</span> <span class=s1>&#39;PhotoAlbum&#39;</span> <span class=o>|</span> <span class=s1>&#39;File&#39;</span><span class=p>;</span> <span class=c1>// 拍照 ｜相册｜文件
 </span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=nx>isPrivate</span>: <span class=kt>boolean</span><span class=p>;</span> <span class=c1>// 是否开启“私有化”上传
@@ -495,13 +497,15 @@ URLScheme
 </span></span><span class=line><span class=cl>  <span class=c1>// 文件上传
 </span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=nx>fileUpload</span><span class=p>(</span><span class=nx>params</span>: <span class=kt>UploadParams</span><span class=p>,</span> <span class=nx>callbackName</span><span class=p>)</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=nx>isAndroid</span><span class=p>)</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl>      <span class=nb>window</span><span class=p>.</span><span class=nx>XiaoLanMaBridgeForNative</span><span class=p>.</span><span class=nx>fileUpload</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>      <span class=c1>// Android 在全局暴露的方法
+</span></span></span><span class=line><span class=cl><span class=c1></span>      <span class=nb>window</span><span class=p>.</span><span class=nx>XiaoLanMaBridgeFromNative</span><span class=p>.</span><span class=nx>fileUpload</span><span class=p>(</span>
 </span></span><span class=line><span class=cl>        <span class=nx>JSON</span><span class=p>.</span><span class=nx>stringify</span><span class=p>(</span><span class=nx>params</span><span class=p>),</span>
 </span></span><span class=line><span class=cl>        <span class=nx>callbackName</span>
 </span></span><span class=line><span class=cl>      <span class=p>);</span>
 </span></span><span class=line><span class=cl>    <span class=p>}</span>
 </span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=nx>isIOS</span><span class=p>)</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl>      <span class=nb>window</span><span class=p>.</span><span class=nx>webkit</span><span class=p>.</span><span class=nx>messageHandlers</span><span class=p>.</span><span class=nx>fileUpload</span><span class=p>.</span><span class=nx>postMessage</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>      <span class=c1>// iOS 在全局暴露的方法
+</span></span></span><span class=line><span class=cl><span class=c1></span>      <span class=nb>window</span><span class=p>.</span><span class=nx>webkit</span><span class=p>.</span><span class=nx>messageHandlers</span><span class=p>.</span><span class=nx>fileUpload</span><span class=p>.</span><span class=nx>postMessage</span><span class=p>(</span>
 </span></span><span class=line><span class=cl>        <span class=nx>JSON</span><span class=p>.</span><span class=nx>stringify</span><span class=p>({</span>
 </span></span><span class=line><span class=cl>          <span class=nx>callbackName</span><span class=p>,</span>
 </span></span><span class=line><span class=cl>          <span class=nx>data</span>: <span class=kt>params</span>
@@ -512,7 +516,7 @@ URLScheme
 </span></span><span class=line><span class=cl>  <span class=c1>// 获取用户信息
 </span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=nx>getUserInfo</span><span class=p>(</span><span class=nx>params</span><span class=p>,</span> <span class=nx>callbackName</span><span class=p>)</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=nx>isAndroid</span><span class=p>)</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl>      <span class=nb>window</span><span class=p>.</span><span class=nx>XiaoLanMaBridgeForNative</span><span class=p>.</span><span class=nx>getUserInfo</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>      <span class=nb>window</span><span class=p>.</span><span class=nx>XiaoLanMaBridgeFromNative</span><span class=p>.</span><span class=nx>getUserInfo</span><span class=p>(</span>
 </span></span><span class=line><span class=cl>        <span class=nx>JSON</span><span class=p>.</span><span class=nx>stringify</span><span class=p>(</span><span class=nx>params</span><span class=p>),</span>
 </span></span><span class=line><span class=cl>        <span class=nx>callbackName</span>
 </span></span><span class=line><span class=cl>      <span class=p>);</span>
@@ -529,7 +533,7 @@ URLScheme
 </span></span><span class=line><span class=cl>  <span class=c1>// 关闭 WebView
 </span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=nx>closeWebView</span><span class=p>(</span><span class=nx>params</span><span class=p>)</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=nx>isAndroid</span><span class=p>)</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl>      <span class=nb>window</span><span class=p>.</span><span class=nx>XiaoLanMaBridgeForNative</span><span class=p>.</span><span class=nx>closeWebView</span><span class=p>(</span><span class=nx>JSON</span><span class=p>.</span><span class=nx>stringify</span><span class=p>(</span><span class=nx>params</span><span class=p>));</span>
+</span></span><span class=line><span class=cl>      <span class=nb>window</span><span class=p>.</span><span class=nx>XiaoLanMaBridgeFromNative</span><span class=p>.</span><span class=nx>closeWebView</span><span class=p>(</span><span class=nx>JSON</span><span class=p>.</span><span class=nx>stringify</span><span class=p>(</span><span class=nx>params</span><span class=p>));</span>
 </span></span><span class=line><span class=cl>    <span class=p>}</span>
 </span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=nx>isIOS</span><span class=p>)</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>      <span class=nb>window</span><span class=p>.</span><span class=nx>webkit</span><span class=p>.</span><span class=nx>messageHandlers</span><span class=p>.</span><span class=nx>closeWebView</span><span class=p>.</span><span class=nx>closeWebView</span><span class=p>(</span>
@@ -659,36 +663,24 @@ URLScheme
 </span><span class=lnt>21
 </span><span class=lnt>22
 </span><span class=lnt>23
-</span><span class=lnt>24
-</span><span class=lnt>25
-</span><span class=lnt>26
-</span><span class=lnt>27
-</span><span class=lnt>28
-</span><span class=lnt>29
 </span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=nb>window</span><span class=p>.</span><span class=nx>XiaoLanMaBridge</span> <span class=o>=</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>  <span class=c1>// 这里需要预先声明好所有的回调场景
 </span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=nx>nativeRegister</span><span class=o>:</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>    <span class=nx>onSwitch2Font</span><span class=p>()</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>      <span class=c1>// 可以看出，运行之前，需要先向 nativeRegisterCallback 添加 onSwitch2FontCallback 回调
-</span></span></span><span class=line><span class=cl><span class=c1></span>      <span class=nb>window</span><span class=p>.</span><span class=nx>XiaoLanMaBridge</span><span class=p>.</span><span class=nx>nativeRegisterCallback</span><span class=p>.</span><span class=nx>onSwitch2FontCallback</span><span class=p>(</span>
-</span></span><span class=line><span class=cl>        <span class=p>()</span> <span class=p>=&gt;</span> <span class=p>({</span>
-</span></span><span class=line><span class=cl>          <span class=nx>success</span><span class=o>:</span> <span class=kc>true</span>
-</span></span><span class=line><span class=cl>        <span class=p>})</span>
-</span></span><span class=line><span class=cl>      <span class=p>);</span>
+</span></span></span><span class=line><span class=cl><span class=c1></span>      <span class=nb>window</span><span class=p>.</span><span class=nx>XiaoLanMaBridge</span><span class=p>.</span><span class=nx>nativeRegisterCallback</span><span class=p>.</span><span class=nx>onSwitch2FontCallback</span><span class=p>({</span>
+</span></span><span class=line><span class=cl>        <span class=nx>success</span><span class=o>:</span> <span class=kc>true</span>
+</span></span><span class=line><span class=cl>      <span class=p>});</span>
 </span></span><span class=line><span class=cl>    <span class=p>},</span>
 </span></span><span class=line><span class=cl>    <span class=nx>onTheme2Light</span><span class=p>()</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl>      <span class=nb>window</span><span class=p>.</span><span class=nx>XiaoLanMaBridge</span><span class=p>.</span><span class=nx>nativeRegisterCallback</span><span class=p>.</span><span class=nx>onTheme2LightCallback</span><span class=p>(</span>
-</span></span><span class=line><span class=cl>        <span class=p>()</span> <span class=p>=&gt;</span> <span class=p>({</span>
-</span></span><span class=line><span class=cl>          <span class=nx>success</span><span class=o>:</span> <span class=kc>true</span>
-</span></span><span class=line><span class=cl>        <span class=p>})</span>
-</span></span><span class=line><span class=cl>      <span class=p>);</span>
+</span></span><span class=line><span class=cl>      <span class=nb>window</span><span class=p>.</span><span class=nx>XiaoLanMaBridge</span><span class=p>.</span><span class=nx>nativeRegisterCallback</span><span class=p>.</span><span class=nx>onTheme2LightCallback</span><span class=p>({</span>
+</span></span><span class=line><span class=cl>        <span class=nx>success</span><span class=o>:</span> <span class=kc>true</span>
+</span></span><span class=line><span class=cl>      <span class=p>});</span>
 </span></span><span class=line><span class=cl>    <span class=p>},</span>
 </span></span><span class=line><span class=cl>    <span class=nx>onTheme2Dark</span><span class=p>()</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl>      <span class=nb>window</span><span class=p>.</span><span class=nx>XiaoLanMaBridge</span><span class=p>.</span><span class=nx>nativeRegisterCallback</span><span class=p>.</span><span class=nx>onTheme2DarkCallback</span><span class=p>(</span>
-</span></span><span class=line><span class=cl>        <span class=p>()</span> <span class=p>=&gt;</span> <span class=p>({</span>
-</span></span><span class=line><span class=cl>          <span class=nx>success</span><span class=o>:</span> <span class=kc>true</span>
-</span></span><span class=line><span class=cl>        <span class=p>})</span>
-</span></span><span class=line><span class=cl>      <span class=p>);</span>
+</span></span><span class=line><span class=cl>      <span class=nb>window</span><span class=p>.</span><span class=nx>XiaoLanMaBridge</span><span class=p>.</span><span class=nx>nativeRegisterCallback</span><span class=p>.</span><span class=nx>onTheme2DarkCallback</span><span class=p>({</span>
+</span></span><span class=line><span class=cl>        <span class=nx>success</span><span class=o>:</span> <span class=kc>true</span>
+</span></span><span class=line><span class=cl>      <span class=p>});</span>
 </span></span><span class=line><span class=cl>    <span class=p>}</span>
 </span></span><span class=line><span class=cl>  <span class=p>},</span>
 </span></span><span class=line><span class=cl>  <span class=c1>// 保存 nativeRegister 回调

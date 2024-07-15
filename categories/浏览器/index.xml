@@ -7,7 +7,7 @@
 &lt;li>缓存问题，HTTP 的缓存（HTTP 缓存头部、ETag、Catch-Control）；&lt;/li>
 &lt;li>浏览器接收到 HTTP 数据包后的解析流程（解析 HTML、词法分析、DOM 树、CSS 规则树、渲染树、Layout、Paint、渲染、复合图层的合成、GPU 绘制、外链资源的处理、loaded、DOMContentLoaded）；&lt;/li>
 &lt;li>CSS 的可视化格式模型（元素的渲染规则）；&lt;/li>
-&lt;li>JS 引擎解析过程（解释阶段，预处理阶段、执行阶段生成执行上下文、作用域链、回收机制）；&lt;/li>
+&lt;li>JS 引擎解析过程（解释阶段、预处理阶段、执行阶段生成执行上下文、作用域链、回收机制）；&lt;/li>
 &lt;li>拓展（跨域、Web 安全、Hybrid 模式）。&lt;/li>
 &lt;/ol>
 &lt;h2 id="从浏览器接收-url-到开启网络请求线程">从浏览器接收 URL 到开启网络请求线程&lt;/h2>
@@ -162,14 +162,14 @@ dns-prefetch
 &lt;li>Connection：当浏览器与服务器通信时对长连接如何进行处理，如 keep-alive；&lt;/li>
 &lt;li>Host：请求的服务器 URL；&lt;/li>
 &lt;li>Origin：最初的请求是从哪里发起的（只会精确到端口），Origin 比 Referer 更尊重隐私；&lt;/li>
-&lt;li>Referer：该页面的来源 URL（适用于所有类型的请求，会精确到详细页面地址，csrf 拦截常用到这个字段）；&lt;/li>
+&lt;li>Referer：该页面的来源 URL（适用于所有类型的请求，会精确到详细页面地址，CSRF 拦截常用到这个字段）；&lt;/li>
 &lt;li>User-Agent：用户客户端的一些必要信息。&lt;/li>
 &lt;/ul>
 &lt;p>常用的响应头部：&lt;/p>
 &lt;ul>
 &lt;li>Access-Control-Allow-Headers：服务器端允许的请求 Headers；&lt;/li>
 &lt;li>Access-Control-Allow-Methods：服务器端允许的请求方法；&lt;/li>
-&lt;li>Access-Control-Allow-Origin：服务器端允许的请求 Origin 头部；&lt;/li>
+&lt;li>Access-Control-Allow-Origin：服务器端允许的请求 Origin；&lt;/li>
 &lt;li>Content-Type：服务端返回的实体内容的类型；&lt;/li>
 &lt;li>Date：数据从服务器发送的时间；&lt;/li>
 &lt;li>Last-Modified：请求资源的最后修改时间；&lt;/li>
@@ -188,9 +188,9 @@ dns-prefetch
 &lt;ol>
 &lt;li>在登录页面，用户登录了；&lt;/li>
 &lt;li>此时，服务端会生成一个 session，session 中有对应用户的信息（如用户名、密码等）；&lt;/li>
-&lt;li>然后会有一个 sessionid（相当于是服务端的这个 session 对应的 key）；&lt;/li>
-&lt;li>然后服务端在登录页面中写入 Cookie，值就是 :jsessionid=xxx；&lt;/li>
-&lt;li>然后浏览器本地就有这个 Cookie 了，以后访问同域名下的页面时，自动带上 Cookie，自动检验，在有效时间内无需二次登陆。&lt;/li>
+&lt;li>然后会有一个 sessionId（相当于是服务端的这个 session 对应的 key）；&lt;/li>
+&lt;li>然后服务端在登录页面中写入 Cookie，值就是 :sessionid=xxx；&lt;/li>
+&lt;li>然后浏览器本地就有这个 Cookie 了，以后访问同域名下的页面时，自动带上 Cookie，在有效时间内无需二次登陆。&lt;/li>
 &lt;/ol>
 &lt;p>上述就是 Cookie 的常用场景简述（当然了，实际情况下得考虑更多因素）。&lt;/p>
 &lt;p>一般来说，Cookie 是不允许存放敏感信息的（千万不要明文存储用户名、密码），因为非常不安全；如果一定要强行存储，首先，一定要在 Cookie 中设置 HTTPOnly（这样就无法通过 JS 操作了），另外可以考虑 RSA 等非对称加密（因为浏览器本地也是容易被攻克的，并不安全）。&lt;/p>
@@ -204,7 +204,7 @@ dns-prefetch
 &lt;p>此时就造成了较为严重的浪费，而且也降低了访问速度；当然了，针对这种场景，是有优化方案的（多域名拆分）。具体做法就是：&lt;/p>
 &lt;ul>
 &lt;li>将静态资源分组，分别放到不同的域名下（如 static.base.com）；&lt;/li>
-&lt;li>而 page.base.com（页面所在域名）下请求时，是不会带上 static.base.com 域名的 Cookie 的，避免了浪费。&lt;/li>
+&lt;li>而 page.base.com（页面所在域名）下请求时，是不会带上 static.base.com 域名的 Cookie 的（前提是 Cookie 没有被写入到 base.com 下），避免了浪费。&lt;/li>
 &lt;/ul>
 &lt;p>说到了多域名拆分，这里再提一个问题，那就是：&lt;/p>
 &lt;ul>
@@ -226,7 +226,7 @@ dns-prefetch
 &lt;li>HTTP/1.0 中，默认使用的是短连接；浏览器每进行一次 HTTP 操作，就建立一次连接，任务结束就中断连接；譬如每一个静态资源请求时都是一个单独的连接；&lt;/li>
 &lt;li>HTTP/1.1 起，默认使用长连接，使用长连接会有这一行 Connection: keep-alive；在长连接的情况下，当一个网页打开完成后，客户端和服务端之间用于传输 HTTP 的 TCP 连接不会关闭；如果客户端再次访问这个服务器的页面，会继续使用这一条已经建立的连接。&lt;/li>
 &lt;/ul>
-&lt;p>注意：keep-alive 不会永远保持，它有一个持续时间，一般在服务器中配置（如 apache）；另外长连接需要客户端和服务器都支持时才有效。&lt;/p>
+&lt;p>注意：keep-alive 不会永远保持，它有一个持续时间，一般在服务器中配置（如 Apache）；另外长连接需要客户端和服务器都支持时才有效。&lt;/p>
 &lt;h3 id="五http2">五、HTTP/2&lt;/h3>
 &lt;p>HTTP/2 与 HTTP/1.x 的显著不同点：&lt;/p>
 &lt;ul>
