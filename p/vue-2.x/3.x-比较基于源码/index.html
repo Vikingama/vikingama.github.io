@@ -3471,7 +3471,7 @@
 </span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=nx>getter</span> <span class=o>==</span> <span class=kc>null</span><span class=p>)</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>      <span class=nx>warn</span><span class=p>(</span><span class=s1>&#39;没有 getter？开什么玩笑&#39;</span><span class=p>);</span>
 </span></span><span class=line><span class=cl>    <span class=p>}</span>
-</span></span><span class=line><span class=cl>    <span class=c1>// 为计算属性创建 watcher
+</span></span><span class=line><span class=cl>    <span class=c1>// 为计算属性创建 watcher，这里的“副作用回调”为 noop
 </span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=nx>watchers</span><span class=p>[</span><span class=nx>key</span><span class=p>]</span> <span class=o>=</span> <span class=k>new</span> <span class=nx>Watcher</span><span class=p>(</span><span class=nx>vm</span><span class=p>,</span> <span class=nx>getter</span> <span class=o>||</span> <span class=nx>noop</span><span class=p>,</span> <span class=nx>noop</span><span class=p>,</span> <span class=p>{</span> <span class=nx>lazy</span>: <span class=kt>true</span> <span class=p>});</span>
 </span></span><span class=line><span class=cl>    <span class=c1>// 判断 computed 属性是否和 vm.$data、vm.$options.methods、vm.$options.props 冲突
 </span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=k>if</span> <span class=p>(</span><span class=o>!</span><span class=p>(</span><span class=nx>key</span> <span class=k>in</span> <span class=nx>vm</span><span class=p>))</span> <span class=p>{</span>
@@ -9156,6 +9156,7 @@
 </span><span class=lnt>195
 </span><span class=lnt>196
 </span><span class=lnt>197
+</span><span class=lnt>198
 </span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-ts data-lang=ts><span class=line><span class=cl><span class=c1>// watchers 在未定义初始值时触发的初始值
 </span></span></span><span class=line><span class=cl><span class=c1></span><span class=kr>const</span> <span class=nx>INITIAL_WATCHER_VALUE</span> <span class=o>=</span> <span class=p>{};</span>
 </span></span><span class=line><span class=cl><span class=kr>export</span> <span class=kr>interface</span> <span class=nx>WatchOptionsBase</span> <span class=p>{</span>
@@ -9248,7 +9249,8 @@
 </span></span><span class=line><span class=cl>          <span class=c1>// 运行清理函数
 </span></span></span><span class=line><span class=cl><span class=c1></span>          <span class=nx>cleanup</span><span class=p>();</span>
 </span></span><span class=line><span class=cl>        <span class=p>}</span>
-</span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=nx>callWithErrorHandling</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>        <span class=c1>// 运行一次 source 来收集依赖；先清理再收集
+</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=k>return</span> <span class=nx>callWithErrorHandling</span><span class=p>(</span>
 </span></span><span class=line><span class=cl>          <span class=nx>source</span><span class=p>,</span>
 </span></span><span class=line><span class=cl>          <span class=nx>instance</span><span class=p>,</span>
 </span></span><span class=line><span class=cl>          <span class=nx>ErrorCodes</span><span class=p>.</span><span class=nx>WATCH_CALLBACK</span><span class=p>,</span>
