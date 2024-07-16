@@ -387,8 +387,8 @@
 </span></span><span class=line><span class=cl>      <span class=p>}</span>
 </span></span><span class=line><span class=cl>    <span class=p>}</span>
 </span></span><span class=line><span class=cl>    <span class=cm>/**
-</span></span></span><span class=line><span class=cl><span class=cm>     * 如果不是 computedWatcher，则在实例化的过程中对 getter 求值
-</span></span></span><span class=line><span class=cl><span class=cm>     * 1. 先运行一次，完成依赖
+</span></span></span><span class=line><span class=cl><span class=cm>     * 如果不是 computedWatcher，则在实例化的过程中调用 get 对 expOrFn 进行求值
+</span></span></span><span class=line><span class=cl><span class=cm>     * 1. 先运行一次，完成依赖收集
 </span></span></span><span class=line><span class=cl><span class=cm>     * 2. 作为 prevValue
 </span></span></span><span class=line><span class=cl><span class=cm>     */</span>
 </span></span><span class=line><span class=cl>    <span class=k>this</span><span class=p>.</span><span class=nx>value</span> <span class=o>=</span> <span class=k>this</span><span class=p>.</span><span class=nx>lazy</span> <span class=o>?</span> <span class=kc>undefined</span> <span class=o>:</span> <span class=k>this</span><span class=p>.</span><span class=kr>get</span><span class=p>();</span>
@@ -404,8 +404,9 @@
 </span></span><span class=line><span class=cl>    <span class=nx>pushTarget</span><span class=p>(</span><span class=k>this</span><span class=p>);</span>
 </span></span><span class=line><span class=cl>    <span class=kr>const</span> <span class=nx>vm</span> <span class=o>=</span> <span class=k>this</span><span class=p>.</span><span class=nx>vm</span><span class=p>;</span>
 </span></span><span class=line><span class=cl>    <span class=k>try</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl>      <span class=nx>value</span> <span class=o>=</span> <span class=k>this</span><span class=p>.</span><span class=nx>getter</span><span class=p>.</span><span class=nx>call</span><span class=p>(</span><span class=nx>vm</span><span class=p>,</span> <span class=nx>vm</span><span class=p>);</span> <span class=c1>// 从组件实例中获取数据
-</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=p>}</span> <span class=k>catch</span> <span class=p>(</span><span class=nx>e</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=c1>// 求值的过程中，当前 watcher 被收集起来
+</span></span></span><span class=line><span class=cl><span class=c1></span>      <span class=nx>value</span> <span class=o>=</span> <span class=k>this</span><span class=p>.</span><span class=nx>getter</span><span class=p>.</span><span class=nx>call</span><span class=p>(</span><span class=nx>vm</span><span class=p>,</span> <span class=nx>vm</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span> <span class=k>catch</span> <span class=p>(</span><span class=nx>e</span><span class=p>)</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>      <span class=k>if</span> <span class=p>(</span><span class=k>this</span><span class=p>.</span><span class=nx>user</span><span class=p>)</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>        <span class=c1>// 对 watchOption 进行报错
 </span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=nx>handleError</span><span class=p>(</span><span class=sb>`getter for watcher &#34;</span><span class=si>${</span><span class=k>this</span><span class=p>.</span><span class=nx>expression</span><span class=si>}</span><span class=sb>&#34;`</span><span class=p>);</span>
@@ -416,7 +417,6 @@
 </span></span><span class=line><span class=cl>      <span class=cm>/**
 </span></span></span><span class=line><span class=cl><span class=cm>       * 如果要深层监听数据变化的话
 </span></span></span><span class=line><span class=cl><span class=cm>       * 递归的触发每个属性的 getter
-</span></span></span><span class=line><span class=cl><span class=cm>       * 将 watcher 添加到他们的依赖列表里
 </span></span></span><span class=line><span class=cl><span class=cm>       */</span>
 </span></span><span class=line><span class=cl>      <span class=k>if</span> <span class=p>(</span><span class=k>this</span><span class=p>.</span><span class=nx>deep</span><span class=p>)</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>        <span class=nx>traverse</span><span class=p>(</span><span class=nx>value</span><span class=p>);</span>
@@ -603,6 +603,8 @@
 </span><span class=lnt>80
 </span><span class=lnt>81
 </span><span class=lnt>82
+</span><span class=lnt>83
+</span><span class=lnt>84
 </span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-ts data-lang=ts><span class=line><span class=cl><span class=c1>// 将 obj[key] 转换为 getter/setters 形式
 </span></span></span><span class=line><span class=cl><span class=c1></span><span class=kr>export</span> <span class=kd>function</span> <span class=nx>defineReactive</span><span class=p>(</span><span class=nx>obj</span><span class=p>,</span> <span class=nx>key</span><span class=p>,</span> <span class=nx>val</span><span class=p>,</span> <span class=nx>customSetter</span><span class=p>,</span> <span class=nx>shallow</span><span class=p>)</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>property</span> <span class=o>=</span> <span class=nb>Object</span><span class=p>.</span><span class=nx>getOwnPropertyDescriptor</span><span class=p>(</span><span class=nx>obj</span><span class=p>,</span> <span class=nx>key</span><span class=p>);</span>
@@ -639,8 +641,10 @@
 </span></span><span class=line><span class=cl>      <span class=k>if</span> <span class=p>(</span><span class=nx>Dep</span><span class=p>.</span><span class=nx>target</span><span class=p>)</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>        <span class=nx>dep</span><span class=p>.</span><span class=nx>depend</span><span class=p>();</span>
 </span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=p>(</span><span class=nx>childOb</span><span class=p>)</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl>          <span class=nx>childOb</span><span class=p>.</span><span class=nx>dep</span><span class=p>.</span><span class=nx>depend</span><span class=p>();</span>
-</span></span><span class=line><span class=cl>          <span class=k>if</span> <span class=p>(</span><span class=nb>Array</span><span class=p>.</span><span class=nx>isArray</span><span class=p>(</span><span class=nx>value</span><span class=p>))</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>          <span class=c1>// 子项的 dep 也要收集 Dep.target
+</span></span></span><span class=line><span class=cl><span class=c1></span>          <span class=nx>childOb</span><span class=p>.</span><span class=nx>dep</span><span class=p>.</span><span class=nx>depend</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>          <span class=c1>// 有多个依赖项目
+</span></span></span><span class=line><span class=cl><span class=c1></span>          <span class=k>if</span> <span class=p>(</span><span class=nb>Array</span><span class=p>.</span><span class=nx>isArray</span><span class=p>(</span><span class=nx>value</span><span class=p>))</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>            <span class=nx>dependArray</span><span class=p>(</span><span class=nx>value</span><span class=p>);</span>
 </span></span><span class=line><span class=cl>          <span class=p>}</span>
 </span></span><span class=line><span class=cl>        <span class=p>}</span>
@@ -771,9 +775,11 @@
 </span><span class=lnt>84
 </span><span class=lnt>85
 </span><span class=lnt>86
+</span><span class=lnt>87
+</span><span class=lnt>88
 </span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-ts data-lang=ts><span class=line><span class=cl><span class=c1>// 为“值”创建观察者实例的工厂函数
 </span></span></span><span class=line><span class=cl><span class=c1></span><span class=kr>export</span> <span class=kd>function</span> <span class=nx>observe</span><span class=p>(</span><span class=nx>value</span><span class=p>,</span> <span class=nx>asRootData</span><span class=p>)</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl>  <span class=c1>// value 不能是 VNode，也不能是 Vue 组件实例
+</span></span><span class=line><span class=cl>  <span class=c1>// value 不能是 VNode，只能对对象进行 observe
 </span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=k>if</span> <span class=p>(</span><span class=o>!</span><span class=nx>isObject</span><span class=p>(</span><span class=nx>value</span><span class=p>)</span> <span class=o>||</span> <span class=nx>value</span> <span class=k>instanceof</span> <span class=nx>VNode</span><span class=p>)</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>    <span class=k>return</span><span class=p>;</span>
 </span></span><span class=line><span class=cl>  <span class=p>}</span>
@@ -809,7 +815,8 @@
 </span></span></span><span class=line><span class=cl><span class=c1></span>      <span class=kr>const</span> <span class=nx>result</span> <span class=o>=</span> <span class=nx>original</span><span class=p>.</span><span class=nx>apply</span><span class=p>(</span><span class=k>this</span><span class=p>,</span> <span class=nx>args</span><span class=p>);</span>
 </span></span><span class=line><span class=cl>      <span class=kr>const</span> <span class=nx>ob</span> <span class=o>=</span> <span class=k>this</span><span class=p>.</span><span class=nx>__ob__</span><span class=p>;</span>
 </span></span><span class=line><span class=cl>      <span class=kd>let</span> <span class=nx>inserted</span><span class=p>;</span>
-</span></span><span class=line><span class=cl>      <span class=k>switch</span> <span class=p>(</span><span class=nx>method</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=c1>// 获取新插入的数据
+</span></span></span><span class=line><span class=cl><span class=c1></span>      <span class=k>switch</span> <span class=p>(</span><span class=nx>method</span><span class=p>)</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>        <span class=k>case</span> <span class=s1>&#39;push&#39;</span><span class=o>:</span>
 </span></span><span class=line><span class=cl>        <span class=k>case</span> <span class=s1>&#39;unshift&#39;</span><span class=o>:</span>
 </span></span><span class=line><span class=cl>          <span class=nx>inserted</span> <span class=o>=</span> <span class=nx>args</span><span class=p>;</span>
@@ -826,7 +833,8 @@
 </span></span><span class=line><span class=cl>    <span class=p>});</span>
 </span></span><span class=line><span class=cl>  <span class=p>}</span>
 </span></span><span class=line><span class=cl><span class=p>);</span>
-</span></span><span class=line><span class=cl><span class=kr>export</span> <span class=kr>class</span> <span class=nx>Observer</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl><span class=c1>// 对传入的 value 进行 defineReactive 转化
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kr>export</span> <span class=kr>class</span> <span class=nx>Observer</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>  <span class=kr>constructor</span><span class=p>(</span><span class=nx>value</span><span class=p>)</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>    <span class=c1>// 保存订阅了 value 本身的 watcher
 </span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=k>this</span><span class=p>.</span><span class=nx>dep</span> <span class=o>=</span> <span class=k>new</span> <span class=nx>Dep</span><span class=p>();</span>
@@ -1068,6 +1076,13 @@
 </span><span class=lnt>127
 </span><span class=lnt>128
 </span><span class=lnt>129
+</span><span class=lnt>130
+</span><span class=lnt>131
+</span><span class=lnt>132
+</span><span class=lnt>133
+</span><span class=lnt>134
+</span><span class=lnt>135
+</span><span class=lnt>136
 </span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-ts data-lang=ts><span class=line><span class=cl><span class=kr>export</span> <span class=kd>function</span> <span class=nx>reactive</span><span class=p>(</span><span class=nx>target</span><span class=p>)</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>  <span class=c1>// readonly 数据直接返回
 </span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=k>if</span> <span class=p>(</span><span class=nx>target</span> <span class=o>&amp;&amp;</span> <span class=nx>target</span><span class=p>.</span><span class=nx>__v_isReadonly</span><span class=p>)</span> <span class=p>{</span>
@@ -1079,8 +1094,8 @@
 </span></span><span class=line><span class=cl>    <span class=kc>false</span><span class=p>,</span>
 </span></span><span class=line><span class=cl>    <span class=cm>/**
 </span></span></span><span class=line><span class=cl><span class=cm>     * baseHandlers
-</span></span></span><span class=line><span class=cl><span class=cm>     * track: get has ownKeys
-</span></span></span><span class=line><span class=cl><span class=cm>     * trigger: set deleteProperty
+</span></span></span><span class=line><span class=cl><span class=cm>     * track: get、has、ownKeys
+</span></span></span><span class=line><span class=cl><span class=cm>     * trigger: set、deleteProperty
 </span></span></span><span class=line><span class=cl><span class=cm>     */</span>
 </span></span><span class=line><span class=cl>    <span class=p>{</span>
 </span></span><span class=line><span class=cl>      <span class=kr>get</span><span class=p>(</span><span class=nx>target</span><span class=p>,</span> <span class=nx>key</span><span class=p>,</span> <span class=nx>receiver</span><span class=p>)</span> <span class=p>{</span>
@@ -1093,12 +1108,19 @@
 </span></span></span><span class=line><span class=cl><span class=c1></span>          <span class=k>return</span> <span class=nx>target</span><span class=p>;</span>
 </span></span><span class=line><span class=cl>        <span class=p>}</span>
 </span></span><span class=line><span class=cl>        <span class=kr>const</span> <span class=nx>targetIsArray</span> <span class=o>=</span> <span class=nx>isArray</span><span class=p>(</span><span class=nx>target</span><span class=p>);</span>
-</span></span><span class=line><span class=cl>        <span class=c1>// 如果 target 是数组，key 是 arrayInstrumentations 的一个属性
-</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=k>if</span> <span class=p>(</span><span class=nx>targetIsArray</span> <span class=o>&amp;&amp;</span> <span class=nx>hasOwn</span><span class=p>(</span><span class=nx>arrayInstrumentations</span><span class=p>,</span> <span class=nx>key</span><span class=p>))</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl>          <span class=c1>// arrayInstrumentations 包含了对数组方法的劫持
-</span></span></span><span class=line><span class=cl><span class=c1></span>          <span class=k>return</span> <span class=nx>Reflect</span><span class=p>.</span><span class=kr>get</span><span class=p>(</span><span class=nx>arrayInstrumentations</span><span class=p>,</span> <span class=nx>key</span><span class=p>,</span> <span class=nx>receiver</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=p>(</span><span class=nx>targetIsArray</span> <span class=o>&amp;&amp;</span> <span class=nx>hasOwn</span><span class=p>(</span><span class=nx>arrayInstrumentations</span><span class=p>,</span> <span class=nx>key</span><span class=p>))</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>          <span class=cm>/**
+</span></span></span><span class=line><span class=cl><span class=cm>           * arrayInstrumentations 包含了对数组方法的劫持：
+</span></span></span><span class=line><span class=cl><span class=cm>           * __proto__
+</span></span></span><span class=line><span class=cl><span class=cm>           * [Symbol.iterator]
+</span></span></span><span class=line><span class=cl><span class=cm>           * concat
+</span></span></span><span class=line><span class=cl><span class=cm>           * entries
+</span></span></span><span class=line><span class=cl><span class=cm>           * every
+</span></span></span><span class=line><span class=cl><span class=cm>           * ...
+</span></span></span><span class=line><span class=cl><span class=cm>           */</span>
+</span></span><span class=line><span class=cl>          <span class=k>return</span> <span class=nx>Reflect</span><span class=p>.</span><span class=kr>get</span><span class=p>(</span><span class=nx>arrayInstrumentations</span><span class=p>,</span> <span class=nx>key</span><span class=p>,</span> <span class=nx>receiver</span><span class=p>);</span>
 </span></span><span class=line><span class=cl>        <span class=p>}</span>
-</span></span><span class=line><span class=cl>        <span class=c1>// 获取正常的结果
+</span></span><span class=line><span class=cl>        <span class=c1>// 获取原始结果
 </span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=kr>const</span> <span class=nx>res</span> <span class=o>=</span> <span class=nx>Reflect</span><span class=p>.</span><span class=kr>get</span><span class=p>(</span><span class=nx>target</span><span class=p>,</span> <span class=nx>key</span><span class=p>,</span> <span class=nx>receiver</span><span class=p>);</span>
 </span></span><span class=line><span class=cl>        <span class=c1>// 如果 key 是内建 Symbol 或者是 __proto__/__v_isRef，不需要依赖收集，直接返回
 </span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=k>if</span> <span class=p>(</span>
@@ -1118,7 +1140,7 @@
 </span></span><span class=line><span class=cl>        <span class=p>}</span>
 </span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=p>(</span><span class=nx>isObject</span><span class=p>(</span><span class=nx>res</span><span class=p>))</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>          <span class=cm>/**
-</span></span></span><span class=line><span class=cl><span class=cm>           * reactive 是深层的
+</span></span></span><span class=line><span class=cl><span class=cm>           * 访问到再进行转换
 </span></span></span><span class=line><span class=cl><span class=cm>           * 如果是 res 是 Object
 </span></span></span><span class=line><span class=cl><span class=cm>           * 对 res 调用 reactive
 </span></span></span><span class=line><span class=cl><span class=cm>           */</span>
@@ -1171,7 +1193,7 @@
 </span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=nx>result</span><span class=p>;</span>
 </span></span><span class=line><span class=cl>      <span class=p>},</span>
 </span></span><span class=line><span class=cl>      <span class=nx>ownKeys</span><span class=p>(</span><span class=nx>target</span><span class=p>)</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl>        <span class=c1>// 依赖收集
+</span></span><span class=line><span class=cl>        <span class=c1>// 对迭代访问进行依赖收集
 </span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=nx>track</span><span class=p>(</span><span class=nx>target</span><span class=p>,</span> <span class=s1>&#39;iterate&#39;</span><span class=p>,</span> <span class=nx>isArray</span><span class=p>(</span><span class=nx>target</span><span class=p>)</span> <span class=o>?</span> <span class=s1>&#39;length&#39;</span> <span class=o>:</span> <span class=nx>ITERATE_KEY</span><span class=p>);</span>
 </span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=nx>Reflect</span><span class=p>.</span><span class=nx>ownKeys</span><span class=p>(</span><span class=nx>target</span><span class=p>);</span>
 </span></span><span class=line><span class=cl>      <span class=p>}</span>
@@ -1560,6 +1582,7 @@
 </span><span class=lnt>173
 </span><span class=lnt>174
 </span><span class=lnt>175
+</span><span class=lnt>176
 </span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-ts data-lang=ts><span class=line><span class=cl><span class=c1>// 追踪类型
 </span></span></span><span class=line><span class=cl><span class=c1></span><span class=kr>export</span> <span class=kr>const</span> <span class=kr>enum</span> <span class=nx>TrackOpTypes</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>  <span class=nx>GET</span> <span class=o>=</span> <span class=s1>&#39;get&#39;</span><span class=p>,</span> <span class=c1>// 属性读取
@@ -1664,15 +1687,16 @@
 </span></span><span class=line><span class=cl>  <span class=nx>oldValue?</span>: <span class=kt>unknown</span><span class=p>,</span>
 </span></span><span class=line><span class=cl>  <span class=nx>oldTarget?</span>: <span class=kt>Map</span><span class=p>&lt;</span><span class=nt>unknown</span><span class=err>,</span> <span class=na>unknown</span><span class=p>&gt;</span> <span class=o>|</span> <span class=nx>Set</span><span class=p>&lt;</span><span class=nt>unknown</span><span class=p>&gt;</span>
 </span></span><span class=line><span class=cl><span class=p>)</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>depsMap</span> <span class=o>=</span> <span class=nx>targetMap</span><span class=p>.</span><span class=kr>get</span><span class=p>(</span><span class=nx>target</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=c1>// 获取 depsMap 并将 activeEffect 收集到 effects 里
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=kr>const</span> <span class=nx>depsMap</span> <span class=o>=</span> <span class=nx>targetMap</span><span class=p>.</span><span class=kr>get</span><span class=p>(</span><span class=nx>target</span><span class=p>);</span>
 </span></span><span class=line><span class=cl>  <span class=c1>// target 没有被 track 过
 </span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=k>if</span> <span class=p>(</span><span class=o>!</span><span class=nx>depsMap</span><span class=p>)</span> <span class=k>return</span><span class=p>;</span>
 </span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>effects</span> <span class=o>=</span> <span class=k>new</span> <span class=nx>Set</span><span class=p>&lt;</span><span class=nt>ReactiveEffect</span><span class=p>&gt;();</span>
 </span></span><span class=line><span class=cl>  <span class=c1>// 将 effectsToAdd 按条件添加到 effects 里
 </span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=kr>const</span> <span class=nx>add</span> <span class=o>=</span> <span class=p>(</span><span class=nx>effectsToAdd</span>: <span class=kt>Set</span><span class=p>&lt;</span><span class=nt>ReactiveEffect</span><span class=p>&gt;</span> <span class=o>|</span> <span class=kc>undefined</span><span class=p>)</span> <span class=o>=&gt;</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl>    <span class=c1>// 这里的 effectsToAdd 就是 Set(dep)
-</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=k>if</span> <span class=p>(</span><span class=nx>effectsToAdd</span><span class=p>)</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl>      <span class=nx>effectsToAdd</span><span class=p>.</span><span class=nx>forEach</span><span class=p>(</span><span class=nx>effect</span> <span class=o>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=nx>effectsToAdd</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=c1>// effectsToAdd 中保存着 activeEffect
+</span></span></span><span class=line><span class=cl><span class=c1></span>      <span class=nx>effectsToAdd</span><span class=p>.</span><span class=nx>forEach</span><span class=p>(</span><span class=nx>effect</span> <span class=o>=&gt;</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=p>(</span><span class=nx>effect</span> <span class=o>!==</span> <span class=nx>activeEffect</span> <span class=o>||</span> <span class=nx>effect</span><span class=p>.</span><span class=nx>allowRecurse</span><span class=p>)</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>          <span class=nx>effects</span><span class=p>.</span><span class=nx>add</span><span class=p>(</span><span class=nx>effect</span><span class=p>);</span>
 </span></span><span class=line><span class=cl>        <span class=p>}</span>
@@ -1832,6 +1856,7 @@
 </span><span class=lnt>95
 </span><span class=lnt>96
 </span><span class=lnt>97
+</span><span class=lnt>98
 </span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-ts data-lang=ts><span class=line><span class=cl><span class=kd>let</span> <span class=nx>uid</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>
 </span></span><span class=line><span class=cl><span class=kr>const</span> <span class=nx>effectStack</span>: <span class=kt>ReactiveEffect</span><span class=p>[]</span> <span class=o>=</span> <span class=p>[];</span>
 </span></span><span class=line><span class=cl><span class=kr>export</span> <span class=kr>interface</span> <span class=nx>ReactiveEffect</span><span class=p>&lt;</span><span class=nt>T</span> <span class=err>=</span> <span class=na>any</span><span class=p>&gt;</span> <span class=p>{</span>
@@ -1871,7 +1896,8 @@
 </span></span><span class=line><span class=cl>  <span class=nx>fn</span><span class=o>:</span> <span class=p>()</span> <span class=o>=&gt;</span> <span class=nx>T</span><span class=p>,</span>
 </span></span><span class=line><span class=cl>  <span class=nx>options</span>: <span class=kt>ReactiveEffectOptions</span>
 </span></span><span class=line><span class=cl><span class=p>)</span><span class=o>:</span> <span class=nx>ReactiveEffect</span><span class=p>&lt;</span><span class=nt>T</span><span class=p>&gt;</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>effect</span> <span class=o>=</span> <span class=kd>function</span> <span class=nx>reactiveEffect</span><span class=p>()</span><span class=o>:</span> <span class=kt>unknown</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=c1>// 被收集的 effect
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=kr>const</span> <span class=nx>effect</span> <span class=o>=</span> <span class=kd>function</span> <span class=nx>reactiveEffect</span><span class=p>()</span><span class=o>:</span> <span class=kt>unknown</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=o>!</span><span class=nx>effect</span><span class=p>.</span><span class=nx>active</span><span class=p>)</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>      <span class=k>return</span> <span class=nx>options</span><span class=p>.</span><span class=nx>scheduler</span> <span class=o>?</span> <span class=kc>undefined</span> <span class=o>:</span> <span class=nx>fn</span><span class=p>();</span>
 </span></span><span class=line><span class=cl>    <span class=p>}</span>
@@ -2317,7 +2343,7 @@
 </span></span><span class=line><span class=cl>  <span class=p>)</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>    <span class=c1>// 就把 job 加入队列
 </span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=nx>queue</span><span class=p>.</span><span class=nx>push</span><span class=p>(</span><span class=nx>job</span><span class=p>);</span>
-</span></span><span class=line><span class=cl>    <span class=c1>// 并且在下个事件循环“刷新 job 队列”
+</span></span><span class=line><span class=cl>    <span class=c1>// 并且在下个事件循环调用 flushJobs“刷新 job 队列”
 </span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=nx>queueFlush</span><span class=p>();</span>
 </span></span><span class=line><span class=cl>  <span class=p>}</span>
 </span></span><span class=line><span class=cl><span class=p>}</span>
@@ -2328,7 +2354,7 @@
 </span></span><span class=line><span class=cl>    <span class=nx>queue</span><span class=p>.</span><span class=nx>splice</span><span class=p>(</span><span class=nx>i</span><span class=p>,</span> <span class=mi>1</span><span class=p>);</span>
 </span></span><span class=line><span class=cl>  <span class=p>}</span>
 </span></span><span class=line><span class=cl><span class=p>}</span>
-</span></span><span class=line><span class=cl><span class=c1>// 刷新 job 队列
+</span></span><span class=line><span class=cl><span class=c1>// 刷新 job 队列（flushPreFlushCbs -&gt; queue -&gt; flushPostFlushCbs）
 </span></span></span><span class=line><span class=cl><span class=c1></span><span class=kd>function</span> <span class=nx>flushJobs</span><span class=p>(</span><span class=nx>seen?</span>: <span class=kt>CountMap</span><span class=p>)</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>  <span class=nx>isFlushPending</span> <span class=o>=</span> <span class=kc>false</span><span class=p>;</span>
 </span></span><span class=line><span class=cl>  <span class=nx>isFlushing</span> <span class=o>=</span> <span class=kc>true</span><span class=p>;</span> <span class=c1>// 队列正在刷新
@@ -2383,7 +2409,7 @@
 </span></span><span class=line><span class=cl>  <span class=p>}</span>
 </span></span><span class=line><span class=cl>  <span class=nx>queueFlush</span><span class=p>();</span>
 </span></span><span class=line><span class=cl><span class=p>}</span>
-</span></span><span class=line><span class=cl><span class=c1>// 将「渲染之“前”要执行的回调」入列（flash: pre）
+</span></span><span class=line><span class=cl><span class=c1>// 将「渲染之“前”要执行的回调」入列（flush: pre）
 </span></span></span><span class=line><span class=cl><span class=c1></span><span class=kr>export</span> <span class=kd>function</span> <span class=nx>queuePreFlushCb</span><span class=p>(</span><span class=nx>cb</span>: <span class=kt>SchedulerCb</span><span class=p>)</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>  <span class=nx>queueCb</span><span class=p>(</span><span class=nx>cb</span><span class=p>,</span> <span class=nx>activePreFlushCbs</span><span class=p>,</span> <span class=nx>pendingPreFlushCbs</span><span class=p>,</span> <span class=nx>preFlushIndex</span><span class=p>);</span>
 </span></span><span class=line><span class=cl><span class=p>}</span>
@@ -2393,7 +2419,7 @@
 </span></span><span class=line><span class=cl><span class=p>}</span>
 </span></span><span class=line><span class=cl><span class=cm>/**
 </span></span></span><span class=line><span class=cl><span class=cm> * 刷新「渲染之“前”要执行的回调」
-</span></span></span><span class=line><span class=cl><span class=cm> * 渲染更新之前，触发因为 props 更新而运行的 watcher（flash: pre）
+</span></span></span><span class=line><span class=cl><span class=cm> * 渲染更新之前，触发因为 props 更新而运行的 watcher（flush: pre）
 </span></span></span><span class=line><span class=cl><span class=cm> */</span>
 </span></span><span class=line><span class=cl><span class=kr>export</span> <span class=kd>function</span> <span class=nx>flushPreFlushCbs</span><span class=p>(</span>
 </span></span><span class=line><span class=cl>  <span class=nx>seen?</span>: <span class=kt>CountMap</span><span class=p>,</span>
@@ -2623,6 +2649,8 @@
 </span><span class=lnt>44
 </span><span class=lnt>45
 </span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
 </span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-ts data-lang=ts><span class=line><span class=cl><span class=kr>export</span> <span class=kd>function</span> <span class=nx>provide</span><span class=p>(</span><span class=nx>key</span><span class=p>,</span> <span class=nx>value</span><span class=p>)</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>  <span class=k>if</span> <span class=p>(</span><span class=o>!</span><span class=nx>currentInstance</span><span class=p>)</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>    <span class=nx>warn</span><span class=p>(</span><span class=sb>`provide() 只能在用在 setup() 里`</span><span class=p>);</span>
@@ -2639,7 +2667,8 @@
 </span></span><span class=line><span class=cl>      <span class=c1>// 基于父级的 provides 创建自己的 provides
 </span></span></span><span class=line><span class=cl><span class=c1></span>      <span class=nx>provides</span> <span class=o>=</span> <span class=nx>currentInstance</span><span class=p>.</span><span class=nx>provides</span> <span class=o>=</span> <span class=nb>Object</span><span class=p>.</span><span class=nx>create</span><span class=p>(</span><span class=nx>parentProvides</span><span class=p>);</span>
 </span></span><span class=line><span class=cl>    <span class=p>}</span>
-</span></span><span class=line><span class=cl>    <span class=nx>provides</span><span class=p>[</span><span class=nx>key</span><span class=p>]</span> <span class=o>=</span> <span class=nx>value</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 保存 value
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=nx>provides</span><span class=p>[</span><span class=nx>key</span><span class=p>]</span> <span class=o>=</span> <span class=nx>value</span><span class=p>;</span>
 </span></span><span class=line><span class=cl>  <span class=p>}</span>
 </span></span><span class=line><span class=cl><span class=p>}</span>
 </span></span><span class=line><span class=cl><span class=kr>export</span> <span class=kd>function</span> <span class=nx>inject</span><span class=p>(</span>
@@ -2650,7 +2679,8 @@
 </span></span><span class=line><span class=cl>  <span class=c1>// 找到离自己最近的父组件的 provides 或着 vnode 的上下文
 </span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=kr>const</span> <span class=nx>instance</span> <span class=o>=</span> <span class=nx>currentInstance</span> <span class=o>||</span> <span class=nx>currentRenderingInstance</span><span class=p>;</span>
 </span></span><span class=line><span class=cl>  <span class=k>if</span> <span class=p>(</span><span class=nx>instance</span><span class=p>)</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl>    <span class=kr>const</span> <span class=nx>provides</span> <span class=o>=</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 从父级组件查找 provide
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=kr>const</span> <span class=nx>provides</span> <span class=o>=</span>
 </span></span><span class=line><span class=cl>      <span class=nx>instance</span><span class=p>.</span><span class=nx>parent</span> <span class=o>==</span> <span class=kc>null</span>
 </span></span><span class=line><span class=cl>        <span class=o>?</span> <span class=nx>instance</span><span class=p>.</span><span class=nx>vnode</span><span class=p>.</span><span class=nx>appContext</span> <span class=o>&amp;&amp;</span> <span class=nx>instance.vnode.appContext.provides</span>
 </span></span><span class=line><span class=cl>        : <span class=kt>instance.parent.provides</span><span class=p>;</span>
@@ -3470,7 +3500,7 @@
 </span></span><span class=line><span class=cl>    <span class=kr>const</span> <span class=nx>watcher</span> <span class=o>=</span> <span class=k>this</span><span class=p>.</span><span class=nx>_computedWatchers</span> <span class=o>&amp;&amp;</span> <span class=k>this</span><span class=p>.</span><span class=nx>_computedWatchers</span><span class=p>[</span><span class=nx>key</span><span class=p>];</span>
 </span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=nx>watcher</span><span class=p>)</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>      <span class=k>if</span> <span class=p>(</span><span class=nx>watcher</span><span class=p>.</span><span class=nx>dirty</span><span class=p>)</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl>        <span class=c1>// 用到再求值
+</span></span><span class=line><span class=cl>        <span class=c1>// 惰性求值
 </span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=nx>watcher</span><span class=p>.</span><span class=nx>evaluate</span><span class=p>();</span>
 </span></span><span class=line><span class=cl>      <span class=p>}</span>
 </span></span><span class=line><span class=cl>      <span class=k>if</span> <span class=p>(</span><span class=nx>Dep</span><span class=p>.</span><span class=nx>target</span><span class=p>)</span> <span class=p>{</span>
