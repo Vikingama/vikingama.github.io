@@ -3624,7 +3624,7 @@
 </span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=nx>scheduler</span><span class=o>:</span> <span class=p>()</span> <span class=o>=&gt;</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>          <span class=k>if</span> <span class=p>(</span><span class=o>!</span><span class=k>this</span><span class=p>.</span><span class=nx>_dirty</span><span class=p>)</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>            <span class=c1>// 数据“脏”了
-</span></span></span><span class=line><span class=cl><span class=c1></span>            <span class=k>this</span><span class=err>.</span><span class=nx>_dirty</span> <span class=o>=</span> <span class=kc>true</span><span class=p>;</span>
+</span></span></span><span class=line><span class=cl><span class=c1></span>            <span class=k>this</span><span class=p>.</span><span class=nx>_dirty</span> <span class=o>=</span> <span class=kc>true</span><span class=p>;</span>
 </span></span><span class=line><span class=cl>            <span class=c1>// 派发通知，通知运行访问该计算属性的 activeEffect
 </span></span></span><span class=line><span class=cl><span class=c1></span>            <span class=nx>trigger</span><span class=p>(</span><span class=nx>toRaw</span><span class=p>(</span><span class=k>this</span><span class=p>),</span> <span class=s1>&#39;set&#39;</span><span class=p>,</span> <span class=s1>&#39;value&#39;</span><span class=p>);</span>
 </span></span><span class=line><span class=cl>          <span class=p>}</span>
