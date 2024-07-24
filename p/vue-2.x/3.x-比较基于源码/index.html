@@ -11,7 +11,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
 <span>深色</span></li></div></ol></aside><main class="main full-width"><article class="has-image main-article"><header class=article-header><div class=article-image><a href=/p/vue-2.x/3.x-%E6%AF%94%E8%BE%83%E5%9F%BA%E4%BA%8E%E6%BA%90%E7%A0%81/><img src=/img/cover/vue.png loading=lazy alt="Vue 2.x/3.x 比较（基于源码）"></a></div><div class=article-details><header class=article-category><a href=/categories/vue/>Vue</a></header><div class=article-title-wrapper><h2 class=article-title><a href=/p/vue-2.x/3.x-%E6%AF%94%E8%BE%83%E5%9F%BA%E4%BA%8E%E6%BA%90%E7%A0%81/>Vue 2.x/3.x 比较（基于源码）</a></h2><h3 class=article-subtitle>最近在看 Vue 源码，顺手做下笔记</h3></div><footer class=article-time><div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
 <time class=article-time--published>Oct 24, 2021</time></div><div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
-<time class=article-time--reading>阅读时长：82 分钟</time></div></footer></div></header><section class=article-content><h2 id=响应式原理-2x>响应式原理 2.x</h2><p>Dep 用来存放/管理订阅者（watcher）的对象；每个 Dep 实例都存在于<strong>对象每个属性对应的 getter/setter 所在的闭包里</strong>并且都有唯一的 id。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+<time class=article-time--reading>阅读时长：86 分钟</time></div></footer></div></header><section class=article-content><h2 id=响应式原理-2x>响应式原理 2.x</h2><p>Dep 用来存放/管理订阅者（watcher）的对象；每个 Dep 实例都存在于<strong>对象每个属性对应的 getter/setter 所在的闭包里</strong>并且都有唯一的 id。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -7900,6 +7900,65 @@
 </span><span class=lnt>2315
 </span><span class=lnt>2316
 </span><span class=lnt>2317
+</span><span class=lnt>2318
+</span><span class=lnt>2319
+</span><span class=lnt>2320
+</span><span class=lnt>2321
+</span><span class=lnt>2322
+</span><span class=lnt>2323
+</span><span class=lnt>2324
+</span><span class=lnt>2325
+</span><span class=lnt>2326
+</span><span class=lnt>2327
+</span><span class=lnt>2328
+</span><span class=lnt>2329
+</span><span class=lnt>2330
+</span><span class=lnt>2331
+</span><span class=lnt>2332
+</span><span class=lnt>2333
+</span><span class=lnt>2334
+</span><span class=lnt>2335
+</span><span class=lnt>2336
+</span><span class=lnt>2337
+</span><span class=lnt>2338
+</span><span class=lnt>2339
+</span><span class=lnt>2340
+</span><span class=lnt>2341
+</span><span class=lnt>2342
+</span><span class=lnt>2343
+</span><span class=lnt>2344
+</span><span class=lnt>2345
+</span><span class=lnt>2346
+</span><span class=lnt>2347
+</span><span class=lnt>2348
+</span><span class=lnt>2349
+</span><span class=lnt>2350
+</span><span class=lnt>2351
+</span><span class=lnt>2352
+</span><span class=lnt>2353
+</span><span class=lnt>2354
+</span><span class=lnt>2355
+</span><span class=lnt>2356
+</span><span class=lnt>2357
+</span><span class=lnt>2358
+</span><span class=lnt>2359
+</span><span class=lnt>2360
+</span><span class=lnt>2361
+</span><span class=lnt>2362
+</span><span class=lnt>2363
+</span><span class=lnt>2364
+</span><span class=lnt>2365
+</span><span class=lnt>2366
+</span><span class=lnt>2367
+</span><span class=lnt>2368
+</span><span class=lnt>2369
+</span><span class=lnt>2370
+</span><span class=lnt>2371
+</span><span class=lnt>2372
+</span><span class=lnt>2373
+</span><span class=lnt>2374
+</span><span class=lnt>2375
+</span><span class=lnt>2376
 </span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-ts data-lang=ts><span class=line><span class=cl><span class=kr>export</span> <span class=kr>const</span> <span class=nx>createApp</span> <span class=o>=</span> <span class=p>((...</span><span class=nx>args</span><span class=p>)</span> <span class=o>=&gt;</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>  <span class=cm>/**
 </span></span></span><span class=line><span class=cl><span class=cm>   * patchProp 更新 props 方法集合
@@ -8057,6 +8116,65 @@
 </span></span><span class=line><span class=cl>    <span class=nx>cloneNode</span>: <span class=kt>hostCloneNode</span><span class=p>,</span>
 </span></span><span class=line><span class=cl>    <span class=nx>insertStaticContent</span>: <span class=kt>hostInsertStaticContent</span>
 </span></span><span class=line><span class=cl>  <span class=p>}</span> <span class=o>=</span> <span class=nx>options</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=cm>/**
+</span></span></span><span class=line><span class=cl><span class=cm>   * 是否是相同节点（可以复用）：type &amp; key 都相同
+</span></span></span><span class=line><span class=cl><span class=cm>   * 如果 n1 存在，并且 n1 n2 不能复用，卸载 n1
+</span></span></span><span class=line><span class=cl><span class=cm>   * 如果 n2 的 patchFlag 为 BAIL 忽略所有优化手段（dynamicChildren）
+</span></span></span><span class=line><span class=cl><span class=cm>   * 根据 n2 的 type 的值，对 n2 类型做判断，分别做处理：
+</span></span></span><span class=line><span class=cl><span class=cm>   *   文字       processText
+</span></span></span><span class=line><span class=cl><span class=cm>   *   注释       processCommentNode
+</span></span></span><span class=line><span class=cl><span class=cm>   *   静态       mountStaticNode
+</span></span></span><span class=line><span class=cl><span class=cm>   *   FRAGMENT   processFragment
+</span></span></span><span class=line><span class=cl><span class=cm>   *   ELEMENT    processElement: n1 === null ? mountElement : patchElement
+</span></span></span><span class=line><span class=cl><span class=cm>   *                 mountElement 会调用原生方法挂载 n2，如果 n2.children 存在，会调用 mountChildren 将 n2.children 挂载到 n2.el 下
+</span></span></span><span class=line><span class=cl><span class=cm>   *                 patchElement 会根据 n2.patchFlag 调用 patchProps、patchBlockChildren、patchChildren 处理 n1 和 n2 及其子节点，并调用生命周期函数
+</span></span></span><span class=line><span class=cl><span class=cm>   *                    如果 n2 是一个 Block，自身存在 dynamicChildren，调用 patchBlockChildren 处理动态子节点
+</span></span></span><span class=line><span class=cl><span class=cm>   *                        dynamicChildren 的结构是稳定的，只需要遍历 newChildren，调用 patch(old, new) 即可
+</span></span></span><span class=line><span class=cl><span class=cm>   *                    如果 n2 不是一个 Block，调用 patchChildren 处理子节点
+</span></span></span><span class=line><span class=cl><span class=cm>   *                        如果 n2.patchFlag&amp;KEYED_FRAGMENT，patchChildren 调用 patchKeyedChildren
+</span></span></span><span class=line><span class=cl><span class=cm>   *                            这种情况，说明存在可以被复用的节点
+</span></span></span><span class=line><span class=cl><span class=cm>   *                            从前向后遍历 i&lt;=e1&amp;&amp;i&lt;=e2，如果 c1[i] 和 c2[i] 可复用，调用 patch；否则，停止遍历；i++
+</span></span></span><span class=line><span class=cl><span class=cm>   *                            从后向前遍历 i&lt;=e1&amp;&amp;i&lt;=e2，如果 c1[e1] 和 c2[e2] 可复用，调用 patch；否则，停止遍历；e1++ e2++
+</span></span></span><span class=line><span class=cl><span class=cm>   *                            如果 i&gt;e1，oldChildren 没有剩余
+</span></span></span><span class=line><span class=cl><span class=cm>   *                                如果 i&lt;=e2，newChildren 有剩余，调用 patch，挂载 c2[i]
+</span></span></span><span class=line><span class=cl><span class=cm>   *                            如果 i&gt;e2，newChildren 没有剩余
+</span></span></span><span class=line><span class=cl><span class=cm>   *                                如果 i&lt;=e1，oldChildren 有剩余，调用 unmount，卸载 c1[i]
+</span></span></span><span class=line><span class=cl><span class=cm>   *                            此时 oldChildren/newChildren 均有剩余
+</span></span></span><span class=line><span class=cl><span class=cm>   *                                从 s2 开始 e2 结束，遍历 newChildren，将 [c2[i].key,i] 保存在 keyToNewIndexMap（即 c2.key 到相对位置索引 i 的映射）
+</span></span></span><span class=line><span class=cl><span class=cm>   *                                初始化被 patch 的新节点数量 patched 为 0
+</span></span></span><span class=line><span class=cl><span class=cm>   *                                初始化剩下的需要被 patch 的新节点数量 toBePatched 为 e2-i+1
+</span></span></span><span class=line><span class=cl><span class=cm>   *                                初始化一个长度为 toBePatched 的数组 newIndexToOldIndexMap，每项均为 0，用来保存每个 c2 在 oldChildren 中的位置（未更新前的位置）
+</span></span></span><span class=line><span class=cl><span class=cm>   *                                从 s1 开始 e1 结束，遍历剩余的 oldChildren
+</span></span></span><span class=line><span class=cl><span class=cm>   *                                    如果 patched&gt;toBePatched，说明 newChildren 的每项都被 patch 完了，调用 unmount 卸载 c1[i] 即可
+</span></span></span><span class=line><span class=cl><span class=cm>   * ···································如果 c1[i].key 存在，在 keyToNewIndexMap 中查找 c1[i] 在 newChildren 中的相对新位置 newIndex
+</span></span></span><span class=line><span class=cl><span class=cm>   *                                    否则，从 s2 开始 e2 结束，遍历 newChildren，如果 c2[j] 在 oldChildren 中不存在，newIndex=j
+</span></span></span><span class=line><span class=cl><span class=cm>   *                                    如果 newIndex 不存在，说明，c1[i] 在 newChildren 中不存在，需要被卸载掉
+</span></span></span><span class=line><span class=cl><span class=cm>   *                                    如果 newIndex 存在，说明 c1[i] 可以被复用，他的新的位置是 newIndex，只是需要被移动
+</span></span></span><span class=line><span class=cl><span class=cm>   *                                        更新 newIndexToOldIndexMap[newIndex-s2]=i+1，newIndex-s2 位置的 c2 在 oldChildren 中的位置是 i+1
+</span></span></span><span class=line><span class=cl><span class=cm>   *                                        newIndexToOldIndexMap 的下标都是相对位置，所以是 newIndex-s2
+</span></span></span><span class=line><span class=cl><span class=cm>   *                                        如果 newIndex 小于“遍历 oldChildren 过程中遇到的最大的 newIndex 值”maxNewIndexSoFar，说明当前节点不需要移动
+</span></span></span><span class=line><span class=cl><span class=cm>   *                                        对 c1[i] 和 c2[newIndex] 调用 patch，patched++
+</span></span></span><span class=line><span class=cl><span class=cm>   *                                    找出 newIndexToOldIndexMap 中“最长递增子序列”的下标，放到 increasingNewIndexSequence 数组里
+</span></span></span><span class=line><span class=cl><span class=cm>   *                                    从后向前（toBePatched-1 到 0）遍历剩余的 newChildren
+</span></span></span><span class=line><span class=cl><span class=cm>   *                                        如果他在 newIndexToOldIndexMap 中的值为 0，说明这个节点在 oldChildren 中是没有的，需要新增
+</span></span></span><span class=line><span class=cl><span class=cm>   *                                        否则，节点需要被移动，调用 move 移动节点，锚点为 c2[nextIndex + 1]
+</span></span></span><span class=line><span class=cl><span class=cm>   *                                        从后向前遍历，就是为了方便找移动的锚点
+</span></span></span><span class=line><span class=cl><span class=cm>   *                        如果 n2.patchFlag&amp;UNKEYED_FRAGMENT，patchChildren 调用 patchUnkeyedChildren
+</span></span></span><span class=line><span class=cl><span class=cm>   *                            遍历 commonLength，对 c1[i] 和 c2[i] 调用 patch
+</span></span></span><span class=line><span class=cl><span class=cm>   *                            如果 oldLength &gt; newLength，调用 unmountChildren 卸载 commonLength 之后的所有剩下的 c1
+</span></span></span><span class=line><span class=cl><span class=cm>   *                            否则，调用 mountChildren 挂载 commonLength 之后的所有剩下的 c2
+</span></span></span><span class=line><span class=cl><span class=cm>   *                        如果 n2.shapeFlag&amp;TEXT_CHILDREN
+</span></span></span><span class=line><span class=cl><span class=cm>   *                            如果 n1.shapeFlag&amp;ARRAY_CHILDREN，调用 unmountChildren 卸载 c1
+</span></span></span><span class=line><span class=cl><span class=cm>   *                            如果 c1 !== c2，将 c2 更新到页面上去
+</span></span></span><span class=line><span class=cl><span class=cm>   *                        如果 n1.shapeFlag&amp;ARRAY_CHILDREN
+</span></span></span><span class=line><span class=cl><span class=cm>   *                            如果 n2.shapeFlag&amp;ARRAY_CHILDREN，调用 patchKeyedChildren
+</span></span></span><span class=line><span class=cl><span class=cm>   *                            否则，卸载 c1
+</span></span></span><span class=line><span class=cl><span class=cm>   *                        如果 n1.shapeFlag&amp;TEXT_CHILDREN，从页面上删除 c1
+</span></span></span><span class=line><span class=cl><span class=cm>   *                        否则，调用 mountChildren，挂载 c2 即可
+</span></span></span><span class=line><span class=cl><span class=cm>   *   COMPONENT  processComponent
+</span></span></span><span class=line><span class=cl><span class=cm>   *   TELEPORT   type.process，使用 vnode 自带的 process 方法
+</span></span></span><span class=line><span class=cl><span class=cm>   *   SUSPENSE   type.process，使用 vnode 自带的 process 方法
+</span></span></span><span class=line><span class=cl><span class=cm>   */</span>
 </span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>patch</span>: <span class=kt>PatchFn</span> <span class=o>=</span> <span class=p>(</span>
 </span></span><span class=line><span class=cl>    <span class=nx>n1</span><span class=p>,</span> <span class=c1>// 旧 vnode
 </span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=nx>n2</span><span class=p>,</span> <span class=c1>// 新 vnode
@@ -9325,19 +9443,19 @@
 </span></span></span><span class=line><span class=cl><span class=c1></span>      <span class=kr>const</span> <span class=nx>s1</span> <span class=o>=</span> <span class=nx>i</span><span class=p>;</span> <span class=c1>// oldStartIndex
 </span></span></span><span class=line><span class=cl><span class=c1></span>      <span class=kr>const</span> <span class=nx>s2</span> <span class=o>=</span> <span class=nx>i</span><span class=p>;</span> <span class=c1>// newStartIndex
 </span></span></span><span class=line><span class=cl><span class=c1></span>      <span class=kr>const</span> <span class=nx>keyToNewIndexMap</span>: <span class=kt>Map</span><span class=p>&lt;</span><span class=nt>string</span> <span class=err>|</span> <span class=na>number</span><span class=err>,</span> <span class=na>number</span><span class=p>&gt;</span> <span class=o>=</span> <span class=k>new</span> <span class=nx>Map</span><span class=p>();</span> <span class=c1>// 将剩余的 newChildrenKey 和索引映射为 Map
-</span></span></span><span class=line><span class=cl><span class=c1></span>      <span class=c1>// 遍历剩余的 newChildren，将 newChildrenKey 和 index 保存在 Map 中
+</span></span></span><span class=line><span class=cl><span class=c1></span>      <span class=c1>// 遍历剩余的 newChildren，将 newChildrenKey 和在 newChildren 中的实际 index 保存在 Map 中
 </span></span></span><span class=line><span class=cl><span class=c1></span>      <span class=k>for</span> <span class=p>(</span><span class=nx>i</span> <span class=o>=</span> <span class=nx>s2</span><span class=p>;</span> <span class=nx>i</span> <span class=o>&lt;=</span> <span class=nx>e2</span><span class=p>;</span> <span class=nx>i</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>        <span class=kr>const</span> <span class=nx>nextChild</span> <span class=o>=</span> <span class=p>(</span><span class=nx>c2</span><span class=p>[</span><span class=nx>i</span><span class=p>]</span> <span class=o>=</span> <span class=nx>optimized</span>
 </span></span><span class=line><span class=cl>          <span class=o>?</span> <span class=nx>cloneIfMounted</span><span class=p>(</span><span class=nx>c2</span><span class=p>[</span><span class=nx>i</span><span class=p>]</span> <span class=kr>as</span> <span class=nx>VNode</span><span class=p>)</span>
 </span></span><span class=line><span class=cl>          <span class=o>:</span> <span class=nx>normalizeVNode</span><span class=p>(</span><span class=nx>c2</span><span class=p>[</span><span class=nx>i</span><span class=p>]));</span>
 </span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=p>(</span><span class=nx>nextChild</span><span class=p>.</span><span class=nx>key</span> <span class=o>!=</span> <span class=kc>null</span><span class=p>)</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl>          <span class=nx>keyToNewIndexMap</span><span class=p>.</span><span class=kr>set</span><span class=p>(</span><span class=nx>nextChild</span><span class=p>.</span><span class=nx>key</span><span class=p>,</span> <span class=nx>i</span><span class=p>);</span>
-</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span><span class=line><span class=cl>          <span class=nx>keyToNewIndexMap</span><span class=p>.</span><span class=kr>set</span><span class=p>(</span><span class=nx>nextChild</span><span class=p>.</span><span class=nx>key</span><span class=p>,</span> <span class=nx>i</span><span class=p>);</span> <span class=c1>// i 是绝对位置
+</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=p>}</span>
 </span></span><span class=line><span class=cl>      <span class=p>}</span>
 </span></span><span class=line><span class=cl>      <span class=kd>let</span> <span class=nx>j</span><span class=p>;</span>
 </span></span><span class=line><span class=cl>      <span class=kd>let</span> <span class=nx>patched</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=c1>// 已经被 patch 的节点数量
 </span></span></span><span class=line><span class=cl><span class=c1></span>      <span class=kd>let</span> <span class=nx>moved</span> <span class=o>=</span> <span class=kc>false</span><span class=p>;</span> <span class=c1>// 收否需要移动节点
-</span></span></span><span class=line><span class=cl><span class=c1></span>      <span class=kd>let</span> <span class=nx>maxNewIndexSoFar</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=c1>// 遍历 oldChildren 过程中，遇到的最大索引值
+</span></span></span><span class=line><span class=cl><span class=c1></span>      <span class=kd>let</span> <span class=nx>maxNewIndexSoFar</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=c1>// 遍历 oldChildren 过程中遇到的最大的 newIndex 值
 </span></span></span><span class=line><span class=cl><span class=c1></span>      <span class=kr>const</span> <span class=nx>toBePatched</span> <span class=o>=</span> <span class=nx>e2</span> <span class=o>-</span> <span class=nx>s2</span> <span class=o>+</span> <span class=mi>1</span><span class=p>;</span> <span class=c1>// newChildren 中，需要被 patch 的节点个数（剩余节点数量）
 </span></span></span><span class=line><span class=cl><span class=c1></span>      <span class=cm>/**
 </span></span></span><span class=line><span class=cl><span class=cm>       * 新建长度为 toBePatched 的数组，用来保存“newChildrenItem 在 oldChildren 中的位置”
@@ -9373,30 +9491,26 @@
 </span></span></span><span class=line><span class=cl><span class=cm>         * 如果取不到，卸载 prevChild
 </span></span></span><span class=line><span class=cl><span class=cm>         */</span>
 </span></span><span class=line><span class=cl>        <span class=kd>let</span> <span class=nx>newIndex</span><span class=p>;</span>
-</span></span><span class=line><span class=cl>        <span class=p>{</span>
-</span></span><span class=line><span class=cl>          <span class=c1>// 这个过程用来确认 newIndex 的值
-</span></span></span><span class=line><span class=cl><span class=c1></span>          <span class=k>if</span> <span class=p>(</span><span class=nx>prevChild</span><span class=p>.</span><span class=nx>key</span> <span class=o>!=</span> <span class=kc>null</span><span class=p>)</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl>            <span class=c1>// 尝试获取和 c1[i] 有相同 key 的 newChildrenItem 的索引
-</span></span></span><span class=line><span class=cl><span class=c1></span>            <span class=nx>newIndex</span> <span class=o>=</span> <span class=nx>keyToNewIndexMap</span><span class=p>.</span><span class=kr>get</span><span class=p>(</span><span class=nx>prevChild</span><span class=p>.</span><span class=nx>key</span><span class=p>);</span>
-</span></span><span class=line><span class=cl>          <span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl>            <span class=c1>// 如果 prevChild.key 是 null，遍历剩余（s2～e2）的 newChildren
-</span></span></span><span class=line><span class=cl><span class=c1></span>            <span class=k>for</span> <span class=p>(</span><span class=nx>j</span> <span class=o>=</span> <span class=nx>s2</span><span class=p>;</span> <span class=nx>j</span> <span class=o>&lt;=</span> <span class=nx>e2</span><span class=p>;</span> <span class=nx>j</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl>              <span class=k>if</span> <span class=p>(</span>
-</span></span><span class=line><span class=cl>                <span class=cm>/**
-</span></span></span><span class=line><span class=cl><span class=cm>                 * newIndexToOldIndexMap 的下表为相对位置，所以是 j-s2
-</span></span></span><span class=line><span class=cl><span class=cm>                 * 如果 j-s2 位置的值 === 0
-</span></span></span><span class=line><span class=cl><span class=cm>                 * j-s2 对应的节点没有被复用
-</span></span></span><span class=line><span class=cl><span class=cm>                 */</span>
-</span></span><span class=line><span class=cl>                <span class=nx>newIndexToOldIndexMap</span><span class=p>[</span><span class=nx>j</span> <span class=o>-</span> <span class=nx>s2</span><span class=p>]</span> <span class=o>===</span> <span class=mi>0</span> <span class=o>&amp;&amp;</span>
-</span></span><span class=line><span class=cl>                <span class=cm>/**
-</span></span></span><span class=line><span class=cl><span class=cm>                 * 如果 c1[i] 和 c2[j] 的 type 相同
-</span></span></span><span class=line><span class=cl><span class=cm>                 * 没有 key 也行吗？
-</span></span></span><span class=line><span class=cl><span class=cm>                 */</span>
-</span></span><span class=line><span class=cl>                <span class=nx>isSameVNodeType</span><span class=p>(</span><span class=nx>prevChild</span><span class=p>,</span> <span class=nx>c2</span><span class=p>[</span><span class=nx>j</span><span class=p>]</span> <span class=kr>as</span> <span class=nx>VNode</span><span class=p>)</span>
-</span></span><span class=line><span class=cl>              <span class=p>)</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl>                <span class=nx>newIndex</span> <span class=o>=</span> <span class=nx>j</span><span class=p>;</span>
-</span></span><span class=line><span class=cl>                <span class=k>break</span><span class=p>;</span>
-</span></span><span class=line><span class=cl>              <span class=p>}</span>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=p>(</span><span class=nx>prevChild</span><span class=p>.</span><span class=nx>key</span> <span class=o>!=</span> <span class=kc>null</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>          <span class=cm>/**
+</span></span></span><span class=line><span class=cl><span class=cm>           * 尝试获取和 c1[i] 有相同 key 的 newChildrenItem 的索引
+</span></span></span><span class=line><span class=cl><span class=cm>           * 此时 newIndex 代表的是，c1[i] 在 newChildren 中的绝对位置，可能为 undefined
+</span></span></span><span class=line><span class=cl><span class=cm>           */</span>
+</span></span><span class=line><span class=cl>          <span class=nx>newIndex</span> <span class=o>=</span> <span class=nx>keyToNewIndexMap</span><span class=p>.</span><span class=kr>get</span><span class=p>(</span><span class=nx>prevChild</span><span class=p>.</span><span class=nx>key</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>          <span class=c1>// 如果 prevChild.key 是 null，遍历剩余（s2～e2）的 newChildren
+</span></span></span><span class=line><span class=cl><span class=c1></span>          <span class=k>for</span> <span class=p>(</span><span class=nx>j</span> <span class=o>=</span> <span class=nx>s2</span><span class=p>;</span> <span class=nx>j</span> <span class=o>&lt;=</span> <span class=nx>e2</span><span class=p>;</span> <span class=nx>j</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=k>if</span> <span class=p>(</span>
+</span></span><span class=line><span class=cl>              <span class=cm>/**
+</span></span></span><span class=line><span class=cl><span class=cm>               * newIndexToOldIndexMap 的下表为相对位置，所以是 j-s2
+</span></span></span><span class=line><span class=cl><span class=cm>               * 如果 j-s2 位置的值 === 0
+</span></span></span><span class=line><span class=cl><span class=cm>               * j-s2 对应的节点没有被复用
+</span></span></span><span class=line><span class=cl><span class=cm>               */</span>
+</span></span><span class=line><span class=cl>              <span class=nx>newIndexToOldIndexMap</span><span class=p>[</span><span class=nx>j</span> <span class=o>-</span> <span class=nx>s2</span><span class=p>]</span> <span class=o>===</span> <span class=mi>0</span> <span class=o>&amp;&amp;</span>
+</span></span><span class=line><span class=cl>              <span class=nx>isSameVNodeType</span><span class=p>(</span><span class=nx>prevChild</span><span class=p>,</span> <span class=nx>c2</span><span class=p>[</span><span class=nx>j</span><span class=p>]</span> <span class=kr>as</span> <span class=nx>VNode</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>              <span class=nx>newIndex</span> <span class=o>=</span> <span class=nx>j</span><span class=p>;</span> <span class=c1>// 新增节点的位置
+</span></span></span><span class=line><span class=cl><span class=c1></span>              <span class=k>break</span><span class=p>;</span>
 </span></span><span class=line><span class=cl>            <span class=p>}</span>
 </span></span><span class=line><span class=cl>          <span class=p>}</span>
 </span></span><span class=line><span class=cl>        <span class=p>}</span>
@@ -9406,12 +9520,16 @@
 </span></span><span class=line><span class=cl>        <span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>          <span class=cm>/**
 </span></span></span><span class=line><span class=cl><span class=cm>           * 找到了就进行 patch（c1[i] 和 c2[newIndex]），还要更新 patched
-</span></span></span><span class=line><span class=cl><span class=cm>           * 更新 newIndexToOldIndexMap 的相对下标的值
+</span></span></span><span class=line><span class=cl><span class=cm>           * 更新 newIndexToOldIndexMap 的相对下标（绝对下表-起始位置）的值（绝对位置）
 </span></span></span><span class=line><span class=cl><span class=cm>           */</span>
 </span></span><span class=line><span class=cl>          <span class=nx>newIndexToOldIndexMap</span><span class=p>[</span><span class=nx>newIndex</span> <span class=o>-</span> <span class=nx>s2</span><span class=p>]</span> <span class=o>=</span> <span class=nx>i</span> <span class=o>+</span> <span class=mi>1</span><span class=p>;</span>
 </span></span><span class=line><span class=cl>          <span class=k>if</span> <span class=p>(</span><span class=nx>newIndex</span> <span class=o>&gt;=</span> <span class=nx>maxNewIndexSoFar</span><span class=p>)</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl>            <span class=nx>maxNewIndexSoFar</span> <span class=o>=</span> <span class=nx>newIndex</span><span class=p>;</span> <span class=c1>// 更新遇到的最大索引值
-</span></span></span><span class=line><span class=cl><span class=c1></span>          <span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=cm>/**
+</span></span></span><span class=line><span class=cl><span class=cm>             * 如果 c1[i] 在 newChildren 中的新位置 newIndex 比遇到的 newIndex 的最大值还要大
+</span></span></span><span class=line><span class=cl><span class=cm>             * 说明不需要进行移动操作
+</span></span></span><span class=line><span class=cl><span class=cm>             */</span>
+</span></span><span class=line><span class=cl>            <span class=nx>maxNewIndexSoFar</span> <span class=o>=</span> <span class=nx>newIndex</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>          <span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>            <span class=nx>moved</span> <span class=o>=</span> <span class=kc>true</span><span class=p>;</span> <span class=c1>// 需要移动节点
 </span></span></span><span class=line><span class=cl><span class=c1></span>          <span class=p>}</span>
 </span></span><span class=line><span class=cl>          <span class=nx>patch</span><span class=p>(</span>
@@ -9431,7 +9549,7 @@
 </span></span><span class=line><span class=cl>      <span class=kr>const</span> <span class=nx>increasingNewIndexSequence</span> <span class=o>=</span> <span class=nx>moved</span>
 </span></span><span class=line><span class=cl>        <span class=o>?</span> <span class=nx>getSequence</span><span class=p>(</span><span class=nx>newIndexToOldIndexMap</span><span class=p>)</span>
 </span></span><span class=line><span class=cl>        <span class=o>:</span> <span class=nx>EMPTY_ARR</span><span class=p>;</span> <span class=c1>// 计算出 newIndexToOldIndexMap 中的最长递增子序列的“索引/下标”
-</span></span></span><span class=line><span class=cl><span class=c1></span>      <span class=nx>j</span> <span class=o>=</span> <span class=nx>increasingNewIndexSequence</span><span class=p>.</span><span class=nx>length</span> <span class=o>-</span> <span class=mi>1</span><span class=p>;</span> <span class=c1>// 获取最后一个元素（最长递增子序列的最后一个值的下标）
+</span></span></span><span class=line><span class=cl><span class=c1></span>      <span class=nx>j</span> <span class=o>=</span> <span class=nx>increasingNewIndexSequence</span><span class=p>.</span><span class=nx>length</span> <span class=o>-</span> <span class=mi>1</span><span class=p>;</span> <span class=c1>// 获取最后一个元素（最长递增子序列的最后一个值）
 </span></span></span><span class=line><span class=cl><span class=c1></span>      <span class=cm>/**
 </span></span></span><span class=line><span class=cl><span class=cm>       * 从后向前遍历需要被处理的剩余节点，处理 move &amp; mount 情况
 </span></span></span><span class=line><span class=cl><span class=cm>       * 为什么不“从前往后”遍历呢？因为“插入节点”需要有一个“锚点”
@@ -9443,7 +9561,7 @@
 </span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=kr>const</span> <span class=nx>anchor</span> <span class=o>=</span>
 </span></span><span class=line><span class=cl>          <span class=nx>nextIndex</span> <span class=o>+</span> <span class=mi>1</span> <span class=o>&lt;</span> <span class=nx>l2</span> <span class=o>?</span> <span class=p>(</span><span class=nx>c2</span><span class=p>[</span><span class=nx>nextIndex</span> <span class=o>+</span> <span class=mi>1</span><span class=p>]</span> <span class=kr>as</span> <span class=nx>VNode</span><span class=p>).</span><span class=nx>el</span> : <span class=kt>parentAnchor</span><span class=p>;</span>
 </span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=p>(</span><span class=nx>newIndexToOldIndexMap</span><span class=p>[</span><span class=nx>i</span><span class=p>]</span> <span class=o>===</span> <span class=mi>0</span><span class=p>)</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl>          <span class=c1>// 没有找到复用节点，挂载 nextChild
+</span></span><span class=line><span class=cl>          <span class=c1>// 新增的节点，挂载 nextChild
 </span></span></span><span class=line><span class=cl><span class=c1></span>          <span class=nx>patch</span><span class=p>(</span>
 </span></span><span class=line><span class=cl>            <span class=kc>null</span><span class=p>,</span>
 </span></span><span class=line><span class=cl>            <span class=nx>nextChild</span><span class=p>,</span>
