@@ -11,7 +11,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
 <span>深色</span></li></div></ol></aside><main class="main full-width"><article class="has-image main-article"><header class=article-header><div class=article-image><a href=/p/vue-2.x/3.x-%E6%AF%94%E8%BE%83%E5%9F%BA%E4%BA%8E%E6%BA%90%E7%A0%81/><img src=/img/cover/vue.png loading=lazy alt="Vue 2.x/3.x 比较（基于源码）"></a></div><div class=article-details><header class=article-category><a href=/categories/vue/>Vue</a></header><div class=article-title-wrapper><h2 class=article-title><a href=/p/vue-2.x/3.x-%E6%AF%94%E8%BE%83%E5%9F%BA%E4%BA%8E%E6%BA%90%E7%A0%81/>Vue 2.x/3.x 比较（基于源码）</a></h2><h3 class=article-subtitle>最近在看 Vue 源码，顺手做下笔记</h3></div><footer class=article-time><div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
 <time class=article-time--published>Oct 24, 2021</time></div><div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
-<time class=article-time--reading>阅读时长：86 分钟</time></div></footer></div></header><section class=article-content><h2 id=响应式原理-2x>响应式原理 2.x</h2><p>Dep 用来存放/管理订阅者（watcher）的对象；每个 Dep 实例都存在于<strong>对象每个属性对应的 getter/setter 所在的闭包里</strong>并且都有唯一的 id。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+<time class=article-time--reading>阅读时长：87 分钟</time></div></footer></div></header><section class=article-content><h2 id=响应式原理-2x>响应式原理 2.x</h2><p>Dep 用来存放/管理订阅者（watcher）的对象；每个 Dep 实例都存在于<strong>对象每个属性对应的 getter/setter 所在的闭包里</strong>并且都有唯一的 id。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -7959,6 +7959,54 @@
 </span><span class=lnt>2374
 </span><span class=lnt>2375
 </span><span class=lnt>2376
+</span><span class=lnt>2377
+</span><span class=lnt>2378
+</span><span class=lnt>2379
+</span><span class=lnt>2380
+</span><span class=lnt>2381
+</span><span class=lnt>2382
+</span><span class=lnt>2383
+</span><span class=lnt>2384
+</span><span class=lnt>2385
+</span><span class=lnt>2386
+</span><span class=lnt>2387
+</span><span class=lnt>2388
+</span><span class=lnt>2389
+</span><span class=lnt>2390
+</span><span class=lnt>2391
+</span><span class=lnt>2392
+</span><span class=lnt>2393
+</span><span class=lnt>2394
+</span><span class=lnt>2395
+</span><span class=lnt>2396
+</span><span class=lnt>2397
+</span><span class=lnt>2398
+</span><span class=lnt>2399
+</span><span class=lnt>2400
+</span><span class=lnt>2401
+</span><span class=lnt>2402
+</span><span class=lnt>2403
+</span><span class=lnt>2404
+</span><span class=lnt>2405
+</span><span class=lnt>2406
+</span><span class=lnt>2407
+</span><span class=lnt>2408
+</span><span class=lnt>2409
+</span><span class=lnt>2410
+</span><span class=lnt>2411
+</span><span class=lnt>2412
+</span><span class=lnt>2413
+</span><span class=lnt>2414
+</span><span class=lnt>2415
+</span><span class=lnt>2416
+</span><span class=lnt>2417
+</span><span class=lnt>2418
+</span><span class=lnt>2419
+</span><span class=lnt>2420
+</span><span class=lnt>2421
+</span><span class=lnt>2422
+</span><span class=lnt>2423
+</span><span class=lnt>2424
 </span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-ts data-lang=ts><span class=line><span class=cl><span class=kr>export</span> <span class=kr>const</span> <span class=nx>createApp</span> <span class=o>=</span> <span class=p>((...</span><span class=nx>args</span><span class=p>)</span> <span class=o>=&gt;</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>  <span class=cm>/**
 </span></span></span><span class=line><span class=cl><span class=cm>   * patchProp 更新 props 方法集合
@@ -9443,32 +9491,31 @@
 </span></span></span><span class=line><span class=cl><span class=c1></span>      <span class=kr>const</span> <span class=nx>s1</span> <span class=o>=</span> <span class=nx>i</span><span class=p>;</span> <span class=c1>// oldStartIndex
 </span></span></span><span class=line><span class=cl><span class=c1></span>      <span class=kr>const</span> <span class=nx>s2</span> <span class=o>=</span> <span class=nx>i</span><span class=p>;</span> <span class=c1>// newStartIndex
 </span></span></span><span class=line><span class=cl><span class=c1></span>      <span class=kr>const</span> <span class=nx>keyToNewIndexMap</span>: <span class=kt>Map</span><span class=p>&lt;</span><span class=nt>string</span> <span class=err>|</span> <span class=na>number</span><span class=err>,</span> <span class=na>number</span><span class=p>&gt;</span> <span class=o>=</span> <span class=k>new</span> <span class=nx>Map</span><span class=p>();</span> <span class=c1>// 将剩余的 newChildrenKey 和索引映射为 Map
-</span></span></span><span class=line><span class=cl><span class=c1></span>      <span class=c1>// 遍历剩余的 newChildren，将 newChildrenKey 和在 newChildren 中的实际 index 保存在 Map 中
+</span></span></span><span class=line><span class=cl><span class=c1></span>      <span class=c1>// 遍历剩余的 newChildren，将 c2[i].key 和在 newChildren 中的实际 index 保存在 Map 中
 </span></span></span><span class=line><span class=cl><span class=c1></span>      <span class=k>for</span> <span class=p>(</span><span class=nx>i</span> <span class=o>=</span> <span class=nx>s2</span><span class=p>;</span> <span class=nx>i</span> <span class=o>&lt;=</span> <span class=nx>e2</span><span class=p>;</span> <span class=nx>i</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>        <span class=kr>const</span> <span class=nx>nextChild</span> <span class=o>=</span> <span class=p>(</span><span class=nx>c2</span><span class=p>[</span><span class=nx>i</span><span class=p>]</span> <span class=o>=</span> <span class=nx>optimized</span>
 </span></span><span class=line><span class=cl>          <span class=o>?</span> <span class=nx>cloneIfMounted</span><span class=p>(</span><span class=nx>c2</span><span class=p>[</span><span class=nx>i</span><span class=p>]</span> <span class=kr>as</span> <span class=nx>VNode</span><span class=p>)</span>
 </span></span><span class=line><span class=cl>          <span class=o>:</span> <span class=nx>normalizeVNode</span><span class=p>(</span><span class=nx>c2</span><span class=p>[</span><span class=nx>i</span><span class=p>]));</span>
 </span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=p>(</span><span class=nx>nextChild</span><span class=p>.</span><span class=nx>key</span> <span class=o>!=</span> <span class=kc>null</span><span class=p>)</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl>          <span class=nx>keyToNewIndexMap</span><span class=p>.</span><span class=kr>set</span><span class=p>(</span><span class=nx>nextChild</span><span class=p>.</span><span class=nx>key</span><span class=p>,</span> <span class=nx>i</span><span class=p>);</span> <span class=c1>// i 是绝对位置
+</span></span><span class=line><span class=cl>          <span class=nx>keyToNewIndexMap</span><span class=p>.</span><span class=kr>set</span><span class=p>(</span><span class=nx>nextChild</span><span class=p>.</span><span class=nx>key</span><span class=p>,</span> <span class=nx>i</span><span class=p>);</span> <span class=c1>// i 是绝对位置，因为是从 s2 开始的
 </span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=p>}</span>
 </span></span><span class=line><span class=cl>      <span class=p>}</span>
 </span></span><span class=line><span class=cl>      <span class=kd>let</span> <span class=nx>j</span><span class=p>;</span>
-</span></span><span class=line><span class=cl>      <span class=kd>let</span> <span class=nx>patched</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=c1>// 已经被 patch 的节点数量
-</span></span></span><span class=line><span class=cl><span class=c1></span>      <span class=kd>let</span> <span class=nx>moved</span> <span class=o>=</span> <span class=kc>false</span><span class=p>;</span> <span class=c1>// 收否需要移动节点
+</span></span><span class=line><span class=cl>      <span class=kd>let</span> <span class=nx>moved</span> <span class=o>=</span> <span class=kc>false</span><span class=p>;</span> <span class=c1>// 是否需要移动节点
+</span></span></span><span class=line><span class=cl><span class=c1></span>      <span class=kd>let</span> <span class=nx>patched</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=c1>// 已经被 patch 的节点数量
 </span></span></span><span class=line><span class=cl><span class=c1></span>      <span class=kd>let</span> <span class=nx>maxNewIndexSoFar</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=c1>// 遍历 oldChildren 过程中遇到的最大的 newIndex 值
 </span></span></span><span class=line><span class=cl><span class=c1></span>      <span class=kr>const</span> <span class=nx>toBePatched</span> <span class=o>=</span> <span class=nx>e2</span> <span class=o>-</span> <span class=nx>s2</span> <span class=o>+</span> <span class=mi>1</span><span class=p>;</span> <span class=c1>// newChildren 中，需要被 patch 的节点个数（剩余节点数量）
 </span></span></span><span class=line><span class=cl><span class=c1></span>      <span class=cm>/**
-</span></span></span><span class=line><span class=cl><span class=cm>       * 新建长度为 toBePatched 的数组，用来保存“newChildrenItem 在 oldChildren 中的位置”
-</span></span></span><span class=line><span class=cl><span class=cm>       * newIndexToOldIndexMap[newChild 的相对位置] = oldChild 的下标 + 1（如果复用的话）
+</span></span></span><span class=line><span class=cl><span class=cm>       * 新建长度为 toBePatched 的数组，用来保存“newChildren 中的节点在 oldChildren 中的位置（原先的位置）”
+</span></span></span><span class=line><span class=cl><span class=cm>       * newIndexToOldIndexMap[newChild 的相对位置] = oldChild 的下标 + 1（如果找得到的话）
 </span></span></span><span class=line><span class=cl><span class=cm>       * 需要计算出 newIndexToOldIndexMap 中的最长递增子序列
 </span></span></span><span class=line><span class=cl><span class=cm>       * 0 1  2 3 4  5 6
 </span></span></span><span class=line><span class=cl><span class=cm>       * a b [c d e] f g
 </span></span></span><span class=line><span class=cl><span class=cm>       * a b [e c d h] f g
 </span></span></span><span class=line><span class=cl><span class=cm>       *     [5,3,4,0]
-</span></span></span><span class=line><span class=cl><span class=cm>       * newChildren 中的 h 节点没有找到可复用的对应节点，所以下标为 0
-</span></span></span><span class=line><span class=cl><span class=cm>       * 这个数组代表了，newChildren 中“可复用”的节点在 oldChildren 中的位置关系（原先的位置）
-</span></span></span><span class=line><span class=cl><span class=cm>       * 所以，在newIndexToOldIndexMap 中找“最长递增子序列”的目的是为了“尽可能少的移动节点”
 </span></span></span><span class=line><span class=cl><span class=cm>       * [5,3,4,0] 中，3,4 不需要移动，5 需要移动，0 需要新建
+</span></span></span><span class=line><span class=cl><span class=cm>       * newChildren 中的 h 节点没有找到可复用的对应节点，所以对应的值为 0
+</span></span></span><span class=line><span class=cl><span class=cm>       * 在 newIndexToOldIndexMap 中查找“最长递增子序列”的目的是为了“尽可能少的移动节点”，在子序列中出现的节点是不用动的
 </span></span></span><span class=line><span class=cl><span class=cm>       */</span>
 </span></span><span class=line><span class=cl>      <span class=kr>const</span> <span class=nx>newIndexToOldIndexMap</span> <span class=o>=</span> <span class=k>new</span> <span class=nb>Array</span><span class=p>(</span><span class=nx>toBePatched</span><span class=p>);</span>
 </span></span><span class=line><span class=cl>      <span class=k>for</span> <span class=p>(</span><span class=nx>i</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=nx>i</span> <span class=o>&lt;</span> <span class=nx>toBePatched</span><span class=p>;</span> <span class=nx>i</span><span class=o>++</span><span class=p>)</span> <span class=nx>newIndexToOldIndexMap</span><span class=p>[</span><span class=nx>i</span><span class=p>]</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>
@@ -9484,17 +9531,14 @@
 </span></span><span class=line><span class=cl>          <span class=nx>unmount</span><span class=p>(</span><span class=nx>prevChild</span><span class=p>,</span> <span class=nx>parentComponent</span><span class=p>,</span> <span class=nx>parentSuspense</span><span class=p>,</span> <span class=kc>true</span><span class=p>);</span>
 </span></span><span class=line><span class=cl>          <span class=k>continue</span><span class=p>;</span> <span class=c1>// 跳过本次循环
 </span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=p>}</span>
-</span></span><span class=line><span class=cl>        <span class=cm>/**
-</span></span></span><span class=line><span class=cl><span class=cm>         * prevChild 在 keyToNewIndexMap 中的 value
-</span></span></span><span class=line><span class=cl><span class=cm>         * 即 oldChild 在 newChildren 中的索引
-</span></span></span><span class=line><span class=cl><span class=cm>         * 如果能取到，说明节点可以复用
-</span></span></span><span class=line><span class=cl><span class=cm>         * 如果取不到，卸载 prevChild
-</span></span></span><span class=line><span class=cl><span class=cm>         */</span>
 </span></span><span class=line><span class=cl>        <span class=kd>let</span> <span class=nx>newIndex</span><span class=p>;</span>
 </span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=p>(</span><span class=nx>prevChild</span><span class=p>.</span><span class=nx>key</span> <span class=o>!=</span> <span class=kc>null</span><span class=p>)</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>          <span class=cm>/**
-</span></span></span><span class=line><span class=cl><span class=cm>           * 尝试获取和 c1[i] 有相同 key 的 newChildrenItem 的索引
-</span></span></span><span class=line><span class=cl><span class=cm>           * 此时 newIndex 代表的是，c1[i] 在 newChildren 中的绝对位置，可能为 undefined
+</span></span></span><span class=line><span class=cl><span class=cm>           * newIndex 取 prevChild.key 在 keyToNewIndexMap 中对应的 value（绝对位置）
+</span></span></span><span class=line><span class=cl><span class=cm>           * newIndex 指可复用节点 prevChild 在 newChildren 中的位置
+</span></span></span><span class=line><span class=cl><span class=cm>           * 此时，c2[newIndex] 对应的可复用节点为 prevChild/c1[i]
+</span></span></span><span class=line><span class=cl><span class=cm>           * 如果能取到，说明节点可以复用
+</span></span></span><span class=line><span class=cl><span class=cm>           * 如果取不到，卸载 prevChild
 </span></span></span><span class=line><span class=cl><span class=cm>           */</span>
 </span></span><span class=line><span class=cl>          <span class=nx>newIndex</span> <span class=o>=</span> <span class=nx>keyToNewIndexMap</span><span class=p>.</span><span class=kr>get</span><span class=p>(</span><span class=nx>prevChild</span><span class=p>.</span><span class=nx>key</span><span class=p>);</span>
 </span></span><span class=line><span class=cl>        <span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
@@ -9502,7 +9546,7 @@
 </span></span></span><span class=line><span class=cl><span class=c1></span>          <span class=k>for</span> <span class=p>(</span><span class=nx>j</span> <span class=o>=</span> <span class=nx>s2</span><span class=p>;</span> <span class=nx>j</span> <span class=o>&lt;=</span> <span class=nx>e2</span><span class=p>;</span> <span class=nx>j</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>            <span class=k>if</span> <span class=p>(</span>
 </span></span><span class=line><span class=cl>              <span class=cm>/**
-</span></span></span><span class=line><span class=cl><span class=cm>               * newIndexToOldIndexMap 的下表为相对位置，所以是 j-s2
+</span></span></span><span class=line><span class=cl><span class=cm>               * newIndexToOldIndexMap 的下标为相对位置，所以是 j-s2
 </span></span></span><span class=line><span class=cl><span class=cm>               * 如果 j-s2 位置的值 === 0
 </span></span></span><span class=line><span class=cl><span class=cm>               * j-s2 对应的节点没有被复用
 </span></span></span><span class=line><span class=cl><span class=cm>               */</span>
@@ -9519,8 +9563,8 @@
 </span></span></span><span class=line><span class=cl><span class=c1></span>          <span class=nx>unmount</span><span class=p>(</span><span class=nx>prevChild</span><span class=p>,</span> <span class=nx>parentComponent</span><span class=p>,</span> <span class=nx>parentSuspense</span><span class=p>,</span> <span class=kc>true</span><span class=p>);</span>
 </span></span><span class=line><span class=cl>        <span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>          <span class=cm>/**
-</span></span></span><span class=line><span class=cl><span class=cm>           * 找到了就进行 patch（c1[i] 和 c2[newIndex]），还要更新 patched
-</span></span></span><span class=line><span class=cl><span class=cm>           * 更新 newIndexToOldIndexMap 的相对下标（绝对下表-起始位置）的值（绝对位置）
+</span></span></span><span class=line><span class=cl><span class=cm>           * 找到了就进行 patch（c1[i] 和 c2[newIndex]），还要更新 patched 的值
+</span></span></span><span class=line><span class=cl><span class=cm>           * 既然找到了可复用的元素，更新 newIndexToOldIndexMap
 </span></span></span><span class=line><span class=cl><span class=cm>           */</span>
 </span></span><span class=line><span class=cl>          <span class=nx>newIndexToOldIndexMap</span><span class=p>[</span><span class=nx>newIndex</span> <span class=o>-</span> <span class=nx>s2</span><span class=p>]</span> <span class=o>=</span> <span class=nx>i</span> <span class=o>+</span> <span class=mi>1</span><span class=p>;</span>
 </span></span><span class=line><span class=cl>          <span class=k>if</span> <span class=p>(</span><span class=nx>newIndex</span> <span class=o>&gt;=</span> <span class=nx>maxNewIndexSoFar</span><span class=p>)</span> <span class=p>{</span>
@@ -9530,8 +9574,13 @@
 </span></span></span><span class=line><span class=cl><span class=cm>             */</span>
 </span></span><span class=line><span class=cl>            <span class=nx>maxNewIndexSoFar</span> <span class=o>=</span> <span class=nx>newIndex</span><span class=p>;</span>
 </span></span><span class=line><span class=cl>          <span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl>            <span class=nx>moved</span> <span class=o>=</span> <span class=kc>true</span><span class=p>;</span> <span class=c1>// 需要移动节点
-</span></span></span><span class=line><span class=cl><span class=c1></span>          <span class=p>}</span>
+</span></span><span class=line><span class=cl>            <span class=cm>/**
+</span></span></span><span class=line><span class=cl><span class=cm>             * 如果 newIndex 突然出现有小于 maxNewIndexSoFar
+</span></span></span><span class=line><span class=cl><span class=cm>             * 有节点要插队，需要移动节点
+</span></span></span><span class=line><span class=cl><span class=cm>             * 否则，就没有必要计算子序列
+</span></span></span><span class=line><span class=cl><span class=cm>             */</span>
+</span></span><span class=line><span class=cl>            <span class=nx>moved</span> <span class=o>=</span> <span class=kc>true</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>          <span class=p>}</span>
 </span></span><span class=line><span class=cl>          <span class=nx>patch</span><span class=p>(</span>
 </span></span><span class=line><span class=cl>            <span class=nx>prevChild</span><span class=p>,</span>
 </span></span><span class=line><span class=cl>            <span class=nx>c2</span><span class=p>[</span><span class=nx>newIndex</span><span class=p>]</span> <span class=kr>as</span> <span class=nx>VNode</span><span class=p>,</span>
@@ -9546,22 +9595,37 @@
 </span></span><span class=line><span class=cl>          <span class=nx>patched</span><span class=o>++</span><span class=p>;</span>
 </span></span><span class=line><span class=cl>        <span class=p>}</span>
 </span></span><span class=line><span class=cl>      <span class=p>}</span>
+</span></span><span class=line><span class=cl>      <span class=cm>/**
+</span></span></span><span class=line><span class=cl><span class=cm>       * 计算出 newIndexToOldIndexMap 中的最长递增子序列的“索引/下标”
+</span></span></span><span class=line><span class=cl><span class=cm>       * newIndexToOldIndexMap: [5,3,4,0]
+</span></span></span><span class=line><span class=cl><span class=cm>       * 最长递增子序列为：[3,4]
+</span></span></span><span class=line><span class=cl><span class=cm>       * 对应的下标为：[1,2]
+</span></span></span><span class=line><span class=cl><span class=cm>       * 此时，increasingNewIndexSequence 为 [1,2]
+</span></span></span><span class=line><span class=cl><span class=cm>       */</span>
 </span></span><span class=line><span class=cl>      <span class=kr>const</span> <span class=nx>increasingNewIndexSequence</span> <span class=o>=</span> <span class=nx>moved</span>
 </span></span><span class=line><span class=cl>        <span class=o>?</span> <span class=nx>getSequence</span><span class=p>(</span><span class=nx>newIndexToOldIndexMap</span><span class=p>)</span>
-</span></span><span class=line><span class=cl>        <span class=o>:</span> <span class=nx>EMPTY_ARR</span><span class=p>;</span> <span class=c1>// 计算出 newIndexToOldIndexMap 中的最长递增子序列的“索引/下标”
-</span></span></span><span class=line><span class=cl><span class=c1></span>      <span class=nx>j</span> <span class=o>=</span> <span class=nx>increasingNewIndexSequence</span><span class=p>.</span><span class=nx>length</span> <span class=o>-</span> <span class=mi>1</span><span class=p>;</span> <span class=c1>// 获取最后一个元素（最长递增子序列的最后一个值）
+</span></span><span class=line><span class=cl>        <span class=o>:</span> <span class=nx>EMPTY_ARR</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>      <span class=cm>/**
+</span></span></span><span class=line><span class=cl><span class=cm>       * 获取 increasingNewIndexSequence 中最后一个元素的下标
+</span></span></span><span class=line><span class=cl><span class=cm>       * 下标本身没什么实际意义，算是“最长递增子序列”长度的别名
+</span></span></span><span class=line><span class=cl><span class=cm>       * 在循环 toBePatched-&gt;0 的时候，用来判断：
+</span></span></span><span class=line><span class=cl><span class=cm>       * 什么时候开始移动（跳过多少个节点不移动）
+</span></span></span><span class=line><span class=cl><span class=cm>       * 因为子序列里的节点是稳定的，不需要移动
+</span></span></span><span class=line><span class=cl><span class=cm>       */</span>
+</span></span><span class=line><span class=cl>      <span class=nx>j</span> <span class=o>=</span> <span class=nx>increasingNewIndexSequence</span><span class=p>.</span><span class=nx>length</span> <span class=o>-</span> <span class=mi>1</span><span class=p>;</span> <span class=c1>//
 </span></span></span><span class=line><span class=cl><span class=c1></span>      <span class=cm>/**
 </span></span></span><span class=line><span class=cl><span class=cm>       * 从后向前遍历需要被处理的剩余节点，处理 move &amp; mount 情况
 </span></span></span><span class=line><span class=cl><span class=cm>       * 为什么不“从前往后”遍历呢？因为“插入节点”需要有一个“锚点”
+</span></span></span><span class=line><span class=cl><span class=cm>       * 这里的 i 表示“相对位置”
 </span></span></span><span class=line><span class=cl><span class=cm>       */</span>
 </span></span><span class=line><span class=cl>      <span class=k>for</span> <span class=p>(</span><span class=nx>i</span> <span class=o>=</span> <span class=nx>toBePatched</span> <span class=o>-</span> <span class=mi>1</span><span class=p>;</span> <span class=nx>i</span> <span class=o>&gt;=</span> <span class=mi>0</span><span class=p>;</span> <span class=nx>i</span><span class=o>--</span><span class=p>)</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl>        <span class=kr>const</span> <span class=nx>nextIndex</span> <span class=o>=</span> <span class=nx>s2</span> <span class=o>+</span> <span class=nx>i</span><span class=p>;</span> <span class=c1>// 在原 newChildren 中的索引
+</span></span><span class=line><span class=cl>        <span class=kr>const</span> <span class=nx>nextIndex</span> <span class=o>=</span> <span class=nx>s2</span> <span class=o>+</span> <span class=nx>i</span><span class=p>;</span> <span class=c1>// 在 newChildren 中的索引（绝对位置）
 </span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=kr>const</span> <span class=nx>nextChild</span> <span class=o>=</span> <span class=nx>c2</span><span class=p>[</span><span class=nx>nextIndex</span><span class=p>]</span> <span class=kr>as</span> <span class=nx>VNode</span><span class=p>;</span> <span class=c1>// 拿到待处理的 nextChild
 </span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=c1>// 锚点为 c2[nextIndex + 1] 或父级锚点
 </span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=kr>const</span> <span class=nx>anchor</span> <span class=o>=</span>
 </span></span><span class=line><span class=cl>          <span class=nx>nextIndex</span> <span class=o>+</span> <span class=mi>1</span> <span class=o>&lt;</span> <span class=nx>l2</span> <span class=o>?</span> <span class=p>(</span><span class=nx>c2</span><span class=p>[</span><span class=nx>nextIndex</span> <span class=o>+</span> <span class=mi>1</span><span class=p>]</span> <span class=kr>as</span> <span class=nx>VNode</span><span class=p>).</span><span class=nx>el</span> : <span class=kt>parentAnchor</span><span class=p>;</span>
 </span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=p>(</span><span class=nx>newIndexToOldIndexMap</span><span class=p>[</span><span class=nx>i</span><span class=p>]</span> <span class=o>===</span> <span class=mi>0</span><span class=p>)</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl>          <span class=c1>// 新增的节点，挂载 nextChild
+</span></span><span class=line><span class=cl>          <span class=c1>// 在 oldChildren 中没有对应的节点，属于新增的节点，挂载 nextChild
 </span></span></span><span class=line><span class=cl><span class=c1></span>          <span class=nx>patch</span><span class=p>(</span>
 </span></span><span class=line><span class=cl>            <span class=kc>null</span><span class=p>,</span>
 </span></span><span class=line><span class=cl>            <span class=nx>nextChild</span><span class=p>,</span>
@@ -9574,12 +9638,15 @@
 </span></span><span class=line><span class=cl>            <span class=nx>optimized</span>
 </span></span><span class=line><span class=cl>          <span class=p>);</span>
 </span></span><span class=line><span class=cl>        <span class=p>}</span> <span class=k>else</span> <span class=k>if</span> <span class=p>(</span><span class=nx>moved</span><span class=p>)</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl>          <span class=k>if</span> <span class=p>(</span><span class=nx>j</span> <span class=o>&lt;</span> <span class=mi>0</span> <span class=o>||</span> <span class=nx>i</span> <span class=o>!==</span> <span class=nx>increasingNewIndexSequence</span><span class=p>[</span><span class=nx>j</span><span class=p>])</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl>            <span class=c1>// 需要移动
-</span></span></span><span class=line><span class=cl><span class=c1></span>            <span class=nx>move</span><span class=p>(</span><span class=nx>nextChild</span><span class=p>,</span> <span class=nx>container</span><span class=p>,</span> <span class=nx>anchor</span><span class=p>,</span> <span class=nx>MoveType</span><span class=p>.</span><span class=nx>REORDER</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>          <span class=k>if</span> <span class=p>(</span><span class=nx>i</span> <span class=o>!==</span> <span class=nx>increasingNewIndexSequence</span><span class=p>[</span><span class=nx>j</span><span class=p>]</span> <span class=o>||</span> <span class=nx>j</span> <span class=o>&lt;</span> <span class=mi>0</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=cm>/**
+</span></span></span><span class=line><span class=cl><span class=cm>             * 当前相对下标和子序列里的下标不相等
+</span></span></span><span class=line><span class=cl><span class=cm>             * 或者，不在子序列里的节点
+</span></span></span><span class=line><span class=cl><span class=cm>             * 需要移动
+</span></span></span><span class=line><span class=cl><span class=cm>             */</span>
+</span></span><span class=line><span class=cl>            <span class=nx>move</span><span class=p>(</span><span class=nx>nextChild</span><span class=p>,</span> <span class=nx>container</span><span class=p>,</span> <span class=nx>anchor</span><span class=p>,</span> <span class=nx>MoveType</span><span class=p>.</span><span class=nx>REORDER</span><span class=p>);</span>
 </span></span><span class=line><span class=cl>          <span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl>            <span class=c1>// 在“最长递增子序列”中的元素都不需要移动
-</span></span></span><span class=line><span class=cl><span class=c1></span>            <span class=nx>j</span><span class=o>--</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>            <span class=nx>j</span><span class=o>--</span><span class=p>;</span>
 </span></span><span class=line><span class=cl>          <span class=p>}</span>
 </span></span><span class=line><span class=cl>        <span class=p>}</span>
 </span></span><span class=line><span class=cl>      <span class=p>}</span>
@@ -9910,46 +9977,75 @@
 </span></span><span class=line><span class=cl><span class=p>}</span>
 </span></span><span class=line><span class=cl><span class=kd>function</span> <span class=nx>getSequence</span><span class=p>(</span><span class=nx>arr</span><span class=p>)</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>lis</span> <span class=o>=</span> <span class=p>[</span><span class=mi>0</span><span class=p>];</span> <span class=c1>// 保存着“最长递增子序列”的下标
-</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=kr>const</span> <span class=p>{</span> <span class=nx>length</span>: <span class=kt>len</span> <span class=p>}</span> <span class=o>=</span> <span class=nx>arr</span><span class=p>;</span>
-</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>record</span> <span class=o>=</span> <span class=nx>arr</span><span class=p>.</span><span class=nx>slice</span><span class=p>();</span>
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=kr>const</span> <span class=nx>record</span> <span class=o>=</span> <span class=nx>arr</span><span class=p>.</span><span class=nx>slice</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=p>{</span> <span class=nx>length</span>: <span class=kt>len</span> <span class=p>}</span> <span class=o>=</span> <span class=nx>arr</span><span class=p>;</span>
 </span></span><span class=line><span class=cl>  <span class=k>for</span> <span class=p>(</span><span class=kd>let</span> <span class=nx>i</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=nx>i</span> <span class=o>&lt;</span> <span class=nx>len</span><span class=p>;</span> <span class=nx>i</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>    <span class=kr>const</span> <span class=nx>arrI</span> <span class=o>=</span> <span class=nx>arr</span><span class=p>[</span><span class=nx>i</span><span class=p>];</span>
-</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=nx>arrI</span> <span class=o>!==</span> <span class=mi>0</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// Vue 中，需要用 0 表示新增节点的情况，所以跳过
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=k>if</span> <span class=p>(</span><span class=nx>arrI</span> <span class=o>!==</span> <span class=mi>0</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=cm>/**
+</span></span></span><span class=line><span class=cl><span class=cm>       * lis[lis.length - 1] 表示最长递增子序列最后一个值的下标
+</span></span></span><span class=line><span class=cl><span class=cm>       * 所以 arr[last] 表示最长递增子序列的最后一个值
+</span></span></span><span class=line><span class=cl><span class=cm>       * 我们这里没有把最长递增子序列显式的定义出来
+</span></span></span><span class=line><span class=cl><span class=cm>       */</span>
 </span></span><span class=line><span class=cl>      <span class=kr>const</span> <span class=nx>last</span> <span class=o>=</span> <span class=nx>lis</span><span class=p>[</span><span class=nx>lis</span><span class=p>.</span><span class=nx>length</span> <span class=o>-</span> <span class=mi>1</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>      <span class=cm>/**
+</span></span></span><span class=line><span class=cl><span class=cm>       * 如果最长递增子序列的最后一个值 arr[last] 小于 arrI
+</span></span></span><span class=line><span class=cl><span class=cm>       * 说明 arrI 可以直接加入子序列
+</span></span></span><span class=line><span class=cl><span class=cm>       * 所以将对应的下标加入 lis
+</span></span></span><span class=line><span class=cl><span class=cm>       */</span>
 </span></span><span class=line><span class=cl>      <span class=k>if</span> <span class=p>(</span><span class=nx>arr</span><span class=p>[</span><span class=nx>last</span><span class=p>]</span> <span class=o>&lt;</span> <span class=nx>arrI</span><span class=p>)</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>        <span class=cm>/**
 </span></span></span><span class=line><span class=cl><span class=cm>         * “最长递增子序列”的最后一个元素 arr[last] 小于新来的元素 arrI
 </span></span></span><span class=line><span class=cl><span class=cm>         * [1,3,5] &lt;- 10，arr[last] 是 5，arrI 是 10
 </span></span></span><span class=line><span class=cl><span class=cm>         */</span>
-</span></span><span class=line><span class=cl>        <span class=nx>record</span><span class=p>[</span><span class=nx>i</span><span class=p>]</span> <span class=o>=</span> <span class=nx>last</span><span class=p>;</span>
-</span></span><span class=line><span class=cl>        <span class=nx>lis</span><span class=p>.</span><span class=nx>push</span><span class=p>(</span><span class=nx>i</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=nx>record</span><span class=p>[</span><span class=nx>i</span><span class=p>]</span> <span class=o>=</span> <span class=nx>last</span><span class=p>;</span> <span class=c1>// 记录一下 i 对应的下标 lis[lis.length - 1]
+</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=nx>lis</span><span class=p>.</span><span class=nx>push</span><span class=p>(</span><span class=nx>i</span><span class=p>);</span>
 </span></span><span class=line><span class=cl>        <span class=k>continue</span><span class=p>;</span>
 </span></span><span class=line><span class=cl>      <span class=p>}</span>
-</span></span><span class=line><span class=cl>      <span class=c1>// 二分替换
-</span></span></span><span class=line><span class=cl><span class=c1></span>      <span class=kd>let</span> <span class=nx>left</span> <span class=o>=</span> <span class=mi>0</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>      <span class=cm>/**
+</span></span></span><span class=line><span class=cl><span class=cm>       * 构建最长递增子序列时，最后一个元素，越小越好
+</span></span></span><span class=line><span class=cl><span class=cm>       * 如果 arr[last] &gt;= arrI，需要进行元素替换
+</span></span></span><span class=line><span class=cl><span class=cm>       * 用 arrI 把比 arrI 大的最小的那个元素替换掉
+</span></span></span><span class=line><span class=cl><span class=cm>       * 所以，需要用二分查找替换
+</span></span></span><span class=line><span class=cl><span class=cm>       * 最终找到 arr[lis[left]]
+</span></span></span><span class=line><span class=cl><span class=cm>       */</span>
+</span></span><span class=line><span class=cl>      <span class=kd>let</span> <span class=nx>left</span> <span class=o>=</span> <span class=mi>0</span><span class=p>,</span>
 </span></span><span class=line><span class=cl>        <span class=nx>right</span> <span class=o>=</span> <span class=nx>lis</span><span class=p>.</span><span class=nx>length</span> <span class=o>-</span> <span class=mi>1</span><span class=p>;</span>
 </span></span><span class=line><span class=cl>      <span class=k>while</span> <span class=p>(</span><span class=nx>left</span> <span class=o>&lt;</span> <span class=nx>right</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=cm>/**
+</span></span></span><span class=line><span class=cl><span class=cm>         * 找到“最长递增子序列”里中间的元素的下标 lis[mid]
+</span></span></span><span class=line><span class=cl><span class=cm>         * 在去 arr 里找到对应的值 arr[lis[mid]]
+</span></span></span><span class=line><span class=cl><span class=cm>         * arr[lis[mid]] 就是子序列的中间值
+</span></span></span><span class=line><span class=cl><span class=cm>         * 这里是去找 lis[mid] 对应的值
+</span></span></span><span class=line><span class=cl><span class=cm>         * 所以 arr 没有事先排序无所谓
+</span></span></span><span class=line><span class=cl><span class=cm>         * “最长递增子序列”是排好序的
+</span></span></span><span class=line><span class=cl><span class=cm>         */</span>
 </span></span><span class=line><span class=cl>        <span class=kr>const</span> <span class=nx>mid</span> <span class=o>=</span> <span class=p>(</span><span class=nx>left</span> <span class=o>+</span> <span class=nx>right</span><span class=p>)</span> <span class=o>&gt;&gt;</span> <span class=mi>1</span><span class=p>;</span>
 </span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=p>(</span><span class=nx>arr</span><span class=p>[</span><span class=nx>lis</span><span class=p>[</span><span class=nx>mid</span><span class=p>]]</span> <span class=o>&lt;</span> <span class=nx>arrI</span><span class=p>)</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl>          <span class=c1>// 在右边
+</span></span><span class=line><span class=cl>          <span class=c1>// 比 arrI 大的最小的那个元素，在右边
 </span></span></span><span class=line><span class=cl><span class=c1></span>          <span class=nx>left</span> <span class=o>=</span> <span class=nx>mid</span> <span class=o>+</span> <span class=mi>1</span><span class=p>;</span>
 </span></span><span class=line><span class=cl>        <span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl>          <span class=c1>// 在左边
+</span></span><span class=line><span class=cl>          <span class=c1>// 比 arrI 大的最小的那个元素，在左边
 </span></span></span><span class=line><span class=cl><span class=c1></span>          <span class=nx>right</span> <span class=o>=</span> <span class=nx>mid</span><span class=p>;</span>
 </span></span><span class=line><span class=cl>        <span class=p>}</span>
 </span></span><span class=line><span class=cl>      <span class=p>}</span>
-</span></span><span class=line><span class=cl>      <span class=c1>// 找比 arrI 大的最小元素，并替换
+</span></span><span class=line><span class=cl>      <span class=c1>// 找比 arrI 大的最小元素，用 arrI 替换掉
 </span></span></span><span class=line><span class=cl><span class=c1></span>      <span class=k>if</span> <span class=p>(</span><span class=nx>arrI</span> <span class=o>&lt;</span> <span class=nx>arr</span><span class=p>[</span><span class=nx>lis</span><span class=p>[</span><span class=nx>left</span><span class=p>]])</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=p>(</span><span class=nx>left</span> <span class=o>&gt;</span> <span class=mi>0</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>          <span class=cm>/**
+</span></span></span><span class=line><span class=cl><span class=cm>           * 因为发生了元素的替换，需要更新一下 record[i]
+</span></span></span><span class=line><span class=cl><span class=cm>           * record[i] 从 lis[lis.length - 1] 变为了 lis[left - 1]
+</span></span></span><span class=line><span class=cl><span class=cm>           */</span>
 </span></span><span class=line><span class=cl>          <span class=nx>record</span><span class=p>[</span><span class=nx>i</span><span class=p>]</span> <span class=o>=</span> <span class=nx>lis</span><span class=p>[</span><span class=nx>left</span> <span class=o>-</span> <span class=mi>1</span><span class=p>];</span>
 </span></span><span class=line><span class=cl>        <span class=p>}</span>
 </span></span><span class=line><span class=cl>        <span class=nx>lis</span><span class=p>[</span><span class=nx>left</span><span class=p>]</span> <span class=o>=</span> <span class=nx>i</span><span class=p>;</span>
 </span></span><span class=line><span class=cl>      <span class=p>}</span>
 </span></span><span class=line><span class=cl>    <span class=p>}</span>
 </span></span><span class=line><span class=cl>  <span class=p>}</span>
-</span></span><span class=line><span class=cl>  <span class=kd>let</span> <span class=nx>i</span> <span class=o>=</span> <span class=nx>lis</span><span class=p>.</span><span class=nx>length</span><span class=p>;</span>
-</span></span><span class=line><span class=cl>  <span class=kd>let</span> <span class=nx>last</span> <span class=o>=</span> <span class=nx>lis</span><span class=p>[</span><span class=nx>i</span> <span class=o>-</span> <span class=mi>1</span><span class=p>];</span>
-</span></span><span class=line><span class=cl>  <span class=k>while</span> <span class=p>(</span><span class=nx>i</span><span class=o>--</span> <span class=o>&gt;</span> <span class=mi>0</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=kd>let</span> <span class=nx>i</span> <span class=o>=</span> <span class=nx>lis</span><span class=p>.</span><span class=nx>length</span><span class=p>;</span> <span class=c1>// “最长递增子序列”的长度
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=kd>let</span> <span class=nx>last</span> <span class=o>=</span> <span class=nx>lis</span><span class=p>[</span><span class=nx>i</span> <span class=o>-</span> <span class=mi>1</span><span class=p>];</span> <span class=c1>// “最长递增子序列”中最后一个元素的下标
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=k>while</span> <span class=p>(</span><span class=nx>i</span><span class=o>--</span> <span class=o>&gt;</span> <span class=mi>0</span><span class=p>)</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>    <span class=nx>lis</span><span class=p>[</span><span class=nx>i</span><span class=p>]</span> <span class=o>=</span> <span class=nx>last</span><span class=p>;</span>
 </span></span><span class=line><span class=cl>    <span class=nx>last</span> <span class=o>=</span> <span class=nx>record</span><span class=p>[</span><span class=nx>last</span><span class=p>];</span>
 </span></span><span class=line><span class=cl>  <span class=p>}</span>
