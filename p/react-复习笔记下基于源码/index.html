@@ -1,6 +1,6 @@
-<!doctype html><html lang=zh-cn dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content='本来是总结开发用到的模式的；时隔一年半，好死不死看了“卡颂的文章”，改的面目全非'><title>React 复习笔记（下，基于源码） · 看不见我的美 · 是你瞎了眼</title>
+<!doctype html><html lang=zh-cn dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content='本来是总结开发用到的模式的；时隔一年半，好死不死看了“卡颂的文章”，改的面目全非'><title>React 复习笔记（下，基于源码） · Stay Hungry Stay Foolish</title>
 <link rel=canonical href=https://vikingama.github.io/p/react-%E5%A4%8D%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8B%E5%9F%BA%E4%BA%8E%E6%BA%90%E7%A0%81/><link rel=stylesheet href=/scss/style.min.25d33c133ac62b31b779da6f9614c6ff632bad670ad454a2b936a66bb28581fc.css><meta property='og:title' content='React 复习笔记（下，基于源码）'><meta property='og:description' content='本来是总结开发用到的模式的；时隔一年半，好死不死看了“卡颂的文章”，改的面目全非'><meta property='og:url' content='https://vikingama.github.io/p/react-%E5%A4%8D%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8B%E5%9F%BA%E4%BA%8E%E6%BA%90%E7%A0%81/'><meta property='og:site_name' content='馬腊咯稽'><meta property='og:type' content='article'><meta property='article:section' content='Post'><meta property='article:published_time' content='2021-10-10T00:00:00+00:00'><meta property='article:modified_time' content='2021-10-10T00:00:00+00:00'><meta property='og:image' content='https://vikingama.github.io/img/cover/react.png'><meta name=twitter:title content="React 复习笔记（下，基于源码）"><meta name=twitter:description content="本来是总结开发用到的模式的；时隔一年半，好死不死看了“卡颂的文章”，改的面目全非"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content='https://vikingama.github.io/img/cover/react.png'><link rel="shortcut icon" href=/favicon.ico><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><meta name=theme-color content="#ffffff"><meta name=robots content="noarchive"></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label=切换菜单>
-<span class=hamburger-box><span class=hamburger-inner></span></span></button><header><figure class=site-avatar><a href=/><img src=/img/avatar_huae06eac29c2bc6aa7e83a685ea2f6536_13838_300x0_resize_box_3.png width=300 height=404 class=site-logo loading=lazy alt=Avatar></a></figure><div class=site-meta><h1 class=site-name><a href=/>馬腊咯稽</a></h1><h2 class=site-description>看不见我的美 · 是你瞎了眼</h2></div></header><ol class=social-menu><li><a href=https://github.com/ElementRef target=_blank title=GitHub><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6.0 00-1.3-3.2 4.2 4.2.0 00-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3.0 00-6.2.0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2.0 00-.1 3.2A4.6 4.6.0 004 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg></a></li></ol><ol class=menu id=main-menu><li><a href=/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg>
+<span class=hamburger-box><span class=hamburger-inner></span></span></button><header><figure class=site-avatar><a href=/><img src=/img/avatar_huae06eac29c2bc6aa7e83a685ea2f6536_13838_300x0_resize_box_3.png width=300 height=404 class=site-logo loading=lazy alt=Avatar></a></figure><div class=site-meta><h1 class=site-name><a href=/>馬腊咯稽</a></h1><h2 class=site-description>Stay Hungry Stay Foolish</h2></div></header><ol class=social-menu><li><a href=https://github.com/ElementRef target=_blank title=GitHub><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6.0 00-1.3-3.2 4.2 4.2.0 00-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3.0 00-6.2.0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2.0 00-.1 3.2A4.6 4.6.0 004 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg></a></li></ol><ol class=menu id=main-menu><li><a href=/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg>
 <span>首页</span></a></li><li><a href=/archives/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><rect x="3" y="4" width="18" height="4" rx="2"/><path d="M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
 <span>归档</span></a></li><li><a href=/search/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="10" cy="10" r="7"/><line x1="21" y1="21" x2="15" y2="15"/></svg>
 <span>搜索</span></a></li><li><a href=https://github.com/ElementRef/AboutConfig target=_blank><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-infinity" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M9.828 9.172a4 4 0 100 5.656A10 10 0 0012 12a10 10 0 012.172-2.828 4 4 0 110 5.656A10 10 0 0112 12 10 10 0 009.828 9.172"/></svg>
@@ -11,7 +11,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
 <span>深色</span></li></div></ol></aside><main class="main full-width"><article class="has-image main-article"><header class=article-header><div class=article-image><a href=/p/react-%E5%A4%8D%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8B%E5%9F%BA%E4%BA%8E%E6%BA%90%E7%A0%81/><img src=/img/cover/react.png loading=lazy alt="React 复习笔记（下，基于源码）"></a></div><div class=article-details><header class=article-category><a href=/categories/react/>React</a></header><div class=article-title-wrapper><h2 class=article-title><a href=/p/react-%E5%A4%8D%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8B%E5%9F%BA%E4%BA%8E%E6%BA%90%E7%A0%81/>React 复习笔记（下，基于源码）</a></h2><h3 class=article-subtitle>本来是总结开发用到的模式的；时隔一年半，好死不死看了“卡颂的文章”，改的面目全非</h3></div><footer class=article-time><div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
 <time class=article-time--published>Oct 10, 2021</time></div><div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
-<time class=article-time--reading>阅读时长：44 分钟</time></div></footer></div></header><section class=article-content><h2 id=调用-reactdomrender-发生了什么>调用 ReactDOM.render 发生了什么？</h2><ol><li>确定应用渲染方式；</li><li>创建 fiberRoot 和 rootFiberNode，并将两者用指针指向彼此；</li><li>向 rootFiberNode 绑定自身的更新队列；</li><li>清空 container 里的内容；</li><li>向 container 绑定原生事件；</li><li>将 render 的第三个参数的 this 指向应用实例并调用；</li><li>初始化完成后，创建 update，并将 fiber 对应的组件作为 payload；</li><li>将 update 与 fiberNode 相关联，fiberNode 对应的 update 组成循环链表；</li><li>调用 scheduleUpdateOnFiber 开始渲染工作。</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>  1
+<time class=article-time--reading>阅读时长：45 分钟</time></div></footer></div></header><section class=article-content><h2 id=调用-reactdomrender-发生了什么>调用 ReactDOM.render 发生了什么？</h2><ol><li>确定应用渲染方式；</li><li>创建 fiberRoot 和 rootFiberNode，并将两者用指针指向彼此；</li><li>向 rootFiberNode 绑定自身的更新队列；</li><li>清空 container 里的内容；</li><li>向 container 绑定原生事件；</li><li>将 render 的第三个参数的 this 指向应用实例并调用；</li><li>初始化完成后，创建 update，并将 fiber 对应的组件作为 payload；</li><li>将 update 与 fiberNode 相关联，fiberNode 对应的 update 组成循环链表；</li><li>调用 scheduleUpdateOnFiber 开始渲染工作。</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>  1
 </span><span class=lnt>  2
 </span><span class=lnt>  3
 </span><span class=lnt>  4
@@ -426,10 +426,10 @@
 </span></span><span class=line><span class=cl>  <span class=cm>/**
 </span></span></span><span class=line><span class=cl><span class=cm>   * 获取应用挂载的 DOM 的 nodeType：
 </span></span></span><span class=line><span class=cl><span class=cm>   * Node.ELEMENT_NODE                      1     元素节点
-</span></span></span><span class=line><span class=cl><span class=cm>   * Node.TEXT_NODE                         3     文字
+</span></span></span><span class=line><span class=cl><span class=cm>   * Node.TEXT_NODE                         3     文字节点
 </span></span></span><span class=line><span class=cl><span class=cm>   * Node.CDATA_SECTION_NODE                4     &lt;!CDATA[[ … ]]&gt;
 </span></span></span><span class=line><span class=cl><span class=cm>   * Node.PROCESSING_INSTRUCTION_NODE       7     &lt;?xml-stylesheet ... ?&gt;
-</span></span></span><span class=line><span class=cl><span class=cm>   * Node.COMMENT_NODE                      8     注释
+</span></span></span><span class=line><span class=cl><span class=cm>   * Node.COMMENT_NODE                      8     注释节点
 </span></span></span><span class=line><span class=cl><span class=cm>   * Node.DOCUMENT_NODE                     9     Document
 </span></span></span><span class=line><span class=cl><span class=cm>   * Node.DOCUMENT_TYPE_NODE                10    &lt;!DOCTYPE html&gt;
 </span></span></span><span class=line><span class=cl><span class=cm>   * Node.DOCUMENT_FRAGMENT_NODE            11    DocumentFragment
@@ -787,7 +787,7 @@
 </span></span></span><span class=line><span class=cl><span class=c1></span>      <span class=nx>schedulePendingInteractions</span><span class=p>(</span><span class=nx>root</span><span class=p>,</span> <span class=nx>lane</span><span class=p>);</span>
 </span></span><span class=line><span class=cl>      <span class=cm>/**
 </span></span></span><span class=line><span class=cl><span class=cm>       * 一种边缘情况：在 batchedUpdates 内部
-</span></span></span><span class=line><span class=cl><span class=cm>       * ReactDOM.render 渲染的 root 节点挂载应该是同步的，
+</span></span></span><span class=line><span class=cl><span class=cm>       * ReactDOM.render 渲染的 root 节点挂载应该是同步的
 </span></span></span><span class=line><span class=cl><span class=cm>       * 而布局更新应该推迟到批处理结束
 </span></span></span><span class=line><span class=cl><span class=cm>       */</span>
 </span></span><span class=line><span class=cl>      <span class=nx>performSyncWorkOnRoot</span><span class=p>(</span><span class=nx>root</span><span class=p>);</span>
@@ -1245,7 +1245,7 @@
 </span></span><span class=line><span class=cl>  <span class=k>do</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>    <span class=cm>/**
 </span></span></span><span class=line><span class=cl><span class=cm>     * 触发 useEffect 回调与其他同步任务
-</span></span></span><span class=line><span class=cl><span class=cm>     * 由于这些任务可能触发新的渲染，
+</span></span></span><span class=line><span class=cl><span class=cm>     * 由于这些任务可能触发新的渲染
 </span></span></span><span class=line><span class=cl><span class=cm>     * 所以，这里要一直遍历执行直到没有任务
 </span></span></span><span class=line><span class=cl><span class=cm>     */</span>
 </span></span><span class=line><span class=cl>    <span class=nx>flushPassiveEffects</span><span class=p>();</span>
@@ -2047,7 +2047,7 @@
 </span></span><span class=line><span class=cl>      <span class=kt>return</span><span class=p>;</span>
 </span></span><span class=line><span class=cl>  <span class=p>}</span>
 </span></span><span class=line><span class=cl><span class=p>}</span>
-</span></span></code></pre></td></tr></table></div></div><h2 id=diff>diff</h2><p>diff 发生在 update 阶段；通过 current 树和组件返回的 JSX 对象，生成 workInProgress 树；并收集需要更新的 fiber 节点，以寻求更新视图的最优方案；它有以下准则：</p><ul><li>只对同级元素进行 diff；如果一个节点在前后两次更新中跨越了层级，那么不会复用节点；</li><li>两个不同类型的元素会产生出不同的树；卸载旧的（及其子树），创建新的（及其子树）；</li><li>通过设置 key 属性，来告知渲染哪些子元素在不同的渲染下可以保持不变；</li><li>同类型的组件元素，组件实例保持不变；</li><li>同类型的元素，保留节点，更新属性。</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span></span></code></pre></td></tr></table></div></div><h2 id=diff>diff</h2><p>diff 发生在 update 阶段（beginWork）；通过 current 树和组件返回的 JSX 对象（VDOM），生成 workInProgress 树；并收集需要更新的 fiber 节点，以寻求更新视图的最优方案；它有以下准则：</p><ul><li>只对同级元素进行 diff；如果一个节点在前后两次更新中跨越了层级，那么不会复用节点；</li><li>两个不同类型的元素会产生出不同的树；卸载旧的（及其子树），创建新的（及其子树）；</li><li>通过设置 key 属性，来告知渲染哪些子元素在不同的渲染下可以保持不变；</li><li>同类型的组件元素，组件实例保持不变；</li><li>同类型的元素，保留节点，更新属性。</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -2584,7 +2584,7 @@
 </span></span><span class=line><span class=cl>  <span class=k>this</span><span class=p>.</span><span class=nx>lanes</span> <span class=o>=</span> <span class=nx>NoLanes</span><span class=p>;</span>
 </span></span><span class=line><span class=cl>  <span class=cm>/**
 </span></span></span><span class=line><span class=cl><span class=cm>   * 双缓存：指向 current/workInProgress 中对应的 fiber 节点
-</span></span></span><span class=line><span class=cl><span class=cm>   * currentFiber.alternate === workInProgressFiber;
+</span></span></span><span class=line><span class=cl><span class=cm>   * currentFiber.alternate === workInProgressFiber
 </span></span></span><span class=line><span class=cl><span class=cm>   * workInProgressFiber.alternate === currentFiber
 </span></span></span><span class=line><span class=cl><span class=cm>   */</span>
 </span></span><span class=line><span class=cl>  <span class=k>this</span><span class=p>.</span><span class=nx>alternate</span> <span class=o>=</span> <span class=kc>null</span><span class=p>;</span> <span class=c1>// 双缓存相关
@@ -2849,7 +2849,7 @@
 </span></span><span class=line><span class=cl>    <span class=nx>workInProgressRootExitStatus</span> <span class=o>=</span> <span class=nx>RootCompleted</span><span class=p>;</span>
 </span></span><span class=line><span class=cl>  <span class=p>}</span>
 </span></span><span class=line><span class=cl><span class=p>}</span>
-</span></span></code></pre></td></tr></table></div></div><ul><li>“递”阶段（beginWork）：传入<strong>当前 fiberNode</strong>，创建<strong>子 fiberNode</strong>；</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span></span></code></pre></td></tr></table></div></div><ul><li>“递”阶段（beginWork）：传入<strong>当前 fiberNode</strong>，创建<strong>子 fiberNode</strong>，根据 VDOM 创建 fiber 树；</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -3103,7 +3103,7 @@
 </span></span><span class=line><span class=cl><span class=kr>export</span> <span class=kr>const</span> <span class=nx>PlacementAndUpdate</span> <span class=o>=</span> <span class=cm>/*           */</span> <span class=mi>0</span><span class=nx>b000000000000000110</span><span class=p>;</span>
 </span></span><span class=line><span class=cl><span class=kr>export</span> <span class=kr>const</span> <span class=nx>Deletion</span> <span class=o>=</span> <span class=cm>/*                     */</span> <span class=mi>0</span><span class=nx>b000000000000001000</span><span class=p>;</span>
 </span></span><span class=line><span class=cl><span class=c1>// ...
-</span></span></span></code></pre></td></tr></table></div></div><ul><li>“归”阶段（completeWork）：</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span></span></span></code></pre></td></tr></table></div></div><ul><li>“归”阶段（completeWork）：构建 effectList；</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -5191,11 +5191,17 @@
 </span><span class=lnt>28
 </span><span class=lnt>29
 </span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
 </span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-ts data-lang=ts><span class=line><span class=cl><span class=cm>/**
 </span></span></span><span class=line><span class=cl><span class=cm> * 以下情况会调用 applyDerivedStateFromProps：
 </span></span></span><span class=line><span class=cl><span class=cm> * 1. mountClassInstance：挂载组件实例
 </span></span></span><span class=line><span class=cl><span class=cm> * 2. resumeMountClassInstance：复用组件实例
 </span></span></span><span class=line><span class=cl><span class=cm> * 3. updateClassInstance：更新组件实例
+</span></span></span><span class=line><span class=cl><span class=cm> * 可以通过 props 派生出一个 state，constructor 也可以执行这个逻辑
+</span></span></span><span class=line><span class=cl><span class=cm> * 但是 constructor 只会在初始化时执行
+</span></span></span><span class=line><span class=cl><span class=cm> * getDerivedStateFromProps 会在每次 render 函数调用前执行
 </span></span></span><span class=line><span class=cl><span class=cm> */</span>
 </span></span><span class=line><span class=cl><span class=kr>export</span> <span class=kd>function</span> <span class=nx>applyDerivedStateFromProps</span><span class=p>(</span>
 </span></span><span class=line><span class=cl>  <span class=nx>workInProgress</span>: <span class=kt>Fiber</span><span class=p>,</span>

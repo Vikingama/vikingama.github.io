@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Vue on 馬腊咯稽</title><link>https://vikingama.github.io/categories/vue/</link><description>Recent content in Vue on 馬腊咯稽</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Thu, 06 Jan 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://vikingama.github.io/categories/vue/index.xml" rel="self" type="application/rss+xml"/><item><title>VueRouter 2.x 源码学习 · 看不见我的美 · 是你瞎了眼</title><link>https://vikingama.github.io/p/vuerouter-2.x-%E6%BA%90%E7%A0%81%E5%AD%A6%E4%B9%A0/</link><pubDate>Thu, 06 Jan 2022 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/p/vuerouter-2.x-%E6%BA%90%E7%A0%81%E5%AD%A6%E4%B9%A0/</guid><description>&lt;img src="https://vikingama.github.io/img/cover/vue.png" alt="VueRouter 2.x 源码学习" />&lt;h2 id="vueuserouter">Vue.use(Router)&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Vue on 馬腊咯稽</title><link>https://vikingama.github.io/categories/vue/</link><description>Recent content in Vue on 馬腊咯稽</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Thu, 06 Jan 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://vikingama.github.io/categories/vue/index.xml" rel="self" type="application/rss+xml"/><item><title>VueRouter 2.x 源码学习 · Stay Hungry Stay Foolish</title><link>https://vikingama.github.io/p/vuerouter-2.x-%E6%BA%90%E7%A0%81%E5%AD%A6%E4%B9%A0/</link><pubDate>Thu, 06 Jan 2022 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/p/vuerouter-2.x-%E6%BA%90%E7%A0%81%E5%AD%A6%E4%B9%A0/</guid><description>&lt;img src="https://vikingama.github.io/img/cover/vue.png" alt="VueRouter 2.x 源码学习" />&lt;h2 id="vueuserouter">Vue.use(Router)&lt;/h2>
 &lt;p>Vue.use 会调用 Router 的静态 install 方法：&lt;/p>
 &lt;ol>
 &lt;li>保存 Vue 构造函数，方便其他组件调用 Vue 的工具函数；&lt;/li>
@@ -2022,7 +2022,7 @@
 &lt;/div>
 &lt;/div>&lt;p>总之，VueRouter 在初始化的时候，会向组件 mixin 一些钩子函数；在 beforeCreate 中，会借助 Vue.util.defineReactive API 将 vm._route 转换为 getter/setter；又因为 router-view 在调用 h 函数渲染组件的时候，会访问 vm._route.matched，router-view 所在实例的 renderWatcher 形成对 vm._route 的依赖。所以，每当 vm._route 变化，router-view 会自动匹配自己要渲染的组件。&lt;/p>
 &lt;p>router-link 默认会渲染出一个绑定了事件的 a 标签，用户点击时，会调用 transitionTo 进行导航；transitionTo 会计算出最新的 route，调用 History API 更新 URL，调用路由钩子，更新 vm._route，触发 router-view 更新。&lt;/p>
-&lt;p>至于 popstate 事件，主要用来处理浏览器的行为（history.pushState/replaceState 并不会触发 popstate）并调用 transitionTo 更新页面。&lt;/p></description></item><item><title>Vue 2.x/3.x 比较（基于源码） · 看不见我的美 · 是你瞎了眼</title><link>https://vikingama.github.io/p/vue-2.x/3.x-%E6%AF%94%E8%BE%83%E5%9F%BA%E4%BA%8E%E6%BA%90%E7%A0%81/</link><pubDate>Sun, 24 Oct 2021 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/p/vue-2.x/3.x-%E6%AF%94%E8%BE%83%E5%9F%BA%E4%BA%8E%E6%BA%90%E7%A0%81/</guid><description>&lt;img src="https://vikingama.github.io/img/cover/vue.png" alt="Vue 2.x/3.x 比较（基于源码）" />&lt;h2 id="响应式原理-2x">响应式原理 2.x&lt;/h2>
+&lt;p>至于 popstate 事件，主要用来处理浏览器的行为（history.pushState/replaceState 并不会触发 popstate）并调用 transitionTo 更新页面。&lt;/p></description></item><item><title>Vue 2.x/3.x 比较（基于源码） · Stay Hungry Stay Foolish</title><link>https://vikingama.github.io/p/vue-2.x/3.x-%E6%AF%94%E8%BE%83%E5%9F%BA%E4%BA%8E%E6%BA%90%E7%A0%81/</link><pubDate>Sun, 24 Oct 2021 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/p/vue-2.x/3.x-%E6%AF%94%E8%BE%83%E5%9F%BA%E4%BA%8E%E6%BA%90%E7%A0%81/</guid><description>&lt;img src="https://vikingama.github.io/img/cover/vue.png" alt="Vue 2.x/3.x 比较（基于源码）" />&lt;h2 id="响应式原理-2x">响应式原理 2.x&lt;/h2>
 &lt;p>Dep 用来存放/管理订阅者（watcher）的对象；每个 Dep 实例都存在于&lt;strong>对象每个属性对应的 getter/setter 所在的闭包里&lt;/strong>并且都有唯一的 id。&lt;/p>
 &lt;div class="highlight">&lt;div class="chroma">
 &lt;table class="lntable">&lt;tr>&lt;td class="lntd">
@@ -5769,7 +5769,7 @@
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="nx">initProvide&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">vm&lt;/span>&lt;span class="p">);&lt;/span> &lt;span class="c1">// 在解析 data/props 之后先解析 provide
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="nx">callHook&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">vm&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s1">&amp;#39;created&amp;#39;&lt;/span>&lt;span class="p">);&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nx">vm&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">$options&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">el&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">vm&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">$mount&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">vm&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">$options&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">el&lt;/span>&lt;span class="p">);&lt;/span> &lt;span class="c1">// 挂载，调用 mountComponent
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">vm&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">$mount&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="err">v&lt;/span>&lt;span class="nx">m&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">$options&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">el&lt;/span>&lt;span class="p">);&lt;/span> &lt;span class="c1">// 挂载，调用 mountComponent
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="p">}&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">};&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
@@ -14933,7 +14933,7 @@
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div></description></item><item><title>基于作用域插槽的 Renderless 组件 · 看不见我的美 · 是你瞎了眼</title><link>https://vikingama.github.io/p/%E5%9F%BA%E4%BA%8E%E4%BD%9C%E7%94%A8%E5%9F%9F%E6%8F%92%E6%A7%BD%E7%9A%84-renderless-%E7%BB%84%E4%BB%B6/</link><pubDate>Wed, 29 Apr 2020 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/p/%E5%9F%BA%E4%BA%8E%E4%BD%9C%E7%94%A8%E5%9F%9F%E6%8F%92%E6%A7%BD%E7%9A%84-renderless-%E7%BB%84%E4%BB%B6/</guid><description>&lt;img src="https://vikingama.github.io/img/cover/vue.png" alt="基于作用域插槽的 Renderless 组件" />&lt;p>回来一查，原来是作用域插槽的高阶（算是吧）用法；插槽就插槽呗，你给我装什么大尾巴狼。&lt;/p>
+&lt;/div></description></item><item><title>基于作用域插槽的 Renderless 组件 · Stay Hungry Stay Foolish</title><link>https://vikingama.github.io/p/%E5%9F%BA%E4%BA%8E%E4%BD%9C%E7%94%A8%E5%9F%9F%E6%8F%92%E6%A7%BD%E7%9A%84-renderless-%E7%BB%84%E4%BB%B6/</link><pubDate>Wed, 29 Apr 2020 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/p/%E5%9F%BA%E4%BA%8E%E4%BD%9C%E7%94%A8%E5%9F%9F%E6%8F%92%E6%A7%BD%E7%9A%84-renderless-%E7%BB%84%E4%BB%B6/</guid><description>&lt;img src="https://vikingama.github.io/img/cover/vue.png" alt="基于作用域插槽的 Renderless 组件" />&lt;p>回来一查，原来是作用域插槽的高阶（算是吧）用法；插槽就插槽呗，你给我装什么大尾巴狼。&lt;/p>
 &lt;h2 id="普通插槽与作用域插槽">普通插槽与作用域插槽&lt;/h2>
 &lt;div class="highlight">&lt;div class="chroma">
 &lt;table class="lntable">&lt;tr>&lt;td class="lntd">
@@ -15544,7 +15544,7 @@ target="_blank" rel="noopener"
 Renderless Components In Vue.js
 &lt;/a>
 &lt;/li>
-&lt;/ul></description></item><item><title>Vue Composition API · 看不见我的美 · 是你瞎了眼</title><link>https://vikingama.github.io/p/vue-composition-api/</link><pubDate>Thu, 23 Apr 2020 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/p/vue-composition-api/</guid><description>&lt;img src="https://vikingama.github.io/img/cover/vue.png" alt="Vue Composition API" />&lt;h2 id="与-hooks-的区别">与 Hooks 的区别&lt;/h2>
+&lt;/ul></description></item><item><title>Vue Composition API · Stay Hungry Stay Foolish</title><link>https://vikingama.github.io/p/vue-composition-api/</link><pubDate>Thu, 23 Apr 2020 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/p/vue-composition-api/</guid><description>&lt;img src="https://vikingama.github.io/img/cover/vue.png" alt="Vue Composition API" />&lt;h2 id="与-hooks-的区别">与 Hooks 的区别&lt;/h2>
 &lt;ol>
 &lt;li>更符合 JS 习惯；&lt;/li>
 &lt;li>对调用顺序不敏感；&lt;/li>
@@ -16670,7 +16670,7 @@ Renderless Components In Vue.js
 &lt;li>isReactive，判断对象是否是 reactive 创建的一个响应式代理；&lt;/li>
 &lt;li>isReadonly，判断对象是否是 readonly 创建的一个只读代理；&lt;/li>
 &lt;li>isRef，判断值是否为 ref 对象。&lt;/li>
-&lt;/ul></description></item><item><title>Vue 3.0 来了 · 看不见我的美 · 是你瞎了眼</title><link>https://vikingama.github.io/p/vue-3.0-%E6%9D%A5%E4%BA%86/</link><pubDate>Wed, 22 Apr 2020 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/p/vue-3.0-%E6%9D%A5%E4%BA%86/</guid><description>&lt;img src="https://vikingama.github.io/img/cover/vue.png" alt="Vue 3.0 来了" />&lt;h2 id="改变">改变&lt;/h2>
+&lt;/ul></description></item><item><title>Vue 3.0 来了 · Stay Hungry Stay Foolish</title><link>https://vikingama.github.io/p/vue-3.0-%E6%9D%A5%E4%BA%86/</link><pubDate>Wed, 22 Apr 2020 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/p/vue-3.0-%E6%9D%A5%E4%BA%86/</guid><description>&lt;img src="https://vikingama.github.io/img/cover/vue.png" alt="Vue 3.0 来了" />&lt;h2 id="改变">改变&lt;/h2>
 &lt;p>Vue 新版本根据&lt;a class="link"
 href="https://github.com/vuejs/rfcs"
 target="_blank" rel="noopener"
@@ -16792,7 +16792,7 @@ loading="lazy"
 >
 &lt;/p>
 &lt;h2 id="ie11">IE11&lt;/h2>
-&lt;p>Vue 3.0 将为 IE11 建立专门的 build，开发者可以选择不同的版本；2.7 将会是 2.x 时代的最后一个版本，有 18 个月的支持期。&lt;/p></description></item><item><title>Vue 2.x 复习总结 · 看不见我的美 · 是你瞎了眼</title><link>https://vikingama.github.io/p/vue-2.x-%E5%A4%8D%E4%B9%A0%E6%80%BB%E7%BB%93/</link><pubDate>Wed, 04 Mar 2020 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/p/vue-2.x-%E5%A4%8D%E4%B9%A0%E6%80%BB%E7%BB%93/</guid><description>&lt;img src="https://vikingama.github.io/img/cover/vue.png" alt="Vue 2.x 复习总结" />&lt;h2 id="生命周期">生命周期&lt;/h2>
+&lt;p>Vue 3.0 将为 IE11 建立专门的 build，开发者可以选择不同的版本；2.7 将会是 2.x 时代的最后一个版本，有 18 个月的支持期。&lt;/p></description></item><item><title>Vue 2.x 复习总结 · Stay Hungry Stay Foolish</title><link>https://vikingama.github.io/p/vue-2.x-%E5%A4%8D%E4%B9%A0%E6%80%BB%E7%BB%93/</link><pubDate>Wed, 04 Mar 2020 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/p/vue-2.x-%E5%A4%8D%E4%B9%A0%E6%80%BB%E7%BB%93/</guid><description>&lt;img src="https://vikingama.github.io/img/cover/vue.png" alt="Vue 2.x 复习总结" />&lt;h2 id="生命周期">生命周期&lt;/h2>
 &lt;p>&lt;img src="https://vikingama.github.io/p/vue-2.x-%E5%A4%8D%E4%B9%A0%E6%80%BB%E7%BB%93/lifecycle.png"
 width="1200"
 height="3039"

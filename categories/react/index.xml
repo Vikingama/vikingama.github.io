@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>React on 馬腊咯稽</title><link>https://vikingama.github.io/categories/react/</link><description>Recent content in React on 馬腊咯稽</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Fri, 31 Dec 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://vikingama.github.io/categories/react/index.xml" rel="self" type="application/rss+xml"/><item><title>「转」我在函数组件中可以随便写，最通俗异步组件原理 · 看不见我的美 · 是你瞎了眼</title><link>https://vikingama.github.io/p/%E8%BD%AC%E6%88%91%E5%9C%A8%E5%87%BD%E6%95%B0%E7%BB%84%E4%BB%B6%E4%B8%AD%E5%8F%AF%E4%BB%A5%E9%9A%8F%E4%BE%BF%E5%86%99%E6%9C%80%E9%80%9A%E4%BF%97%E5%BC%82%E6%AD%A5%E7%BB%84%E4%BB%B6%E5%8E%9F%E7%90%86/</link><pubDate>Fri, 31 Dec 2021 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/p/%E8%BD%AC%E6%88%91%E5%9C%A8%E5%87%BD%E6%95%B0%E7%BB%84%E4%BB%B6%E4%B8%AD%E5%8F%AF%E4%BB%A5%E9%9A%8F%E4%BE%BF%E5%86%99%E6%9C%80%E9%80%9A%E4%BF%97%E5%BC%82%E6%AD%A5%E7%BB%84%E4%BB%B6%E5%8E%9F%E7%90%86/</guid><description>&lt;img src="https://vikingama.github.io/img/cover/react.png" alt="「转」我在函数组件中可以随便写，最通俗异步组件原理" />&lt;p>看完这篇文章，你将掌握：&lt;/p>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>React on 馬腊咯稽</title><link>https://vikingama.github.io/categories/react/</link><description>Recent content in React on 馬腊咯稽</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Fri, 31 Dec 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://vikingama.github.io/categories/react/index.xml" rel="self" type="application/rss+xml"/><item><title>「转」我在函数组件中可以随便写，最通俗异步组件原理 · Stay Hungry Stay Foolish</title><link>https://vikingama.github.io/p/%E8%BD%AC%E6%88%91%E5%9C%A8%E5%87%BD%E6%95%B0%E7%BB%84%E4%BB%B6%E4%B8%AD%E5%8F%AF%E4%BB%A5%E9%9A%8F%E4%BE%BF%E5%86%99%E6%9C%80%E9%80%9A%E4%BF%97%E5%BC%82%E6%AD%A5%E7%BB%84%E4%BB%B6%E5%8E%9F%E7%90%86/</link><pubDate>Fri, 31 Dec 2021 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/p/%E8%BD%AC%E6%88%91%E5%9C%A8%E5%87%BD%E6%95%B0%E7%BB%84%E4%BB%B6%E4%B8%AD%E5%8F%AF%E4%BB%A5%E9%9A%8F%E4%BE%BF%E5%86%99%E6%9C%80%E9%80%9A%E4%BF%97%E5%BC%82%E6%AD%A5%E7%BB%84%E4%BB%B6%E5%8E%9F%E7%90%86/</guid><description>&lt;img src="https://vikingama.github.io/img/cover/react.png" alt="「转」我在函数组件中可以随便写，最通俗异步组件原理" />&lt;p>看完这篇文章，你将掌握：&lt;/p>
 &lt;ol>
 &lt;li>componentDidCatch 原理；&lt;/li>
 &lt;li>Suspense 原理；&lt;/li>
@@ -777,7 +777,7 @@ target="_blank" rel="noopener"
 我在函数组件中可以随便写，最通俗异步组件原理
 &lt;/a>
 &lt;/li>
-&lt;/ul></description></item><item><title>React 复习笔记（下，基于源码） · 看不见我的美 · 是你瞎了眼</title><link>https://vikingama.github.io/p/react-%E5%A4%8D%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8B%E5%9F%BA%E4%BA%8E%E6%BA%90%E7%A0%81/</link><pubDate>Sun, 10 Oct 2021 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/p/react-%E5%A4%8D%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8B%E5%9F%BA%E4%BA%8E%E6%BA%90%E7%A0%81/</guid><description>&lt;img src="https://vikingama.github.io/img/cover/react.png" alt="React 复习笔记（下，基于源码）" />&lt;h2 id="调用-reactdomrender-发生了什么">调用 ReactDOM.render 发生了什么？&lt;/h2>
+&lt;/ul></description></item><item><title>React 复习笔记（下，基于源码） · Stay Hungry Stay Foolish</title><link>https://vikingama.github.io/p/react-%E5%A4%8D%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8B%E5%9F%BA%E4%BA%8E%E6%BA%90%E7%A0%81/</link><pubDate>Sun, 10 Oct 2021 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/p/react-%E5%A4%8D%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8B%E5%9F%BA%E4%BA%8E%E6%BA%90%E7%A0%81/</guid><description>&lt;img src="https://vikingama.github.io/img/cover/react.png" alt="React 复习笔记（下，基于源码）" />&lt;h2 id="调用-reactdomrender-发生了什么">调用 ReactDOM.render 发生了什么？&lt;/h2>
 &lt;ol>
 &lt;li>确定应用渲染方式；&lt;/li>
 &lt;li>创建 fiberRoot 和 rootFiberNode，并将两者用指针指向彼此；&lt;/li>
@@ -1208,10 +1208,10 @@ target="_blank" rel="noopener"
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="cm">/**
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * 获取应用挂载的 DOM 的 nodeType：
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * Node.ELEMENT_NODE 1 元素节点
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * Node.TEXT_NODE 3 文字
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * Node.TEXT_NODE 3 文字节点
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * Node.CDATA_SECTION_NODE 4 &amp;lt;!CDATA[[ … ]]&amp;gt;
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * Node.PROCESSING_INSTRUCTION_NODE 7 &amp;lt;?xml-stylesheet ... ?&amp;gt;
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * Node.COMMENT_NODE 8 注释
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * Node.COMMENT_NODE 8 注释节点
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * Node.DOCUMENT_NODE 9 Document
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * Node.DOCUMENT_TYPE_NODE 10 &amp;lt;!DOCTYPE html&amp;gt;
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * Node.DOCUMENT_FRAGMENT_NODE 11 DocumentFragment
@@ -1576,7 +1576,7 @@ target="_blank" rel="noopener"
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="nx">schedulePendingInteractions&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">root&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">lane&lt;/span>&lt;span class="p">);&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="cm">/**
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * 一种边缘情况：在 batchedUpdates 内部
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * ReactDOM.render 渲染的 root 节点挂载应该是同步的，
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * ReactDOM.render 渲染的 root 节点挂载应该是同步的
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * 而布局更新应该推迟到批处理结束
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> */&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">performSyncWorkOnRoot&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">root&lt;/span>&lt;span class="p">);&lt;/span>
@@ -2081,7 +2081,7 @@ target="_blank" rel="noopener"
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">do&lt;/span> &lt;span class="p">{&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="cm">/**
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * 触发 useEffect 回调与其他同步任务
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * 由于这些任务可能触发新的渲染，
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * 由于这些任务可能触发新的渲染
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * 所以，这里要一直遍历执行直到没有任务
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> */&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">flushPassiveEffects&lt;/span>&lt;span class="p">();&lt;/span>
@@ -2913,7 +2913,7 @@ target="_blank" rel="noopener"
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
 &lt;/div>&lt;h2 id="diff">diff&lt;/h2>
-&lt;p>diff 发生在 update 阶段；通过 current 树和组件返回的 JSX 对象，生成 workInProgress 树；并收集需要更新的 fiber 节点，以寻求更新视图的最优方案；它有以下准则：&lt;/p>
+&lt;p>diff 发生在 update 阶段（beginWork）；通过 current 树和组件返回的 JSX 对象（VDOM），生成 workInProgress 树；并收集需要更新的 fiber 节点，以寻求更新视图的最优方案；它有以下准则：&lt;/p>
 &lt;ul>
 &lt;li>只对同级元素进行 diff；如果一个节点在前后两次更新中跨越了层级，那么不会复用节点；&lt;/li>
 &lt;li>两个不同类型的元素会产生出不同的树；卸载旧的（及其子树），创建新的（及其子树）；&lt;/li>
@@ -3517,7 +3517,7 @@ loading="lazy"
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">this&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">lanes&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">NoLanes&lt;/span>&lt;span class="p">;&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="cm">/**
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * 双缓存：指向 current/workInProgress 中对应的 fiber 节点
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * currentFiber.alternate === workInProgressFiber;
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * currentFiber.alternate === workInProgressFiber
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * workInProgressFiber.alternate === currentFiber
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> */&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">this&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">alternate&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="kc">null&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="c1">// 双缓存相关
@@ -3794,7 +3794,7 @@ loading="lazy"
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
 &lt;/div>&lt;ul>
-&lt;li>“递”阶段（beginWork）：传入&lt;strong>当前 fiberNode&lt;/strong>，创建&lt;strong>子 fiberNode&lt;/strong>；&lt;/li>
+&lt;li>“递”阶段（beginWork）：传入&lt;strong>当前 fiberNode&lt;/strong>，创建&lt;strong>子 fiberNode&lt;/strong>，根据 VDOM 创建 fiber 树；&lt;/li>
 &lt;/ul>
 &lt;div class="highlight">&lt;div class="chroma">
 &lt;table class="lntable">&lt;tr>&lt;td class="lntd">
@@ -4075,7 +4075,7 @@ loading="lazy"
 &lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
 &lt;/div>&lt;ul>
-&lt;li>“归”阶段（completeWork）：&lt;/li>
+&lt;li>“归”阶段（completeWork）：构建 effectList；&lt;/li>
 &lt;/ul>
 &lt;div class="highlight">&lt;div class="chroma">
 &lt;table class="lntable">&lt;tr>&lt;td class="lntd">
@@ -6308,6 +6308,9 @@ target="_blank" rel="noopener"
 &lt;/span>&lt;span class="lnt">28
 &lt;/span>&lt;span class="lnt">29
 &lt;/span>&lt;span class="lnt">30
+&lt;/span>&lt;span class="lnt">31
+&lt;/span>&lt;span class="lnt">32
+&lt;/span>&lt;span class="lnt">33
 &lt;/span>&lt;/code>&lt;/pre>&lt;/td>
 &lt;td class="lntd">
 &lt;pre tabindex="0" class="chroma">&lt;code class="language-ts" data-lang="ts">&lt;span class="line">&lt;span class="cl">&lt;span class="cm">/**
@@ -6315,6 +6318,9 @@ target="_blank" rel="noopener"
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * 1. mountClassInstance：挂载组件实例
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * 2. resumeMountClassInstance：复用组件实例
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * 3. updateClassInstance：更新组件实例
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * 可以通过 props 派生出一个 state，constructor 也可以执行这个逻辑
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * 但是 constructor 只会在初始化时执行
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * getDerivedStateFromProps 会在每次 render 函数调用前执行
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> */&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">export&lt;/span> &lt;span class="kd">function&lt;/span> &lt;span class="nx">applyDerivedStateFromProps&lt;/span>&lt;span class="p">(&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">workInProgress&lt;/span>: &lt;span class="kt">Fiber&lt;/span>&lt;span class="p">,&lt;/span>
@@ -7005,7 +7011,7 @@ target="_blank" rel="noopener"
 React 技术揭秘
 &lt;/a>
 &lt;/li>
-&lt;/ul></description></item><item><title>React 复习笔记（中） · 看不见我的美 · 是你瞎了眼</title><link>https://vikingama.github.io/p/react-%E5%A4%8D%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%AD/</link><pubDate>Thu, 27 Feb 2020 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/p/react-%E5%A4%8D%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%AD/</guid><description>&lt;img src="https://vikingama.github.io/img/cover/react.png" alt="React 复习笔记（中）" />&lt;h2 id="hook-产生的动机">Hook 产生的动机&lt;/h2>
+&lt;/ul></description></item><item><title>React 复习笔记（中） · Stay Hungry Stay Foolish</title><link>https://vikingama.github.io/p/react-%E5%A4%8D%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%AD/</link><pubDate>Thu, 27 Feb 2020 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/p/react-%E5%A4%8D%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%AD/</guid><description>&lt;img src="https://vikingama.github.io/img/cover/react.png" alt="React 复习笔记（中）" />&lt;h2 id="hook-产生的动机">Hook 产生的动机&lt;/h2>
 &lt;ul>
 &lt;li>代码层次更清晰；在类组件中，共属于一个功能的代码分散在各个钩子函数中；&lt;/li>
 &lt;li>更好的&lt;strong>状态逻辑&lt;/strong>复用，renderProps 和高阶组件不是那么&lt;strong>好用&lt;/strong>；&lt;/li>
@@ -7313,7 +7319,7 @@ React 技术揭秘
 &lt;/div>
 &lt;/div>&lt;p>注意：如果通过 createContext 将 useReducer 的 state 和 dispatch 当作 value 传递下去；你甚至可以得到一个简单的 redux。&lt;/p>
 &lt;h2 id="usecallback--usememo">useCallback &amp;amp; useMemo&lt;/h2>
-&lt;p>Memo 是一种优化技术，大体上就是缓存昂贵计算的值并在相同输入的情况下直接返回缓存值；useCallback 用来缓存函数的引用，useMemo 用来缓存计算数据的引用。&lt;/p>
+&lt;p>Memo 是一种优化技术，大体上就是缓存昂贵计算的值并在相同输入的情况下直接返回缓存值（某种程度上的 Vue.computed）；useCallback 用来缓存函数的引用，useMemo 用来缓存计算数据的引用。&lt;/p>
 &lt;div class="highlight">&lt;div class="chroma">
 &lt;table class="lntable">&lt;tr>&lt;td class="lntd">
 &lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
@@ -7543,7 +7549,7 @@ React 技术揭秘
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div></description></item><item><title>React 复习笔记（上） · 看不见我的美 · 是你瞎了眼</title><link>https://vikingama.github.io/p/react-%E5%A4%8D%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8A/</link><pubDate>Tue, 25 Feb 2020 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/p/react-%E5%A4%8D%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8A/</guid><description>&lt;img src="https://vikingama.github.io/img/cover/react.png" alt="React 复习笔记（上）" />&lt;h2 id="jsx-与-react-元素">JSX 与 React 元素&lt;/h2>
+&lt;/div></description></item><item><title>React 复习笔记（上） · Stay Hungry Stay Foolish</title><link>https://vikingama.github.io/p/react-%E5%A4%8D%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8A/</link><pubDate>Tue, 25 Feb 2020 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/p/react-%E5%A4%8D%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8A/</guid><description>&lt;img src="https://vikingama.github.io/img/cover/react.png" alt="React 复习笔记（上）" />&lt;h2 id="jsx-与-react-元素">JSX 与 React 元素&lt;/h2>
 &lt;p>JSX 是一个 JavaScript 的语法扩展；在编译之后，JSX 会被 Babel 转为函数调用，对其取值后得到 JS 对象。JSX 使用 camelCase 来定义属性的名称，而不使用 HTML 属性名称的命名约定。&lt;/p>
 &lt;p>对于 React，JSX 仅仅是 React.createElement(component, props, &amp;hellip;children) 函数的语法糖；包含在开始和结束标签之间的 JSX 表达式内容将作为特定属性 props.children 传递给外层组件。&lt;/p>
 &lt;p>与浏览器的 DOM 元素不同，React 元素是不可变对象；一旦被创建，就无法更改它的子元素或者属性；一个元素就像电影的单帧：它代表了某个特定时刻的 UI。React 元素是创建开销极小的普通对象；ReactDOM 会将元素和它的子元素与它们之前的状态进行比较，通过 Diff 算法使 DOM 与 React 元素保持一致。&lt;/p>

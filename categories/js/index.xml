@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>JS on 馬腊咯稽</title><link>https://vikingama.github.io/categories/js/</link><description>Recent content in JS on 馬腊咯稽</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Wed, 11 Mar 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://vikingama.github.io/categories/js/index.xml" rel="self" type="application/rss+xml"/><item><title>面向面试编程 · 看不见我的美 · 是你瞎了眼</title><link>https://vikingama.github.io/p/%E9%9D%A2%E5%90%91%E9%9D%A2%E8%AF%95%E7%BC%96%E7%A8%8B/</link><pubDate>Wed, 11 Mar 2020 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/p/%E9%9D%A2%E5%90%91%E9%9D%A2%E8%AF%95%E7%BC%96%E7%A8%8B/</guid><description>&lt;img src="https://vikingama.github.io/img/cover/javascript.png" alt="面向面试编程" />&lt;h2 id="for-循环打印-0-9">for 循环打印 0-9&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>JS on 馬腊咯稽</title><link>https://vikingama.github.io/categories/js/</link><description>Recent content in JS on 馬腊咯稽</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Wed, 11 Mar 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://vikingama.github.io/categories/js/index.xml" rel="self" type="application/rss+xml"/><item><title>面向面试编程 · Stay Hungry Stay Foolish</title><link>https://vikingama.github.io/p/%E9%9D%A2%E5%90%91%E9%9D%A2%E8%AF%95%E7%BC%96%E7%A8%8B/</link><pubDate>Wed, 11 Mar 2020 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/p/%E9%9D%A2%E5%90%91%E9%9D%A2%E8%AF%95%E7%BC%96%E7%A8%8B/</guid><description>&lt;img src="https://vikingama.github.io/img/cover/javascript.png" alt="面向面试编程" />&lt;h2 id="for-循环打印-0-9">for 循环打印 0-9&lt;/h2>
 &lt;div class="highlight">&lt;div class="chroma">
 &lt;table class="lntable">&lt;tr>&lt;td class="lntd">
 &lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
@@ -2548,7 +2548,7 @@ target="_blank" rel="noopener"
 壹题
 &lt;/a>
 &lt;/li>
-&lt;/ul></description></item><item><title>「转」谈谈递归 · 看不见我的美 · 是你瞎了眼</title><link>https://vikingama.github.io/p/%E8%BD%AC%E8%B0%88%E8%B0%88%E9%80%92%E5%BD%92/</link><pubDate>Fri, 14 Jun 2019 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/p/%E8%BD%AC%E8%B0%88%E8%B0%88%E9%80%92%E5%BD%92/</guid><description>&lt;img src="https://vikingama.github.io/img/cover/javascript.png" alt="「转」谈谈递归" />&lt;h2 id="什么是递归">什么是递归&lt;/h2>
+&lt;/ul></description></item><item><title>「转」谈谈递归 · Stay Hungry Stay Foolish</title><link>https://vikingama.github.io/p/%E8%BD%AC%E8%B0%88%E8%B0%88%E9%80%92%E5%BD%92/</link><pubDate>Fri, 14 Jun 2019 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/p/%E8%BD%AC%E8%B0%88%E8%B0%88%E9%80%92%E5%BD%92/</guid><description>&lt;img src="https://vikingama.github.io/img/cover/javascript.png" alt="「转」谈谈递归" />&lt;h2 id="什么是递归">什么是递归&lt;/h2>
 &lt;p>小时候，我们都听过下面这则故事：&lt;/p>
 &lt;blockquote>
 &lt;p>从前有座山，山里有个庙，庙里有个老和尚在给小和尚讲故事，讲的什么呢？「从前有座山，山里有个庙，庙里有个老和尚在给小和尚讲故事，讲的什么呢？『从前有座山，山里有个庙，庙里有个老和尚在给小和尚讲故事，讲的什么呢？&amp;hellip;』」&lt;/p>
@@ -2785,7 +2785,7 @@ target="_blank" rel="noopener"
 谈谈递归
 &lt;/a>
 &lt;/li>
-&lt;/ul></description></item><item><title>attribute 与 property · 看不见我的美 · 是你瞎了眼</title><link>https://vikingama.github.io/p/attribute-%E4%B8%8E-property/</link><pubDate>Sat, 25 May 2019 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/p/attribute-%E4%B8%8E-property/</guid><description>&lt;img src="https://vikingama.github.io/img/cover/javascript.png" alt="attribute 与 property" />&lt;h2 id="区别">区别&lt;/h2>
+&lt;/ul></description></item><item><title>attribute 与 property · Stay Hungry Stay Foolish</title><link>https://vikingama.github.io/p/attribute-%E4%B8%8E-property/</link><pubDate>Sat, 25 May 2019 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/p/attribute-%E4%B8%8E-property/</guid><description>&lt;img src="https://vikingama.github.io/img/cover/javascript.png" alt="attribute 与 property" />&lt;h2 id="区别">区别&lt;/h2>
 &lt;ol>
 &lt;li>attribute 指的是 HTML 的属性，property 指的是 DOM 对象（JS 对象）的属性；&lt;/li>
 &lt;li>非自定义的 attribute 特性与 property 有映射关系，比如：id，class 等；&lt;/li>
@@ -2847,7 +2847,7 @@ loading="lazy"
 &lt;h2 id="总结">总结&lt;/h2>
 &lt;p>可以看到 attribute 只是 DOM 对象的 property 之一，保存着对应元素在 HTML 代码中的所有属性；其中 attribute 的值全部为字符串，而 property 的值可以为字符串、对象、数组、布尔值、null、undefined 等。&lt;/p>
 &lt;p>为了操作 DOM 的简便，除了自定义属性，大部分 attribute 在 property 里都有对应的映射；修改其一等价于修改另一个。其中 for 和 class 为 JS 的保留字，所以 attribute 的 for/class 属性映射到了 property 的 htmlFor/className。&lt;/p>
-&lt;p>因为 attribute 的属性值只能为字符串，所以当我们在 HTML 中加上‘checked=&amp;ldquo;false&amp;rdquo;’时，false 会被当作是长度为 5 的字符串，被隐式转换为 true，所以默认“man”被选中。因此 在设置“以非字符串为属性值”的属性时，应该在 JS 中设置 property。&lt;/p></description></item><item><title>「转」VirtualDOM 真的比操作原生 DOM 快吗？ · 看不见我的美 · 是你瞎了眼</title><link>https://vikingama.github.io/p/%E8%BD%ACvirtualdom-%E7%9C%9F%E7%9A%84%E6%AF%94%E6%93%8D%E4%BD%9C%E5%8E%9F%E7%94%9F-dom-%E5%BF%AB%E5%90%97/</link><pubDate>Thu, 23 May 2019 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/p/%E8%BD%ACvirtualdom-%E7%9C%9F%E7%9A%84%E6%AF%94%E6%93%8D%E4%BD%9C%E5%8E%9F%E7%94%9F-dom-%E5%BF%AB%E5%90%97/</guid><description>&lt;img src="https://vikingama.github.io/img/cover/javascript.png" alt="「转」VirtualDOM 真的比操作原生 DOM 快吗？" />&lt;h2 id="原生-dom-操作-vs-通过框架封装操作">原生 DOM 操作 vs 通过框架封装操作&lt;/h2>
+&lt;p>因为 attribute 的属性值只能为字符串，所以当我们在 HTML 中加上‘checked=&amp;ldquo;false&amp;rdquo;’时，false 会被当作是长度为 5 的字符串，被隐式转换为 true，所以默认“man”被选中。因此 在设置“以非字符串为属性值”的属性时，应该在 JS 中设置 property。&lt;/p></description></item><item><title>「转」VirtualDOM 真的比操作原生 DOM 快吗？ · Stay Hungry Stay Foolish</title><link>https://vikingama.github.io/p/%E8%BD%ACvirtualdom-%E7%9C%9F%E7%9A%84%E6%AF%94%E6%93%8D%E4%BD%9C%E5%8E%9F%E7%94%9F-dom-%E5%BF%AB%E5%90%97/</link><pubDate>Thu, 23 May 2019 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/p/%E8%BD%ACvirtualdom-%E7%9C%9F%E7%9A%84%E6%AF%94%E6%93%8D%E4%BD%9C%E5%8E%9F%E7%94%9F-dom-%E5%BF%AB%E5%90%97/</guid><description>&lt;img src="https://vikingama.github.io/img/cover/javascript.png" alt="「转」VirtualDOM 真的比操作原生 DOM 快吗？" />&lt;h2 id="原生-dom-操作-vs-通过框架封装操作">原生 DOM 操作 vs 通过框架封装操作&lt;/h2>
 &lt;p>这是一个性能 vs 可维护性的取舍。&lt;/p>
 &lt;p>框架的意义在于为你掩盖底层的 DOM 操作，让你用更声明式的方式来描述你的目的，从而让你的代码更容易维护。&lt;/p>
 &lt;p>没有任何框架可以比纯手动的优化 DOM 操作更快，因为框架的 DOM 操作层需要应对任何上层 API 可能产生的操作，它的实现必须是普适的。&lt;/p>
@@ -2902,7 +2902,7 @@ target="_blank" rel="noopener"
 壹题
 &lt;/a>
 &lt;/li>
-&lt;/ul></description></item><item><title>随机排列一个数组 · 看不见我的美 · 是你瞎了眼</title><link>https://vikingama.github.io/p/%E9%9A%8F%E6%9C%BA%E6%8E%92%E5%88%97%E4%B8%80%E4%B8%AA%E6%95%B0%E7%BB%84/</link><pubDate>Wed, 22 May 2019 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/p/%E9%9A%8F%E6%9C%BA%E6%8E%92%E5%88%97%E4%B8%80%E4%B8%AA%E6%95%B0%E7%BB%84/</guid><description>&lt;img src="https://vikingama.github.io/img/cover/javascript.png" alt="随机排列一个数组" />&lt;h2 id="arrayprototypesort">Array.prototype.sort()&lt;/h2>
+&lt;/ul></description></item><item><title>随机排列一个数组 · Stay Hungry Stay Foolish</title><link>https://vikingama.github.io/p/%E9%9A%8F%E6%9C%BA%E6%8E%92%E5%88%97%E4%B8%80%E4%B8%AA%E6%95%B0%E7%BB%84/</link><pubDate>Wed, 22 May 2019 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/p/%E9%9A%8F%E6%9C%BA%E6%8E%92%E5%88%97%E4%B8%80%E4%B8%AA%E6%95%B0%E7%BB%84/</guid><description>&lt;img src="https://vikingama.github.io/img/cover/javascript.png" alt="随机排列一个数组" />&lt;h2 id="arrayprototypesort">Array.prototype.sort()&lt;/h2>
 &lt;p>sort 方法不能实现随机排序的原因是：当对一个数组进行 n 次排序后，这 n 个数组的第 x 项的平均数并不是无限接近于原数组所有项的平均数。&lt;/p>
 &lt;div class="highlight">&lt;div class="chroma">
 &lt;table class="lntable">&lt;tr>&lt;td class="lntd">
@@ -3005,7 +3005,7 @@ target="_blank" rel="noopener"
 JS 中随机排列数组顺序（经典洗牌算法）和数组的排序方法
 &lt;/a>
 &lt;/li>
-&lt;/ul></description></item><item><title>JS 的事件循环机制 · 看不见我的美 · 是你瞎了眼</title><link>https://vikingama.github.io/p/js-%E7%9A%84%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF%E6%9C%BA%E5%88%B6/</link><pubDate>Mon, 13 May 2019 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/p/js-%E7%9A%84%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF%E6%9C%BA%E5%88%B6/</guid><description>&lt;img src="https://vikingama.github.io/img/cover/javascript.png" alt="JS 的事件循环机制" />&lt;h2 id="浏览器">浏览器&lt;/h2>
+&lt;/ul></description></item><item><title>JS 的事件循环机制 · Stay Hungry Stay Foolish</title><link>https://vikingama.github.io/p/js-%E7%9A%84%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF%E6%9C%BA%E5%88%B6/</link><pubDate>Mon, 13 May 2019 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/p/js-%E7%9A%84%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF%E6%9C%BA%E5%88%B6/</guid><description>&lt;img src="https://vikingama.github.io/img/cover/javascript.png" alt="JS 的事件循环机制" />&lt;h2 id="浏览器">浏览器&lt;/h2>
 &lt;p>浏览器是多进程（CPU 资源分配的最小单位）的，新开一个 Tab 页其实就是创建了一个浏览器&lt;strong>渲染进程&lt;/strong>（记得很早之前，FF 是多个 Tab 共用一个进程，导致一个页面的假死会使整个浏览器崩掉）；一个进程中包含了多个线程（CPU 资源调度的最小单位），比如渲染线程、JS 线程、HTTP 请求线程等。当你发起一个请求时，其实就是创建了一个请求线程，当请求结束后，该线程可能就会被销毁。一个浏览器渲染进程通常由以下常驻线程组成：&lt;/p>
 &lt;ul>
 &lt;li>GUI 渲染线程：
