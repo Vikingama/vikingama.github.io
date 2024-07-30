@@ -5526,7 +5526,7 @@ NG100 错误
 &lt;ol>
 &lt;li>switchMap：会自动帮我们处理“竞态”；在第一个请求没有完成的情况下，发起第二个请求；第一个请求将被忽略；&lt;/li>
 &lt;li>mergeMap：不会帮我们处理“竞态”；最终会使用哪个请求返回的结果，不一定；有可能新的请求使用旧的结果；&lt;/li>
-&lt;li>exhaustMap：第一个请求没处理完成，就不会发起新的请求；只有第一个求请完成的情况下，才发起新的请求；&lt;/li>
+&lt;li>exhaustMap：第一个请求没处理完成，就会忽略新发起的请求；只有第一个求请完成的情况下，才能发起新的请求；&lt;/li>
 &lt;li>concatMap：开启队列，按&lt;strong>顺序&lt;/strong>处理所有的请求；不会丢弃老的/新的请求。&lt;/li>
 &lt;/ol>
 &lt;div class="highlight">&lt;div class="chroma">
