@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>CSS on 馬腊咯稽</title><link>https://vikingama.github.io/categories/css/</link><description>Recent content in CSS on 馬腊咯稽</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Mon, 28 Feb 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://vikingama.github.io/categories/css/index.xml" rel="self" type="application/rss+xml"/><item><title>《CSS 新世界》笔记 · Stay Hungry Stay Foolish</title><link>https://vikingama.github.io/p/css-%E6%96%B0%E4%B8%96%E7%95%8C%E7%AC%94%E8%AE%B0/</link><pubDate>Mon, 28 Feb 2022 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/p/css-%E6%96%B0%E4%B8%96%E7%95%8C%E7%AC%94%E8%AE%B0/</guid><description>&lt;img src="https://vikingama.github.io/img/cover/css.png" alt="《CSS 新世界》笔记" />&lt;h2 id="前置知识">前置知识&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>CSS on 馬腊咯稽</title><link>https://vikingama.github.io/categories/css/</link><description>Recent content in CSS on 馬腊咯稽</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Mon, 28 Feb 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://vikingama.github.io/categories/css/index.xml" rel="self" type="application/rss+xml"/><item><title>《CSS 新世界》笔记 · Stay Hungry • Stay Foolish</title><link>https://vikingama.github.io/p/css-%E6%96%B0%E4%B8%96%E7%95%8C%E7%AC%94%E8%AE%B0/</link><pubDate>Mon, 28 Feb 2022 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/p/css-%E6%96%B0%E4%B8%96%E7%95%8C%E7%AC%94%E8%AE%B0/</guid><description>&lt;img src="https://vikingama.github.io/img/cover/css.png" alt="《CSS 新世界》笔记" />&lt;h2 id="前置知识">前置知识&lt;/h2>
 &lt;p>&lt;a class="link"
 href="https://www.zhangxinxu.com/wordpress/2011/03/css-css3-unit-units"
 target="_blank" rel="noopener"
@@ -2965,7 +2965,7 @@ proximity
 &lt;ul>
 &lt;li>economy，默认值，浏览器可以对元素进行样式上的调整（怎么调整浏览器自己定）；&lt;/li>
 &lt;li>exact，不要浏览器对样式进行调整。&lt;/li>
-&lt;/ul></description></item><item><title>《CSS 选择器世界》笔记 · Stay Hungry Stay Foolish</title><link>https://vikingama.github.io/p/css-%E9%80%89%E6%8B%A9%E5%99%A8%E4%B8%96%E7%95%8C%E7%AC%94%E8%AE%B0/</link><pubDate>Thu, 20 Jan 2022 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/p/css-%E9%80%89%E6%8B%A9%E5%99%A8%E4%B8%96%E7%95%8C%E7%AC%94%E8%AE%B0/</guid><description>&lt;img src="https://vikingama.github.io/img/cover/css.png" alt="《CSS 选择器世界》笔记" />&lt;h2 id="优先级与选择器">优先级与选择器&lt;/h2>
+&lt;/ul></description></item><item><title>《CSS 选择器世界》笔记 · Stay Hungry • Stay Foolish</title><link>https://vikingama.github.io/p/css-%E9%80%89%E6%8B%A9%E5%99%A8%E4%B8%96%E7%95%8C%E7%AC%94%E8%AE%B0/</link><pubDate>Thu, 20 Jan 2022 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/p/css-%E9%80%89%E6%8B%A9%E5%99%A8%E4%B8%96%E7%95%8C%E7%AC%94%E8%AE%B0/</guid><description>&lt;img src="https://vikingama.github.io/img/cover/css.png" alt="《CSS 选择器世界》笔记" />&lt;h2 id="优先级与选择器">优先级与选择器&lt;/h2>
 &lt;p>CSS 是有局部作用域的（ShadowDOM）。&lt;/p>
 &lt;p>CSS 选择符有五种：&lt;/p>
 &lt;ol>
@@ -3506,7 +3506,7 @@ target="_blank" rel="noopener"
 &lt;li>不支持多个表达式，也不支持选择符，例如，:not(li, dd) 是无效的。&lt;/li>
 &lt;/ol>
 &lt;p>:fullscreen 伪类用来匹配全屏元素；通过调用 element.requestFullScreen 可以让元素全屏显示，通过调用 document.cancelFullScreen 可以取消全屏。&lt;/p>
-&lt;p>:lang() 用来匹配指定语言环境下的元素。&lt;/p></description></item><item><title>《CSS 世界》笔记 · Stay Hungry Stay Foolish</title><link>https://vikingama.github.io/p/css-%E4%B8%96%E7%95%8C%E7%AC%94%E8%AE%B0/</link><pubDate>Sun, 02 Jan 2022 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/p/css-%E4%B8%96%E7%95%8C%E7%AC%94%E8%AE%B0/</guid><description>&lt;img src="https://vikingama.github.io/img/cover/css.png" alt="《CSS 世界》笔记" />&lt;h2 id="文档流">文档流&lt;/h2>
+&lt;p>:lang() 用来匹配指定语言环境下的元素。&lt;/p></description></item><item><title>《CSS 世界》笔记 · Stay Hungry • Stay Foolish</title><link>https://vikingama.github.io/p/css-%E4%B8%96%E7%95%8C%E7%AC%94%E8%AE%B0/</link><pubDate>Sun, 02 Jan 2022 00:00:00 +0000</pubDate><guid>https://vikingama.github.io/p/css-%E4%B8%96%E7%95%8C%E7%AC%94%E8%AE%B0/</guid><description>&lt;img src="https://vikingama.github.io/img/cover/css.png" alt="《CSS 世界》笔记" />&lt;h2 id="文档流">文档流&lt;/h2>
 &lt;p>&lt;strong>文档流&lt;/strong>是指 CSS 中引导元素排列和定位的一条看不见的“水流”。&lt;/p>
 &lt;p>CSS 的基石是 HTML，所以 HTML 默认的表现符合“流”，可以通过破坏“流”来实现特殊布局。&lt;/p>
 &lt;p>文档流的流向是可以改变的（column、display、float、position&amp;hellip;），这种改变可以让 CSS 的展现更为丰富；因此，“文档流从左往右自上而下”这种说法是不严谨的。&lt;/p>
