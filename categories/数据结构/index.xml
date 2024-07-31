@@ -2117,10 +2117,7 @@ target="_blank" rel="noopener"
 &lt;li>依次比较相邻的两个数，如果不符合排序规则，则调换两个数的位置；&lt;/li>
 &lt;li>再对最后一位以外的数组，重复前面的过程，直至全部排序完成。&lt;/li>
 &lt;/ul>
-&lt;p>&lt;img src="https://vikingama.github.io/img/post/data-structures-algorithms/%e5%86%92%e6%b3%a1%e6%8e%92%e5%ba%8f.gif"
-loading="lazy"
->
-&lt;/p>
+&lt;p>&lt;video autoplay disablepictureinpicture disableremoteplayback loop muted oncontextmenu="return false;" playsinline preload src="https://vikingama.github.io/img/post/data-structures-algorithms/冒泡排序.mp4" width="100%">&lt;/video>&lt;/p>
 &lt;div class="highlight">&lt;div class="chroma">
 &lt;table class="lntable">&lt;tr>&lt;td class="lntd">
 &lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
@@ -2149,8 +2146,8 @@ loading="lazy"
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">function&lt;/span> &lt;span class="nx">bubbleSort&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">array&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kr">const&lt;/span> &lt;span class="nx">arr&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">array&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">concat&lt;/span>&lt;span class="p">();&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kr">const&lt;/span> &lt;span class="nx">length&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">arr&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">length&lt;/span>&lt;span class="p">;&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">for&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="kd">let&lt;/span> &lt;span class="nx">i&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="mi">0&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="nx">i&lt;/span> &lt;span class="o">&amp;lt;=&lt;/span> &lt;span class="nx">length&lt;/span> &lt;span class="o">-&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="nx">i&lt;/span>&lt;span class="o">++&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">for&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="kd">let&lt;/span> &lt;span class="nx">j&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="mi">0&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="nx">j&lt;/span> &lt;span class="o">&amp;lt;=&lt;/span> &lt;span class="nx">length&lt;/span> &lt;span class="o">-&lt;/span> &lt;span class="nx">i&lt;/span> &lt;span class="o">-&lt;/span> &lt;span class="mi">2&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="nx">j&lt;/span>&lt;span class="o">++&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">for&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="kd">let&lt;/span> &lt;span class="nx">i&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="mi">0&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="nx">i&lt;/span> &lt;span class="o">&amp;lt;&lt;/span> &lt;span class="nx">length&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="nx">i&lt;/span>&lt;span class="o">++&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">for&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="kd">let&lt;/span> &lt;span class="nx">j&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="mi">0&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="nx">j&lt;/span> &lt;span class="o">&amp;lt;&lt;/span> &lt;span class="nx">length&lt;/span> &lt;span class="o">-&lt;/span> &lt;span class="nx">i&lt;/span> &lt;span class="o">-&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="nx">j&lt;/span>&lt;span class="o">++&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 每一轮都要进行前一项和后一项的对比
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nx">arr&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="nx">j&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="o">&amp;gt;&lt;/span> &lt;span class="nx">arr&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="nx">j&lt;/span> &lt;span class="o">+&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="p">])&lt;/span> &lt;span class="p">{&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 如果前一项比后一项大，交换顺序
@@ -2164,10 +2161,7 @@ loading="lazy"
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
 &lt;/div>&lt;p>选择排序，复杂度 O(n²)：&lt;/p>
-&lt;p>&lt;img src="https://vikingama.github.io/img/post/data-structures-algorithms/%e9%80%89%e6%8b%a9%e6%8e%92%e5%ba%8f.gif"
-loading="lazy"
->
-&lt;/p>
+&lt;p>&lt;video autoplay disablepictureinpicture disableremoteplayback loop muted oncontextmenu="return false;" playsinline preload src="https://vikingama.github.io/img/post/data-structures-algorithms/选择排序.mp4" width="100%">&lt;/video>&lt;/p>
 &lt;div class="highlight">&lt;div class="chroma">
 &lt;table class="lntable">&lt;tr>&lt;td class="lntd">
 &lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
@@ -2196,10 +2190,10 @@ loading="lazy"
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kr">const&lt;/span> &lt;span class="nx">arr&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">array&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">concat&lt;/span>&lt;span class="p">();&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kr">const&lt;/span> &lt;span class="nx">length&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">arr&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">length&lt;/span>&lt;span class="p">;&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">let&lt;/span> &lt;span class="nx">minIndex&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="mi">0&lt;/span>&lt;span class="p">;&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">for&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="kd">let&lt;/span> &lt;span class="nx">i&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="mi">0&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="nx">i&lt;/span> &lt;span class="o">&amp;lt;=&lt;/span> &lt;span class="nx">length&lt;/span> &lt;span class="o">-&lt;/span> &lt;span class="mi">2&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="nx">i&lt;/span>&lt;span class="o">++&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">for&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="kd">let&lt;/span> &lt;span class="nx">i&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="mi">0&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="nx">i&lt;/span> &lt;span class="o">&amp;lt;&lt;/span> &lt;span class="nx">length&lt;/span> &lt;span class="o">-&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="nx">i&lt;/span>&lt;span class="o">++&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 每一轮排序都会将该轮的最小值排到正确的位置，直至剩下最后一个位置
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="nx">minIndex&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">i&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="c1">// 假设最小值的索引为 i
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="k">for&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="kd">let&lt;/span> &lt;span class="nx">j&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">i&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="nx">j&lt;/span> &lt;span class="o">&amp;lt;=&lt;/span> &lt;span class="nx">length&lt;/span> &lt;span class="o">-&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="nx">j&lt;/span>&lt;span class="o">++&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="k">for&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="kd">let&lt;/span> &lt;span class="nx">j&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">i&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="nx">j&lt;/span> &lt;span class="o">&amp;lt;&lt;/span> &lt;span class="nx">length&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="nx">j&lt;/span>&lt;span class="o">++&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 剩下的有没有比 arr[minIndex] 小的
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nx">arr&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="nx">minIndex&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="o">&amp;gt;&lt;/span> &lt;span class="nx">arr&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="nx">j&lt;/span>&lt;span class="p">])&lt;/span> &lt;span class="p">{&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">minIndex&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">j&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="c1">// 重新设置最小值的索引
@@ -2215,10 +2209,7 @@ loading="lazy"
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
 &lt;/div>&lt;p>插入排序，从前到后一次处理未排好序的元素，对于每个元素，我们将它与之前排好序的元素进行比较，找到对应位置并插入（时间复杂度：O(n²)，空间复杂度：O(1)）：&lt;/p>
-&lt;p>&lt;img src="https://vikingama.github.io/img/post/data-structures-algorithms/%e6%8f%92%e5%85%a5%e6%8e%92%e5%ba%8f.gif"
-loading="lazy"
->
-&lt;/p>
+&lt;p>&lt;video autoplay disablepictureinpicture disableremoteplayback loop muted oncontextmenu="return false;" playsinline preload src="https://vikingama.github.io/img/post/data-structures-algorithms/插入排序.mp4" width="100%">&lt;/video>&lt;/p>
 &lt;div class="highlight">&lt;div class="chroma">
 &lt;table class="lntable">&lt;tr>&lt;td class="lntd">
 &lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
@@ -2264,10 +2255,7 @@ loading="lazy"
 &lt;li>当基准数被放到准确的位置之后，根据基准数位置，将数组分为前后两个子数组；&lt;/li>
 &lt;li>对子数组进行 1-3 的递归操作，直到子数组的长度小于等于 1 为止。&lt;/li>
 &lt;/ul>
-&lt;p>&lt;img src="https://vikingama.github.io/img/post/data-structures-algorithms/%e5%bf%ab%e9%80%9f%e6%8e%92%e5%ba%8f.gif"
-loading="lazy"
->
-&lt;/p>
+&lt;p>&lt;video autoplay disablepictureinpicture disableremoteplayback loop muted oncontextmenu="return false;" playsinline preload src="https://vikingama.github.io/img/post/data-structures-algorithms/快速排序.mp4" width="100%">&lt;/video>&lt;/p>
 &lt;div class="highlight">&lt;div class="chroma">
 &lt;table class="lntable">&lt;tr>&lt;td class="lntd">
 &lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
@@ -2305,10 +2293,7 @@ loading="lazy"
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
 &lt;/div>&lt;p>归并排序，将一个数组分为两个子数组，通过递归将数组切分到只剩下一个元素为止；然后将每个子数组中的元素排序后合并，通过不断合并数组，最后会拿到一个排好序的大数组（时间复杂度：O(nlogN)，空间复杂度：O(n)）：&lt;/p>
-&lt;p>&lt;img src="https://vikingama.github.io/img/post/data-structures-algorithms/%e5%bd%92%e5%b9%b6%e6%8e%92%e5%ba%8f.gif"
-loading="lazy"
->
-&lt;/p>
+&lt;p>&lt;video autoplay disablepictureinpicture disableremoteplayback loop muted oncontextmenu="return false;" playsinline preload src="https://vikingama.github.io/img/post/data-structures-algorithms/归并排序.mp4" width="100%">&lt;/video>&lt;/p>
 &lt;div class="highlight">&lt;div class="chroma">
 &lt;table class="lntable">&lt;tr>&lt;td class="lntd">
 &lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
