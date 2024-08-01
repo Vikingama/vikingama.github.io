@@ -671,7 +671,7 @@
 </span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=nx>clearFn</span><span class=p>;</span>
 </span></span><span class=line><span class=cl><span class=p>}</span>
 </span></span><span class=line><span class=cl><span class=c1>// 使用 useSetInterval
-</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kr>export</span> <span class=k>default</span> <span class=kd>function</span> <span class=nx>setIntervalTest() {</span>
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kr>export</span> <span class=k>default</span> <span class=kd>function</span> <span class=nx>SetIntervalTest() {</span>
 </span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>clearSetInterval</span> <span class=o>=</span> <span class=nx>useSetInterval</span><span class=p>(()</span> <span class=o>=&gt;</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>    <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=s1>&#39;useSetInterval&#39;</span><span class=p>);</span>
 </span></span><span class=line><span class=cl>  <span class=p>},</span> <span class=mi>3000</span><span class=p>);</span>
@@ -699,11 +699,31 @@
 </span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=nx>clearFn</span><span class=p>;</span>
 </span></span><span class=line><span class=cl><span class=p>}</span>
 </span></span><span class=line><span class=cl><span class=c1>// 使用 useSetTimneout
-</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kr>export</span> <span class=k>default</span> <span class=kd>function</span> <span class=nx>setIntervalTest() {</span>
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kr>export</span> <span class=k>default</span> <span class=kd>function</span> <span class=nx>SetIntervalTest() {</span>
 </span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>clearSetTimeout</span> <span class=o>=</span> <span class=nx>useSetTimneout</span><span class=p>(()</span> <span class=o>=&gt;</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>    <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=s1>&#39;useSetTimneout&#39;</span><span class=p>);</span>
 </span></span><span class=line><span class=cl>  <span class=p>},</span> <span class=mi>3000</span><span class=p>);</span>
 </span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=p>&lt;</span><span class=nt>main</span> <span class=na>onClick</span><span class=o>=</span><span class=p>{</span><span class=nx>clearSetTimeout</span><span class=p>}&gt;</span><span class=nx>useSetInterval</span> <span class=err>测试</span><span class=p>&lt;/</span><span class=nt>main</span><span class=p>&gt;;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>使用 Hook 实现 forceUpdate：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-tsx data-lang=tsx><span class=line><span class=cl><span class=c1>// forceUpdate
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kr>export</span> <span class=kd>function</span> <span class=nx>useForceUpdate() {</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=p>[,</span> <span class=nx>forceUpdate</span><span class=p>]</span> <span class=o>=</span> <span class=nx>useReducer</span><span class=p>(</span><span class=nx>x</span> <span class=o>=&gt;</span> <span class=nx>x</span> <span class=o>+</span> <span class=mi>1</span><span class=p>,</span> <span class=mi>0</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=nx>useCallback</span><span class=p>(()</span> <span class=o>=&gt;</span> <span class=nx>forceUpdate</span><span class=p>(),</span> <span class=p>[]);</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=c1>// 使用 useForceUpdate
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kr>export</span> <span class=k>default</span> <span class=kd>function</span> <span class=nx>ForceUpdateTest() {</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>forceUpdate</span> <span class=o>=</span> <span class=nx>useForceUpdate</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=p>&lt;</span><span class=nt>main</span> <span class=na>onClick</span><span class=o>=</span><span class=p>{</span><span class=nx>forceUpdate</span><span class=p>}&gt;{</span><span class=nb>Date</span><span class=p>.</span><span class=nx>now</span><span class=p>()}</span> <span class=err>测试</span><span class=p>&lt;/</span><span class=nt>main</span><span class=p>&gt;;</span>
 </span></span><span class=line><span class=cl><span class=p>}</span>
 </span></span></code></pre></td></tr></table></div></div></section><footer class=article-footer><section class=article-copyright><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
 <span>Licensed under CC BY-NC-SA 4.0</span></section></footer></article><aside class=related-content--wrapper><h2 class=section-title>相关文章</h2><div class=related-content><div class="flex article-list--tile"><article class=has-image><a href=/p/%E8%BD%AC%E6%88%91%E5%9C%A8%E5%87%BD%E6%95%B0%E7%BB%84%E4%BB%B6%E4%B8%AD%E5%8F%AF%E4%BB%A5%E9%9A%8F%E4%BE%BF%E5%86%99%E6%9C%80%E9%80%9A%E4%BF%97%E5%BC%82%E6%AD%A5%E7%BB%84%E4%BB%B6%E5%8E%9F%E7%90%86/><div class=article-image><img src=/img/cover/react.png loading=lazy data-key data-hash=/img/cover/react.png></div><div class=article-details><h2 class=article-title>「转」我在函数组件中可以随便写，最通俗异步组件原理</h2></div></a></article><article class=has-image><a href=/p/react-%E5%A4%8D%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8B%E5%9F%BA%E4%BA%8E%E6%BA%90%E7%A0%81/><div class=article-image><img src=/img/cover/react.png loading=lazy data-key data-hash=/img/cover/react.png></div><div class=article-details><h2 class=article-title>React 复习笔记（下，基于源码）</h2></div></a></article><article class=has-image><a href=/p/react-%E5%A4%8D%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8A/><div class=article-image><img src=/img/cover/react.png loading=lazy data-key data-hash=/img/cover/react.png></div><div class=article-details><h2 class=article-title>React 复习笔记（上）</h2></div></a></article></div></div></aside><footer class=site-footer><section class=copyright>&copy;
