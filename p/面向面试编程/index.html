@@ -11,7 +11,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
 <span>深色</span></li></div></ol></aside><main class="main full-width"><article class="has-image main-article"><header class=article-header><div class=article-image><a href=/p/%E9%9D%A2%E5%90%91%E9%9D%A2%E8%AF%95%E7%BC%96%E7%A8%8B/><img src=/img/cover/javascript.png loading=lazy alt=面向面试编程></a></div><div class=article-details><header class=article-category><a href=/categories/js/>JS</a></header><div class=article-title-wrapper><h2 class=article-title><a href=/p/%E9%9D%A2%E5%90%91%E9%9D%A2%E8%AF%95%E7%BC%96%E7%A8%8B/>面向面试编程</a></h2><h3 class=article-subtitle>好烦刷面试题呀</h3></div><footer class=article-time><div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
 <time class=article-time--published>Mar 11, 2020</time></div><div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
-<time class=article-time--reading>阅读时长：13 分钟</time></div></footer></div></header><section class=article-content><h2 id=for-循环打印-0-9>for 循环打印 0-9</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+<time class=article-time--reading>阅读时长：12 分钟</time></div></footer></div></header><section class=article-content><h2 id=for-循环打印-0-9>for 循环打印 0-9</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -276,18 +276,16 @@
 </span><span class=lnt>17
 </span><span class=lnt>18
 </span><span class=lnt>19
-</span><span class=lnt>20
 </span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=kd>function</span> <span class=nx>compose</span><span class=p>(...</span><span class=nx>fns</span><span class=p>)</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl>  <span class=kd>let</span> <span class=nx>ctx</span> <span class=o>=</span> <span class=k>this</span><span class=p>;</span>
-</span></span><span class=line><span class=cl>  <span class=kd>let</span> <span class=nx>temp</span> <span class=o>=</span> <span class=kc>null</span><span class=p>;</span>
-</span></span><span class=line><span class=cl>  <span class=kd>let</span> <span class=nx>length</span> <span class=o>=</span> <span class=nx>fns</span><span class=p>.</span><span class=nx>length</span><span class=p>;</span>
-</span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=kd>function</span> <span class=nx>fn</span><span class=p>(...</span><span class=nx>args</span><span class=p>)</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl>    <span class=nx>temp</span> <span class=o>=</span> <span class=nx>fns</span><span class=p>[</span><span class=nx>length</span> <span class=o>-</span> <span class=mi>1</span><span class=p>].</span><span class=nx>call</span><span class=p>(</span><span class=nx>ctx</span><span class=p>,</span> <span class=p>...</span><span class=nx>args</span><span class=p>);</span>
-</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=nx>length</span> <span class=o>&gt;</span> <span class=mi>1</span><span class=p>)</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl>      <span class=nx>length</span><span class=o>--</span><span class=p>;</span>
-</span></span><span class=line><span class=cl>      <span class=k>return</span> <span class=nx>fn</span><span class=p>.</span><span class=nx>call</span><span class=p>(</span><span class=nx>ctx</span><span class=p>,</span> <span class=nx>temp</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>that</span> <span class=o>=</span> <span class=k>this</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=kd>let</span> <span class=p>{</span> <span class=nx>length</span> <span class=p>}</span> <span class=o>=</span> <span class=nx>fns</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=kd>let</span> <span class=nx>result</span> <span class=o>=</span> <span class=kc>null</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=kd>function</span> <span class=nx>temp</span><span class=p>(</span><span class=nx>params</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=nx>length</span> <span class=o>&gt;</span> <span class=mi>0</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=nx>result</span> <span class=o>=</span> <span class=nx>fns</span><span class=p>[</span><span class=o>--</span><span class=nx>length</span><span class=p>].</span><span class=nx>call</span><span class=p>(</span><span class=nx>that</span><span class=p>,</span> <span class=nx>params</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>      <span class=k>return</span> <span class=nx>temp</span><span class=p>.</span><span class=nx>call</span><span class=p>(</span><span class=nx>that</span><span class=p>,</span> <span class=nx>result</span><span class=p>);</span>
 </span></span><span class=line><span class=cl>    <span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl>      <span class=k>return</span> <span class=nx>temp</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>      <span class=k>return</span> <span class=nx>result</span><span class=p>;</span>
 </span></span><span class=line><span class=cl>    <span class=p>}</span>
 </span></span><span class=line><span class=cl>  <span class=p>};</span>
 </span></span><span class=line><span class=cl><span class=p>}</span>
@@ -431,7 +429,8 @@
 </span></span><span class=line><span class=cl>    <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=nx>data</span><span class=p>);</span>
 </span></span><span class=line><span class=cl>  <span class=p>}</span>
 </span></span><span class=line><span class=cl><span class=p>);</span>
-</span></span></code></pre></td></tr></table></div></div><h2 id=实现-map使用-reduce>实现 map（使用 reduce）</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span></span></code></pre></td></tr></table></div></div><h2 id=实现-maphttpsdevelopermozillaorgzh-cndocswebjavascriptreferenceglobal_objectsarraymap使用-reduce>实现 <a class=link href=https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/map target=_blank rel=noopener>map
+</a>（使用 reduce）</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -459,7 +458,7 @@
 </span></span><span class=line><span class=cl><span class=kr>const</span> <span class=nx>b</span> <span class=o>=</span> <span class=p>[</span><span class=s1>&#39;a&#39;</span><span class=p>,</span> <span class=s1>&#39;b&#39;</span><span class=p>,</span> <span class=s1>&#39;c&#39;</span><span class=p>].</span><span class=nx>implementMapUsingReduce</span><span class=p>(</span><span class=nx>a</span> <span class=p>=&gt;</span> <span class=nx>a</span> <span class=o>+</span> <span class=s1>&#39;!&#39;</span><span class=p>);</span>
 </span></span><span class=line><span class=cl><span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=nx>a</span><span class=p>);</span> <span class=c1>// [2, 3, 4, 5]
 </span></span></span><span class=line><span class=cl><span class=c1></span><span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=nx>b</span><span class=p>);</span> <span class=c1>// [&#39;a!&#39;, &#39;b!&#39;, &#39;c!&#39;]
-</span></span></span></code></pre></td></tr></table></div></div><h2 id=实现-reduce>实现 reduce</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span></span></span></code></pre></td></tr></table></div></div><h2 id=实现-reducehttpsdevelopermozillaorgzh-cndocswebjavascriptreferenceglobal_objectsarrayreduce>实现 <a class=link href=https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce target=_blank rel=noopener>reduce</a></h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -513,7 +512,7 @@
 </span></span><span class=line><span class=cl><span class=p>].</span><span class=nx>implementReduce</span><span class=p>((</span><span class=nx>acc</span><span class=p>,</span> <span class=nx>cur</span><span class=p>)</span> <span class=p>=&gt;</span> <span class=nx>acc</span><span class=p>.</span><span class=nx>concat</span><span class=p>(</span><span class=nx>cur</span><span class=p>),</span> <span class=p>[]);</span>
 </span></span><span class=line><span class=cl><span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=nx>a</span><span class=p>);</span> <span class=c1>// 10
 </span></span></span><span class=line><span class=cl><span class=c1></span><span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=nx>b</span><span class=p>);</span> <span class=c1>// [0, 1, 2, 3, 4, 5]
-</span></span></span></code></pre></td></tr></table></div></div><h2 id=实现-new>实现 new</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></span></span></code></pre></td></tr></table></div></div><h2 id=实现-newhttpsdevelopermozillaorgzh-cndocswebjavascriptreferenceoperatorsnew>实现 <a class=link href=https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/new target=_blank rel=noopener>new</a></h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span><span class=lnt>3
 </span><span class=lnt>4
@@ -549,7 +548,7 @@
 </span></span><span class=line><span class=cl>  <span class=kd>let</span> <span class=nx>timer</span><span class=p>;</span>
 </span></span><span class=line><span class=cl>  <span class=kd>let</span> <span class=nx>loop</span> <span class=o>=</span> <span class=p>()</span> <span class=p>=&gt;</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>    <span class=nx>timer</span> <span class=o>=</span> <span class=nb>window</span><span class=p>.</span><span class=nx>requestAnimationFrame</span><span class=p>(</span><span class=nx>loop</span><span class=p>);</span>
-</span></span><span class=line><span class=cl>    <span class=kd>let</span> <span class=nx>endTime</span> <span class=o>=</span> <span class=nx>getNow</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>    <span class=nx>endTime</span> <span class=o>=</span> <span class=nx>getNow</span><span class=p>();</span>
 </span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=nx>endTime</span> <span class=o>-</span> <span class=nx>startTime</span> <span class=o>&gt;</span> <span class=nx>time</span><span class=p>)</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>      <span class=nx>endTime</span> <span class=o>=</span> <span class=nx>startTime</span> <span class=o>=</span> <span class=nx>getNow</span><span class=p>();</span>
 </span></span><span class=line><span class=cl>      <span class=nx>cb</span><span class=p>(</span><span class=nx>timer</span><span class=p>);</span>
@@ -1375,6 +1374,7 @@
 </span><span class=lnt>68
 </span><span class=lnt>69
 </span><span class=lnt>70
+</span><span class=lnt>71
 </span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=kd>function</span> <span class=nx>deepClone</span><span class=p>(</span><span class=nx>o</span><span class=p>,</span> <span class=nx>map</span> <span class=o>=</span> <span class=k>new</span> <span class=nx>WeakMap</span><span class=p>())</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>type</span> <span class=o>=</span> <span class=nx>o</span> <span class=p>=&gt;</span>
 </span></span><span class=line><span class=cl>    <span class=nb>Object</span><span class=p>.</span><span class=nx>prototype</span><span class=p>.</span><span class=nx>toString</span>
@@ -1392,8 +1392,8 @@
 </span></span><span class=line><span class=cl>  <span class=p>)</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=nx>o</span><span class=p>;</span>
 </span></span><span class=line><span class=cl>  <span class=p>}</span>
-</span></span><span class=line><span class=cl>  <span class=c1>// if (type(o) === &#39;function&#39;) {
-</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>//   // https://developer.chrome.com/docs/apps/contentSecurityPolicy/#relaxing-inline-script
+</span></span><span class=line><span class=cl>  <span class=c1>// https://developer.chrome.com/docs/apps/contentSecurityPolicy/#relaxing-inline-script
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>// if (type(o) === &#39;function&#39;) {
 </span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>//   return eval(o.toString());
 </span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>// }
 </span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=k>if</span> <span class=p>(</span><span class=nx>type</span><span class=p>(</span><span class=nx>o</span><span class=p>)</span> <span class=o>===</span> <span class=s1>&#39;date&#39;</span><span class=p>)</span> <span class=p>{</span>
@@ -1407,14 +1407,15 @@
 </span></span><span class=line><span class=cl>  <span class=p>}</span>
 </span></span><span class=line><span class=cl>  <span class=kd>let</span> <span class=nx>temp</span> <span class=o>=</span> <span class=k>new</span> <span class=nx>o</span><span class=p>.</span><span class=nx>constructor</span><span class=p>();</span>
 </span></span><span class=line><span class=cl>  <span class=nx>map</span><span class=p>.</span><span class=nx>set</span><span class=p>(</span><span class=nx>o</span><span class=p>,</span> <span class=nx>temp</span><span class=p>);</span>
-</span></span><span class=line><span class=cl>  <span class=c1>// Map、Set、WeakMap、WeakSet
-</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=k>if</span> <span class=p>(</span><span class=nx>type</span><span class=p>(</span><span class=nx>o</span><span class=p>)</span> <span class=o>===</span> <span class=s1>&#39;map&#39;</span> <span class=o>||</span> <span class=nx>type</span><span class=p>(</span><span class=nx>o</span><span class=p>)</span> <span class=o>===</span> <span class=s1>&#39;weakmap&#39;</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=c1>// WeakMap 不能被遍历，所以不能被拷贝
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=k>if</span> <span class=p>(</span><span class=nx>type</span><span class=p>(</span><span class=nx>o</span><span class=p>)</span> <span class=o>===</span> <span class=s1>&#39;map&#39;</span><span class=p>)</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>    <span class=nx>o</span><span class=p>.</span><span class=nx>forEach</span><span class=p>((</span><span class=nx>v</span><span class=p>,</span> <span class=nx>k</span><span class=p>)</span> <span class=p>=&gt;</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>      <span class=nx>temp</span><span class=p>.</span><span class=nx>set</span><span class=p>(</span><span class=nx>k</span><span class=p>,</span> <span class=nx>deepClone</span><span class=p>(</span><span class=nx>v</span><span class=p>,</span> <span class=nx>map</span><span class=p>));</span>
 </span></span><span class=line><span class=cl>    <span class=p>});</span>
 </span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=nx>temp</span><span class=p>;</span>
 </span></span><span class=line><span class=cl>  <span class=p>}</span>
-</span></span><span class=line><span class=cl>  <span class=k>if</span> <span class=p>(</span><span class=nx>type</span><span class=p>(</span><span class=nx>o</span><span class=p>)</span> <span class=o>===</span> <span class=s1>&#39;set&#39;</span> <span class=o>||</span> <span class=nx>type</span><span class=p>(</span><span class=nx>o</span><span class=p>)</span> <span class=o>===</span> <span class=s1>&#39;weakset&#39;</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=c1>// WeakSet 不能被遍历，所以不能被拷贝
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=k>if</span> <span class=p>(</span><span class=nx>type</span><span class=p>(</span><span class=nx>o</span><span class=p>)</span> <span class=o>===</span> <span class=s1>&#39;set&#39;</span><span class=p>)</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>    <span class=nx>o</span><span class=p>.</span><span class=nx>forEach</span><span class=p>(</span><span class=nx>v</span> <span class=p>=&gt;</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>      <span class=nx>temp</span><span class=p>.</span><span class=nx>add</span><span class=p>(</span><span class=nx>deepClone</span><span class=p>(</span><span class=nx>v</span><span class=p>,</span> <span class=nx>map</span><span class=p>));</span>
 </span></span><span class=line><span class=cl>    <span class=p>});</span>
@@ -1445,7 +1446,7 @@
 </span></span><span class=line><span class=cl>  <span class=p>])</span>
 </span></span><span class=line><span class=cl><span class=p>};</span>
 </span></span><span class=line><span class=cl><span class=nx>deepClone</span><span class=p>(</span><span class=nx>temp</span><span class=p>);</span>
-</span></span></code></pre></td></tr></table></div></div><h2 id=实现一个无限累加的函数>实现一个无限累加的函数</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span></span></code></pre></td></tr></table></div></div><h2 id=实现一个无限累加的函数chrome-中已失效><del>实现一个无限累加的函数</del>（Chrome 中已失效）</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -1647,7 +1648,7 @@
 </span></span><span class=line><span class=cl>  <span class=k>if</span> <span class=p>(</span><span class=nx>n</span> <span class=o>%</span> <span class=mi>1</span> <span class=o>!==</span> <span class=mi>0</span><span class=p>)</span> <span class=k>throw</span> <span class=k>new</span> <span class=nb>Error</span><span class=p>(</span><span class=s1>&#39;&gt;.&lt;&#39;</span><span class=p>);</span>
 </span></span><span class=line><span class=cl>  <span class=k>if</span> <span class=p>(</span><span class=nx>n</span> <span class=o>&lt;=</span> <span class=mi>0</span><span class=p>)</span> <span class=k>return</span> <span class=nx>temp</span><span class=p>[</span><span class=mi>0</span><span class=p>];</span>
 </span></span><span class=line><span class=cl>  <span class=k>if</span> <span class=p>(</span><span class=nx>n</span> <span class=o>===</span> <span class=mi>1</span><span class=p>)</span> <span class=k>return</span> <span class=nx>temp</span><span class=p>[</span><span class=mi>1</span><span class=p>];</span>
-</span></span><span class=line><span class=cl>  <span class=k>for</span> <span class=p>(</span><span class=kd>let</span> <span class=nx>i</span> <span class=o>=</span> <span class=mi>2</span><span class=p>;</span> <span class=nx>i</span> <span class=o>&lt;=</span> <span class=nx>n</span><span class=p>;</span> <span class=nx>i</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=k>for</span> <span class=p>(</span><span class=kd>let</span> <span class=nx>i</span> <span class=o>=</span> <span class=mi>2</span><span class=p>;</span> <span class=nx>i</span> <span class=o>&lt;</span> <span class=nx>n</span> <span class=o>+</span> <span class=mi>1</span><span class=p>;</span> <span class=nx>i</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>    <span class=nx>temp</span><span class=p>[</span><span class=nx>i</span><span class=p>]</span> <span class=o>=</span> <span class=nx>temp</span><span class=p>[</span><span class=nx>i</span> <span class=o>-</span> <span class=mi>1</span><span class=p>]</span> <span class=o>+</span> <span class=nx>temp</span><span class=p>[</span><span class=nx>i</span> <span class=o>-</span> <span class=mi>2</span><span class=p>];</span>
 </span></span><span class=line><span class=cl>  <span class=p>}</span>
 </span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=nx>temp</span><span class=p>[</span><span class=nx>n</span><span class=p>];</span>
@@ -2137,28 +2138,6 @@
 </span><span class=lnt>20
 </span><span class=lnt>21
 </span><span class=lnt>22
-</span><span class=lnt>23
-</span><span class=lnt>24
-</span><span class=lnt>25
-</span><span class=lnt>26
-</span><span class=lnt>27
-</span><span class=lnt>28
-</span><span class=lnt>29
-</span><span class=lnt>30
-</span><span class=lnt>31
-</span><span class=lnt>32
-</span><span class=lnt>33
-</span><span class=lnt>34
-</span><span class=lnt>35
-</span><span class=lnt>36
-</span><span class=lnt>37
-</span><span class=lnt>38
-</span><span class=lnt>39
-</span><span class=lnt>40
-</span><span class=lnt>41
-</span><span class=lnt>42
-</span><span class=lnt>43
-</span><span class=lnt>44
 </span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=kr>const</span> <span class=nx>exampleArr</span> <span class=o>=</span> <span class=p>[</span>
 </span></span><span class=line><span class=cl>  <span class=p>{</span> <span class=nx>id</span><span class=o>:</span> <span class=mi>3</span><span class=p>,</span> <span class=nx>name</span><span class=o>:</span> <span class=s1>&#39;部门 3&#39;</span><span class=p>,</span> <span class=nx>pid</span><span class=o>:</span> <span class=mi>1</span> <span class=p>},</span>
 </span></span><span class=line><span class=cl>  <span class=p>{</span> <span class=nx>id</span><span class=o>:</span> <span class=mi>4</span><span class=p>,</span> <span class=nx>name</span><span class=o>:</span> <span class=s1>&#39;部门 4&#39;</span><span class=p>,</span> <span class=nx>pid</span><span class=o>:</span> <span class=mi>3</span> <span class=p>},</span>
@@ -2166,7 +2145,7 @@
 </span></span><span class=line><span class=cl>  <span class=p>{</span> <span class=nx>id</span><span class=o>:</span> <span class=mi>1</span><span class=p>,</span> <span class=nx>name</span><span class=o>:</span> <span class=s1>&#39;部门 1&#39;</span><span class=p>,</span> <span class=nx>pid</span><span class=o>:</span> <span class=mi>0</span> <span class=p>},</span>
 </span></span><span class=line><span class=cl>  <span class=p>{</span> <span class=nx>id</span><span class=o>:</span> <span class=mi>2</span><span class=p>,</span> <span class=nx>name</span><span class=o>:</span> <span class=s1>&#39;部门 2&#39;</span><span class=p>,</span> <span class=nx>pid</span><span class=o>:</span> <span class=mi>1</span> <span class=p>}</span>
 </span></span><span class=line><span class=cl><span class=p>];</span>
-</span></span><span class=line><span class=cl><span class=kd>function</span> <span class=nx>arr2Tree1</span><span class=p>(</span><span class=nx>arr</span><span class=p>,</span> <span class=nx>pid</span> <span class=o>=</span> <span class=mi>0</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl><span class=kd>function</span> <span class=nx>arr2Tree</span><span class=p>(</span><span class=nx>arr</span><span class=p>,</span> <span class=nx>pid</span> <span class=o>=</span> <span class=mi>0</span><span class=p>)</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>  <span class=kd>let</span> <span class=nx>temp</span> <span class=o>=</span> <span class=p>[];</span>
 </span></span><span class=line><span class=cl>  <span class=nx>getChildren</span><span class=p>(</span><span class=nx>arr</span><span class=p>,</span> <span class=nx>temp</span><span class=p>,</span> <span class=nx>pid</span><span class=p>);</span>
 </span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=nx>temp</span><span class=p>;</span>
@@ -2180,29 +2159,7 @@
 </span></span><span class=line><span class=cl>    <span class=p>}</span>
 </span></span><span class=line><span class=cl>  <span class=p>}</span>
 </span></span><span class=line><span class=cl><span class=p>}</span>
-</span></span><span class=line><span class=cl><span class=kd>function</span> <span class=nx>arr2Tree2</span><span class=p>(</span><span class=nx>arr</span><span class=p>)</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>temp</span> <span class=o>=</span> <span class=p>[];</span>
-</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>map</span> <span class=o>=</span> <span class=p>{};</span>
-</span></span><span class=line><span class=cl>  <span class=k>for</span> <span class=p>(</span><span class=kd>let</span> <span class=nx>item</span> <span class=k>of</span> <span class=nx>arr</span><span class=p>)</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl>    <span class=nx>map</span><span class=p>[</span><span class=nx>item</span><span class=p>.</span><span class=nx>id</span><span class=p>]</span> <span class=o>=</span> <span class=p>{</span> <span class=p>...</span><span class=nx>item</span><span class=p>,</span> <span class=nx>children</span><span class=o>:</span> <span class=p>[]</span> <span class=p>};</span>
-</span></span><span class=line><span class=cl>  <span class=p>}</span>
-</span></span><span class=line><span class=cl>  <span class=k>for</span> <span class=p>(</span><span class=kd>let</span> <span class=nx>item</span> <span class=k>of</span> <span class=nx>arr</span><span class=p>)</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl>    <span class=kr>const</span> <span class=p>{</span> <span class=nx>id</span><span class=p>,</span> <span class=nx>pid</span> <span class=p>}</span> <span class=o>=</span> <span class=nx>item</span><span class=p>;</span>
-</span></span><span class=line><span class=cl>    <span class=kr>const</span> <span class=nx>mapItem</span> <span class=o>=</span> <span class=nx>map</span><span class=p>[</span><span class=nx>id</span><span class=p>];</span>
-</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=nx>pid</span> <span class=o>===</span> <span class=mi>0</span><span class=p>)</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl>      <span class=nx>temp</span><span class=p>.</span><span class=nx>push</span><span class=p>(</span><span class=nx>mapItem</span><span class=p>);</span>
-</span></span><span class=line><span class=cl>    <span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl>      <span class=k>if</span> <span class=p>(</span><span class=o>!</span><span class=nx>map</span><span class=p>[</span><span class=nx>pid</span><span class=p>])</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl>        <span class=nx>map</span><span class=p>[</span><span class=nx>pid</span><span class=p>]</span> <span class=o>=</span> <span class=p>{</span> <span class=nx>children</span><span class=o>:</span> <span class=p>[]</span> <span class=p>};</span>
-</span></span><span class=line><span class=cl>      <span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl>        <span class=nx>map</span><span class=p>[</span><span class=nx>pid</span><span class=p>].</span><span class=nx>children</span><span class=p>.</span><span class=nx>push</span><span class=p>(</span><span class=nx>mapItem</span><span class=p>);</span>
-</span></span><span class=line><span class=cl>      <span class=p>}</span>
-</span></span><span class=line><span class=cl>    <span class=p>}</span>
-</span></span><span class=line><span class=cl>  <span class=p>}</span>
-</span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=nx>temp</span><span class=p>;</span>
-</span></span><span class=line><span class=cl><span class=p>}</span>
-</span></span><span class=line><span class=cl><span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=nx>arr2Tree1</span><span class=p>(</span><span class=nx>exampleArr</span><span class=p>));</span>
-</span></span><span class=line><span class=cl><span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=nx>arr2Tree2</span><span class=p>(</span><span class=nx>exampleArr</span><span class=p>));</span>
+</span></span><span class=line><span class=cl><span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=nx>arr2Tree</span><span class=p>(</span><span class=nx>exampleArr</span><span class=p>));</span>
 </span></span></code></pre></td></tr></table></div></div><h2 id=检验链表是否成环>检验链表是否成环</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
@@ -2257,4 +2214,4 @@
 <button class="pswp__button pswp__button--share" title=Share></button>
 <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
 <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
-<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">目录</h2><div class=widget--toc><nav id=TableOfContents><ol><li><a href=#for-循环打印-0-9>for 循环打印 0-9</a></li><li><a href=#proxy-实现数据绑定>Proxy 实现数据绑定</a></li><li><a href=#实现-applycallbind>实现 apply、call、bind</a></li><li><a href=#实现-compose>实现 compose</a></li><li><a href=#实现-instanceof>实现 instanceof</a></li><li><a href=#实现-flatten>实现 flatten</a></li><li><a href=#实现-jsonp>实现 jsonp</a></li><li><a href=#实现-map使用-reduce>实现 map（使用 reduce）</a></li><li><a href=#实现-reduce>实现 reduce</a></li><li><a href=#实现-new>实现 new</a></li><li><a href=#实现-setintervalsettimeout使用-requestanimationframe>实现 setInterval/setTimeout（使用 requestAnimationFrame）</a></li><li><a href=#实现-sleep>实现 sleep</a></li><li><a href=#实现-eventemitter>实现 EventEmitter</a></li><li><a href=#实现-lazyman>实现 LazyMan</a></li><li><a href=#实现-objectassign>实现 Object.assign</a></li><li><a href=#实现-promise>实现 Promise</a></li><li><a href=#实现-promiseallpromiseracepromiseretry-和-promiseallsettled>实现 Promise.all、Promise.race、Promise.retry 和 Promise.allSettled</a></li><li><a href=#实现继承>实现继承</a></li><li><a href=#实现柯里化>实现柯里化</a></li><li><a href=#实现深拷贝>实现深拷贝</a></li><li><a href=#实现一个无限累加的函数>实现一个无限累加的函数</a></li><li><a href=#实现两个非常大的数字超出了-number-范围的加法>实现两个非常大的数字（超出了 Number 范围）的加法</a></li><li><a href=#复杂类型转换>复杂类型转换</a></li><li><a href=#数组去重>数组去重</a></li><li><a href=#写一个函数输入-n求斐波那契数列的第-n-项>写一个函数，输入 n，求斐波那契数列的第 n 项</a></li><li><a href=#扁平化去重>扁平化去重</a></li><li><a href=#利用函数柯理化动态创建函数>利用函数柯理化动态创建函数</a></li><li><a href=#节流与防抖>节流与防抖</a></li><li><a href=#合并数组>合并数组</a></li><li><a href=#计算数组交集>计算数组交集</a></li><li><a href=#大小写取相反>大小写取相反</a></li><li><a href=#字符串匹配>字符串匹配</a></li><li><a href=#旋转数组>旋转数组</a></li><li><a href=#打印出-1-1000-之间所有的对称数>打印出 1-1000 之间所有的对称数</a></li><li><a href=#找区间>找区间</a></li><li><a href=#给定一个整数数组和一个目标值找出数组中和为目标值的两个数>给定一个整数数组和一个目标值，找出数组中和为目标值的两个数</a></li><li><a href=#不使用加减乘除计算整数的-7-倍>不使用加减乘除计算整数的 7 倍</a></li><li><a href=#字符串排序>字符串排序</a></li><li><a href=#将扁平的数据结构转化为树>将扁平的数据结构转化为树</a></li><li><a href=#检验链表是否成环>检验链表是否成环</a></li><li><a href=#参考>参考</a></li></ol></nav></div></section></aside></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=/ts/main.js defer></script></body></html>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">目录</h2><div class=widget--toc><nav id=TableOfContents><ol><li><a href=#for-循环打印-0-9>for 循环打印 0-9</a></li><li><a href=#proxy-实现数据绑定>Proxy 实现数据绑定</a></li><li><a href=#实现-applycallbind>实现 apply、call、bind</a></li><li><a href=#实现-compose>实现 compose</a></li><li><a href=#实现-instanceof>实现 instanceof</a></li><li><a href=#实现-flatten>实现 flatten</a></li><li><a href=#实现-jsonp>实现 jsonp</a></li><li><a href=#实现-maphttpsdevelopermozillaorgzh-cndocswebjavascriptreferenceglobal_objectsarraymap使用-reduce>实现 <a href=https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/map>map</a>（使用 reduce）</a></li><li><a href=#实现-reducehttpsdevelopermozillaorgzh-cndocswebjavascriptreferenceglobal_objectsarrayreduce>实现 <a href=https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce>reduce</a></a></li><li><a href=#实现-newhttpsdevelopermozillaorgzh-cndocswebjavascriptreferenceoperatorsnew>实现 <a href=https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/new>new</a></a></li><li><a href=#实现-setintervalsettimeout使用-requestanimationframe>实现 setInterval/setTimeout（使用 requestAnimationFrame）</a></li><li><a href=#实现-sleep>实现 sleep</a></li><li><a href=#实现-eventemitter>实现 EventEmitter</a></li><li><a href=#实现-lazyman>实现 LazyMan</a></li><li><a href=#实现-objectassign>实现 Object.assign</a></li><li><a href=#实现-promise>实现 Promise</a></li><li><a href=#实现-promiseallpromiseracepromiseretry-和-promiseallsettled>实现 Promise.all、Promise.race、Promise.retry 和 Promise.allSettled</a></li><li><a href=#实现继承>实现继承</a></li><li><a href=#实现柯里化>实现柯里化</a></li><li><a href=#实现深拷贝>实现深拷贝</a></li><li><a href=#实现一个无限累加的函数chrome-中已失效><del>实现一个无限累加的函数</del>（Chrome 中已失效）</a></li><li><a href=#实现两个非常大的数字超出了-number-范围的加法>实现两个非常大的数字（超出了 Number 范围）的加法</a></li><li><a href=#复杂类型转换>复杂类型转换</a></li><li><a href=#数组去重>数组去重</a></li><li><a href=#写一个函数输入-n求斐波那契数列的第-n-项>写一个函数，输入 n，求斐波那契数列的第 n 项</a></li><li><a href=#扁平化去重>扁平化去重</a></li><li><a href=#利用函数柯理化动态创建函数>利用函数柯理化动态创建函数</a></li><li><a href=#节流与防抖>节流与防抖</a></li><li><a href=#合并数组>合并数组</a></li><li><a href=#计算数组交集>计算数组交集</a></li><li><a href=#大小写取相反>大小写取相反</a></li><li><a href=#字符串匹配>字符串匹配</a></li><li><a href=#旋转数组>旋转数组</a></li><li><a href=#打印出-1-1000-之间所有的对称数>打印出 1-1000 之间所有的对称数</a></li><li><a href=#找区间>找区间</a></li><li><a href=#给定一个整数数组和一个目标值找出数组中和为目标值的两个数>给定一个整数数组和一个目标值，找出数组中和为目标值的两个数</a></li><li><a href=#不使用加减乘除计算整数的-7-倍>不使用加减乘除计算整数的 7 倍</a></li><li><a href=#字符串排序>字符串排序</a></li><li><a href=#将扁平的数据结构转化为树>将扁平的数据结构转化为树</a></li><li><a href=#检验链表是否成环>检验链表是否成环</a></li><li><a href=#参考>参考</a></li></ol></nav></div></section></aside></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=/ts/main.js defer></script></body></html>
