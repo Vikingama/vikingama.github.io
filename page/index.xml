@@ -35,14 +35,12 @@
 &lt;h3 id="蓝犀共享经济服务平台">蓝犀共享经济服务平台&lt;/h3>
 &lt;blockquote>
 &lt;p>时间：2022 年 3 月 – 2024 年 5 月&lt;/p>
-&lt;p>描述：智能财税平台，可完成商户入驻、自由职业者结算/开票流程&lt;/p>
-&lt;p>技术栈：Angula、NgZorro、OpenTelemetry、RxJS、TS&lt;/p>
+&lt;p>描述：智能财税平台，可完成商户入驻/充值流程、自由职业者/个体户的财务结算/开票流程&lt;/p>
+&lt;p>技术栈：Angular、NgZorro、RxJS、TS&lt;/p>
 &lt;ul>
-&lt;li>负责精确到按钮粒度的权限管理的开发&lt;/li>
-&lt;li>使用 ContentChiid 进行逻辑封装&lt;/li>
-&lt;li>使用 NgZorro 作为基础组件库&lt;/li>
+&lt;li>负责按钮粒度的权限管理的开发&lt;/li>
+&lt;li>使用 ViewChild 进行逻辑封装&lt;/li>
 &lt;li>接入 OTLP，打通前后端链路&lt;/li>
-&lt;li>配置 ESLint 与 Prettier&lt;/li>
 &lt;/ul>
 &lt;/blockquote>
 &lt;h3 id="自由职业者签约平台">自由职业者签约平台&lt;/h3>
@@ -67,7 +65,6 @@
 &lt;li>使用基于 slot 的 renderless 数据渲染方式&lt;/li>
 &lt;li>通过预渲染插件对官网进行 SEO 优化&lt;/li>
 &lt;li>使用 husky 规范 commit 信息&lt;/li>
-&lt;li>基于路由的权限管理&lt;/li>
 &lt;/ul>
 &lt;/blockquote>
 &lt;h3 id="花瓣站长平台">花瓣站长平台&lt;/h3>
@@ -76,8 +73,6 @@
 &lt;p>描述：供合作伙伴查询推广流量的工具&lt;/p>
 &lt;p>技术栈：React、ReactRouter、Redux、AntDesign、StyledComponents、BizCharts&lt;/p>
 &lt;ul>
-&lt;li>使用 AntDesign 作为基础组件库&lt;/li>
-&lt;li>使用 BizCharts 展示流量数据&lt;/li>
 &lt;li>使用 CSS IN JS 的样式管理&lt;/li>
 &lt;li>使用 Redux 管理全局状态&lt;/li>
 &lt;li>基于路由的代码懒加载&lt;/li>
