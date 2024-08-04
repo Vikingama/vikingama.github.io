@@ -263,18 +263,18 @@ URLScheme
 </span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-swift data-lang=swift><span class=line><span class=cl><span class=kd>let</span> <span class=nv>wkConfig</span> <span class=p>=</span> <span class=n>WKWebViewConfiguration</span><span class=p>()</span>
 </span></span><span class=line><span class=cl><span class=kd>let</span> <span class=nv>wkUserContentController</span> <span class=p>=</span> <span class=n>WKUserContentController</span><span class=p>()</span>
 </span></span><span class=line><span class=cl><span class=cm>/**
-</span></span></span><span class=line><span class=cl><span class=cm>  Web 加载完毕后，window.webkit.messageHandlers 对象上会多出一个 getUserInfo 属性
-</span></span></span><span class=line><span class=cl><span class=cm>  可以通过调用 getUserInfo.postMessage 完成对 Native 的通信
-</span></span></span><span class=line><span class=cl><span class=cm>*/</span>
+</span></span></span><span class=line><span class=cl><span class=cm> * Web 加载完毕后，window.webkit.messageHandlers 对象上会多出一个 getUserInfo 属性
+</span></span></span><span class=line><span class=cl><span class=cm> * 可以通过调用 getUserInfo.postMessage 完成对 Native 的通信
+</span></span></span><span class=line><span class=cl><span class=cm> */</span>
 </span></span><span class=line><span class=cl><span class=n>wkUserContentController</span><span class=p>.</span><span class=n>add</span><span class=p>(</span>
 </span></span><span class=line><span class=cl>  <span class=kc>self</span> <span class=k>as</span> <span class=n>WKScriptMessageHandler</span><span class=p>,</span>
 </span></span><span class=line><span class=cl>  <span class=n>name</span><span class=p>:</span> <span class=s>&#34;getUserInfo&#34;</span>
 </span></span><span class=line><span class=cl><span class=p>)</span>
 </span></span><span class=line><span class=cl><span class=n>wkConfig</span><span class=p>.</span><span class=n>userContentController</span> <span class=p>=</span> <span class=n>wkUserContentController</span>
 </span></span><span class=line><span class=cl><span class=cm>/**
-</span></span></span><span class=line><span class=cl><span class=cm>  https://developer.apple.com/documentation/webkit/wkscriptmessagehandler/1396222-usercontentcontroller
-</span></span></span><span class=line><span class=cl><span class=cm>  重写 WKScriptMessageHandler 中的 userContentController
-</span></span></span><span class=line><span class=cl><span class=cm>*/</span>
+</span></span></span><span class=line><span class=cl><span class=cm> * https://developer.apple.com/documentation/webkit/wkscriptmessagehandler/1396222-usercontentcontroller
+</span></span></span><span class=line><span class=cl><span class=cm> * 重写 WKScriptMessageHandler 中的 userContentController
+</span></span></span><span class=line><span class=cl><span class=cm> */</span>
 </span></span><span class=line><span class=cl><span class=kd>extension</span> <span class=nc>WKWebViewWithMessageHandler</span><span class=p>:</span> <span class=n>WKScriptMessageHandler</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>  <span class=kd>func</span> <span class=nf>userContentController</span><span class=p>(</span>
 </span></span><span class=line><span class=cl>    <span class=kc>_</span> <span class=n>userContentController</span><span class=p>:</span> <span class=n>WKUserContentController</span><span class=p>,</span>
@@ -536,7 +536,7 @@ URLScheme
 </span></span><span class=line><span class=cl>      <span class=nb>window</span><span class=p>.</span><span class=nx>XiaoLanMaBridgeFromNative</span><span class=p>.</span><span class=nx>closeWebView</span><span class=p>(</span><span class=nx>JSON</span><span class=p>.</span><span class=nx>stringify</span><span class=p>(</span><span class=nx>params</span><span class=p>));</span>
 </span></span><span class=line><span class=cl>    <span class=p>}</span>
 </span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=nx>isIOS</span><span class=p>)</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl>      <span class=nb>window</span><span class=p>.</span><span class=nx>webkit</span><span class=p>.</span><span class=nx>messageHandlers</span><span class=p>.</span><span class=nx>closeWebView</span><span class=p>.</span><span class=nx>closeWebView</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>      <span class=nb>window</span><span class=p>.</span><span class=nx>webkit</span><span class=p>.</span><span class=nx>messageHandlers</span><span class=p>.</span><span class=nx>closeWebView</span><span class=p>.</span><span class=nx>postMessage</span><span class=p>(</span>
 </span></span><span class=line><span class=cl>        <span class=nx>JSON</span><span class=p>.</span><span class=nx>stringify</span><span class=p>({</span>
 </span></span><span class=line><span class=cl>          <span class=nx>data</span>: <span class=kt>params</span>
 </span></span><span class=line><span class=cl>        <span class=p>})</span>

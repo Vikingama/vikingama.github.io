@@ -38,8 +38,10 @@
 &lt;p>描述：智能财税平台，可完成商户入驻/充值流程、自由职业者/个体户的财务结算/开票流程&lt;/p>
 &lt;p>技术栈：Angular、NgZorro、RxJS、TS&lt;/p>
 &lt;ul>
+&lt;li>使用 ControlValueAccessor 封装自定义表单组件&lt;/li>
+&lt;li>使用 renderless 模式进行逻辑封装&lt;/li>
+&lt;li>使用 asyncPipe 初始化页面数据&lt;/li>
 &lt;li>负责按钮粒度的权限管理的开发&lt;/li>
-&lt;li>使用 ViewChild 进行逻辑封装&lt;/li>
 &lt;li>接入 OTLP，打通前后端链路&lt;/li>
 &lt;/ul>
 &lt;/blockquote>
@@ -47,19 +49,19 @@
 &lt;blockquote>
 &lt;p>时间：2022 年 3 月 – 2024 年 5 月&lt;/p>
 &lt;p>描述：帮助个体户/自由职业者完成签约流程&lt;/p>
-&lt;p>技术栈：Vue@2、Vite、OpenTelemetry&lt;/p>
+&lt;p>技术栈：Vue@2、Vite、Vuex、Vant&lt;/p>
 &lt;ul>
 &lt;li>接入 OTLP，打通前后端链路&lt;/li>
 &lt;li>迁移脚手架至 Vite@3&lt;/li>
 &lt;li>参与 JSBridge 开发&lt;/li>
-&lt;li>配置 ESLint&lt;/li>
+&lt;li>参与配置 ESLint&lt;/li>
 &lt;/ul>
 &lt;/blockquote>
 &lt;h3 id="lstack-混合云管平台">LStack 混合云管平台&lt;/h3>
 &lt;blockquote>
 &lt;p>时间：2020 年 5 月 – 2022 年 1 月&lt;/p>
 &lt;p>描述：面向开发者的云原生应用管理工具&lt;/p>
-&lt;p>技术栈：Vue@2、VueRouter、Vuex、ElementUI、ECharts、Lerna&lt;/p>
+&lt;p>技术栈：Vue@2、VueRouter、Vuex、ElementUI、ECharts&lt;/p>
 &lt;ul>
 &lt;li>通过 lint-staged 对暂存区文件进行格式化和校验&lt;/li>
 &lt;li>使用基于 slot 的 renderless 数据渲染方式&lt;/li>
@@ -71,7 +73,7 @@
 &lt;blockquote>
 &lt;p>时间：2019 年 7 月 – 2019 年 8 月&lt;/p>
 &lt;p>描述：供合作伙伴查询推广流量的工具&lt;/p>
-&lt;p>技术栈：React、ReactRouter、Redux、AntDesign、StyledComponents、BizCharts&lt;/p>
+&lt;p>技术栈：React、ReactRouter、Redux、StyledComponents、BizCharts&lt;/p>
 &lt;ul>
 &lt;li>使用 CSS IN JS 的样式管理&lt;/li>
 &lt;li>使用 Redux 管理全局状态&lt;/li>

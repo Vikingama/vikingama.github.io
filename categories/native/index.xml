@@ -400,18 +400,18 @@ WKUIDelegate
 &lt;pre tabindex="0" class="chroma">&lt;code class="language-swift" data-lang="swift">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">let&lt;/span> &lt;span class="nv">wkConfig&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">WKWebViewConfiguration&lt;/span>&lt;span class="p">()&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">let&lt;/span> &lt;span class="nv">wkUserContentController&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">WKUserContentController&lt;/span>&lt;span class="p">()&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm">/**
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> Web 加载完毕后，window.webkit.messageHandlers 对象上会多出一个 getUserInfo 属性
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> 可以通过调用 getUserInfo.postMessage 完成对 Native 的通信
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm">*/&lt;/span>
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * Web 加载完毕后，window.webkit.messageHandlers 对象上会多出一个 getUserInfo 属性
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * 可以通过调用 getUserInfo.postMessage 完成对 Native 的通信
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> */&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">wkUserContentController&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">add&lt;/span>&lt;span class="p">(&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kc">self&lt;/span> &lt;span class="k">as&lt;/span> &lt;span class="n">WKScriptMessageHandler&lt;/span>&lt;span class="p">,&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">name&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="s">&amp;#34;getUserInfo&amp;#34;&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">)&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">wkConfig&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">userContentController&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">wkUserContentController&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm">/**
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> https://developer.apple.com/documentation/webkit/wkscriptmessagehandler/1396222-usercontentcontroller
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> 重写 WKScriptMessageHandler 中的 userContentController
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm">*/&lt;/span>
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * https://developer.apple.com/documentation/webkit/wkscriptmessagehandler/1396222-usercontentcontroller
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * 重写 WKScriptMessageHandler 中的 userContentController
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> */&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">extension&lt;/span> &lt;span class="nc">WKWebViewWithMessageHandler&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="n">WKScriptMessageHandler&lt;/span> &lt;span class="p">{&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">func&lt;/span> &lt;span class="nf">userContentController&lt;/span>&lt;span class="p">(&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kc">_&lt;/span> &lt;span class="n">userContentController&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="n">WKUserContentController&lt;/span>&lt;span class="p">,&lt;/span>
@@ -703,7 +703,7 @@ WKUIDelegate
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">window&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">XiaoLanMaBridgeFromNative&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">closeWebView&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">JSON&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">stringify&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">params&lt;/span>&lt;span class="p">));&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nx">isIOS&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">window&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">webkit&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">messageHandlers&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">closeWebView&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">closeWebView&lt;/span>&lt;span class="p">(&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">window&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">webkit&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">messageHandlers&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">closeWebView&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">postMessage&lt;/span>&lt;span class="p">(&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">JSON&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">stringify&lt;/span>&lt;span class="p">({&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">data&lt;/span>: &lt;span class="kt">params&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">})&lt;/span>
