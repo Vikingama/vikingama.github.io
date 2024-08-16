@@ -1,0 +1,939 @@
+<!doctype html><html lang=zh-cn dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content='项目迁移终于接近尾声了，在这期间也学到不少前端工程化的知识和新的编程思路'><title>偷“师”学“艺” · Stay Hungry · Stay Foolish</title>
+<link rel=canonical href=https://vikingama.github.io/p/%E5%81%B7%E5%B8%88%E5%AD%A6%E8%89%BA/><link rel=stylesheet href=/scss/style.min.38c15d3a5c1bca30008bb625a46636d24f5deb4bf3217095e667a3abc843eaef.css><meta property='og:title' content='偷“师”学“艺”'><meta property='og:description' content='项目迁移终于接近尾声了，在这期间也学到不少前端工程化的知识和新的编程思路'><meta property='og:url' content='https://vikingama.github.io/p/%E5%81%B7%E5%B8%88%E5%AD%A6%E8%89%BA/'><meta property='og:site_name' content='馬腊咯稽'><meta property='og:type' content='article'><meta property='article:section' content='Post'><meta property='article:published_time' content='2021-07-19T00:00:00+00:00'><meta property='article:modified_time' content='2021-07-19T00:00:00+00:00'><meta property='og:image' content='https://vikingama.github.io/img/cover/engineering.png'><meta name=twitter:title content="偷“师”学“艺”"><meta name=twitter:description content="项目迁移终于接近尾声了，在这期间也学到不少前端工程化的知识和新的编程思路"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content='https://vikingama.github.io/img/cover/engineering.png'><link rel="shortcut icon" href=/favicon.ico><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><meta name=theme-color content="#ffffff"><meta name=robots content="noarchive"><div class=warning-banner>因为 GitHub 账号二次验证失败，计划迁往
+<a href=https://elementref.github.io/>新地址&rarr;</a></div></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label=切换菜单>
+<span class=hamburger-box><span class=hamburger-inner></span></span></button><header><figure class=site-avatar><a href=/><img src=/img/avatar_huae06eac29c2bc6aa7e83a685ea2f6536_13838_300x0_resize_box_3.png width=300 height=404 class=site-logo loading=lazy alt=Avatar></a></figure><div class=site-meta><h1 class=site-name><a href=/>馬腊咯稽</a></h1><h2 class=site-description>Stay Hungry · Stay Foolish</h2></div></header><ol class=menu id=main-menu><li><a href=/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg>
+<span>首页</span></a></li><li><a href=/archives/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><rect x="3" y="4" width="18" height="4" rx="2"/><path d="M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+<span>归档</span></a></li><li><a href=/search/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="10" cy="10" r="7"/><line x1="21" y1="21" x2="15" y2="15"/></svg>
+<span>搜索</span></a></li><li><a href=https://github.com/ElementRef/AboutConfig target=_blank><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-infinity" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M9.828 9.172a4 4 0 100 5.656A10 10 0 0012 12a10 10 0 012.172-2.828 4 4 0 110 5.656A10 10 0 0112 12 10 10 0 009.828 9.172"/></svg>
+<span>配置</span></a></li><li><a href=/%E5%90%AF%E5%8F%91/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M10 14a3.5 3.5.0 005 0l4-4a3.5 3.5.0 00-5-5l-.5.5"/><path d="M14 10a3.5 3.5.0 00-5 0l-4 4a3.5 3.5.0 005 5l.5-.5"/></svg>
+<span>启发</span></a></li><li><a href=/%E5%91%BD%E4%BB%A4/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-terminal" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 7l5 5-5 5"/><line x1="12" y1="19" x2="19" y2="19"/></svg>
+<span>命令</span></a></li><li><a href=/%E5%85%B3%E4%BA%8E/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="7" r="4"/><path d="M6 21v-2a4 4 0 014-4h4a4 4 0 014 4v2"/></svg>
+<span>关于</span></a></li><div class=menu-bottom-section><li id=dark-mode-toggle><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<span>深色</span></li></div></ol></aside><main class="main full-width"><article class="has-image main-article"><header class=article-header><div class=article-image><a href=/p/%E5%81%B7%E5%B8%88%E5%AD%A6%E8%89%BA/><img src=/img/cover/engineering.png loading=lazy alt=偷“师”学“艺”></a></div><div class=article-details><header class=article-category><a href=/categories/%E5%B7%A5%E7%A8%8B%E5%8C%96/>工程化</a></header><div class=article-title-wrapper><h2 class=article-title><a href=/p/%E5%81%B7%E5%B8%88%E5%AD%A6%E8%89%BA/>偷“师”学“艺”</a></h2><h3 class=article-subtitle>项目迁移终于接近尾声了，在这期间也学到不少前端工程化的知识和新的编程思路</h3></div><footer class=article-time><div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>Jul 19, 2021</time></div><div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>阅读时长：10 分钟</time></div></footer></div></header><section class=article-content><h2 id=monorepo>monorepo</h2><p>公司的主要业务是混合云管，所以除了官网这种 ToC 的项目之外，其余均是 ToB 的管理后台项目；根据具体业务分为了：容器服务、镜像管理、服务商监控、应用管理等等。这些子项目有统一的 UI 风格、相近的交互逻辑、耦合的业务逻辑；所以非常适合 monorepo 的项目管理方式。</p><p>Lerna 是前端 monorepo 比较好的解决方案，搭配 yarn 可以非常好的管理项目外部与项目之间的依赖。每个项目都是一个独立的 package，每个 package 都有自己的 workspace，可以将自己的 APIs 通过 lib 暴露并 publish 到内部 npm 仓库，这样每个 package 既是独立的项目也是其他 package 的依赖。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-json data-lang=json><span class=line><span class=cl><span class=c1>// lerna.json
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;packages&#34;</span><span class=p>:</span> <span class=p>[</span>
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;packages/@cli/*&#34;</span><span class=p>,</span> <span class=c1>// 脚手架依赖，放置 linters 规则和配置
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=s2>&#34;packages/@common/*&#34;</span><span class=p>,</span> <span class=c1>// 公共依赖，放置工具函数和组件
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=s2>&#34;packages/@project/*&#34;</span> <span class=c1>// 业务代码，放置具体的业务实现
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=p>],</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;version&#34;</span><span class=p>:</span> <span class=s2>&#34;independent&#34;</span><span class=p>,</span> <span class=c1>// 独立模式，每个 package 有独立的版本号
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=nt>&#34;useWorkspaces&#34;</span><span class=p>:</span> <span class=kc>true</span><span class=p>,</span> <span class=c1>// 启用 workspace 模式
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=nt>&#34;npmClient&#34;</span><span class=p>:</span> <span class=s2>&#34;yarn&#34;</span><span class=p>,</span> <span class=c1>// 使用 yarn 取代 npm
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=nt>&#34;command&#34;</span><span class=p>:</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;publish&#34;</span><span class=p>:</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=nt>&#34;ignoreChanges&#34;</span><span class=p>:</span> <span class=p>[</span><span class=s2>&#34;ignored-file&#34;</span><span class=p>,</span> <span class=s2>&#34;*.temp&#34;</span><span class=p>,</span> <span class=s2>&#34;*.md&#34;</span><span class=p>],</span> <span class=c1>// 不会包含在更改/发布中的文件，防止为不必要地更改发布新版本，例如修复 ReadMe 拼写错误
+</span></span></span><span class=line><span class=cl><span class=c1></span>      <span class=nt>&#34;message&#34;</span><span class=p>:</span> <span class=s2>&#34;chore(release): publish&#34;</span><span class=p>,</span> <span class=c1>// 发布新版本时，自定义的提交消息
+</span></span></span><span class=line><span class=cl><span class=c1></span>      <span class=nt>&#34;registry&#34;</span><span class=p>:</span> <span class=s2>&#34;https://npm.pkg.github.com&#34;</span><span class=p>,</span> <span class=c1>// 包发在哪里，一般是公司内部的 npm 服务器
+</span></span></span><span class=line><span class=cl><span class=c1></span>      <span class=nt>&#34;conventionalCommits&#34;</span><span class=p>:</span> <span class=kc>true</span> <span class=c1>// 自动生成 ChangeLog
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=p>},</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;bootstrap&#34;</span><span class=p>:</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=nt>&#34;ignore&#34;</span><span class=p>:</span> <span class=s2>&#34;component-*&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>      <span class=nt>&#34;npmClientArgs&#34;</span><span class=p>:</span> <span class=p>[</span><span class=s2>&#34;--no-package-lock&#34;</span><span class=p>,</span> <span class=s2>&#34;--production&#34;</span><span class=p>]</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=c1>// package.json
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;name&#34;</span><span class=p>:</span> <span class=s2>&#34;lerna&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;private&#34;</span><span class=p>:</span> <span class=kc>true</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;workspaces&#34;</span><span class=p>:</span> <span class=p>[</span>
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;packages/@cli/*&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;packages/@common/*&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;packages/@project/*&#34;</span>
+</span></span><span class=line><span class=cl>  <span class=p>],</span>
+</span></span><span class=line><span class=cl>  <span class=c1>// ...
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>Lerna 两种模式：</p><ul><li>固定模式，项目统一单个版本（所有的包使用一个版本号，Babel 使用的这种模式），版本信息保存在根目录下的 lerna.json 中；如果主版本号为 0，任何更新都将被视为不兼容更新；</li><li>独立模式，每个包的版本号是独立的（公司使用的这种模式，因为每个包是一个独立的项目、不是一个完整功能的一部分）；发包时，需要指定此次更新的粒度（修复、小版本、大版本？）。</li></ul><p>Lerna 常用命令：</p><ul><li>lerna init 创建/升级为 Lerna 仓库；<ul><li>&ndash;independent/-i 使用独立的版本控制模式</li></ul></li><li>lerna bootstrap 进入引导流程，安装所有依赖并链接交叉依赖；</li><li>lerna create [name] [loc] 创建新的包，名字为 name，位置在 loc；</li><li>lerna import [pathToRepo] 导入本地路径中的 repo 并提交 commit；</li><li>lerna exec &ndash; [command] [..args] 对每个包中执行任意命令；<ul><li>&ndash; rm -rf ./node_modules 删除每个包下的 node_modules</li></ul></li><li>lerna publish 发布自上次发布之后有更新的包（private 为 true 的除外），提示“输入新版本号”并更新 git 和 npm 上的所有包；<ul><li>&ndash;force-publish [packages] 强制发布“一个、多个（以逗号分隔）或全部（*）”软件包</li><li>&ndash;npm-tag [tagname] — 使用给定的 npm dist-tag（默认 latest）发布到 npm</li><li>&ndash;canary/-c 创建一个 canary 版本</li><li>&ndash;skip-git 不运行 git 命令</li></ul></li><li>lerna changed 检查自上次发布以来哪些软件包被修改过；</li><li>lerna clean 移除所有包的 node_modules 目录（不会移除根目录的 node_modules，即使加上 &ndash;hoist 参数）；</li><li>lerna diff [package?] 列出所有或某个软件包自上次发布以来的修改情况；</li><li>lerna info 打印本地环境信息；</li><li>lerna run [script] 在每一个包含 [script] 脚本的包中运行此 NpmScript；<ul><li>lerna run build&ndash;concurrency 5 对所有包进行打包，最大并行数为 5</li></ul></li><li>lerna list/ls 列出当前 Lerna 仓库中的所有公共软件包；<ul><li>&ndash;json 以 Array JSON 的形式输出</li><li>&ndash;ndjson 以 Newline Delimited JSON 的形式输出</li><li>&ndash;all 列出 private 为 true 的包（默认不输出）</li><li>&ndash;long 展示更多信息</li><li>&ndash;parseable 展示可解析输出，而不是列化视图</li><li>&ndash;toposort 按拓扑顺序进行排序输出</li><li>&ndash;graph 以图的形式输出</li></ul></li><li>lerna link 为所有依赖彼此的包软连接在一起。<ul><li>lerna link convert 将公用的 devDependencies 放到根目录的 package.json</li></ul></li></ul><h2 id=commit>commit</h2><p>对于需要多人维护的复杂项目，相同的代码样式和具体的提交信息是必要的；借助 husky 和 lint-staged（相似的工具还有 pretty-quick，不过只能调用 Prettier，不能调用 Lints），可以对待提交的文件进行校验、格式化，也可以对 commit message 进行约束。</p><h3 id=提交工作流钩子>提交工作流钩子</h3><ul><li>pre-commit：在提交信息前运行；它用于检查即将提交的快照；例如，检查是否有所遗漏，确保测试运行，以及核查代码；不过你可以用 git commit &ndash;no-verify 来绕过这个环节。你可以利用该钩子来检查代码风格是否一致（运行类似 lint 的程序）等；</li><li>prepare-commit-msg：在启动提交信息编辑器之前，默认信息被创建之后运行；它允许你编辑提交者所看到的默认信息。它对一般的提交来说并没有什么用；然而对那些会自动产生默认信息的提交，如提交信息模板、合并提交、压缩提交和修订提交等非常实用；</li><li>commit-msg：接收一个参数（存有当前提交信息的临时文件的路径）。可以用来在提交通过前验证项目状态或提交信息；</li><li>post-commit：在整个提交过程完成后运行；该钩子一般用于通知之类的事情。</li></ul><h3 id=workspace-信息>workspace 信息</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=kr>const</span> <span class=p>{</span> <span class=nx>execSync</span> <span class=p>}</span> <span class=o>=</span> <span class=nx>require</span><span class=p>(</span><span class=s1>&#39;child_process&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=c1>// 将 yarn workspaces info 输出为对象
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kr>const</span> <span class=nx>getWorkspacesInfo</span> <span class=o>=</span> <span class=p>()</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=kd>let</span> <span class=nx>temp</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=k>try</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=kr>const</span> <span class=nx>yarnStdout</span> <span class=o>=</span> <span class=nx>execSync</span><span class=p>(</span><span class=s1>&#39;yarn workspaces info&#39;</span><span class=p>,</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=nx>encoding</span><span class=o>:</span> <span class=s1>&#39;utf8&#39;</span>
+</span></span><span class=line><span class=cl>    <span class=p>})</span>
+</span></span><span class=line><span class=cl>      <span class=p>.</span><span class=nx>replace</span><span class=p>(</span><span class=sr>/^yarn workspaces.*$/m</span><span class=p>,</span> <span class=s1>&#39;&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>      <span class=p>.</span><span class=nx>replace</span><span class=p>(</span><span class=sr>/^Done.*$/m</span><span class=p>,</span> <span class=s1>&#39;&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>      <span class=p>.</span><span class=nx>replace</span><span class=p>(</span><span class=sr>/\n/g</span><span class=p>,</span> <span class=s1>&#39;&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=nx>temp</span> <span class=o>=</span> <span class=nx>JSON</span><span class=p>.</span><span class=nx>parse</span><span class=p>(</span><span class=nx>yarnStdout</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span> <span class=k>catch</span> <span class=p>(</span><span class=nx>error</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>throw</span> <span class=k>new</span> <span class=nb>Error</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>      <span class=sb>`执行 yarn workspaces info 命令时出错，具体如下：\n</span><span class=si>${</span><span class=nx>error</span><span class=si>}</span><span class=sb>`</span>
+</span></span><span class=line><span class=cl>    <span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=k>if</span> <span class=p>(</span><span class=nb>Object</span><span class=p>.</span><span class=nx>prototype</span><span class=p>.</span><span class=nx>toString</span><span class=p>.</span><span class=nx>call</span><span class=p>(</span><span class=nx>temp</span><span class=p>)</span> <span class=o>!==</span> <span class=s1>&#39;[object Object]&#39;</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=p>{};</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=nx>temp</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>};</span>
+</span></span><span class=line><span class=cl><span class=kr>const</span> <span class=nx>getWorkspaces</span> <span class=o>=</span> <span class=p>()</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=kd>let</span> <span class=nx>temp</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=k>try</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>temp</span> <span class=o>=</span> <span class=nx>getWorkspacesInfo</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span> <span class=k>catch</span> <span class=p>(</span><span class=nx>error</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>throw</span> <span class=k>new</span> <span class=nb>Error</span><span class=p>(</span><span class=sb>`获取不到 workspaces 信息。\n</span><span class=si>${</span><span class=nx>error</span><span class=si>}</span><span class=sb>`</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=k>if</span> <span class=p>(</span><span class=nb>Object</span><span class=p>.</span><span class=nx>prototype</span><span class=p>.</span><span class=nx>toString</span><span class=p>.</span><span class=nx>call</span><span class=p>(</span><span class=nx>temp</span><span class=p>)</span> <span class=o>!==</span> <span class=s1>&#39;[object Object]&#39;</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=p>[];</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=nb>Object</span><span class=p>.</span><span class=nx>keys</span><span class=p>(</span><span class=nx>temp</span><span class=p>).</span><span class=nx>map</span><span class=p>(</span><span class=nx>name</span> <span class=p>=&gt;</span> <span class=p>({</span> <span class=nx>name</span><span class=p>,</span> <span class=p>...</span><span class=nx>temp</span><span class=p>[</span><span class=nx>name</span><span class=p>]</span> <span class=p>}));</span>
+</span></span><span class=line><span class=cl><span class=p>};</span>
+</span></span><span class=line><span class=cl><span class=kr>const</span> <span class=nx>getWorkspacesName</span> <span class=o>=</span> <span class=p>()</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=kd>let</span> <span class=nx>temp</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=k>try</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>temp</span> <span class=o>=</span> <span class=nx>getWorkspacesInfo</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span> <span class=k>catch</span> <span class=p>(</span><span class=nx>error</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>throw</span> <span class=k>new</span> <span class=nb>Error</span><span class=p>(</span><span class=sb>`获取不到 workspaces name 信息。\n</span><span class=si>${</span><span class=nx>error</span><span class=si>}</span><span class=sb>`</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=k>if</span> <span class=p>(</span><span class=nb>Object</span><span class=p>.</span><span class=nx>prototype</span><span class=p>.</span><span class=nx>toString</span><span class=p>.</span><span class=nx>call</span><span class=p>(</span><span class=nx>temp</span><span class=p>)</span> <span class=o>!==</span> <span class=s1>&#39;[object Object]&#39;</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=p>[];</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=nb>Object</span><span class=p>.</span><span class=nx>keys</span><span class=p>(</span><span class=nx>temp</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>};</span>
+</span></span><span class=line><span class=cl><span class=nx>exports</span><span class=p>.</span><span class=nx>getWorkspaces</span> <span class=o>=</span> <span class=nx>getWorkspaces</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=nx>exports</span><span class=p>.</span><span class=nx>getWorkspacesInfo</span> <span class=o>=</span> <span class=nx>getWorkspacesInfo</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=nx>exports</span><span class=p>.</span><span class=nx>getWorkspacesName</span> <span class=o>=</span> <span class=nx>getWorkspacesName</span><span class=p>;</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=git-信息>git 信息</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=kr>const</span> <span class=p>{</span> <span class=nx>execSync</span> <span class=p>}</span> <span class=o>=</span> <span class=nx>require</span><span class=p>(</span><span class=s1>&#39;child_process&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=kr>const</span> <span class=p>{</span> <span class=nx>getWorkspacesName</span> <span class=p>}</span> <span class=o>=</span> <span class=nx>require</span><span class=p>(</span><span class=s1>&#39;./workspace&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=c1>// 获取当前所在 git 分支
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kr>const</span> <span class=nx>getCurrentBranch</span> <span class=o>=</span> <span class=p>()</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=k>try</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=kr>const</span> <span class=nx>gitStatus</span> <span class=o>=</span> <span class=nx>execSync</span><span class=p>(</span><span class=s1>&#39;git status&#39;</span><span class=p>,</span> <span class=p>{</span> <span class=nx>encoding</span><span class=o>:</span> <span class=s1>&#39;utf8&#39;</span> <span class=p>});</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=nx>gitStatus</span><span class=p>.</span><span class=nx>split</span><span class=p>(</span><span class=s1>&#39;\n&#39;</span><span class=p>)[</span><span class=mi>0</span><span class=p>].</span><span class=nx>replace</span><span class=p>(</span><span class=s1>&#39;On branch &#39;</span><span class=p>,</span> <span class=s1>&#39;&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span> <span class=k>catch</span> <span class=p>(</span><span class=nx>error</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>throw</span> <span class=k>new</span> <span class=nb>Error</span><span class=p>(</span><span class=sb>`执行 git 命令时出错，具体如下：\n</span><span class=si>${</span><span class=nx>error</span><span class=p>.</span><span class=nx>toString</span><span class=p>()</span><span class=si>}</span><span class=sb>`</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>};</span>
+</span></span><span class=line><span class=cl><span class=kr>const</span> <span class=nx>getCommitScopes</span> <span class=o>=</span> <span class=p>()</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>temp</span> <span class=o>=</span> <span class=nx>getWorkspacesName</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>  <span class=k>if</span> <span class=p>(</span><span class=nb>Array</span><span class=p>.</span><span class=nx>isArray</span><span class=p>(</span><span class=nx>temp</span><span class=p>))</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=nx>temp</span><span class=p>.</span><span class=nx>map</span><span class=p>(</span><span class=nx>name</span> <span class=p>=&gt;</span>
+</span></span><span class=line><span class=cl>      <span class=nx>name</span><span class=p>.</span><span class=nx>charAt</span><span class=p>(</span><span class=mi>0</span><span class=p>)</span> <span class=o>===</span> <span class=s1>&#39;@&#39;</span> <span class=o>?</span> <span class=nx>name</span><span class=p>.</span><span class=nx>split</span><span class=p>(</span><span class=s1>&#39;/&#39;</span><span class=p>)[</span><span class=mi>1</span><span class=p>]</span> <span class=o>:</span> <span class=nx>name</span>
+</span></span><span class=line><span class=cl>    <span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=p>[];</span>
+</span></span><span class=line><span class=cl><span class=p>};</span>
+</span></span><span class=line><span class=cl><span class=nx>exports</span><span class=p>.</span><span class=nx>getCurrentBranch</span> <span class=o>=</span> <span class=nx>getCurrentBranch</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=nx>exports</span><span class=p>.</span><span class=nx>getCommitScopes</span> <span class=o>=</span> <span class=nx>getCommitScopes</span><span class=p>;</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=stylelint-配置>stylelint 配置</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=nx>module</span><span class=p>.</span><span class=nx>exports</span> <span class=o>=</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>defaultSeverity</span><span class=o>:</span> <span class=s1>&#39;error&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=kr>extends</span><span class=o>:</span> <span class=p>[</span>
+</span></span><span class=line><span class=cl>    <span class=s1>&#39;stylelint-config-standard&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=s1>&#39;stylelint-config-rational-order&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=s1>&#39;stylelint-config-prettier&#39;</span>
+</span></span><span class=line><span class=cl>  <span class=p>],</span>
+</span></span><span class=line><span class=cl>  <span class=nx>ignoreDisables</span><span class=o>:</span> <span class=kc>true</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nx>ignoreFiles</span><span class=o>:</span> <span class=p>[</span><span class=s1>&#39;**/*.json&#39;</span><span class=p>],</span>
+</span></span><span class=line><span class=cl>  <span class=nx>plugins</span><span class=o>:</span> <span class=p>[</span>
+</span></span><span class=line><span class=cl>    <span class=s1>&#39;stylelint-declaration-block-no-ignored-properties&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=s1>&#39;stylelint-declaration-strict-value&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=s1>&#39;stylelint-scss&#39;</span>
+</span></span><span class=line><span class=cl>  <span class=p>],</span>
+</span></span><span class=line><span class=cl>  <span class=nx>rules</span><span class=o>:</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=s1>&#39;at-rule-no-unknown&#39;</span><span class=o>:</span> <span class=kc>null</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=s1>&#39;scss/at-rule-no-unknown&#39;</span><span class=o>:</span> <span class=kc>true</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=s1>&#39;plugin/declaration-block-no-ignored-properties&#39;</span><span class=o>:</span> <span class=kc>true</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=s1>&#39;scale-unlimited/declaration-strict-value&#39;</span><span class=o>:</span> <span class=p>[</span>
+</span></span><span class=line><span class=cl>      <span class=p>[</span><span class=s1>&#39;/color$/&#39;</span><span class=p>,</span> <span class=s1>&#39;z-index&#39;</span><span class=p>],</span>
+</span></span><span class=line><span class=cl>      <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=nx>ignoreKeywords</span><span class=o>:</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>          <span class=s1>&#39;/color$/&#39;</span><span class=o>:</span> <span class=p>[</span><span class=s1>&#39;currentColor&#39;</span><span class=p>,</span> <span class=s1>&#39;inherit&#39;</span><span class=p>,</span> <span class=s1>&#39;transparent&#39;</span><span class=p>],</span>
+</span></span><span class=line><span class=cl>          <span class=s1>&#39;z-index&#39;</span><span class=o>:</span> <span class=p>[</span><span class=s1>&#39;auto&#39;</span><span class=p>]</span>
+</span></span><span class=line><span class=cl>        <span class=p>},</span>
+</span></span><span class=line><span class=cl>        <span class=nx>disableFix</span><span class=o>:</span> <span class=kc>true</span>
+</span></span><span class=line><span class=cl>      <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=p>]</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>};</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=eslint-配置>eslint 配置</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span><span class=lnt>55
+</span><span class=lnt>56
+</span><span class=lnt>57
+</span><span class=lnt>58
+</span><span class=lnt>59
+</span><span class=lnt>60
+</span><span class=lnt>61
+</span><span class=lnt>62
+</span><span class=lnt>63
+</span><span class=lnt>64
+</span><span class=lnt>65
+</span><span class=lnt>66
+</span><span class=lnt>67
+</span><span class=lnt>68
+</span><span class=lnt>69
+</span><span class=lnt>70
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=nx>module</span><span class=p>.</span><span class=nx>exports</span> <span class=o>=</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>globals</span><span class=o>:</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>__PRERENDER__INJECTED__</span><span class=o>:</span> <span class=s1>&#39;readonly&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nx>__PROJECT__</span><span class=o>:</span> <span class=s1>&#39;readonly&#39;</span>
+</span></span><span class=line><span class=cl>  <span class=p>},</span>
+</span></span><span class=line><span class=cl>  <span class=nx>env</span><span class=o>:</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>browser</span><span class=o>:</span> <span class=kc>true</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nx>node</span><span class=o>:</span> <span class=kc>true</span>
+</span></span><span class=line><span class=cl>  <span class=p>},</span>
+</span></span><span class=line><span class=cl>  <span class=kr>extends</span><span class=o>:</span> <span class=p>[</span>
+</span></span><span class=line><span class=cl>    <span class=s1>&#39;airbnb-base&#39;</span><span class=p>,</span> <span class=c1>// 剔除 react 规则 的 eslint-config-airbnb
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=s1>&#39;plugin:vue/essential&#39;</span><span class=p>,</span> <span class=c1>// vue 2.x 规则
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=s1>&#39;plugin:promise/recommended&#39;</span><span class=p>,</span> <span class=c1>// promise 规则
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=s1>&#39;plugin:markdown/recommended&#39;</span><span class=p>,</span> <span class=c1>// markdown 规则
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=s1>&#39;plugin:prettier/recommended&#39;</span> <span class=c1>// prettier 冲突规则
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=p>],</span>
+</span></span><span class=line><span class=cl>  <span class=nx>plugins</span><span class=o>:</span> <span class=p>[</span><span class=s1>&#39;html&#39;</span><span class=p>],</span>
+</span></span><span class=line><span class=cl>  <span class=nx>root</span><span class=o>:</span> <span class=kc>true</span><span class=p>,</span> <span class=c1>// 根配置
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=nx>rules</span><span class=o>:</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=s1>&#39;import/prefer-default-export&#39;</span><span class=o>:</span> <span class=s1>&#39;off&#39;</span><span class=p>,</span> <span class=c1>// 不强制使用默认导出
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=s1>&#39;no-param-reassign&#39;</span><span class=o>:</span> <span class=p>[</span>
+</span></span><span class=line><span class=cl>      <span class=s1>&#39;error&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>      <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=nx>props</span><span class=o>:</span> <span class=kc>false</span> <span class=c1>// 禁止对函数参数进行重新赋值，形参属性除外
+</span></span></span><span class=line><span class=cl><span class=c1></span>      <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=p>],</span>
+</span></span><span class=line><span class=cl>    <span class=s1>&#39;no-plusplus&#39;</span><span class=o>:</span> <span class=p>[</span>
+</span></span><span class=line><span class=cl>      <span class=s1>&#39;error&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>      <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=nx>allowForLoopAfterthoughts</span><span class=o>:</span> <span class=kc>true</span> <span class=c1>// 允许在 for 循环中使用 ++
+</span></span></span><span class=line><span class=cl><span class=c1></span>      <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=p>],</span>
+</span></span><span class=line><span class=cl>    <span class=s1>&#39;no-restricted-syntax&#39;</span><span class=o>:</span> <span class=p>[</span><span class=s1>&#39;error&#39;</span><span class=p>,</span> <span class=s1>&#39;WithStatement&#39;</span><span class=p>],</span> <span class=c1>// 可以使用函数表达式和 in 操作符号，不能用 with
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=s1>&#39;no-shadow&#39;</span><span class=o>:</span> <span class=p>[</span>
+</span></span><span class=line><span class=cl>      <span class=s1>&#39;error&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>      <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=nx>allow</span><span class=o>:</span> <span class=p>[</span><span class=s1>&#39;state&#39;</span><span class=p>,</span> <span class=s1>&#39;series&#39;</span><span class=p>]</span> <span class=c1>// 禁止变量声明与外层作用域的变量同名
+</span></span></span><span class=line><span class=cl><span class=c1></span>      <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=p>],</span>
+</span></span><span class=line><span class=cl>    <span class=s1>&#39;no-underscore-dangle&#39;</span><span class=o>:</span> <span class=s1>&#39;off&#39;</span><span class=p>,</span> <span class=c1>// 标识符中可以有下划线
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=s1>&#39;no-unused-expressions&#39;</span><span class=o>:</span> <span class=p>[</span>
+</span></span><span class=line><span class=cl>      <span class=s1>&#39;error&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>      <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=nx>allowShortCircuit</span><span class=o>:</span> <span class=kc>true</span> <span class=c1>// 允许在表达式中使用逻辑短路求值
+</span></span></span><span class=line><span class=cl><span class=c1></span>      <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=p>],</span>
+</span></span><span class=line><span class=cl>    <span class=s1>&#39;no-use-before-define&#39;</span><span class=o>:</span> <span class=p>[</span>
+</span></span><span class=line><span class=cl>      <span class=s1>&#39;error&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>      <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=nx>functions</span><span class=o>:</span> <span class=kc>false</span> <span class=c1>// 禁止在变量定义之前使用它们，函数声明除外
+</span></span></span><span class=line><span class=cl><span class=c1></span>      <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=p>],</span>
+</span></span><span class=line><span class=cl>    <span class=s1>&#39;prefer-destructuring&#39;</span><span class=o>:</span> <span class=p>[</span>
+</span></span><span class=line><span class=cl>      <span class=s1>&#39;error&#39;</span><span class=p>,</span> <span class=c1>// 不强制使用数组解构
+</span></span></span><span class=line><span class=cl><span class=c1></span>      <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=nx>array</span><span class=o>:</span> <span class=kc>false</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=nx>object</span><span class=o>:</span> <span class=kc>true</span>
+</span></span><span class=line><span class=cl>      <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=p>],</span>
+</span></span><span class=line><span class=cl>    <span class=s1>&#39;promise/always-return&#39;</span><span class=o>:</span> <span class=s1>&#39;off&#39;</span><span class=p>,</span> <span class=c1>// then 方法可以没有返回值
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=s1>&#39;promise/catch-or-return&#39;</span><span class=o>:</span> <span class=p>[</span>
+</span></span><span class=line><span class=cl>      <span class=s1>&#39;error&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>      <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=nx>allowFinally</span><span class=o>:</span> <span class=kc>true</span> <span class=c1>// 允许使用 finally
+</span></span></span><span class=line><span class=cl><span class=c1></span>      <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=p>],</span>
+</span></span><span class=line><span class=cl>    <span class=s1>&#39;vue/require-default-prop&#39;</span><span class=o>:</span> <span class=s1>&#39;off&#39;</span><span class=p>,</span> <span class=c1>// 不要求 prop 有默认值
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=s1>&#39;vue/require-prop-types&#39;</span><span class=o>:</span> <span class=s1>&#39;off&#39;</span> <span class=c1>// 不要求必须规定 prop 类型
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>};</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=prettier-配置>prettier 配置</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-json data-lang=json><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;arrowParens&#34;</span><span class=p>:</span> <span class=s2>&#34;avoid&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;bracketSpacing&#34;</span><span class=p>:</span> <span class=kc>true</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;embeddedLanguageFormatting&#34;</span><span class=p>:</span> <span class=s2>&#34;auto&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;endOfLine&#34;</span><span class=p>:</span> <span class=s2>&#34;lf&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;htmlWhitespaceSensitivity&#34;</span><span class=p>:</span> <span class=s2>&#34;strict&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;jsxBracketSameLine&#34;</span><span class=p>:</span> <span class=kc>true</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;jsxSingleQuote&#34;</span><span class=p>:</span> <span class=kc>true</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;printWidth&#34;</span><span class=p>:</span> <span class=mi>120</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;proseWrap&#34;</span><span class=p>:</span> <span class=s2>&#34;preserve&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;quoteProps&#34;</span><span class=p>:</span> <span class=s2>&#34;consistent&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;semi&#34;</span><span class=p>:</span> <span class=kc>false</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;singleQuote&#34;</span><span class=p>:</span> <span class=kc>true</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;tabWidth&#34;</span><span class=p>:</span> <span class=mi>2</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;trailingComma&#34;</span><span class=p>:</span> <span class=s2>&#34;es5&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;useTabs&#34;</span><span class=p>:</span> <span class=kc>false</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;vueIndentScriptAndStyle&#34;</span><span class=p>:</span> <span class=kc>true</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=husky-配置>husky 配置</h3><p>.husky/commit-msg 钩子：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=cp>#!/bin/sh
+</span></span></span><span class=line><span class=cl><span class=cp></span>. <span class=s2>&#34;</span><span class=k>$(</span>dirname <span class=s2>&#34;</span><span class=nv>$0</span><span class=s2>&#34;</span><span class=k>)</span><span class=s2>/_/husky.sh&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>npx --no-install commitlint --edit <span class=s2>&#34;</span><span class=nv>$1</span><span class=s2>&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><p>.husky/pre-commit 钩子：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=cp>#!/bin/sh
+</span></span></span><span class=line><span class=cl><span class=cp></span>. <span class=s2>&#34;</span><span class=k>$(</span>dirname <span class=s2>&#34;</span><span class=nv>$0</span><span class=s2>&#34;</span><span class=k>)</span><span class=s2>/_/husky.sh&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>npx lint-staged
+</span></span></code></pre></td></tr></table></div></div><h3 id=commitlint-配置>commitlint 配置</h3><p>commitlint.rules:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=kd>function</span> <span class=nx>customSubjectActionEnum</span><span class=p>({</span> <span class=nx>subject</span> <span class=p>},</span> <span class=nx>when</span> <span class=o>=</span> <span class=s1>&#39;never&#39;</span><span class=p>,</span> <span class=nx>value</span> <span class=o>=</span> <span class=p>[])</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>always</span> <span class=o>=</span> <span class=nx>when</span> <span class=o>===</span> <span class=s1>&#39;always&#39;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=k>if</span> <span class=p>(</span><span class=o>!</span><span class=nx>always</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=p>[</span><span class=kc>true</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=k>if</span> <span class=p>(</span>
+</span></span><span class=line><span class=cl>    <span class=k>typeof</span> <span class=nx>subject</span> <span class=o>!==</span> <span class=s1>&#39;string&#39;</span> <span class=o>||</span>
+</span></span><span class=line><span class=cl>    <span class=p>(</span><span class=k>typeof</span> <span class=nx>subject</span> <span class=o>===</span> <span class=s1>&#39;string&#39;</span> <span class=o>&amp;&amp;</span> <span class=nx>subject</span><span class=p>.</span><span class=nx>length</span> <span class=o>===</span> <span class=mi>0</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>  <span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=p>[</span><span class=kc>false</span><span class=p>,</span> <span class=sb>`提交的简要描述不能为空`</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>action</span> <span class=o>=</span> <span class=nx>subject</span><span class=p>.</span><span class=nx>slice</span><span class=p>(</span><span class=mi>0</span><span class=p>,</span> <span class=mi>2</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=k>if</span> <span class=p>(</span><span class=o>!</span><span class=nx>value</span><span class=p>.</span><span class=nx>find</span><span class=p>(</span><span class=nx>item</span> <span class=p>=&gt;</span> <span class=nx>action</span> <span class=o>===</span> <span class=nx>item</span><span class=p>))</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=p>[</span>
+</span></span><span class=line><span class=cl>      <span class=kc>false</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>      <span class=sb>`提交的简要描述应该以中文动词加一个空格起头，动词可选值为 [</span><span class=si>${</span><span class=nx>value</span><span class=si>}</span><span class=sb>]，当前值为 &#39;</span><span class=si>${</span><span class=nx>action</span><span class=si>}</span><span class=sb>&#39;`</span>
+</span></span><span class=line><span class=cl>    <span class=p>];</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=k>if</span> <span class=p>(</span><span class=o>!</span><span class=nx>subject</span><span class=p>.</span><span class=nx>startsWith</span><span class=p>(</span><span class=sb>`</span><span class=si>${</span><span class=nx>action</span><span class=si>}</span><span class=sb> `</span><span class=p>)</span> <span class=o>||</span> <span class=nx>subject</span><span class=p>.</span><span class=nx>slice</span><span class=p>(</span><span class=mi>3</span><span class=p>,</span> <span class=mi>4</span><span class=p>)</span> <span class=o>===</span> <span class=s1>&#39; &#39;</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=p>[</span><span class=kc>false</span><span class=p>,</span> <span class=sb>`提交的简要描述中动词后需且仅需添加一个空格`</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=p>[</span><span class=kc>true</span><span class=p>];</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=kd>function</span> <span class=nx>customScopeEnum</span><span class=p>({</span> <span class=nx>scope</span> <span class=p>},</span> <span class=nx>when</span> <span class=o>=</span> <span class=s1>&#39;never&#39;</span><span class=p>,</span> <span class=nx>value</span> <span class=o>=</span> <span class=p>[])</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>always</span> <span class=o>=</span> <span class=nx>when</span> <span class=o>===</span> <span class=s1>&#39;always&#39;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=k>if</span> <span class=p>(</span><span class=o>!</span><span class=nx>always</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=p>[</span><span class=kc>true</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=p>[</span>
+</span></span><span class=line><span class=cl>    <span class=nx>value</span><span class=p>.</span><span class=nx>find</span><span class=p>(</span><span class=nx>item</span> <span class=p>=&gt;</span> <span class=nx>scope</span> <span class=o>===</span> <span class=nx>item</span><span class=p>),</span>
+</span></span><span class=line><span class=cl>    <span class=sb>`scope 必须为 [</span><span class=si>${</span><span class=nx>value</span><span class=si>}</span><span class=sb>] 其中之一，当前为 </span><span class=si>${</span><span class=nx>scope</span><span class=si>}</span><span class=sb>`</span>
+</span></span><span class=line><span class=cl>  <span class=p>];</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=nx>module</span><span class=p>.</span><span class=nx>exports</span> <span class=o>=</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=s1>&#39;custom-subject-action-enum&#39;</span><span class=o>:</span> <span class=nx>customSubjectActionEnum</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=s1>&#39;custom-scope-enum&#39;</span><span class=o>:</span> <span class=nx>customScopeEnum</span>
+</span></span><span class=line><span class=cl><span class=p>};</span>
+</span></span></code></pre></td></tr></table></div></div><p>commitlint.config:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span><span class=lnt>55
+</span><span class=lnt>56
+</span><span class=lnt>57
+</span><span class=lnt>58
+</span><span class=lnt>59
+</span><span class=lnt>60
+</span><span class=lnt>61
+</span><span class=lnt>62
+</span><span class=lnt>63
+</span><span class=lnt>64
+</span><span class=lnt>65
+</span><span class=lnt>66
+</span><span class=lnt>67
+</span><span class=lnt>68
+</span><span class=lnt>69
+</span><span class=lnt>70
+</span><span class=lnt>71
+</span><span class=lnt>72
+</span><span class=lnt>73
+</span><span class=lnt>74
+</span><span class=lnt>75
+</span><span class=lnt>76
+</span><span class=lnt>77
+</span><span class=lnt>78
+</span><span class=lnt>79
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=kr>const</span> <span class=p>{</span> <span class=nx>getCommitScopes</span> <span class=p>}</span> <span class=o>=</span> <span class=nx>require</span><span class=p>(</span><span class=s1>&#39;./git&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=kr>const</span> <span class=nx>rules</span> <span class=o>=</span> <span class=nx>require</span><span class=p>(</span><span class=s1>&#39;./commitlint.rules&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=kr>const</span> <span class=nx>commitScopes</span> <span class=o>=</span> <span class=nx>getCommitScopes</span><span class=p>();</span>
+</span></span><span class=line><span class=cl><span class=cm>/*
+</span></span></span><span class=line><span class=cl><span class=cm> * type(scope?): subject
+</span></span></span><span class=line><span class=cl><span class=cm> * body?
+</span></span></span><span class=line><span class=cl><span class=cm> * footer?
+</span></span></span><span class=line><span class=cl><span class=cm> */</span>
+</span></span><span class=line><span class=cl><span class=nx>module</span><span class=p>.</span><span class=nx>exports</span> <span class=o>=</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=kr>extends</span><span class=o>:</span> <span class=p>[</span><span class=s1>&#39;@commitlint/config-conventional&#39;</span><span class=p>],</span>
+</span></span><span class=line><span class=cl>  <span class=nx>plugins</span><span class=o>:</span> <span class=p>[</span>
+</span></span><span class=line><span class=cl>    <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=nx>rules</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=p>],</span>
+</span></span><span class=line><span class=cl>  <span class=cm>/*
+</span></span></span><span class=line><span class=cl><span class=cm>   * Level-[0.1.2]: 0-disables、1-warning、2-error
+</span></span></span><span class=line><span class=cl><span class=cm>   * Applicable-always|never: never-inverts the rule
+</span></span></span><span class=line><span class=cl><span class=cm>   * Value: value to use for this rule
+</span></span></span><span class=line><span class=cl><span class=cm>   */</span>
+</span></span><span class=line><span class=cl>  <span class=nx>rules</span><span class=o>:</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=s1>&#39;body-full-stop&#39;</span><span class=o>:</span> <span class=p>[</span><span class=mi>0</span><span class=p>],</span>
+</span></span><span class=line><span class=cl>    <span class=s1>&#39;body-leading-blank&#39;</span><span class=o>:</span> <span class=p>[</span><span class=mi>2</span><span class=p>,</span> <span class=s1>&#39;always&#39;</span><span class=p>],</span>
+</span></span><span class=line><span class=cl>    <span class=s1>&#39;body-empty&#39;</span><span class=o>:</span> <span class=p>[</span><span class=mi>0</span><span class=p>],</span>
+</span></span><span class=line><span class=cl>    <span class=s1>&#39;body-max-length&#39;</span><span class=o>:</span> <span class=p>[</span><span class=mi>2</span><span class=p>,</span> <span class=s1>&#39;always&#39;</span><span class=p>,</span> <span class=mi>144</span><span class=p>],</span>
+</span></span><span class=line><span class=cl>    <span class=s1>&#39;body-max-line-length&#39;</span><span class=o>:</span> <span class=p>[</span><span class=mi>0</span><span class=p>],</span>
+</span></span><span class=line><span class=cl>    <span class=s1>&#39;body-min-length&#39;</span><span class=o>:</span> <span class=p>[</span><span class=mi>0</span><span class=p>],</span>
+</span></span><span class=line><span class=cl>    <span class=s1>&#39;body-case&#39;</span><span class=o>:</span> <span class=p>[</span><span class=mi>0</span><span class=p>],</span>
+</span></span><span class=line><span class=cl>    <span class=s1>&#39;footer-leading-blank&#39;</span><span class=o>:</span> <span class=p>[</span><span class=mi>2</span><span class=p>,</span> <span class=s1>&#39;always&#39;</span><span class=p>],</span>
+</span></span><span class=line><span class=cl>    <span class=s1>&#39;footer-empty&#39;</span><span class=o>:</span> <span class=p>[</span><span class=mi>0</span><span class=p>],</span>
+</span></span><span class=line><span class=cl>    <span class=s1>&#39;footer-max-length&#39;</span><span class=o>:</span> <span class=p>[</span><span class=mi>0</span><span class=p>],</span>
+</span></span><span class=line><span class=cl>    <span class=s1>&#39;footer-max-line-length&#39;</span><span class=o>:</span> <span class=p>[</span><span class=mi>2</span><span class=p>,</span> <span class=s1>&#39;always&#39;</span><span class=p>,</span> <span class=mi>1</span><span class=p>],</span>
+</span></span><span class=line><span class=cl>    <span class=s1>&#39;footer-min-length&#39;</span><span class=o>:</span> <span class=p>[</span><span class=mi>0</span><span class=p>],</span>
+</span></span><span class=line><span class=cl>    <span class=s1>&#39;header-case&#39;</span><span class=o>:</span> <span class=p>[</span><span class=mi>0</span><span class=p>],</span>
+</span></span><span class=line><span class=cl>    <span class=s1>&#39;header-full-stop&#39;</span><span class=o>:</span> <span class=p>[</span><span class=mi>0</span><span class=p>],</span>
+</span></span><span class=line><span class=cl>    <span class=s1>&#39;header-max-length&#39;</span><span class=o>:</span> <span class=p>[</span><span class=mi>0</span><span class=p>],</span>
+</span></span><span class=line><span class=cl>    <span class=s1>&#39;header-min-length&#39;</span><span class=o>:</span> <span class=p>[</span><span class=mi>0</span><span class=p>],</span>
+</span></span><span class=line><span class=cl>    <span class=s1>&#39;references-empty&#39;</span><span class=o>:</span> <span class=p>[</span><span class=mi>0</span><span class=p>],</span>
+</span></span><span class=line><span class=cl>    <span class=s1>&#39;scope-enum&#39;</span><span class=o>:</span> <span class=p>[</span><span class=mi>0</span><span class=p>],</span>
+</span></span><span class=line><span class=cl>    <span class=s1>&#39;scope-case&#39;</span><span class=o>:</span> <span class=p>[</span><span class=mi>2</span><span class=p>,</span> <span class=s1>&#39;always&#39;</span><span class=p>,</span> <span class=s1>&#39;lower-case&#39;</span><span class=p>],</span>
+</span></span><span class=line><span class=cl>    <span class=s1>&#39;scope-empty&#39;</span><span class=o>:</span> <span class=p>[</span><span class=mi>2</span><span class=p>,</span> <span class=s1>&#39;never&#39;</span><span class=p>],</span>
+</span></span><span class=line><span class=cl>    <span class=s1>&#39;scope-max-length&#39;</span><span class=o>:</span> <span class=p>[</span><span class=mi>0</span><span class=p>],</span>
+</span></span><span class=line><span class=cl>    <span class=s1>&#39;scope-min-length&#39;</span><span class=o>:</span> <span class=p>[</span><span class=mi>0</span><span class=p>],</span>
+</span></span><span class=line><span class=cl>    <span class=s1>&#39;subject-case&#39;</span><span class=o>:</span> <span class=p>[</span><span class=mi>0</span><span class=p>],</span>
+</span></span><span class=line><span class=cl>    <span class=s1>&#39;subject-empty&#39;</span><span class=o>:</span> <span class=p>[</span><span class=mi>2</span><span class=p>,</span> <span class=s1>&#39;never&#39;</span><span class=p>],</span>
+</span></span><span class=line><span class=cl>    <span class=s1>&#39;subject-full-stop&#39;</span><span class=o>:</span> <span class=p>[</span><span class=mi>0</span><span class=p>],</span>
+</span></span><span class=line><span class=cl>    <span class=s1>&#39;subject-max-length&#39;</span><span class=o>:</span> <span class=p>[</span><span class=mi>0</span><span class=p>],</span>
+</span></span><span class=line><span class=cl>    <span class=s1>&#39;subject-min-length&#39;</span><span class=o>:</span> <span class=p>[</span><span class=mi>2</span><span class=p>,</span> <span class=s1>&#39;always&#39;</span><span class=p>,</span> <span class=mi>5</span><span class=p>],</span>
+</span></span><span class=line><span class=cl>    <span class=s1>&#39;type-enum&#39;</span><span class=o>:</span> <span class=p>[</span>
+</span></span><span class=line><span class=cl>      <span class=mi>2</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>      <span class=s1>&#39;always&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>      <span class=p>[</span><span class=s1>&#39;build&#39;</span><span class=p>,</span> <span class=s1>&#39;ci&#39;</span><span class=p>,</span> <span class=s1>&#39;feat&#39;</span><span class=p>,</span> <span class=s1>&#39;fix&#39;</span><span class=p>,</span> <span class=s1>&#39;st&#39;</span><span class=p>,</span> <span class=s1>&#39;sit&#39;</span><span class=p>,</span> <span class=s1>&#39;style&#39;</span><span class=p>,</span> <span class=s1>&#39;version&#39;</span><span class=p>]</span>
+</span></span><span class=line><span class=cl>    <span class=p>],</span>
+</span></span><span class=line><span class=cl>    <span class=s1>&#39;type-case&#39;</span><span class=o>:</span> <span class=p>[</span><span class=mi>2</span><span class=p>,</span> <span class=s1>&#39;always&#39;</span><span class=p>,</span> <span class=s1>&#39;lower-case&#39;</span><span class=p>],</span>
+</span></span><span class=line><span class=cl>    <span class=s1>&#39;type-empty&#39;</span><span class=o>:</span> <span class=p>[</span><span class=mi>2</span><span class=p>,</span> <span class=s1>&#39;never&#39;</span><span class=p>],</span>
+</span></span><span class=line><span class=cl>    <span class=s1>&#39;type-max-length&#39;</span><span class=o>:</span> <span class=p>[</span><span class=mi>0</span><span class=p>],</span>
+</span></span><span class=line><span class=cl>    <span class=s1>&#39;type-min-length&#39;</span><span class=o>:</span> <span class=p>[</span><span class=mi>0</span><span class=p>],</span>
+</span></span><span class=line><span class=cl>    <span class=s1>&#39;signed-off-by&#39;</span><span class=o>:</span> <span class=p>[</span><span class=mi>0</span><span class=p>],</span>
+</span></span><span class=line><span class=cl>    <span class=s1>&#39;custom-subject-action-enum&#39;</span><span class=o>:</span> <span class=p>[</span>
+</span></span><span class=line><span class=cl>      <span class=mi>2</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>      <span class=s1>&#39;always&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>      <span class=p>[</span>
+</span></span><span class=line><span class=cl>        <span class=s1>&#39;添加&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=s1>&#39;完善&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=s1>&#39;修复&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=s1>&#39;解决&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=s1>&#39;删除&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=s1>&#39;禁用&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=s1>&#39;修改&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=s1>&#39;调整&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=s1>&#39;优化&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=s1>&#39;重构&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=s1>&#39;发布&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=s1>&#39;合并&#39;</span>
+</span></span><span class=line><span class=cl>      <span class=p>]</span>
+</span></span><span class=line><span class=cl>    <span class=p>],</span>
+</span></span><span class=line><span class=cl>    <span class=s1>&#39;custom-scope-enum&#39;</span><span class=o>:</span> <span class=p>[</span><span class=mi>2</span><span class=p>,</span> <span class=s1>&#39;always&#39;</span><span class=p>,</span> <span class=p>[</span><span class=s1>&#39;root&#39;</span><span class=p>,</span> <span class=p>...</span><span class=nx>commitScopes</span><span class=p>]]</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>};</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=commitizen-配置>commitizen 配置</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span><span class=lnt>55
+</span><span class=lnt>56
+</span><span class=lnt>57
+</span><span class=lnt>58
+</span><span class=lnt>59
+</span><span class=lnt>60
+</span><span class=lnt>61
+</span><span class=lnt>62
+</span><span class=lnt>63
+</span><span class=lnt>64
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=kr>const</span> <span class=p>{</span> <span class=nx>getCommitScopes</span> <span class=p>}</span> <span class=o>=</span> <span class=nx>require</span><span class=p>(</span><span class=s1>&#39;./git&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=kr>const</span> <span class=nx>scopes</span> <span class=o>=</span> <span class=nx>getCommitScopes</span><span class=p>();</span>
+</span></span><span class=line><span class=cl><span class=nx>module</span><span class=p>.</span><span class=nx>exports</span> <span class=o>=</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>subjectLimit</span><span class=o>:</span> <span class=mi>72</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nx>subjectSeparator</span><span class=o>:</span> <span class=s1>&#39;: &#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nx>typePrefix</span><span class=o>:</span> <span class=s1>&#39;&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nx>typeSuffix</span><span class=o>:</span> <span class=s1>&#39;&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nx>scopes</span><span class=o>:</span> <span class=p>[{</span> <span class=nx>name</span><span class=o>:</span> <span class=s1>&#39;root&#39;</span> <span class=p>},</span> <span class=p>...</span><span class=nx>scopes</span><span class=p>.</span><span class=nx>map</span><span class=p>(</span><span class=nx>name</span> <span class=p>=&gt;</span> <span class=p>({</span> <span class=nx>name</span> <span class=p>}))],</span>
+</span></span><span class=line><span class=cl>  <span class=nx>scopeOverrides</span><span class=o>:</span> <span class=p>{},</span>
+</span></span><span class=line><span class=cl>  <span class=nx>allowCustomScopes</span><span class=o>:</span> <span class=kc>false</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nx>allowBreakingChanges</span><span class=o>:</span> <span class=p>[</span><span class=s1>&#39;feat&#39;</span><span class=p>,</span> <span class=s1>&#39;fix&#39;</span><span class=p>,</span> <span class=s1>&#39;st&#39;</span><span class=p>,</span> <span class=s1>&#39;sit&#39;</span><span class=p>],</span>
+</span></span><span class=line><span class=cl>  <span class=nx>skipQuestions</span><span class=o>:</span> <span class=p>[],</span>
+</span></span><span class=line><span class=cl>  <span class=nx>appendBranchNameToCommitMessage</span><span class=o>:</span> <span class=kc>false</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=c1>// ticketNumberPrefix: &#39;&#39;,
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>// breakingPrefix: &#39;&#39;,
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>// footerPrefix: &#39;&#39;,
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=nx>breaklineChar</span><span class=o>:</span> <span class=s1>&#39;|&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nx>upperCaseSubject</span><span class=o>:</span> <span class=kc>false</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nx>askForBreakingChangeFirst</span><span class=o>:</span> <span class=kc>false</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nx>types</span><span class=o>:</span> <span class=p>[</span>
+</span></span><span class=line><span class=cl>    <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=nx>name</span><span class=o>:</span> <span class=s1>&#39;build:     涉及构建系统及与其相关的外部依赖变动&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>      <span class=nx>value</span><span class=o>:</span> <span class=s1>&#39;build&#39;</span>
+</span></span><span class=line><span class=cl>    <span class=p>},</span>
+</span></span><span class=line><span class=cl>    <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=nx>name</span><span class=o>:</span> <span class=s1>&#39;ci:        涉及 CI 配置文件或脚本修改的变动&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>      <span class=nx>value</span><span class=o>:</span> <span class=s1>&#39;ci&#39;</span>
+</span></span><span class=line><span class=cl>    <span class=p>},</span>
+</span></span><span class=line><span class=cl>    <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=nx>name</span><span class=o>:</span> <span class=s1>&#39;feat:      增加了新的功能特征，对应 action 只能为“添加”&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>      <span class=nx>value</span><span class=o>:</span> <span class=s1>&#39;feat&#39;</span>
+</span></span><span class=line><span class=cl>    <span class=p>},</span>
+</span></span><span class=line><span class=cl>    <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=nx>name</span><span class=o>:</span> <span class=s1>&#39;fix:       修复 bug，对应 action 只能为“修复”&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>      <span class=nx>value</span><span class=o>:</span> <span class=s1>&#39;fix&#39;</span>
+</span></span><span class=line><span class=cl>    <span class=p>},</span>
+</span></span><span class=line><span class=cl>    <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=nx>name</span><span class=o>:</span> <span class=s1>&#39;st:        解决 ST 单子，仅限 release 分支，对应 action 只能为“修复”&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>      <span class=nx>value</span><span class=o>:</span> <span class=s1>&#39;st&#39;</span>
+</span></span><span class=line><span class=cl>    <span class=p>},</span>
+</span></span><span class=line><span class=cl>    <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=nx>name</span><span class=o>:</span> <span class=s1>&#39;sit:       解决 SIT 单子，仅限 release 分支，对应 action 只能为“修复”&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>      <span class=nx>value</span><span class=o>:</span> <span class=s1>&#39;sit&#39;</span>
+</span></span><span class=line><span class=cl>    <span class=p>},</span>
+</span></span><span class=line><span class=cl>    <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=nx>name</span><span class=o>:</span> <span class=s1>&#39;style:     不影响代码含义的风格修改，比如空格、格式化、缺失的分号等，对应 action 只能为“调整”&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>      <span class=nx>value</span><span class=o>:</span> <span class=s1>&#39;style&#39;</span>
+</span></span><span class=line><span class=cl>    <span class=p>},</span>
+</span></span><span class=line><span class=cl>    <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=nx>name</span><span class=o>:</span> <span class=s1>&#39;version:   发布版本，一般由脚本自动化发布，对应 action 只能为“发布”&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>      <span class=nx>value</span><span class=o>:</span> <span class=s1>&#39;version&#39;</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=p>],</span>
+</span></span><span class=line><span class=cl>  <span class=nx>messages</span><span class=o>:</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>type</span><span class=o>:</span> <span class=s1>&#39;选择本次更改的提交类型：\n&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nx>scope</span><span class=o>:</span> <span class=s1>&#39;选择本次更改涉及模块：\n&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nx>subject</span><span class=o>:</span> <span class=s1>&#39;输入针对本次更改的简要说明：\n&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nx>body</span><span class=o>:</span> <span class=s1>&#39;输入针对本次更改的详细描述（非必须），使用&#34; | &#34;进行换行，每行长度不要超过 72: \n&#39;</span><span class=p>,</span> <span class=c1>// 这里有问题
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=nx>breaking</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>      <span class=s1>&#39;如果本次更改存在不兼容的修改，则须对更改的内容进行详细描述，否则无需填写：\n&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nx>footer</span><span class=o>:</span> <span class=s1>&#39;列举本次更改对应的 Tapd 缺陷 ID（比如 #31、#34）: \n&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nx>confirmCommit</span><span class=o>:</span> <span class=s1>&#39;是否使用以上提交信息进行提交？&#39;</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>};</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=packagejson-对应配置>package.json 对应配置</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=s2>&#34;lint-staged&#34;</span><span class=o>:</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;**/*.{js,ts,vue,htm,html,md}&#34;</span><span class=o>:</span> <span class=s2>&#34;eslint --format=codeframe&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;**/*.{css,scss,sass,vue}&#34;</span><span class=o>:</span> <span class=s2>&#34;stylelint --formatter verbose&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;**/*&#34;</span><span class=o>:</span> <span class=s2>&#34;prettier --check&#34;</span>
+</span></span><span class=line><span class=cl>  <span class=p>},</span>
+</span></span><span class=line><span class=cl>  <span class=s2>&#34;config&#34;</span><span class=o>:</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;commitizen&#34;</span><span class=o>:</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=s2>&#34;path&#34;</span><span class=o>:</span> <span class=s2>&#34;cz-customizable&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=p>},</span>
+</span></span><span class=line><span class=cl>  <span class=s2>&#34;scripts&#34;</span><span class=o>:</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;commit&#34;</span><span class=o>:</span> <span class=s2>&#34;git add . &amp;&amp; cz&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;format&#34;</span><span class=o>:</span> <span class=s2>&#34;prettier --write .&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;eslint:fix&#34;</span><span class=o>:</span> <span class=s2>&#34;eslint --fix . --ext .js,.ts,.vue,.htm,.html,.md&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;stylelint:fix&#34;</span><span class=o>:</span> <span class=s2>&#34;stylelint --fix **/*.{css,scss,sass,vue}&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=c1>// ...
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=整个提交流程>整个提交流程</h3><p><img src=/p/%E5%81%B7%E5%B8%88%E5%AD%A6%E8%89%BA/commit-process.svg loading=lazy></p><p>注意：git add . 相比 git add &ndash;all，不处理删除文件；仅提交当前目录或者后代目录下的文件。</p><h2 id=verdaccio>verdaccio</h2><p>私有仓库使用 Verdaccio 搭建并使用 pm2 守护（找运维小哥）：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 安装 wget</span>
+</span></span><span class=line><span class=cl>yum install -y wget
+</span></span><span class=line><span class=cl><span class=c1># 下载 node</span>
+</span></span><span class=line><span class=cl>wget https://nodejs.org/dist/v10.6.0/node-v10.6.0-linux-x64.tar.xz
+</span></span><span class=line><span class=cl><span class=c1># 解压 node</span>
+</span></span><span class=line><span class=cl>tar -xvf node-v10.6.0-linux-x64.tar.xz
+</span></span><span class=line><span class=cl><span class=c1># 重命名安装目录</span>
+</span></span><span class=line><span class=cl>mv node-v10.6.0-linux-x64.tar.xz nodejs
+</span></span><span class=line><span class=cl><span class=c1># 建立软连接</span>
+</span></span><span class=line><span class=cl>ln -s /usr/local/node/nodejs/bin/npm /usr/local/bin
+</span></span><span class=line><span class=cl>ln -s /usr/local/node/nodejs/bin/node /usr/local/bin
+</span></span><span class=line><span class=cl><span class=c1># 安装 verdaccio</span>
+</span></span><span class=line><span class=cl>npm install -g verdaccio
+</span></span><span class=line><span class=cl><span class=c1># 建立软连接</span>
+</span></span><span class=line><span class=cl>ln -s /usr/local/node/nodejs/bin/verdaccio /usr/local/bin
+</span></span><span class=line><span class=cl><span class=c1># 安装 pm2</span>
+</span></span><span class=line><span class=cl>npm install -g pm2
+</span></span><span class=line><span class=cl><span class=c1># 建立软连接</span>
+</span></span><span class=line><span class=cl>ln -s /usr/local/node/nodejs/bin/pm2 /usr/local/bin
+</span></span><span class=line><span class=cl><span class=c1># 使用 pm2 运行 verdaccio</span>
+</span></span><span class=line><span class=cl>pm2 start verdaccio
+</span></span></code></pre></td></tr></table></div></div><p>配置 .npmrc、.yarnrc：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=l>registry &#34;http://npm.inner.com/&#34;</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>配置 package.json：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-json data-lang=json><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;publishConfig&#34;</span><span class=p>:</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;registry&#34;</span><span class=p>:</span> <span class=s2>&#34;http://npm.inner.com/&#34;</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=c1>// ...
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>安装依赖时，会向私服请求 package，如果找不到，服务器就会向 npmjs.org 请求并缓存。</p><h2 id=request>request</h2><p>后端数据会通过无渲染组件请求，组件通过 props 接受请求参数，再将返回数据通过作用域插槽暴露。</p><p><img src=/p/%E5%81%B7%E5%B8%88%E5%AD%A6%E8%89%BA/request.svg loading=lazy></p><p>RlApiRequest 的 render 函数返回了 $scopedSlots.default(this.cSlotScopeProps)；继承了 RlApiRequest 的组件通过传入不同的 props 和 aSlotScopeProps（会改写 cSlotScopeProps），达到不同的目的。</p><h2 id=pipes>pipes</h2><p>对于数据的处理都会交给管道层，组件通过 props 接受原始数据，处理过的数据通过默认的作用域插槽返回。</p><p><img src=/p/%E5%81%B7%E5%B8%88%E5%AD%A6%E8%89%BA/pipes-renderless.svg loading=lazy></p><p>多个 pipe 共同组成了 pipes 总管道，通过传入 enablePipeFormat、enablePipeFilter 等 props 控制对应管道的开闭；本质上是作用域插槽的应用。</p></section><footer class=article-footer><section class=article-copyright><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span></section></footer></article><footer class=site-footer><section class=copyright>&copy;
+2017 -
+2024
+<a href=https://github.com/Vikingama target=_blank>馬腊咯稽</a></section><section class=powerby>Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a>, Deploy by Actions<br>主题 <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.13.0>Stack</a></b> 由 <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a> 设计</section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">目录</h2><div class=widget--toc><nav id=TableOfContents><ol><li><a href=#monorepo>monorepo</a></li><li><a href=#commit>commit</a><ol><li><a href=#提交工作流钩子>提交工作流钩子</a></li><li><a href=#workspace-信息>workspace 信息</a></li><li><a href=#git-信息>git 信息</a></li><li><a href=#stylelint-配置>stylelint 配置</a></li><li><a href=#eslint-配置>eslint 配置</a></li><li><a href=#prettier-配置>prettier 配置</a></li><li><a href=#husky-配置>husky 配置</a></li><li><a href=#commitlint-配置>commitlint 配置</a></li><li><a href=#commitizen-配置>commitizen 配置</a></li><li><a href=#packagejson-对应配置>package.json 对应配置</a></li><li><a href=#整个提交流程>整个提交流程</a></li></ol></li><li><a href=#verdaccio>verdaccio</a></li><li><a href=#request>request</a></li><li><a href=#pipes>pipes</a></li></ol></nav></div></section></aside></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=/ts/main.js defer></script></body></html>

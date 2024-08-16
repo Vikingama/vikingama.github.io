@@ -1,0 +1,439 @@
+<!doctype html><html lang=zh-cn dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content='本以为移动端的爆发式增长能给前端带来更好的开发体验'><title>WebRTC 初上手 · Stay Hungry · Stay Foolish</title>
+<link rel=canonical href=https://vikingama.github.io/p/webrtc-%E5%88%9D%E4%B8%8A%E6%89%8B/><link rel=stylesheet href=/scss/style.min.38c15d3a5c1bca30008bb625a46636d24f5deb4bf3217095e667a3abc843eaef.css><meta property='og:title' content='WebRTC 初上手'><meta property='og:description' content='本以为移动端的爆发式增长能给前端带来更好的开发体验'><meta property='og:url' content='https://vikingama.github.io/p/webrtc-%E5%88%9D%E4%B8%8A%E6%89%8B/'><meta property='og:site_name' content='馬腊咯稽'><meta property='og:type' content='article'><meta property='article:section' content='Post'><meta property='article:published_time' content='2022-04-25T00:00:00+00:00'><meta property='article:modified_time' content='2022-04-25T00:00:00+00:00'><meta property='og:image' content='https://vikingama.github.io/img/cover/webrtc.png'><meta name=twitter:title content="WebRTC 初上手"><meta name=twitter:description content="本以为移动端的爆发式增长能给前端带来更好的开发体验"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content='https://vikingama.github.io/img/cover/webrtc.png'><link rel="shortcut icon" href=/favicon.ico><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><meta name=theme-color content="#ffffff"><meta name=robots content="noarchive"><div class=warning-banner>因为 GitHub 账号二次验证失败，计划迁往
+<a href=https://elementref.github.io/>新地址&rarr;</a></div></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label=切换菜单>
+<span class=hamburger-box><span class=hamburger-inner></span></span></button><header><figure class=site-avatar><a href=/><img src=/img/avatar_huae06eac29c2bc6aa7e83a685ea2f6536_13838_300x0_resize_box_3.png width=300 height=404 class=site-logo loading=lazy alt=Avatar></a></figure><div class=site-meta><h1 class=site-name><a href=/>馬腊咯稽</a></h1><h2 class=site-description>Stay Hungry · Stay Foolish</h2></div></header><ol class=menu id=main-menu><li><a href=/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg>
+<span>首页</span></a></li><li><a href=/archives/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><rect x="3" y="4" width="18" height="4" rx="2"/><path d="M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+<span>归档</span></a></li><li><a href=/search/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="10" cy="10" r="7"/><line x1="21" y1="21" x2="15" y2="15"/></svg>
+<span>搜索</span></a></li><li><a href=https://github.com/ElementRef/AboutConfig target=_blank><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-infinity" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M9.828 9.172a4 4 0 100 5.656A10 10 0 0012 12a10 10 0 012.172-2.828 4 4 0 110 5.656A10 10 0 0112 12 10 10 0 009.828 9.172"/></svg>
+<span>配置</span></a></li><li><a href=/%E5%90%AF%E5%8F%91/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M10 14a3.5 3.5.0 005 0l4-4a3.5 3.5.0 00-5-5l-.5.5"/><path d="M14 10a3.5 3.5.0 00-5 0l-4 4a3.5 3.5.0 005 5l.5-.5"/></svg>
+<span>启发</span></a></li><li><a href=/%E5%91%BD%E4%BB%A4/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-terminal" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 7l5 5-5 5"/><line x1="12" y1="19" x2="19" y2="19"/></svg>
+<span>命令</span></a></li><li><a href=/%E5%85%B3%E4%BA%8E/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="7" r="4"/><path d="M6 21v-2a4 4 0 014-4h4a4 4 0 014 4v2"/></svg>
+<span>关于</span></a></li><div class=menu-bottom-section><li id=dark-mode-toggle><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<span>深色</span></li></div></ol></aside><main class="main full-width"><article class="has-image main-article"><header class=article-header><div class=article-image><a href=/p/webrtc-%E5%88%9D%E4%B8%8A%E6%89%8B/><img src=/img/cover/webrtc.png loading=lazy alt="WebRTC 初上手"></a></div><div class=article-details><header class=article-category><a href=/categories/webrtc/>WebRTC</a></header><div class=article-title-wrapper><h2 class=article-title><a href=/p/webrtc-%E5%88%9D%E4%B8%8A%E6%89%8B/>WebRTC 初上手</a></h2><h3 class=article-subtitle>本以为移动端的爆发式增长能给前端带来更好的开发体验</h3></div><footer class=article-time><div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>Apr 25, 2022</time></div><div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>阅读时长：6 分钟</time></div></footer></div></header><section class=article-content><h2 id=需求>需求</h2><p>随着政府对个体户税收政策的收紧，公司需要采集客户的“话术视频”来作为规避业务风险的“凭据”。具体来说就是，需要用户在手机端录制一段“我已同意 xxx”的视频，并且录制完成之后，上传至服务器保存。</p><p>经过调研搜集，大致有两种实现思路：<a class=link href=https://w3c.github.io/html-media-capture target=_blank rel=noopener>
+基于 input[capture] 的实现
+</a>和<a class=link href=https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API target=_blank rel=noopener>
+基于 WebRTC 的实现
+</a>；input 这种不是本文重点，略过。</p><p>基于 WebRTC 的实现的基本思路是：</p><ol><li>调用 MediaDevices 获取设备相机和麦克风权限；</li><li>调用 getUserMedia 方法创建 MediaStream 数据流；</li><li>调用 MediaRecorder 捕获媒体流并对数据流捕获和缓存；</li><li>如果文件较大，可能需要 Blob 等 API 对媒体流进行分包上传；</li><li>如果产品有需要，可能后端要调用 ffmpeg 等工具对视频编码进行转换。</li></ol><h2 id=webrtc>WebRTC</h2><p>前端调用设备采集视频流主要采用的是 <a class=link href=https://developer.mozilla.org/zh-CN/docs/Glossary/WebRTC target=_blank rel=noopener>WebRTC 实时通讯技术
+</a>，它是一项可以用于视频聊天、音频聊天或 P2P 文件分享的技术。</p><p>整个 WebRTC 主要有以下几个 API 组成：</p><ul><li><a class=link href=https://developer.mozilla.org/zh-CN/docs/Web/API/MediaDevices target=_blank rel=noopener>MediaDevices
+</a>，提供访问连接媒体输入的设备（相机、麦克风以及屏幕共享等），可以使你取得任何硬件资源的媒体数据：<ul><li><a class=link href=https://developer.mozilla.org/zh-CN/docs/Web/API/MediaDevices/getUserMedia target=_blank rel=noopener>getUserMedia
+</a>，为 RTC 连接<strong>获取</strong>设备的摄像头与麦克风权限并<strong>接入</strong>设备信号；会提示用户给予使用媒体输入的许可；</li><li><a class=link href=https://developer.mozilla.org/zh-CN/docs/Web/API/MediaDevices/getDisplayMedia target=_blank rel=noopener>getDisplayMedia
+</a>，提示用户去选择和授权捕获<strong>屏幕内容</strong>在一个 MediaStream 里。</li></ul></li><li><a class=link href=https://developer.mozilla.org/zh-CN/docs/Web/API/MediaStream target=_blank rel=noopener>MediaStream
+</a>是一个媒体内容的流，一个流包含几个轨道，比如视频和音频轨道；</li><li><a class=link href=https://developer.mozilla.org/zh-CN/docs/Web/API/RTCDataChannel target=_blank rel=noopener>RTCDataChannel
+</a>，用来设置 P2P 数据连接，在两者之间建立一个双向数据通道连接；</li><li><a class=link href=https://developer.mozilla.org/zh-CN/docs/Web/API/RTCPeerConnection target=_blank rel=noopener>RTCPeerConnection
+</a>，用于配置音频或视频聊天。</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>  1
+</span><span class=lnt>  2
+</span><span class=lnt>  3
+</span><span class=lnt>  4
+</span><span class=lnt>  5
+</span><span class=lnt>  6
+</span><span class=lnt>  7
+</span><span class=lnt>  8
+</span><span class=lnt>  9
+</span><span class=lnt> 10
+</span><span class=lnt> 11
+</span><span class=lnt> 12
+</span><span class=lnt> 13
+</span><span class=lnt> 14
+</span><span class=lnt> 15
+</span><span class=lnt> 16
+</span><span class=lnt> 17
+</span><span class=lnt> 18
+</span><span class=lnt> 19
+</span><span class=lnt> 20
+</span><span class=lnt> 21
+</span><span class=lnt> 22
+</span><span class=lnt> 23
+</span><span class=lnt> 24
+</span><span class=lnt> 25
+</span><span class=lnt> 26
+</span><span class=lnt> 27
+</span><span class=lnt> 28
+</span><span class=lnt> 29
+</span><span class=lnt> 30
+</span><span class=lnt> 31
+</span><span class=lnt> 32
+</span><span class=lnt> 33
+</span><span class=lnt> 34
+</span><span class=lnt> 35
+</span><span class=lnt> 36
+</span><span class=lnt> 37
+</span><span class=lnt> 38
+</span><span class=lnt> 39
+</span><span class=lnt> 40
+</span><span class=lnt> 41
+</span><span class=lnt> 42
+</span><span class=lnt> 43
+</span><span class=lnt> 44
+</span><span class=lnt> 45
+</span><span class=lnt> 46
+</span><span class=lnt> 47
+</span><span class=lnt> 48
+</span><span class=lnt> 49
+</span><span class=lnt> 50
+</span><span class=lnt> 51
+</span><span class=lnt> 52
+</span><span class=lnt> 53
+</span><span class=lnt> 54
+</span><span class=lnt> 55
+</span><span class=lnt> 56
+</span><span class=lnt> 57
+</span><span class=lnt> 58
+</span><span class=lnt> 59
+</span><span class=lnt> 60
+</span><span class=lnt> 61
+</span><span class=lnt> 62
+</span><span class=lnt> 63
+</span><span class=lnt> 64
+</span><span class=lnt> 65
+</span><span class=lnt> 66
+</span><span class=lnt> 67
+</span><span class=lnt> 68
+</span><span class=lnt> 69
+</span><span class=lnt> 70
+</span><span class=lnt> 71
+</span><span class=lnt> 72
+</span><span class=lnt> 73
+</span><span class=lnt> 74
+</span><span class=lnt> 75
+</span><span class=lnt> 76
+</span><span class=lnt> 77
+</span><span class=lnt> 78
+</span><span class=lnt> 79
+</span><span class=lnt> 80
+</span><span class=lnt> 81
+</span><span class=lnt> 82
+</span><span class=lnt> 83
+</span><span class=lnt> 84
+</span><span class=lnt> 85
+</span><span class=lnt> 86
+</span><span class=lnt> 87
+</span><span class=lnt> 88
+</span><span class=lnt> 89
+</span><span class=lnt> 90
+</span><span class=lnt> 91
+</span><span class=lnt> 92
+</span><span class=lnt> 93
+</span><span class=lnt> 94
+</span><span class=lnt> 95
+</span><span class=lnt> 96
+</span><span class=lnt> 97
+</span><span class=lnt> 98
+</span><span class=lnt> 99
+</span><span class=lnt>100
+</span><span class=lnt>101
+</span><span class=lnt>102
+</span><span class=lnt>103
+</span><span class=lnt>104
+</span><span class=lnt>105
+</span><span class=lnt>106
+</span><span class=lnt>107
+</span><span class=lnt>108
+</span><span class=lnt>109
+</span><span class=lnt>110
+</span><span class=lnt>111
+</span><span class=lnt>112
+</span><span class=lnt>113
+</span><span class=lnt>114
+</span><span class=lnt>115
+</span><span class=lnt>116
+</span><span class=lnt>117
+</span><span class=lnt>118
+</span><span class=lnt>119
+</span><span class=lnt>120
+</span><span class=lnt>121
+</span><span class=lnt>122
+</span><span class=lnt>123
+</span><span class=lnt>124
+</span><span class=lnt>125
+</span><span class=lnt>126
+</span><span class=lnt>127
+</span><span class=lnt>128
+</span><span class=lnt>129
+</span><span class=lnt>130
+</span><span class=lnt>131
+</span><span class=lnt>132
+</span><span class=lnt>133
+</span><span class=lnt>134
+</span><span class=lnt>135
+</span><span class=lnt>136
+</span><span class=lnt>137
+</span><span class=lnt>138
+</span><span class=lnt>139
+</span><span class=lnt>140
+</span><span class=lnt>141
+</span><span class=lnt>142
+</span><span class=lnt>143
+</span><span class=lnt>144
+</span><span class=lnt>145
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=kd>let</span> <span class=nx>media</span> <span class=o>=</span> <span class=kc>null</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=c1>// 请求当前设备可用的媒体输入输出设备
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kr>const</span> <span class=nx>enumerateDevicesPromise</span> <span class=o>=</span> <span class=nx>navigator</span><span class=p>.</span><span class=nx>mediaDevices</span><span class=p>.</span><span class=nx>enumerateDevices</span><span class=p>();</span>
+</span></span><span class=line><span class=cl><span class=nx>enumerateDevicesPromise</span>
+</span></span><span class=line><span class=cl>  <span class=p>.</span><span class=nx>then</span><span class=p>(</span><span class=nx>mediaDevices</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=o>!</span><span class=nb>Array</span><span class=p>.</span><span class=nx>isArray</span><span class=p>(</span><span class=nx>mediaDevices</span><span class=p>))</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=k>throw</span> <span class=k>new</span> <span class=nb>Error</span><span class=p>(</span><span class=s1>&#39;未找到媒体设备&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=nx>mediaDevices</span><span class=p>.</span><span class=nx>forEach</span><span class=p>(({</span> <span class=nx>deviceId</span><span class=p>,</span> <span class=nx>groupId</span><span class=p>,</span> <span class=nx>kind</span><span class=p>,</span> <span class=nx>label</span> <span class=p>})</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=nx>console</span><span class=p>.</span><span class=nx>group</span><span class=p>(</span><span class=s1>&#39;EnumerateDevices&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>      <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=s1>&#39;设备 ID&#39;</span><span class=p>,</span> <span class=nx>deviceId</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>      <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=s1>&#39;设备组 ID&#39;</span><span class=p>,</span> <span class=nx>groupId</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>      <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=s1>&#39;设备类型&#39;</span><span class=p>,</span> <span class=nx>kind</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>      <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=s1>&#39;设备名称&#39;</span><span class=p>,</span> <span class=nx>label</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>      <span class=nx>console</span><span class=p>.</span><span class=nx>groupEnd</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>    <span class=p>});</span>
+</span></span><span class=line><span class=cl>    <span class=kr>const</span> <span class=nx>mediaDevicesKinds</span> <span class=o>=</span> <span class=nx>mediaDevices</span><span class=p>.</span><span class=nx>map</span><span class=p>(({</span> <span class=nx>kind</span> <span class=p>})</span> <span class=p>=&gt;</span> <span class=nx>kind</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=o>!</span><span class=nx>mediaDevicesKinds</span><span class=p>.</span><span class=nx>includes</span><span class=p>(</span><span class=s1>&#39;videoinput&#39;</span><span class=p>))</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=k>throw</span> <span class=k>new</span> <span class=nb>Error</span><span class=p>(</span><span class=s1>&#39;没有相机权限&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=o>!</span><span class=nx>mediaDevicesKinds</span><span class=p>.</span><span class=nx>includes</span><span class=p>(</span><span class=s1>&#39;audioinput&#39;</span><span class=p>))</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=k>throw</span> <span class=k>new</span> <span class=nb>Error</span><span class=p>(</span><span class=s1>&#39;没有麦克风权限&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=p>})</span>
+</span></span><span class=line><span class=cl>  <span class=p>.</span><span class=k>catch</span><span class=p>(</span><span class=nx>error</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>console</span><span class=p>.</span><span class=nx>error</span><span class=p>(</span><span class=nx>error</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=p>});</span>
+</span></span><span class=line><span class=cl><span class=c1>// 请求当前设备可用的 Constraints 属性
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kr>const</span> <span class=nx>supportedConstraints</span> <span class=o>=</span> <span class=nx>navigator</span><span class=p>.</span><span class=nx>mediaDevices</span><span class=p>.</span><span class=nx>getSupportedConstraints</span><span class=p>();</span>
+</span></span><span class=line><span class=cl><span class=kr>const</span> <span class=nx>supportedConstraintsKey</span> <span class=o>=</span> <span class=nb>Object</span><span class=p>.</span><span class=nx>entries</span><span class=p>(</span><span class=nx>supportedConstraints</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>  <span class=p>.</span><span class=nx>filter</span><span class=p>(</span><span class=nx>item</span> <span class=p>=&gt;</span> <span class=nx>item</span><span class=p>[</span><span class=mi>1</span><span class=p>])</span>
+</span></span><span class=line><span class=cl>  <span class=p>.</span><span class=nx>map</span><span class=p>(</span><span class=nx>item</span> <span class=p>=&gt;</span> <span class=nx>item</span><span class=p>[</span><span class=mi>0</span><span class=p>]);</span>
+</span></span><span class=line><span class=cl><span class=c1>// MediaStreamConstraints 对象，用于指定“请求的媒体类型和相对应的参数”
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kr>const</span> <span class=nx>userMediaConstraints</span> <span class=o>=</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>video</span><span class=o>:</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>width</span><span class=o>:</span> <span class=p>{</span> <span class=nx>min</span><span class=o>:</span> <span class=mi>1024</span><span class=p>,</span> <span class=nx>ideal</span><span class=o>:</span> <span class=mi>1280</span><span class=p>,</span> <span class=nx>max</span><span class=o>:</span> <span class=mi>1920</span> <span class=p>},</span> <span class=c1>// 指定视频宽度
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=nx>height</span><span class=o>:</span> <span class=p>{</span> <span class=nx>min</span><span class=o>:</span> <span class=mi>776</span><span class=p>,</span> <span class=nx>ideal</span><span class=o>:</span> <span class=mi>720</span><span class=p>,</span> <span class=nx>max</span><span class=o>:</span> <span class=mi>1080</span> <span class=p>},</span> <span class=c1>// 指定视频高度
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=nx>frameRate</span><span class=o>:</span> <span class=p>{</span> <span class=nx>min</span><span class=o>:</span> <span class=mi>15</span><span class=p>,</span> <span class=nx>ideal</span><span class=o>:</span> <span class=mi>30</span><span class=p>,</span> <span class=nx>max</span><span class=o>:</span> <span class=mi>60</span> <span class=p>},</span> <span class=c1>// 指定视频帧率
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=nx>facingMode</span><span class=o>:</span> <span class=p>{</span> <span class=nx>exact</span><span class=o>:</span> <span class=s1>&#39;environment&#39;</span> <span class=p>}</span> <span class=c1>// 强制使用后置摄像头
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=c1>// facingMode: &#39;user&#39; // 优先使用前置摄像头
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=p>},</span>
+</span></span><span class=line><span class=cl>  <span class=c1>// video: true, // 不指定分辨率
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=nx>audio</span><span class=o>:</span> <span class=kc>true</span>
+</span></span><span class=line><span class=cl><span class=p>};</span>
+</span></span><span class=line><span class=cl><span class=c1>// 过滤 userMediaConstraints 中可用的属性
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=nb>Object</span><span class=p>.</span><span class=nx>keys</span><span class=p>(</span><span class=nx>userMediaConstraints</span><span class=p>).</span><span class=nx>forEach</span><span class=p>(</span><span class=nx>key</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=k>if</span> <span class=p>(</span><span class=o>!</span><span class=nx>supportedConstraintsKey</span><span class=p>.</span><span class=nx>includes</span><span class=p>(</span><span class=nx>key</span><span class=p>))</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>delete</span> <span class=nx>userMediaConstraints</span><span class=p>[</span><span class=nx>key</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>});</span>
+</span></span><span class=line><span class=cl><span class=c1>// 返回的 promise 可能既不会 resolve 也不会 reject，因为现在的操作系统权限控制不是非黑即白的
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kr>const</span> <span class=nx>userMediaPromise</span> <span class=o>=</span>
+</span></span><span class=line><span class=cl>  <span class=nx>navigator</span><span class=p>.</span><span class=nx>mediaDevices</span><span class=p>.</span><span class=nx>getUserMedia</span><span class=p>(</span><span class=nx>userMediaConstraints</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=nx>userMediaPromise</span>
+</span></span><span class=line><span class=cl>  <span class=p>.</span><span class=nx>then</span><span class=p>(</span><span class=nx>mediaStream</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 如果用户授予了媒体权限，userMediaPromise 会 resolve 一个 MediaStream 对象
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=kr>const</span> <span class=nx>monitorEle</span> <span class=o>=</span> <span class=nb>document</span><span class=p>.</span><span class=nx>querySelector</span><span class=p>(</span><span class=s1>&#39;.monitor&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=cm>/**
+</span></span></span><span class=line><span class=cl><span class=cm>     * 使用 srcObject 将不需要借助 URL.createObjectURL（搭配 src 属性）
+</span></span></span><span class=line><span class=cl><span class=cm>     * 仅有 Safari 完整支持了 MediaStream、MediaSource、Blob、File
+</span></span></span><span class=line><span class=cl><span class=cm>     * 大部分浏览器仅支持 MediaStream，不过对我们来说足够了
+</span></span></span><span class=line><span class=cl><span class=cm>     */</span>
+</span></span><span class=line><span class=cl>    <span class=nx>monitorEle</span><span class=p>.</span><span class=nx>loop</span> <span class=o>=</span> <span class=kc>false</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=nx>monitorEle</span><span class=p>.</span><span class=nx>muted</span> <span class=o>=</span> <span class=kc>true</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=nx>monitorEle</span><span class=p>.</span><span class=nx>srcObject</span> <span class=o>=</span> <span class=nx>mediaStream</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=nx>monitorEle</span><span class=p>.</span><span class=nx>onloadedmetadata</span> <span class=o>=</span> <span class=p>()</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=c1>// 视频元数据加载完毕，开始播放
+</span></span></span><span class=line><span class=cl><span class=c1></span>      <span class=nx>monitorEle</span><span class=p>.</span><span class=nx>play</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>    <span class=p>};</span>
+</span></span><span class=line><span class=cl>  <span class=p>})</span>
+</span></span><span class=line><span class=cl>  <span class=p>.</span><span class=k>catch</span><span class=p>(</span><span class=nx>error</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 如果用户拒绝了媒体权限，会 reject 一个 PermissionDeniedError/NotFoundError
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=k>switch</span> <span class=p>(</span><span class=nx>error</span><span class=p>.</span><span class=nx>name</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=k>case</span> <span class=s1>&#39;AbortError&#39;</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>        <span class=nx>console</span><span class=p>.</span><span class=nx>error</span><span class=p>(</span><span class=s1>&#39;中止错误&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=k>break</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>      <span class=k>case</span> <span class=s1>&#39;NotAllowedError&#39;</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>        <span class=nx>console</span><span class=p>.</span><span class=nx>error</span><span class=p>(</span><span class=s1>&#39;拒绝错误，用户拒绝了媒体访问请求&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=k>break</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>      <span class=k>case</span> <span class=s1>&#39;NotFoundError&#39;</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>        <span class=nx>console</span><span class=p>.</span><span class=nx>error</span><span class=p>(</span><span class=s1>&#39;找不到错误&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=k>break</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>      <span class=k>case</span> <span class=s1>&#39;NotReadableError&#39;</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>        <span class=nx>console</span><span class=p>.</span><span class=nx>error</span><span class=p>(</span><span class=s1>&#39;无法读取错误，可能是硬件、软件问题&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=k>break</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>      <span class=k>case</span> <span class=s1>&#39;OverconstrainedError&#39;</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>        <span class=nx>console</span><span class=p>.</span><span class=nx>error</span><span class=p>(</span><span class=s1>&#39;无法满足要求错误，无法满足 constraint 的要求&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=k>break</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>      <span class=k>case</span> <span class=s1>&#39;SecurityError&#39;</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>        <span class=nx>console</span><span class=p>.</span><span class=nx>error</span><span class=p>(</span><span class=s1>&#39;安全错误，设备媒体被禁止，和用户设置有关&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=k>break</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>      <span class=k>case</span> <span class=s1>&#39;TypeError&#39;</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>        <span class=nx>console</span><span class=p>.</span><span class=nx>error</span><span class=p>(</span><span class=s1>&#39;类型错误，constraint 设置问题&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=k>break</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>      <span class=k>default</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>        <span class=c1>// 建议将 error 上报
+</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=k>break</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=p>});</span>
+</span></span><span class=line><span class=cl><span class=c1>// 用来进行屏幕共享/录屏，当前业务场景下用不到
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kd>let</span> <span class=nx>captureStream</span> <span class=o>=</span> <span class=kc>null</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>const</span> <span class=nx>getDisplayMediaPromise</span> <span class=o>=</span>
+</span></span><span class=line><span class=cl>  <span class=nx>navigator</span><span class=p>.</span><span class=nx>mediaDevices</span><span class=p>.</span><span class=nx>getDisplayMedia</span><span class=p>(</span><span class=nx>userMediaConstraints</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=nx>getDisplayMediaPromise</span>
+</span></span><span class=line><span class=cl>  <span class=p>.</span><span class=nx>then</span><span class=p>(</span><span class=nx>mediaStream</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>captureStream</span> <span class=o>=</span> <span class=nx>mediaStream</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>})</span>
+</span></span><span class=line><span class=cl>  <span class=p>.</span><span class=k>catch</span><span class=p>(</span><span class=nx>error</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>switch</span> <span class=p>(</span><span class=nx>error</span><span class=p>.</span><span class=nx>name</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=k>case</span> <span class=s1>&#39;AbortError&#39;</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>        <span class=nx>console</span><span class=p>.</span><span class=nx>error</span><span class=p>(</span><span class=s1>&#39;中止错误&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=k>break</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>      <span class=k>case</span> <span class=s1>&#39;InvalidStateError&#39;</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>        <span class=nx>console</span><span class=p>.</span><span class=nx>error</span><span class=p>(</span><span class=s1>&#39;无效状态错误，当前页面处于非激活状态&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=k>break</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>      <span class=k>case</span> <span class=s1>&#39;NotAllowedError&#39;</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>        <span class=nx>console</span><span class=p>.</span><span class=nx>error</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>          <span class=s1>&#39;拒绝错误，用户拒绝了访问屏幕区域的权限或者不允许当前浏览实例访问屏幕共享&#39;</span>
+</span></span><span class=line><span class=cl>        <span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=k>break</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>      <span class=k>case</span> <span class=s1>&#39;NotFoundError&#39;</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>        <span class=nx>console</span><span class=p>.</span><span class=nx>error</span><span class=p>(</span><span class=s1>&#39;找不到错误，没有可用于捕获的屏幕视频源&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=k>break</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>      <span class=k>case</span> <span class=s1>&#39;NotReadableError&#39;</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>        <span class=nx>console</span><span class=p>.</span><span class=nx>error</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>          <span class=s1>&#39;无法读取错误，发生了硬件或操作系统级别错误或锁定，从而预先占用了共享所选源&#39;</span>
+</span></span><span class=line><span class=cl>        <span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=k>break</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>      <span class=k>case</span> <span class=s1>&#39;OverconstrainedError&#39;</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>        <span class=nx>console</span><span class=p>.</span><span class=nx>error</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>          <span class=s1>&#39;转换错误，创建流后，由于无法生成兼容的流导致应用指定的 constraints 失效&#39;</span>
+</span></span><span class=line><span class=cl>        <span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=k>break</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>      <span class=k>case</span> <span class=s1>&#39;TypeError&#39;</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>        <span class=nx>console</span><span class=p>.</span><span class=nx>error</span><span class=p>(</span><span class=s1>&#39;类型错误，constraint 设置问题&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=k>break</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>      <span class=k>default</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>        <span class=c1>// 建议将 error 上报
+</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=k>break</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=p>})</span>
+</span></span><span class=line><span class=cl>  <span class=p>.</span><span class=k>finally</span><span class=p>(()</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 保存 captureStream，保存至服务器
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=p>});</span>
+</span></span><span class=line><span class=cl><span class=c1>//
+</span></span></span></code></pre></td></tr></table></div></div><p>接下来就是使用 <a class=link href=https://developer.mozilla.org/zh-CN/docs/Web/API/MediaRecorder target=_blank rel=noopener>MediaRecorder
+</a>进行视频流的录制：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=kd>let</span> <span class=nx>chunks</span> <span class=o>=</span> <span class=p>[];</span>
+</span></span><span class=line><span class=cl><span class=kr>const</span> <span class=p>{</span> <span class=nx>isTypeSupported</span> <span class=p>}</span> <span class=o>=</span> <span class=nx>MediaRecorder</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>const</span> <span class=nx>mimeType</span> <span class=o>=</span> <span class=nx>isTypeSupported</span><span class=p>(</span><span class=s1>&#39;video/mp4&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>  <span class=o>?</span> <span class=s1>&#39;video/mp4&#39;</span>
+</span></span><span class=line><span class=cl>  <span class=o>:</span> <span class=nx>isTypeSupported</span><span class=p>(</span><span class=s1>&#39;video/mpeg&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>  <span class=o>?</span> <span class=s1>&#39;video/mpeg&#39;</span>
+</span></span><span class=line><span class=cl>  <span class=o>:</span> <span class=nx>isTypeSupported</span><span class=p>(</span><span class=s1>&#39;video/webm;codecs=h264&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>  <span class=o>?</span> <span class=s1>&#39;video/webm;codecs=h264&#39;</span>
+</span></span><span class=line><span class=cl>  <span class=o>:</span> <span class=nx>isTypeSupported</span><span class=p>(</span><span class=s1>&#39;video/webm;codecs=h265&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>  <span class=o>?</span> <span class=s1>&#39;video/webm;codecs=h265&#39;</span>
+</span></span><span class=line><span class=cl>  <span class=o>:</span> <span class=nx>isTypeSupported</span><span class=p>(</span><span class=s1>&#39;video/webm;codecs=vp8&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>  <span class=o>?</span> <span class=s1>&#39;video/webm;codecs=vp8&#39;</span>
+</span></span><span class=line><span class=cl>  <span class=o>:</span> <span class=nx>isTypeSupported</span><span class=p>(</span><span class=s1>&#39;video/webm;codecs=vp9&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>  <span class=o>?</span> <span class=s1>&#39;video/webm;codecs=vp9&#39;</span>
+</span></span><span class=line><span class=cl>  <span class=o>:</span> <span class=nx>isTypeSupported</span><span class=p>(</span><span class=s1>&#39;video/webm&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>  <span class=o>?</span> <span class=s1>&#39;video/webm&#39;</span>
+</span></span><span class=line><span class=cl>  <span class=o>:</span> <span class=s1>&#39;video/*&#39;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>const</span> <span class=nx>mediaRecorder</span> <span class=o>=</span> <span class=k>new</span> <span class=nx>MediaRecorder</span><span class=p>(</span><span class=nx>mediaStream</span><span class=p>,</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>mimeType</span>
+</span></span><span class=line><span class=cl><span class=p>});</span>
+</span></span><span class=line><span class=cl><span class=nx>mediaRecorder</span><span class=p>.</span><span class=nx>ondataavailable</span> <span class=o>=</span> <span class=p>({</span> <span class=nx>data</span> <span class=p>})</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=k>if</span> <span class=p>(</span><span class=nx>data</span><span class=p>.</span><span class=nx>size</span> <span class=o>&gt;</span> <span class=mi>0</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>chunks</span><span class=p>.</span><span class=nx>push</span><span class=p>(</span><span class=nx>e</span><span class=p>.</span><span class=nx>data</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>};</span>
+</span></span><span class=line><span class=cl><span class=nx>mediaRecorder</span><span class=p>.</span><span class=nx>onstart</span> <span class=o>=</span> <span class=p>()</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=s1>&#39;录制开始&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>};</span>
+</span></span><span class=line><span class=cl><span class=nx>mediaRecorder</span><span class=p>.</span><span class=nx>onpause</span> <span class=o>=</span> <span class=p>()</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=s1>&#39;录制暂停&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>};</span>
+</span></span><span class=line><span class=cl><span class=nx>mediaRecorder</span><span class=p>.</span><span class=nx>onresume</span> <span class=o>=</span> <span class=p>()</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=s1>&#39;录制继续&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>};</span>
+</span></span><span class=line><span class=cl><span class=nx>mediaRecorder</span><span class=p>.</span><span class=nx>onstop</span> <span class=o>=</span> <span class=p>()</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=s1>&#39;录制停止&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>};</span>
+</span></span><span class=line><span class=cl><span class=nx>mediaRecorder</span><span class=p>.</span><span class=nx>onerror</span> <span class=o>=</span> <span class=p>()</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>console</span><span class=p>.</span><span class=nx>error</span><span class=p>(</span><span class=s1>&#39;录制失败&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>};</span>
+</span></span><span class=line><span class=cl><span class=nx>mediaRecorder</span><span class=p>.</span><span class=nx>start</span><span class=p>();</span> <span class=c1>// 开始录制
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=nx>mediaRecorder</span><span class=p>.</span><span class=nx>pause</span><span class=p>();</span> <span class=c1>// 暂停录制
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=nx>mediaRecorder</span><span class=p>.</span><span class=nx>resume</span><span class=p>();</span> <span class=c1>// 继续录制
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=nx>mediaRecorder</span><span class=p>.</span><span class=nx>stop</span><span class=p>();</span> <span class=c1>// 结束录制
+</span></span></span><span class=line><span class=cl><span class=c1>// 暂停/继续录制
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kr>const</span> <span class=nx>pauseBtn</span> <span class=o>=</span> <span class=nb>document</span><span class=p>.</span><span class=nx>querySelector</span><span class=p>(</span><span class=s1>&#39;.pause-btn&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=nx>pauseBtn</span><span class=p>.</span><span class=nx>onclick</span> <span class=o>=</span> <span class=p>()</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=k>if</span> <span class=p>(</span><span class=nx>mediaRecorder</span><span class=p>.</span><span class=nx>state</span> <span class=o>===</span> <span class=s1>&#39;recording&#39;</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>mediaRecorder</span><span class=p>.</span><span class=nx>pause</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span> <span class=k>else</span> <span class=k>if</span> <span class=p>(</span><span class=nx>mediaRecorder</span><span class=p>.</span><span class=nx>state</span> <span class=o>===</span> <span class=s1>&#39;paused&#39;</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>mediaRecorder</span><span class=p>.</span><span class=nx>resume</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>};</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=兼容性>兼容性</h2><p>根据<a class=link href=https://faceid.com/document/faceid-guide-docs/h5_rtc_compatibility target=_blank rel=noopener>
+旷视发布的 RTC 兼容性说明
+</a>，iOS 和原生 Android 内置的浏览器和 WebView 组件都已经很好的支持了 WebRTC；腾讯的 X5 也对 WebRTC 有不错的支持。</p><p>如果出现了运行错误，可以使用 <a class=link href=https://developer.mozilla.org/zh-CN/docs/Web/API/WebRTC_API/adapter.js target=_blank rel=noopener>adapter.js
+</a>垫片并使用 <a class=link href=https://webdemo.agora.io/agora_webrtc_troubleshooting target=_blank rel=noopener>Agora WebRTC Precall Test
+</a>检测当前环境对 WebRTC 的支持情况。</p><p>小米部分机型不识别 MediaStream，并且没有对应的开发文档。</p><p>如果 iOS 不能实时预览和回放，请<a class=link href=https://developer.apple.com/documentation/webkit/delivering_video_content_for_safari target=_blank rel=noopener>
+参阅
+</a>。</p><p>DEMO 在<a class=link href=/demosforife/MediaRecorder.html>
+这里
+</a>。</p></section><footer class=article-footer><section class=article-copyright><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span></section></footer></article><footer class=site-footer><section class=copyright>&copy;
+2017 -
+2024
+<a href=https://github.com/Vikingama target=_blank>馬腊咯稽</a></section><section class=powerby>Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a>, Deploy by Actions<br>主题 <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.13.0>Stack</a></b> 由 <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a> 设计</section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">目录</h2><div class=widget--toc><nav id=TableOfContents><ol><li><a href=#需求>需求</a></li><li><a href=#webrtc>WebRTC</a></li><li><a href=#兼容性>兼容性</a></li></ol></nav></div></section></aside></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=/ts/main.js defer></script></body></html>

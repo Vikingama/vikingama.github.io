@@ -1,0 +1,599 @@
+<!doctype html><html lang=zh-cn dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content='前几天面试，让写一个很简单的 React 项目，竟然有点手生'><title>TS 在 React 中的简单应用 · Stay Hungry · Stay Foolish</title>
+<link rel=canonical href=https://vikingama.github.io/p/ts-%E5%9C%A8-react-%E4%B8%AD%E7%9A%84%E7%AE%80%E5%8D%95%E5%BA%94%E7%94%A8/><link rel=stylesheet href=/scss/style.min.38c15d3a5c1bca30008bb625a46636d24f5deb4bf3217095e667a3abc843eaef.css><meta property='og:title' content='TS 在 React 中的简单应用'><meta property='og:description' content='前几天面试，让写一个很简单的 React 项目，竟然有点手生'><meta property='og:url' content='https://vikingama.github.io/p/ts-%E5%9C%A8-react-%E4%B8%AD%E7%9A%84%E7%AE%80%E5%8D%95%E5%BA%94%E7%94%A8/'><meta property='og:site_name' content='馬腊咯稽'><meta property='og:type' content='article'><meta property='article:section' content='Post'><meta property='article:published_time' content='2022-01-17T00:00:00+00:00'><meta property='article:modified_time' content='2022-01-17T00:00:00+00:00'><meta property='og:image' content='https://vikingama.github.io/img/cover/typescript.png'><meta name=twitter:title content="TS 在 React 中的简单应用"><meta name=twitter:description content="前几天面试，让写一个很简单的 React 项目，竟然有点手生"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content='https://vikingama.github.io/img/cover/typescript.png'><link rel="shortcut icon" href=/favicon.ico><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><meta name=theme-color content="#ffffff"><meta name=robots content="noarchive"><div class=warning-banner>因为 GitHub 账号二次验证失败，计划迁往
+<a href=https://elementref.github.io/>新地址&rarr;</a></div></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label=切换菜单>
+<span class=hamburger-box><span class=hamburger-inner></span></span></button><header><figure class=site-avatar><a href=/><img src=/img/avatar_huae06eac29c2bc6aa7e83a685ea2f6536_13838_300x0_resize_box_3.png width=300 height=404 class=site-logo loading=lazy alt=Avatar></a></figure><div class=site-meta><h1 class=site-name><a href=/>馬腊咯稽</a></h1><h2 class=site-description>Stay Hungry · Stay Foolish</h2></div></header><ol class=menu id=main-menu><li><a href=/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg>
+<span>首页</span></a></li><li><a href=/archives/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><rect x="3" y="4" width="18" height="4" rx="2"/><path d="M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+<span>归档</span></a></li><li><a href=/search/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="10" cy="10" r="7"/><line x1="21" y1="21" x2="15" y2="15"/></svg>
+<span>搜索</span></a></li><li><a href=https://github.com/ElementRef/AboutConfig target=_blank><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-infinity" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M9.828 9.172a4 4 0 100 5.656A10 10 0 0012 12a10 10 0 012.172-2.828 4 4 0 110 5.656A10 10 0 0112 12 10 10 0 009.828 9.172"/></svg>
+<span>配置</span></a></li><li><a href=/%E5%90%AF%E5%8F%91/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M10 14a3.5 3.5.0 005 0l4-4a3.5 3.5.0 00-5-5l-.5.5"/><path d="M14 10a3.5 3.5.0 00-5 0l-4 4a3.5 3.5.0 005 5l.5-.5"/></svg>
+<span>启发</span></a></li><li><a href=/%E5%91%BD%E4%BB%A4/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-terminal" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 7l5 5-5 5"/><line x1="12" y1="19" x2="19" y2="19"/></svg>
+<span>命令</span></a></li><li><a href=/%E5%85%B3%E4%BA%8E/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="7" r="4"/><path d="M6 21v-2a4 4 0 014-4h4a4 4 0 014 4v2"/></svg>
+<span>关于</span></a></li><div class=menu-bottom-section><li id=dark-mode-toggle><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<span>深色</span></li></div></ol></aside><main class="main full-width"><article class="has-image main-article"><header class=article-header><div class=article-image><a href=/p/ts-%E5%9C%A8-react-%E4%B8%AD%E7%9A%84%E7%AE%80%E5%8D%95%E5%BA%94%E7%94%A8/><img src=/img/cover/typescript.png loading=lazy alt="TS 在 React 中的简单应用"></a></div><div class=article-details><header class=article-category><a href=/categories/ts/>TS</a></header><div class=article-title-wrapper><h2 class=article-title><a href=/p/ts-%E5%9C%A8-react-%E4%B8%AD%E7%9A%84%E7%AE%80%E5%8D%95%E5%BA%94%E7%94%A8/>TS 在 React 中的简单应用</a></h2><h3 class=article-subtitle>前几天面试，让写一个很简单的 React 项目，竟然有点手生</h3></div><footer class=article-time><div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>Jan 17, 2022</time></div><div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>阅读时长：4 分钟</time></div></footer></div></header><section class=article-content><h2 id=导入方式>导入方式</h2><p>在 19/20 版本，默认导出可能不可用。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-tsx data-lang=tsx><span class=line><span class=cl><span class=kr>import</span> <span class=o>*</span> <span class=kr>as</span> <span class=nx>React</span> <span class=kr>from</span> <span class=s1>&#39;react&#39;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>import</span> <span class=o>*</span> <span class=kr>as</span> <span class=nx>ReactDOM</span> <span class=kr>from</span> <span class=s1>&#39;react-dom&#39;</span><span class=p>;</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=组件-props-类型>组件 props 类型</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span><span class=lnt>55
+</span><span class=lnt>56
+</span><span class=lnt>57
+</span><span class=lnt>58
+</span><span class=lnt>59
+</span><span class=lnt>60
+</span><span class=lnt>61
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-tsx data-lang=tsx><span class=line><span class=cl><span class=kr>type</span> <span class=nx>CommonType</span> <span class=o>=</span> <span class=p>{};</span>
+</span></span><span class=line><span class=cl><span class=kr>type</span> <span class=nx>ComponentProps</span> <span class=o>=</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>count</span>: <span class=kt>number</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=nx>message</span>: <span class=kt>string</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=nx>disabled</span>: <span class=kt>boolean</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=nx>status</span><span class=o>:</span> <span class=s1>&#39;success&#39;</span> <span class=o>|</span> <span class=s1>&#39;waiting&#39;</span> <span class=o>|</span> <span class=s1>&#39;error&#39;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=nx>objAttr</span><span class=o>:</span> <span class=p>{};</span>
+</span></span><span class=line><span class=cl>  <span class=nx>objAttrArr</span><span class=o>:</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>id</span>: <span class=kt>string</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=nx>title</span>: <span class=kt>string</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>}[];</span>
+</span></span><span class=line><span class=cl>  <span class=nx>dict1</span><span class=o>:</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=p>[</span><span class=nx>key</span>: <span class=kt>string</span><span class=p>]</span><span class=o>:</span> <span class=nx>CommonType</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>};</span>
+</span></span><span class=line><span class=cl>  <span class=nx>dict2</span>: <span class=kt>Record</span><span class=p>&lt;</span><span class=nt>string</span><span class=err>,</span> <span class=na>CommonType</span><span class=p>&gt;;</span> <span class=c1>// 同 dict1
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=nx>onSth</span>: <span class=kt>Function</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=nx>onChange</span><span class=p>()</span><span class=o>:</span> <span class=k>void</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=nx>onClick</span><span class=o>:</span> <span class=p>()</span> <span class=o>=&gt;</span> <span class=k>void</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=nx>onSubmit</span><span class=p>(</span><span class=nx>event</span>: <span class=kt>React.FormEvent</span><span class=p>&lt;</span><span class=nt>HTMLFormElement</span><span class=p>&gt;)</span><span class=o>:</span> <span class=k>void</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=nx>onContextMenu</span><span class=o>:</span> <span class=p>(</span><span class=nx>event</span>: <span class=kt>React.MouseEvent</span><span class=p>&lt;</span><span class=nt>HTMLDivElement</span><span class=p>&gt;)</span> <span class=o>=&gt;</span> <span class=k>void</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=nx>optional?</span>: <span class=kt>unknown</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>};</span>
+</span></span><span class=line><span class=cl><span class=cm>/**
+</span></span></span><span class=line><span class=cl><span class=cm> * 获取元素的 props 类型：
+</span></span></span><span class=line><span class=cl><span class=cm> * React.HTMLAttributes&lt;HTMLDivElement&gt;
+</span></span></span><span class=line><span class=cl><span class=cm> * React.HTMLProps&lt;HTMLDivElement&gt;
+</span></span></span><span class=line><span class=cl><span class=cm> * 获取组件的 props 类型：
+</span></span></span><span class=line><span class=cl><span class=cm> * React.ComponentProps&lt;typeof App&gt;
+</span></span></span><span class=line><span class=cl><span class=cm> * React.ComponentPropsWithRef&lt;typeof App&gt;
+</span></span></span><span class=line><span class=cl><span class=cm> * React.ComponentPropsWithoutRef&lt;typeof App&gt;
+</span></span></span><span class=line><span class=cl><span class=cm> */</span>
+</span></span><span class=line><span class=cl><span class=kr>type</span> <span class=nx>MyButtonProps</span> <span class=o>=</span> <span class=nx>React</span><span class=p>.</span><span class=nx>HTMLAttributes</span><span class=p>&lt;</span><span class=nt>HTMLButtonElement</span><span class=p>&gt;</span> <span class=o>&amp;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=kr>type</span><span class=o>:</span> <span class=s1>&#39;button&#39;</span> <span class=o>|</span> <span class=s1>&#39;submit&#39;</span> <span class=o>|</span> <span class=s1>&#39;reset&#39;</span> <span class=o>|</span> <span class=kc>undefined</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>};</span>
+</span></span><span class=line><span class=cl><span class=kr>const</span> <span class=nx>MyButtonWithForwardRef</span> <span class=o>=</span> <span class=nx>React</span><span class=p>.</span><span class=nx>forwardRef</span><span class=o>&lt;</span>
+</span></span><span class=line><span class=cl>  <span class=nx>HTMLButtonElement</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nx>MyButtonProps</span>
+</span></span><span class=line><span class=cl><span class=o>&gt;</span><span class=p>((</span><span class=nx>props</span><span class=p>,</span> <span class=nx>ref</span><span class=p>)</span> <span class=o>=&gt;</span> <span class=p>(</span>
+</span></span><span class=line><span class=cl>  <span class=p>&lt;</span><span class=nt>div</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>    <span class=p>&lt;</span><span class=nt>button</span> <span class=na>ref</span><span class=o>=</span><span class=p>{</span><span class=nx>ref</span><span class=p>}</span> <span class=p>{</span><span class=na>...props</span><span class=p>}&gt;</span>
+</span></span><span class=line><span class=cl>      <span class=err>按钮</span>
+</span></span><span class=line><span class=cl>    <span class=p>&lt;/</span><span class=nt>button</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  <span class=p>&lt;/</span><span class=nt>div</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>));</span>
+</span></span><span class=line><span class=cl><span class=kr>export</span> <span class=kr>declare</span> <span class=kr>interface</span> <span class=nx>OtherProps</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=cm>/**
+</span></span></span><span class=line><span class=cl><span class=cm>   * JSX.Element        React.createElement 的返回值类型
+</span></span></span><span class=line><span class=cl><span class=cm>   * React.ReactNode    组件的返回值类型
+</span></span></span><span class=line><span class=cl><span class=cm>   */</span>
+</span></span><span class=line><span class=cl>  <span class=nx>children1</span>: <span class=kt>JSX.Element</span><span class=p>;</span> <span class=c1>// 没考虑数组
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=nx>children2</span>: <span class=kt>JSX.Element</span> <span class=o>|</span> <span class=nx>JSX</span><span class=p>.</span><span class=nx>Element</span><span class=p>[];</span> <span class=c1>// 没考虑字符串
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=nx>children3</span>: <span class=kt>React.ReactChildren</span><span class=p>;</span> <span class=c1>// 更像是一个方法而不是类型
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=nx>children4</span>: <span class=kt>React.ReactChild</span><span class=p>[];</span> <span class=c1>// 稍好，考虑到了数组子元素
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=nx>children5</span>: <span class=kt>React.ReactNode</span><span class=p>;</span> <span class=c1>// 兼顾到了所有边界情况
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=nx>renderChildren</span><span class=o>:</span> <span class=p>()</span> <span class=o>=&gt;</span> <span class=nx>React</span><span class=p>.</span><span class=nx>ReactNode</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=nx>style?</span>: <span class=kt>React.CSSProperties</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=nx>onChange?</span>: <span class=kt>React.ChangeEventHandler</span><span class=p>&lt;</span><span class=nt>HTMLInputElement</span><span class=p>&gt;;</span>
+</span></span><span class=line><span class=cl>  <span class=nx>onSubmit?</span>: <span class=kt>React.FormEventHandler</span><span class=p>&lt;</span><span class=nt>HTMLFormElement</span><span class=p>&gt;;</span>
+</span></span><span class=line><span class=cl>  <span class=nx>props1</span>: <span class=kt>React.ComponentPropsWithoutRef</span><span class=o>&lt;</span><span class=s1>&#39;button&#39;</span><span class=o>&gt;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=nx>props2</span>: <span class=kt>React.ComponentPropsWithRef</span><span class=p>&lt;</span><span class=nt>typeof</span> <span class=na>MyButtonWithForwardRef</span><span class=p>&gt;;</span> <span class=c1>// 通过 typeof 获取组件类型
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>type 还是 interface：</p><ol><li>在定义库或者第三方环境类型时，使用 interface，因为它方便扩展；</li><li>在定义组件的 props 和 state 类型时，使用 type，因为它更具有约束性；</li><li>在定义联合类型时，type 非常有用；在描述数据结构 implement 或 extends 类型时，interface 更好。</li></ol><h2 id=函数组件>函数组件</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-tsx data-lang=tsx><span class=line><span class=cl><span class=kr>type</span> <span class=nx>Props</span> <span class=o>=</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>message</span>: <span class=kt>string</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>};</span>
+</span></span><span class=line><span class=cl><span class=c1>// 不推荐 (https://github.com/facebook/create-react-app/pull/8177)
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kr>const</span> <span class=nx>MessageOne</span>: <span class=kt>React.FC</span><span class=p>&lt;</span><span class=nt>Props</span><span class=p>&gt;</span> <span class=o>=</span> <span class=p>({</span> <span class=nx>message</span> <span class=p>})</span> <span class=o>=&gt;</span> <span class=p>&lt;</span><span class=nt>div</span><span class=p>&gt;{</span><span class=nx>message</span><span class=p>}&lt;/</span><span class=nt>div</span><span class=p>&gt;;</span>
+</span></span><span class=line><span class=cl><span class=c1>// 推荐
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kr>const</span> <span class=nx>MessageTwo</span> <span class=o>=</span> <span class=p>({</span> <span class=nx>message</span> <span class=p>}</span><span class=o>:</span> <span class=nx>Props</span><span class=p>)</span> <span class=o>=&gt;</span> <span class=p>&lt;</span><span class=nt>div</span><span class=p>&gt;{</span><span class=nx>message</span><span class=p>}&lt;/</span><span class=nt>div</span><span class=p>&gt;;</span>
+</span></span></code></pre></td></tr></table></div></div><p>不推荐 React.FC 的原因是：</p><ol><li>对组件的 props.children 进行了定义，即使组件不渲染 props.children；</li><li>FC 之前还有 SFC、VFC，谁知道还会不会改名字；</li><li>对『组件命名空间模式』支持的不够好。</li></ol><h2 id=类组件>类组件</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-tsx data-lang=tsx><span class=line><span class=cl><span class=kr>type</span> <span class=nx>MainProps</span> <span class=o>=</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=c1>// readonly 没必要加上，因为 React.Component&lt;P,S&gt; 会将他们标记为 immutable
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=kr>readonly</span> <span class=nx>age</span>: <span class=kt>number</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=nx>message</span>: <span class=kt>string</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>};</span>
+</span></span><span class=line><span class=cl><span class=kr>type</span> <span class=nx>MainState</span> <span class=o>=</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>count</span>: <span class=kt>number</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>};</span>
+</span></span><span class=line><span class=cl><span class=kr>class</span> <span class=nx>Main</span> <span class=kr>extends</span> <span class=nx>React</span><span class=p>.</span><span class=nx>Component</span><span class=p>&lt;</span><span class=nt>MainProps</span><span class=err>,</span> <span class=na>MainState</span><span class=p>&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>year</span><span class=o>!:</span> <span class=kt>number</span><span class=p>;</span> <span class=c1>// 非空断言
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>// 为了更好的类型推断
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=nx>state</span>: <span class=kt>MainState</span> <span class=o>=</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>count</span>: <span class=kt>1</span>
+</span></span><span class=line><span class=cl>  <span class=p>};</span>
+</span></span><span class=line><span class=cl>  <span class=nx>handleIncrement</span> <span class=o>=</span> <span class=p>(</span><span class=nx>num</span>: <span class=kt>number</span> <span class=o>=</span> <span class=mi>1</span><span class=p>)</span> <span class=o>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>this</span><span class=p>.</span><span class=nx>setState</span><span class=p>(</span><span class=nx>state</span> <span class=o>=&gt;</span> <span class=p>({</span>
+</span></span><span class=line><span class=cl>      <span class=nx>count</span>: <span class=kt>state.count</span> <span class=o>+</span> <span class=nx>num</span>
+</span></span><span class=line><span class=cl>    <span class=p>}));</span>
+</span></span><span class=line><span class=cl>  <span class=p>};</span>
+</span></span><span class=line><span class=cl>  <span class=kr>static</span> <span class=nx>getDerivedStateFromProps</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>    <span class=nx>nextProps</span>: <span class=kt>MainProps</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nx>prevState</span>: <span class=kt>MainState</span>
+</span></span><span class=line><span class=cl>  <span class=p>)</span><span class=o>:</span> <span class=nx>Partial</span><span class=p>&lt;</span><span class=nt>MainState</span><span class=p>&gt;</span> <span class=o>|</span> <span class=kc>undefined</span> <span class=o>|</span> <span class=kc>null</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// ...
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=k>return</span> <span class=kc>null</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=nx>componentDidMount() {</span>
+</span></span><span class=line><span class=cl>    <span class=k>this</span><span class=p>.</span><span class=nx>year</span> <span class=o>=</span> <span class=k>this</span><span class=p>.</span><span class=nx>props</span><span class=p>.</span><span class=nx>age</span> <span class=o>*</span> <span class=mi>10</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=nx>render() {</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=p>(</span>
+</span></span><span class=line><span class=cl>      <span class=p>&lt;</span><span class=nt>div</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>        <span class=p>&lt;</span><span class=nt>span</span><span class=p>&gt;{</span><span class=k>this</span><span class=p>.</span><span class=nx>props</span><span class=p>.</span><span class=nx>message</span><span class=p>}&lt;/</span><span class=nt>span</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>        <span class=p>&lt;</span><span class=nt>span</span> <span class=na>onClick</span><span class=o>=</span><span class=p>{()</span> <span class=o>=&gt;</span> <span class=k>this</span><span class=p>.</span><span class=nx>handleIncrement</span><span class=p>()}&gt;{</span><span class=k>this</span><span class=p>.</span><span class=nx>state</span><span class=p>.</span><span class=nx>count</span><span class=p>}&lt;/</span><span class=nt>span</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>        <span class=p>&lt;</span><span class=nt>span</span><span class=p>&gt;{</span><span class=k>this</span><span class=p>.</span><span class=nx>year</span><span class=p>}&lt;/</span><span class=nt>span</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>      <span class=p>&lt;/</span><span class=nt>div</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>    <span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=hook>Hook</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span><span class=lnt>55
+</span><span class=lnt>56
+</span><span class=lnt>57
+</span><span class=lnt>58
+</span><span class=lnt>59
+</span><span class=lnt>60
+</span><span class=lnt>61
+</span><span class=lnt>62
+</span><span class=lnt>63
+</span><span class=lnt>64
+</span><span class=lnt>65
+</span><span class=lnt>66
+</span><span class=lnt>67
+</span><span class=lnt>68
+</span><span class=lnt>69
+</span><span class=lnt>70
+</span><span class=lnt>71
+</span><span class=lnt>72
+</span><span class=lnt>73
+</span><span class=lnt>74
+</span><span class=lnt>75
+</span><span class=lnt>76
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-tsx data-lang=tsx><span class=line><span class=cl><span class=c1>// useState
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kr>export</span> <span class=kd>function</span> <span class=nx>StateExample() {</span>
+</span></span><span class=line><span class=cl>  <span class=cm>/**
+</span></span></span><span class=line><span class=cl><span class=cm>   * show 被推断为 boolean
+</span></span></span><span class=line><span class=cl><span class=cm>   * setShow 被推断为 React.Dispatch&lt;React.SetStateAction&lt;boolean&gt;&gt;
+</span></span></span><span class=line><span class=cl><span class=cm>   */</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=p>[</span><span class=nx>show</span><span class=p>,</span> <span class=nx>setShow</span><span class=p>]</span> <span class=o>=</span> <span class=nx>React</span><span class=p>.</span><span class=nx>useState</span><span class=p>(</span><span class=kc>false</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=cm>/**
+</span></span></span><span class=line><span class=cl><span class=cm>   * user 被推断为 User | null
+</span></span></span><span class=line><span class=cl><span class=cm>   * setUser 被推断为 React.Dispatch&lt;React.SetStateAction&lt;User | null&gt;&gt;
+</span></span></span><span class=line><span class=cl><span class=cm>   */</span>
+</span></span><span class=line><span class=cl>  <span class=kr>type</span> <span class=nx>User</span> <span class=o>=</span> <span class=p>{};</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=p>[</span><span class=nx>user</span><span class=p>,</span> <span class=nx>setUser</span><span class=p>]</span> <span class=o>=</span> <span class=nx>React</span><span class=p>.</span><span class=nx>useState</span><span class=p>&lt;</span><span class=nt>User</span> <span class=err>|</span> <span class=na>null</span><span class=p>&gt;(</span><span class=kc>null</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=kc>null</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=c1>// useReducer
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kr>const</span> <span class=nx>initialState</span> <span class=o>=</span> <span class=p>{</span> <span class=nx>count</span>: <span class=kt>0</span> <span class=p>};</span>
+</span></span><span class=line><span class=cl><span class=kr>type</span> <span class=nx>ActionType</span> <span class=o>=</span>
+</span></span><span class=line><span class=cl>  <span class=o>|</span> <span class=p>{</span> <span class=kr>type</span><span class=o>:</span> <span class=s1>&#39;add&#39;</span><span class=p>;</span> <span class=nx>payload</span>: <span class=kt>number</span> <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=o>|</span> <span class=p>{</span> <span class=kr>type</span><span class=o>:</span> <span class=s1>&#39;dec&#39;</span><span class=p>;</span> <span class=nx>payload</span>: <span class=kt>number</span> <span class=p>};</span>
+</span></span><span class=line><span class=cl><span class=kd>function</span> <span class=nx>reducer</span><span class=p>(</span><span class=nx>state</span>: <span class=kt>typeof</span> <span class=nx>initialState</span><span class=p>,</span> <span class=nx>action</span>: <span class=kt>ActionType</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=k>switch</span> <span class=p>(</span><span class=nx>action</span><span class=p>.</span><span class=kr>type</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>case</span> <span class=s1>&#39;add&#39;</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>      <span class=k>return</span> <span class=p>{</span> <span class=nx>count</span>: <span class=kt>state.count</span> <span class=o>+</span> <span class=nx>action</span><span class=p>.</span><span class=nx>payload</span> <span class=p>};</span>
+</span></span><span class=line><span class=cl>    <span class=k>case</span> <span class=s1>&#39;dec&#39;</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>      <span class=k>return</span> <span class=p>{</span> <span class=nx>count</span>: <span class=kt>state.count</span> <span class=o>-</span> <span class=nx>action</span><span class=p>.</span><span class=nx>payload</span> <span class=p>};</span>
+</span></span><span class=line><span class=cl>    <span class=k>default</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>      <span class=k>return</span> <span class=p>{</span> <span class=nx>count</span>: <span class=kt>state.count</span> <span class=p>};</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=kr>export</span> <span class=kd>function</span> <span class=nx>ReducerExample() {</span>
+</span></span><span class=line><span class=cl>  <span class=cm>/**
+</span></span></span><span class=line><span class=cl><span class=cm>   * state 被推断为 {count: number}
+</span></span></span><span class=line><span class=cl><span class=cm>   * dispatch 被推断为 React.Dispatch&lt;ActionType&gt;
+</span></span></span><span class=line><span class=cl><span class=cm>   */</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=p>[</span><span class=nx>state</span><span class=p>,</span> <span class=nx>dispatch</span><span class=p>]</span> <span class=o>=</span> <span class=nx>React</span><span class=p>.</span><span class=nx>useReducer</span><span class=p>(</span><span class=nx>reducer</span><span class=p>,</span> <span class=nx>initialState</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=p>(</span>
+</span></span><span class=line><span class=cl>    <span class=p>&lt;</span><span class=nt>div</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>      <span class=p>&lt;</span><span class=nt>span</span><span class=p>&gt;{</span><span class=nx>state</span><span class=p>.</span><span class=nx>count</span><span class=p>}&lt;/</span><span class=nt>span</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>      <span class=p>&lt;</span><span class=nt>button</span> <span class=na>onClick</span><span class=o>=</span><span class=p>{()</span> <span class=o>=&gt;</span> <span class=nx>dispatch</span><span class=p>({</span> <span class=kr>type</span><span class=o>:</span> <span class=s1>&#39;add&#39;</span><span class=p>,</span> <span class=nx>payload</span>: <span class=kt>1</span> <span class=p>})}&gt;</span><span class=o>+</span><span class=p>&lt;/</span><span class=nt>button</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>      <span class=p>&lt;</span><span class=nt>button</span> <span class=na>onClick</span><span class=o>=</span><span class=p>{()</span> <span class=o>=&gt;</span> <span class=nx>dispatch</span><span class=p>({</span> <span class=kr>type</span><span class=o>:</span> <span class=s1>&#39;dec&#39;</span><span class=p>,</span> <span class=nx>payload</span>: <span class=kt>1</span> <span class=p>})}&gt;</span><span class=o>-</span><span class=p>&lt;/</span><span class=nt>button</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>    <span class=p>&lt;/</span><span class=nt>div</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  <span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=c1>// useRef
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kr>type</span> <span class=nx>timerType</span> <span class=o>=</span> <span class=nx>ReturnType</span><span class=p>&lt;</span><span class=nt>typeof</span> <span class=na>setTimeout</span><span class=p>&gt;</span> <span class=o>|</span> <span class=kc>null</span><span class=p>;</span> <span class=c1>// 获取 setTimeout 的返回值
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kr>export</span> <span class=kd>function</span> <span class=nx>DelayShow</span><span class=p>({</span> <span class=nx>delay</span> <span class=o>=</span> <span class=mi>3000</span> <span class=p>}</span><span class=o>:</span> <span class=p>{</span> <span class=nx>delay?</span>: <span class=kt>number</span> <span class=p>})</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>timer</span> <span class=o>=</span> <span class=nx>React</span><span class=p>.</span><span class=nx>useRef</span><span class=p>&lt;</span><span class=nt>timerType</span><span class=p>&gt;(</span><span class=kc>null</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=p>[</span><span class=nx>show</span><span class=p>,</span> <span class=nx>setShow</span><span class=p>]</span> <span class=o>=</span> <span class=nx>useState</span><span class=p>(</span><span class=kc>false</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=nx>useEffect</span><span class=p>(()</span> <span class=o>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>setShow</span><span class=p>(</span><span class=kc>false</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=nx>timer</span><span class=p>.</span><span class=nx>current</span> <span class=o>=</span> <span class=nx>setTimeout</span><span class=p>(()</span> <span class=o>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=nx>setShow</span><span class=p>(</span><span class=kc>true</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=p>},</span> <span class=nx>delay</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=p>()</span> <span class=o>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=k>if</span> <span class=p>(</span><span class=nx>timer</span><span class=p>.</span><span class=nx>current</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=nx>clearTimeout</span><span class=p>(</span><span class=nx>timer</span><span class=p>.</span><span class=nx>current</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>      <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=p>};</span>
+</span></span><span class=line><span class=cl>  <span class=p>},</span> <span class=p>[</span><span class=nx>delay</span><span class=p>]);</span>
+</span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=nx>show</span> <span class=o>?</span> <span class=p>&lt;</span><span class=nt>span</span><span class=p>&gt;</span><span class=nx>TikTok</span><span class=p>&lt;/</span><span class=nt>span</span><span class=p>&gt;</span> <span class=o>:</span> <span class=kc>null</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=kr>export</span> <span class=kr>const</span> <span class=nx>DOMRef</span>: <span class=kt>React.FC</span> <span class=o>=</span> <span class=p>({</span> <span class=nx>children</span> <span class=p>})</span> <span class=o>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>divRef</span> <span class=o>=</span> <span class=nx>React</span><span class=p>.</span><span class=nx>useRef</span><span class=p>&lt;</span><span class=nt>HTMLDivElement</span><span class=p>&gt;(</span><span class=kc>null</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=nx>useLayoutEffect</span><span class=p>(()</span> <span class=o>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=nx>divRef</span><span class=p>.</span><span class=nx>current</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=p>},</span> <span class=p>[]);</span>
+</span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=p>&lt;</span><span class=nt>div</span> <span class=na>ref</span><span class=o>=</span><span class=p>{</span><span class=nx>divRef</span><span class=p>}&gt;{</span><span class=nx>children</span><span class=p>}&lt;/</span><span class=nt>div</span><span class=p>&gt;;</span>
+</span></span><span class=line><span class=cl><span class=p>};</span>
+</span></span><span class=line><span class=cl><span class=c1>// useContext
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kr>type</span> <span class=nx>ThemeType</span> <span class=o>=</span> <span class=p>{</span> <span class=nx>theme</span>: <span class=kt>string</span> <span class=p>};</span>
+</span></span><span class=line><span class=cl><span class=kr>export</span> <span class=kr>const</span> <span class=nx>Theme</span> <span class=o>=</span> <span class=nx>React</span><span class=p>.</span><span class=nx>createContext</span><span class=p>&lt;</span><span class=nt>ThemeType</span><span class=p>&gt;({</span> <span class=nx>theme</span><span class=o>:</span> <span class=s1>&#39;dark&#39;</span> <span class=p>});</span>
+</span></span><span class=line><span class=cl><span class=kr>export</span> <span class=kd>function</span> <span class=nx>ConsumerExample() {</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>value</span> <span class=o>=</span> <span class=nx>React</span><span class=p>.</span><span class=nx>useContext</span><span class=p>&lt;</span><span class=nt>ThemeType</span><span class=p>&gt;(</span><span class=nx>Theme</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=p>&lt;</span><span class=nt>span</span><span class=p>&gt;{</span><span class=nx>value</span><span class=p>.</span><span class=nx>theme</span><span class=p>}&lt;/</span><span class=nt>span</span><span class=p>&gt;;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=事件>事件</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-tsx data-lang=tsx><span class=line><span class=cl><span class=kr>const</span> <span class=nx>EventExhibit</span> <span class=o>=</span> <span class=p>({</span> <span class=nx>children</span> <span class=p>}</span><span class=o>:</span> <span class=p>{</span> <span class=nx>children</span>: <span class=kt>React.ReactChildren</span> <span class=p>})</span> <span class=o>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=p>(</span>
+</span></span><span class=line><span class=cl>    <span class=p>&lt;</span><span class=nt>button</span>
+</span></span><span class=line><span class=cl>      <span class=na>onClick</span><span class=o>=</span><span class=p>{</span><span class=nx>event</span> <span class=o>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=cm>/* event 被自动推断为 React.MouseEvent&lt;HTMLButtonElement, MouseEvent&gt; */</span>
+</span></span><span class=line><span class=cl>        <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=nx>event</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>      <span class=p>}}</span>
+</span></span><span class=line><span class=cl>    <span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>      <span class=p>{</span><span class=nx>children</span><span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=p>&lt;/</span><span class=nt>button</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  <span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>};</span>
+</span></span><span class=line><span class=cl><span class=kr>const</span> <span class=nx>InputExhibit</span> <span class=o>=</span> <span class=p>()</span> <span class=o>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=p>[</span><span class=nx>info</span><span class=p>,</span> <span class=nx>setInfo</span><span class=p>]</span> <span class=o>=</span> <span class=nx>React</span><span class=p>.</span><span class=nx>useState</span><span class=p>({</span> <span class=nx>name</span><span class=o>:</span> <span class=s1>&#39;&#39;</span><span class=p>,</span> <span class=nx>age</span><span class=o>:</span> <span class=s1>&#39;&#39;</span> <span class=p>});</span>
+</span></span><span class=line><span class=cl>  <span class=c1>// 一种是对『事件对象』添加类型
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=kr>const</span> <span class=nx>handleNameChange</span> <span class=o>=</span> <span class=p>(</span><span class=nx>e</span>: <span class=kt>React.ChangeEvent</span><span class=p>&lt;</span><span class=nt>HTMLInputElement</span><span class=p>&gt;)</span><span class=o>:</span> <span class=k>void</span> <span class=o>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>setInfo</span><span class=p>({</span> <span class=p>...</span><span class=nx>info</span><span class=p>,</span> <span class=nx>name</span>: <span class=kt>e.target.value</span> <span class=p>});</span>
+</span></span><span class=line><span class=cl>  <span class=p>};</span>
+</span></span><span class=line><span class=cl>  <span class=c1>// 一种是对『事件处理函数』添加类型
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=kr>const</span> <span class=nx>handleAgeChange</span>: <span class=kt>React.ChangeEventHandler</span><span class=p>&lt;</span><span class=nt>HTMLInputElement</span><span class=p>&gt;</span> <span class=o>=</span> <span class=nx>e</span> <span class=o>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>setInfo</span><span class=p>({</span> <span class=p>...</span><span class=nx>info</span><span class=p>,</span> <span class=nx>age</span>: <span class=kt>e.target.value</span> <span class=p>});</span>
+</span></span><span class=line><span class=cl>  <span class=p>};</span>
+</span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=p>(</span>
+</span></span><span class=line><span class=cl>    <span class=p>&lt;</span><span class=nt>div</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>      <span class=p>&lt;</span><span class=nt>input</span> <span class=na>type</span><span class=o>=</span><span class=s>&#34;text&#34;</span> <span class=na>value</span><span class=o>=</span><span class=p>{</span><span class=nx>info</span><span class=p>.</span><span class=nx>name</span><span class=p>}</span> <span class=na>onChange</span><span class=o>=</span><span class=p>{</span><span class=nx>handleNameChange</span><span class=p>}</span> <span class=p>/&gt;</span>
+</span></span><span class=line><span class=cl>      <span class=p>&lt;</span><span class=nt>input</span> <span class=na>type</span><span class=o>=</span><span class=s>&#34;text&#34;</span> <span class=na>value</span><span class=o>=</span><span class=p>{</span><span class=nx>info</span><span class=p>.</span><span class=nx>age</span><span class=p>}</span> <span class=na>onChange</span><span class=o>=</span><span class=p>{</span><span class=nx>handleAgeChange</span><span class=p>}</span> <span class=p>/&gt;</span>
+</span></span><span class=line><span class=cl>    <span class=p>&lt;/</span><span class=nt>div</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  <span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>};</span>
+</span></span><span class=line><span class=cl><span class=kr>const</span> <span class=nx>FormEvent</span> <span class=o>=</span> <span class=p>()</span> <span class=o>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=c1>// React.FormEvent 也可以
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=kr>const</span> <span class=nx>handleSubmit</span> <span class=o>=</span> <span class=p>(</span><span class=nx>e</span>: <span class=kt>React.SyntheticEvent</span><span class=p>)</span><span class=o>:</span> <span class=k>void</span> <span class=o>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>e</span><span class=p>.</span><span class=nx>preventDefault</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>    <span class=kr>const</span> <span class=nx>target</span> <span class=o>=</span> <span class=nx>e</span><span class=p>.</span><span class=nx>target</span> <span class=kr>as</span> <span class=k>typeof</span> <span class=nx>e</span><span class=p>.</span><span class=nx>target</span> <span class=o>&amp;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=nx>email</span><span class=o>:</span> <span class=p>{</span> <span class=nx>value</span>: <span class=kt>string</span> <span class=p>};</span>
+</span></span><span class=line><span class=cl>      <span class=nx>password</span><span class=o>:</span> <span class=p>{</span> <span class=nx>value</span>: <span class=kt>string</span> <span class=p>};</span>
+</span></span><span class=line><span class=cl>    <span class=p>};</span>
+</span></span><span class=line><span class=cl>    <span class=kr>const</span> <span class=nx>email</span> <span class=o>=</span> <span class=nx>target</span><span class=p>.</span><span class=nx>email</span><span class=p>.</span><span class=nx>value</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=kr>const</span> <span class=nx>password</span> <span class=o>=</span> <span class=nx>target</span><span class=p>.</span><span class=nx>password</span><span class=p>.</span><span class=nx>value</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=nx>email</span><span class=p>,</span> <span class=nx>password</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=p>};</span>
+</span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=p>(</span>
+</span></span><span class=line><span class=cl>    <span class=p>&lt;</span><span class=nt>form</span> <span class=na>onSubmit</span><span class=o>=</span><span class=p>{</span><span class=nx>handleSubmit</span><span class=p>}&gt;</span>
+</span></span><span class=line><span class=cl>      <span class=p>&lt;</span><span class=nt>label</span> <span class=na>htmlFor</span><span class=o>=</span><span class=s>&#34;email&#34;</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>        <span class=p>&lt;</span><span class=nt>input</span> <span class=na>type</span><span class=o>=</span><span class=s>&#34;text&#34;</span> <span class=na>name</span><span class=o>=</span><span class=s>&#34;email&#34;</span> <span class=p>/&gt;</span>
+</span></span><span class=line><span class=cl>      <span class=p>&lt;/</span><span class=nt>label</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>      <span class=p>&lt;</span><span class=nt>label</span> <span class=na>htmlFor</span><span class=o>=</span><span class=s>&#34;password&#34;</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>        <span class=p>&lt;</span><span class=nt>input</span> <span class=na>type</span><span class=o>=</span><span class=s>&#34;password&#34;</span> <span class=na>name</span><span class=o>=</span><span class=s>&#34;password&#34;</span> <span class=p>/&gt;</span>
+</span></span><span class=line><span class=cl>      <span class=p>&lt;/</span><span class=nt>label</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>      <span class=p>&lt;</span><span class=nt>button</span> <span class=na>type</span><span class=o>=</span><span class=s>&#34;submit&#34;</span><span class=p>&gt;</span><span class=err>提交</span><span class=p>&lt;/</span><span class=nt>button</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>    <span class=p>&lt;/</span><span class=nt>form</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  <span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>};</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=portals>Portals</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-tsx data-lang=tsx><span class=line><span class=cl><span class=kr>const</span> <span class=nx>modelEle</span> <span class=o>=</span> <span class=nb>document</span><span class=p>.</span><span class=nx>querySelector</span><span class=p>(</span><span class=s1>&#39;#modelEle&#39;</span><span class=p>)</span> <span class=kr>as</span> <span class=nx>HTMLElement</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>const</span> <span class=nx>Model</span>: <span class=kt>React.FC</span> <span class=o>=</span> <span class=p>({</span> <span class=nx>children</span> <span class=p>})</span> <span class=o>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>el</span> <span class=o>=</span> <span class=nx>React</span><span class=p>.</span><span class=nx>useRef</span><span class=p>(</span><span class=nb>document</span><span class=p>.</span><span class=nx>createElement</span><span class=p>(</span><span class=s1>&#39;div&#39;</span><span class=p>));</span>
+</span></span><span class=line><span class=cl>  <span class=nx>useEffect</span><span class=p>(()</span> <span class=o>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>modelEle</span><span class=p>.</span><span class=nx>appendChild</span><span class=p>(</span><span class=nx>el</span><span class=p>.</span><span class=nx>current</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=p>()</span> <span class=o>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=nx>modelEle</span><span class=p>.</span><span class=nx>removeChild</span><span class=p>(</span><span class=nx>el</span><span class=p>.</span><span class=nx>current</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=p>};</span>
+</span></span><span class=line><span class=cl>  <span class=p>},</span> <span class=p>[]);</span>
+</span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=nx>ReactDOM</span><span class=p>.</span><span class=nx>createPortal</span><span class=p>(</span><span class=nx>children</span><span class=p>,</span> <span class=nx>el</span><span class=p>.</span><span class=nx>current</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>};</span>
+</span></span><span class=line><span class=cl><span class=kr>const</span> <span class=nx>UseModel</span> <span class=o>=</span> <span class=p>()</span> <span class=o>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=p>[</span><span class=nx>show</span><span class=p>,</span> <span class=nx>setShow</span><span class=p>]</span> <span class=o>=</span> <span class=nx>React</span><span class=p>.</span><span class=nx>useState</span><span class=p>(</span><span class=kc>false</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=p>(</span>
+</span></span><span class=line><span class=cl>    <span class=p>&lt;</span><span class=nt>div</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>      <span class=p>&lt;</span><span class=nt>div</span> <span class=na>id</span><span class=o>=</span><span class=s>&#34;modelEle&#34;</span><span class=p>&gt;&lt;/</span><span class=nt>div</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>      <span class=p>{</span><span class=nx>show</span> <span class=o>&amp;&amp;</span> <span class=p>(</span>
+</span></span><span class=line><span class=cl>        <span class=p>&lt;</span><span class=nt>Model</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>          <span class=p>&lt;</span><span class=nt>div</span><span class=p>&gt;{</span><span class=cm>/* ... */</span><span class=p>}&lt;/</span><span class=nt>div</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>          <span class=p>&lt;</span><span class=nt>button</span> <span class=na>onClick</span><span class=o>=</span><span class=p>{()</span> <span class=o>=&gt;</span> <span class=nx>setShow</span><span class=p>(</span><span class=kc>false</span><span class=p>)}&gt;</span><span class=err>关闭</span><span class=p>&lt;/</span><span class=nt>button</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>        <span class=p>&lt;/</span><span class=nt>Model</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>      <span class=p>)}</span>
+</span></span><span class=line><span class=cl>      <span class=p>&lt;</span><span class=nt>button</span> <span class=na>onClick</span><span class=o>=</span><span class=p>{()</span> <span class=o>=&gt;</span> <span class=nx>setShow</span><span class=p>(</span><span class=kc>true</span><span class=p>)}&gt;</span><span class=err>打开</span><span class=p>&lt;/</span><span class=nt>button</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>    <span class=p>&lt;/</span><span class=nt>div</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  <span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>};</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=错误边界>错误边界</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-tsx data-lang=tsx><span class=line><span class=cl><span class=kr>type</span> <span class=nx>ErrorProps</span> <span class=o>=</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>children</span>: <span class=kt>React.ReactNode</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>};</span>
+</span></span><span class=line><span class=cl><span class=kr>type</span> <span class=nx>ErrorState</span> <span class=o>=</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>hasError</span>: <span class=kt>boolean</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>};</span>
+</span></span><span class=line><span class=cl><span class=kr>class</span> <span class=nx>ErrorBoundary</span> <span class=kr>extends</span> <span class=nx>React</span><span class=p>.</span><span class=nx>Component</span><span class=p>&lt;</span><span class=nt>ErrorProps</span><span class=err>,</span> <span class=na>ErrorState</span><span class=p>&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>state</span>: <span class=kt>ErrorState</span> <span class=o>=</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>hasError</span>: <span class=kt>false</span>
+</span></span><span class=line><span class=cl>  <span class=p>};</span>
+</span></span><span class=line><span class=cl>  <span class=kr>static</span> <span class=nx>getDerivedStateFromError</span><span class=p>(</span><span class=nx>error</span>: <span class=kt>Error</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=p>{</span> <span class=nx>hasError</span>: <span class=kt>true</span> <span class=p>};</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=nx>componentDidCatch</span><span class=p>(</span><span class=nx>error</span>: <span class=kt>Error</span><span class=p>,</span> <span class=nx>stack</span>: <span class=kt>React.ErrorInfo</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>console</span><span class=p>.</span><span class=nx>error</span><span class=p>(</span><span class=nx>error</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=nx>console</span><span class=p>.</span><span class=nx>error</span><span class=p>(</span><span class=nx>stack</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=nx>render() {</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=k>this</span><span class=p>.</span><span class=nx>state</span><span class=p>.</span><span class=nx>hasError</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=k>return</span> <span class=p>&lt;</span><span class=nt>div</span><span class=p>&gt;</span><span class=nb>Error</span> <span class=nx>Occuried</span><span class=p>...&lt;/</span><span class=nt>div</span><span class=p>&gt;;</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=k>this</span><span class=p>.</span><span class=nx>props</span><span class=p>.</span><span class=nx>children</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=参考>参考</h2><ul><li><a class=link href=https://fettblog.eu/typescript-react-why-i-dont-use-react-fc target=_blank rel=noopener>TypeScript + React: Why I don&rsquo;t Use React.FC</a></li><li><a class=link href=https://github.com/facebook/create-react-app/pull/8177 target=_blank rel=noopener>Remove React.FC from Typescript Template</a></li><li><a class=link href=https://fettblog.eu/typescript-react-component-patterns target=_blank rel=noopener>TypeScript + React: Component Patterns</a></li><li><a class=link href=https://react-typescript-cheatsheet.netlify.app target=_blank rel=noopener>React TypeScript Cheatsheet</a></li></ul></section><footer class=article-footer><section class=article-copyright><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span></section></footer></article><aside class=related-content--wrapper><h2 class=section-title>相关文章</h2><div class=related-content><div class="flex article-list--tile"><article class=has-image><a href=/p/typescript-%E5%A4%8D%E4%B9%A0%E6%80%BB%E7%BB%93%E4%BA%8C/><div class=article-image><img src=/img/cover/typescript.png loading=lazy data-key data-hash=/img/cover/typescript.png></div><div class=article-details><h2 class=article-title>TypeScript 复习总结（二）</h2></div></a></article><article class=has-image><a href=/p/typescript-%E5%A4%8D%E4%B9%A0%E6%80%BB%E7%BB%93%E4%B8%80/><div class=article-image><img src=/img/cover/typescript.png loading=lazy data-key data-hash=/img/cover/typescript.png></div><div class=article-details><h2 class=article-title>TypeScript 复习总结（一）</h2></div></a></article></div></div></aside><footer class=site-footer><section class=copyright>&copy;
+2017 -
+2024
+<a href=https://github.com/Vikingama target=_blank>馬腊咯稽</a></section><section class=powerby>Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a>, Deploy by Actions<br>主题 <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.13.0>Stack</a></b> 由 <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a> 设计</section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">目录</h2><div class=widget--toc><nav id=TableOfContents><ol><li><a href=#导入方式>导入方式</a></li><li><a href=#组件-props-类型>组件 props 类型</a></li><li><a href=#函数组件>函数组件</a></li><li><a href=#类组件>类组件</a></li><li><a href=#hook>Hook</a></li><li><a href=#事件>事件</a></li><li><a href=#portals>Portals</a></li><li><a href=#错误边界>错误边界</a></li><li><a href=#参考>参考</a></li></ol></nav></div></section></aside></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=/ts/main.js defer></script></body></html>

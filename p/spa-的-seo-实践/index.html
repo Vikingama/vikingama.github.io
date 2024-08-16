@@ -1,0 +1,424 @@
+<!doctype html><html lang=zh-cn dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content='为了搜索引擎优化，雷德竟然让我用 jQuery 重写官网'><title>SPA 的 SEO 实践 · Stay Hungry · Stay Foolish</title>
+<link rel=canonical href=https://vikingama.github.io/p/spa-%E7%9A%84-seo-%E5%AE%9E%E8%B7%B5/><link rel=stylesheet href=/scss/style.min.38c15d3a5c1bca30008bb625a46636d24f5deb4bf3217095e667a3abc843eaef.css><meta property='og:title' content='SPA 的 SEO 实践'><meta property='og:description' content='为了搜索引擎优化，雷德竟然让我用 jQuery 重写官网'><meta property='og:url' content='https://vikingama.github.io/p/spa-%E7%9A%84-seo-%E5%AE%9E%E8%B7%B5/'><meta property='og:site_name' content='馬腊咯稽'><meta property='og:type' content='article'><meta property='article:section' content='Post'><meta property='article:published_time' content='2020-11-15T00:00:00+00:00'><meta property='article:modified_time' content='2020-11-15T00:00:00+00:00'><meta property='og:image' content='https://vikingama.github.io/img/cover/seo.png'><meta name=twitter:title content="SPA 的 SEO 实践"><meta name=twitter:description content="为了搜索引擎优化，雷德竟然让我用 jQuery 重写官网"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content='https://vikingama.github.io/img/cover/seo.png'><link rel="shortcut icon" href=/favicon.ico><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><meta name=theme-color content="#ffffff"><meta name=robots content="noarchive"><div class=warning-banner>因为 GitHub 账号二次验证失败，计划迁往
+<a href=https://elementref.github.io/>新地址&rarr;</a></div></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label=切换菜单>
+<span class=hamburger-box><span class=hamburger-inner></span></span></button><header><figure class=site-avatar><a href=/><img src=/img/avatar_huae06eac29c2bc6aa7e83a685ea2f6536_13838_300x0_resize_box_3.png width=300 height=404 class=site-logo loading=lazy alt=Avatar></a></figure><div class=site-meta><h1 class=site-name><a href=/>馬腊咯稽</a></h1><h2 class=site-description>Stay Hungry · Stay Foolish</h2></div></header><ol class=menu id=main-menu><li><a href=/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg>
+<span>首页</span></a></li><li><a href=/archives/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><rect x="3" y="4" width="18" height="4" rx="2"/><path d="M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+<span>归档</span></a></li><li><a href=/search/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="10" cy="10" r="7"/><line x1="21" y1="21" x2="15" y2="15"/></svg>
+<span>搜索</span></a></li><li><a href=https://github.com/ElementRef/AboutConfig target=_blank><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-infinity" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M9.828 9.172a4 4 0 100 5.656A10 10 0 0012 12a10 10 0 012.172-2.828 4 4 0 110 5.656A10 10 0 0112 12 10 10 0 009.828 9.172"/></svg>
+<span>配置</span></a></li><li><a href=/%E5%90%AF%E5%8F%91/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M10 14a3.5 3.5.0 005 0l4-4a3.5 3.5.0 00-5-5l-.5.5"/><path d="M14 10a3.5 3.5.0 00-5 0l-4 4a3.5 3.5.0 005 5l.5-.5"/></svg>
+<span>启发</span></a></li><li><a href=/%E5%91%BD%E4%BB%A4/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-terminal" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 7l5 5-5 5"/><line x1="12" y1="19" x2="19" y2="19"/></svg>
+<span>命令</span></a></li><li><a href=/%E5%85%B3%E4%BA%8E/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="7" r="4"/><path d="M6 21v-2a4 4 0 014-4h4a4 4 0 014 4v2"/></svg>
+<span>关于</span></a></li><div class=menu-bottom-section><li id=dark-mode-toggle><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<span>深色</span></li></div></ol></aside><main class="main full-width"><article class="has-image main-article"><header class=article-header><div class=article-image><a href=/p/spa-%E7%9A%84-seo-%E5%AE%9E%E8%B7%B5/><img src=/img/cover/seo.png loading=lazy alt="SPA 的 SEO 实践"></a></div><div class=article-details><header class=article-category><a href=/categories/seo/>SEO</a></header><div class=article-title-wrapper><h2 class=article-title><a href=/p/spa-%E7%9A%84-seo-%E5%AE%9E%E8%B7%B5/>SPA 的 SEO 实践</a></h2><h3 class=article-subtitle>为了搜索引擎优化，雷德竟然让我用 jQuery 重写官网</h3></div><footer class=article-time><div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>Nov 15, 2020</time></div><div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>阅读时长：6 分钟</time></div></footer></div></header><section class=article-content><p>SEO 就是让搜索引擎了解网站，在用户进行关键词搜索时，网站能出现在搜索结果中比较靠前的位置。</p><h2 id=搜索引擎如何工作>搜索引擎如何工作</h2><ul><li>找出存在的网页：跟踪已知网页上的链接、与网站托管服务合作、站长提交站点地图；</li><li>编入索引：解析网页内容并构建搜索索引，网页的标题、关键词和描述可以改善编入效果；</li><li>呈现：根据搜索内容和其他因素（位置、语言、设备等）从索引中找到最相关的信息返回给用户；</li><li>排名：提高网页加载速度并保持一定的更新频率有利于网站排名。</li></ul><h2 id=搜索引擎蜘蛛>搜索引擎蜘蛛</h2><p><img src=/p/spa-%E7%9A%84-seo-%E5%AE%9E%E8%B7%B5/googlebot-crawl-render.png width=1607 height=884 srcset="/p/spa-%E7%9A%84-seo-%E5%AE%9E%E8%B7%B5/googlebot-crawl-render_huf74340f63266f25da69db6b60087d9ce_18196_480x0_resize_box_3.png 480w, /p/spa-%E7%9A%84-seo-%E5%AE%9E%E8%B7%B5/googlebot-crawl-render_huf74340f63266f25da69db6b60087d9ce_18196_1024x0_resize_box_3.png 1024w" alt=蜘蛛抓取过程 class=gallery-image data-flex-grow=181 data-flex-basis=436px loading=lazy></p><p>蜘蛛是搜索引擎抓用来页面信息和构建信息索引的工具，例如：<a class=link href="https://help.baidu.com/question?prod_id=99&amp;class=476&amp;id=2996" target=_blank rel=noopener>
+Baiduspider
+</a>和 <a class=link href=https://developers.google.com/search/docs/advanced/crawling/googlebot target=_blank rel=noopener>Googlebot
+</a>；蜘蛛在访问页面的过程中，处理文字内容、关键内容标记和属性，例如网站标题、Alt 属性、图片、视频等；此外，蜘蛛还会查找页面上的链接，并将这些链接添加到它要抓取的网页的列表中；这张列表记录着新建立的网站、对现有网站进行的更改以及无效链接，并据此更新索引。</p><p>百度曾发布过一个<a class=link href=https://ziyuan.baidu.com/wiki/990 target=_blank rel=noopener>
+公告
+</a>，提到 Baiduspider 会访问页面的 CSS、JS 和图片资源，但是 JS 会不会执行、JS 的执行结果会不会被编入索引则没有明说；Google 在<a class=link href=https://developers.google.com/search/docs/guides/javascript-seo-basics target=_blank rel=noopener>
+文档
+</a>中指出：Googlebot 支持对 SPA 和动态内容的抓取，在抓取过程中会使用 Chrome 加载网页并运行 JS。</p><p>显然，搜索引擎更喜欢“有内容的”HTML。</p><h2 id=spa-如何产生有内容的html>SPA 如何产生“有内容的”HTML</h2><h3 id=预渲染>预渲染</h3><p>在客户端访问之前提前渲染好 HTML（一般是在打包阶段）；在客户端初次访问页面时，会从静态服务器请求事先渲染好的 HTML；之后 JS 会接管交互、渲染和路由等工作；这是一种混合模式，从客户端来看，页面的行为就像 SPA 一样。</p><p>优点：</p><ul><li>更好的 SEO，爬虫可以直接抓取页面内容；</li><li>更快的（非用户相关内容的）首屏渲染。</li></ul><p>缺点：</p><ul><li>无法实时更新静态服务器端 HTML 的内容（除非在数据发生变动时重新打包部署）；</li><li>无法用于不可穷举的动态路由场景；</li><li>不支持哈希路由。</li></ul><h3 id=服务端同构渲染>服务端同构渲染</h3><p>在客户端发起请求时实时渲染 HTML，服务端总会请求最新的数据完成渲染；加载完第一个页面之后，客户端还是会进入 JS 渲染的模式（混合渲染，例如：Nuxt 和 Next）；这种方式和预渲染模式的差别在于渲染 HTML 的时机不同。</p><p>优点：</p><ul><li>更好的 SEO，爬虫可以直接抓取页面内容；</li><li>更快的首屏渲染。</li></ul><p>缺点：</p><ul><li>需要动态服务，不能 CDN 部署，有可能出现服务只能部署在 A 地，但用户却在 B 地的情况；</li><li>不是所有的开发依赖都支持在服务端运行；</li><li>动态服务器比静态服务器更耗资源；</li><li>客户端与服务端的状态同步；</li><li>不支持哈希路由。</li></ul><h3 id=基于-ua-的动态渲染>基于 UA 的动态渲染</h3><p>Google 搜索中心提到的一种模式，根据 UA 判断，客户端是不是“蜘蛛”；蜘蛛访问的是渲染之后（不一定是动态渲染）的 HTML，普通用户访问的还是一个 SPA。这种模式将客户端分为“用户”和“蜘蛛”两种，可以减轻服务器压力、对搜索引擎抓取的内容进行针对性的优化。</p><h3 id=预渲染配置>预渲染配置</h3><p>通过 HtmlWebpackPlugin 配置项目 TWD：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=kr>const</span> <span class=nx>title</span> <span class=o>=</span> <span class=s1>&#39;我是标题...&#39;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>const</span> <span class=nx>meta</span> <span class=o>=</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>keywords</span><span class=o>:</span> <span class=s1>&#39;我是，关键词，...&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nx>description</span><span class=o>:</span> <span class=s1>&#39;我是描述...&#39;</span>
+</span></span><span class=line><span class=cl><span class=p>};</span>
+</span></span><span class=line><span class=cl><span class=nx>module</span><span class=p>.</span><span class=nx>exports</span> <span class=o>=</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>plugins</span><span class=o>:</span> <span class=p>[</span>
+</span></span><span class=line><span class=cl>    <span class=k>new</span> <span class=nx>HtmlWebpackPlugin</span><span class=p>({</span>
+</span></span><span class=line><span class=cl>      <span class=nx>entry</span><span class=o>:</span> <span class=s1>&#39;src/project/home/main.js&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>      <span class=nx>template</span><span class=o>:</span> <span class=s1>&#39;public/main.html&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>      <span class=nx>filename</span><span class=o>:</span> <span class=s1>&#39;index.html&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>      <span class=nx>chunks</span><span class=o>:</span> <span class=p>[</span><span class=s1>&#39;chunk-vendors&#39;</span><span class=p>,</span> <span class=s1>&#39;chunk-common&#39;</span><span class=p>,</span> <span class=s1>&#39;home&#39;</span><span class=p>],</span>
+</span></span><span class=line><span class=cl>      <span class=nx>title</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>      <span class=nx>meta</span>
+</span></span><span class=line><span class=cl>    <span class=p>})</span>
+</span></span><span class=line><span class=cl>  <span class=p>]</span>
+</span></span><span class=line><span class=cl><span class=p>};</span>
+</span></span></code></pre></td></tr></table></div></div><p>配置 main.js 触发预渲染事件：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=k>new</span> <span class=nx>Vue</span><span class=p>({</span>
+</span></span><span class=line><span class=cl>  <span class=nx>el</span><span class=o>:</span> <span class=s1>&#39;#app&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nx>router</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nx>store</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nx>render</span><span class=o>:</span> <span class=nx>h</span> <span class=p>=&gt;</span> <span class=nx>h</span><span class=p>(</span><span class=nx>App</span><span class=p>),</span>
+</span></span><span class=line><span class=cl>  <span class=nx>mounted</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nb>document</span><span class=p>.</span><span class=nx>dispatchEvent</span><span class=p>(</span><span class=k>new</span> <span class=nx>Event</span><span class=p>(</span><span class=s1>&#39;render-event&#39;</span><span class=p>));</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>});</span>
+</span></span></code></pre></td></tr></table></div></div><p>预渲染完成之后，根结点会被替换掉；需要在项目根组件添加对应的 id，否则会报“Cannot find element: #xxx”错误：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-html data-lang=html><span class=line><span class=cl><span class=p>&lt;</span><span class=nt>template</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  <span class=p>&lt;</span><span class=nt>div</span> <span class=na>id</span><span class=o>=</span><span class=s>&#34;app&#34;</span> <span class=na>class</span><span class=o>=</span><span class=s>&#34;app&#34;</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>    <span class=p>&lt;</span><span class=nt>top-header</span> <span class=na>:isHome</span><span class=o>=</span><span class=s>&#34;true&#34;</span> <span class=p>/&gt;</span>
+</span></span><span class=line><span class=cl>    <span class=p>&lt;</span><span class=nt>div</span> <span class=na>class</span><span class=o>=</span><span class=s>&#34;router-view&#34;</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>      <span class=p>&lt;</span><span class=nt>transition</span> <span class=na>name</span><span class=o>=</span><span class=s>&#34;rv&#34;</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>        <span class=p>&lt;</span><span class=nt>router-view</span> <span class=p>/&gt;</span>
+</span></span><span class=line><span class=cl>      <span class=p>&lt;/</span><span class=nt>transition</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>    <span class=p>&lt;/</span><span class=nt>div</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>    <span class=p>&lt;</span><span class=nt>bottom-footer</span> <span class=p>/&gt;</span>
+</span></span><span class=line><span class=cl>  <span class=p>&lt;/</span><span class=nt>div</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;/</span><span class=nt>template</span><span class=p>&gt;</span>
+</span></span></code></pre></td></tr></table></div></div><p>引入 PrerenderSPAPlugin 插件：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span><span class=lnt>55
+</span><span class=lnt>56
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=kr>const</span> <span class=nx>PrerenderSPAPlugin</span> <span class=o>=</span> <span class=nx>require</span><span class=p>(</span><span class=s1>&#39;prerender-spa-plugin&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=kr>const</span> <span class=nx>Renderer</span> <span class=o>=</span> <span class=nx>PrerenderSPAPlugin</span><span class=p>.</span><span class=nx>PuppeteerRenderer</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=nx>module</span><span class=p>.</span><span class=nx>exports</span> <span class=o>=</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>plugins</span><span class=o>:</span> <span class=p>[</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 在非开发环境下执行
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=o>!</span><span class=nx>process</span><span class=p>.</span><span class=nx>env</span><span class=p>.</span><span class=nx>LOCAL_DEVELOP</span> <span class=o>&amp;&amp;</span>
+</span></span><span class=line><span class=cl>      <span class=k>new</span> <span class=nx>PrerenderSPAPlugin</span><span class=p>({</span>
+</span></span><span class=line><span class=cl>        <span class=c1>// 打包输出目录，也可以配置 outputDir 将预渲染文件输出到单独的目录
+</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=nx>staticDir</span><span class=o>:</span> <span class=nx>path</span><span class=p>.</span><span class=nx>join</span><span class=p>(</span><span class=nx>__dirname</span><span class=p>,</span> <span class=s1>&#39;dist&#39;</span><span class=p>),</span>
+</span></span><span class=line><span class=cl>        <span class=c1>// 对输出的 HTML 压缩配置（html-minifier）
+</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=nx>minify</span><span class=o>:</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>          <span class=nx>collapseBooleanAttributes</span><span class=o>:</span> <span class=kc>true</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>          <span class=nx>removeEmptyAttributes</span><span class=o>:</span> <span class=kc>false</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>          <span class=nx>removeComments</span><span class=o>:</span> <span class=kc>true</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>          <span class=nx>minifyCSS</span><span class=o>:</span> <span class=kc>true</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>          <span class=nx>minifyJS</span><span class=o>:</span> <span class=kc>true</span>
+</span></span><span class=line><span class=cl>        <span class=p>},</span>
+</span></span><span class=line><span class=cl>        <span class=c1>// 渲染器配置
+</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=nx>renderer</span><span class=o>:</span> <span class=k>new</span> <span class=nx>Renderer</span><span class=p>({</span>
+</span></span><span class=line><span class=cl>          <span class=c1>// 挂载在 window 上属性
+</span></span></span><span class=line><span class=cl><span class=c1></span>          <span class=nx>injectProperty</span><span class=o>:</span> <span class=s1>&#39;__PRERENDER__INJECTED__&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>          <span class=c1>// 挂载在 window.__PRERENDER__INJECTED__ 的对象
+</span></span></span><span class=line><span class=cl><span class=c1></span>          <span class=nx>inject</span><span class=o>:</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=nx>hostname</span><span class=o>:</span> <span class=nx>prerenderHostname</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>          <span class=p>},</span>
+</span></span><span class=line><span class=cl>          <span class=c1>// 是否显示浏览器（多用于调试，开启之后部分打包环境会打包失败）
+</span></span></span><span class=line><span class=cl><span class=c1></span>          <span class=nx>headless</span><span class=o>:</span> <span class=kc>true</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>          <span class=c1>// 在预渲染之前等待的时间
+</span></span></span><span class=line><span class=cl><span class=c1></span>          <span class=nx>renderAfterTime</span><span class=o>:</span> <span class=mi>500</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>          <span class=c1>// 最多同时渲染多少个路由
+</span></span></span><span class=line><span class=cl><span class=c1></span>          <span class=nx>maxConcurrentRoutes</span><span class=o>:</span> <span class=mi>1</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>          <span class=c1>// 触发渲染的事件名称
+</span></span></span><span class=line><span class=cl><span class=c1></span>          <span class=nx>renderAfterDocumentEvent</span><span class=o>:</span> <span class=s1>&#39;render-event&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>          <span class=c1>// 浏览器运行参数
+</span></span></span><span class=line><span class=cl><span class=c1></span>          <span class=nx>args</span><span class=o>:</span> <span class=p>[</span><span class=s1>&#39;--no-sandbox&#39;</span><span class=p>,</span> <span class=s1>&#39;--disable-setuid-sandbox&#39;</span><span class=p>]</span>
+</span></span><span class=line><span class=cl>        <span class=p>}),</span>
+</span></span><span class=line><span class=cl>        <span class=c1>// 请求代理配置
+</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=nx>proxy</span><span class=o>:</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>          <span class=s1>&#39;^/api/exp&#39;</span><span class=o>:</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=nx>target</span><span class=o>:</span> <span class=s1>&#39;https://www.example.com&#39;</span>
+</span></span><span class=line><span class=cl>          <span class=p>},</span>
+</span></span><span class=line><span class=cl>          <span class=nx>changeOrigin</span><span class=o>:</span> <span class=kc>true</span>
+</span></span><span class=line><span class=cl>        <span class=p>},</span>
+</span></span><span class=line><span class=cl>        <span class=c1>// 要预渲染的路由
+</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=nx>routes</span><span class=o>:</span> <span class=p>[</span>
+</span></span><span class=line><span class=cl>          <span class=s1>&#39;/&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>          <span class=s1>&#39;/introduction/service-one&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>          <span class=s1>&#39;/introduction/service-two&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>          <span class=s1>&#39;/solution/way-one&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>          <span class=s1>&#39;/solution/way-two&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>          <span class=s1>&#39;/support/ask&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>          <span class=s1>&#39;/about/us&#39;</span>
+</span></span><span class=line><span class=cl>        <span class=p>]</span>
+</span></span><span class=line><span class=cl>      <span class=p>})</span>
+</span></span><span class=line><span class=cl>  <span class=p>]</span>
+</span></span><span class=line><span class=cl><span class=p>};</span>
+</span></span></code></pre></td></tr></table></div></div><p>为了 SEO，你可能需要 extract-text-webpack-plugin 将样式单独打包；减少 HTML 中的无语意字符。</p><h3 id=prerenderspaplugin-逻辑>PrerenderSPAPlugin 逻辑</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span><span class=lnt>55
+</span><span class=lnt>56
+</span><span class=lnt>57
+</span><span class=lnt>58
+</span><span class=lnt>59
+</span><span class=lnt>60
+</span><span class=lnt>61
+</span><span class=lnt>62
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=kd>function</span> <span class=nx>PrerenderSPAPlugin</span><span class=p>(...</span><span class=nx>args</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=c1>// 对入参做处理
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=k>this</span><span class=p>.</span><span class=nx>_options</span> <span class=o>=</span> <span class=nx>args</span><span class=p>[</span><span class=mi>0</span><span class=p>]</span> <span class=o>||</span> <span class=p>{};</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=nx>PrerenderSPAPlugin</span><span class=p>.</span><span class=nx>prototype</span><span class=p>.</span><span class=nx>apply</span><span class=p>(</span><span class=nx>compiler</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=c1>// apply 方法在安装插件时，会被 Webpack 编译器调用一次，在异步操作完成之后调用 callback
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=kr>const</span> <span class=nx>afterEmit</span> <span class=o>=</span> <span class=p>(</span><span class=nx>compilation</span><span class=p>,</span> <span class=nx>callback</span><span class=p>)</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// Prerenderer 会开启 express 服务器和 puppeteer 实例
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=kr>const</span> <span class=nx>prender</span> <span class=o>=</span> <span class=k>new</span> <span class=nx>Prerenderer</span><span class=p>(</span><span class=k>this</span><span class=p>.</span><span class=nx>_options</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=nx>prender</span>
+</span></span><span class=line><span class=cl>      <span class=p>.</span><span class=nx>initialize</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>      <span class=c1>// express 会代理静态目录，通过 puppeteer 访问页面并将页面保存
+</span></span></span><span class=line><span class=cl><span class=c1></span>      <span class=p>.</span><span class=nx>then</span><span class=p>(()</span> <span class=p>=&gt;</span> <span class=nx>prender</span><span class=p>.</span><span class=nx>renderRoutes</span><span class=p>(</span><span class=k>this</span><span class=p>.</span><span class=nx>_options</span><span class=p>.</span><span class=nx>routes</span> <span class=o>||</span> <span class=p>[]))</span>
+</span></span><span class=line><span class=cl>      <span class=p>.</span><span class=nx>then</span><span class=p>(</span><span class=nx>renderedRoutes</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=cm>/**
+</span></span></span><span class=line><span class=cl><span class=cm>         *  [{
+</span></span></span><span class=line><span class=cl><span class=cm>         *    originalRoute: route,
+</span></span></span><span class=line><span class=cl><span class=cm>         *    route: await page.evaluate(&#39;window.location.pathname&#39;),
+</span></span></span><span class=line><span class=cl><span class=cm>         *    html: await page.content()
+</span></span></span><span class=line><span class=cl><span class=cm>         *  }, {...}...]
+</span></span></span><span class=line><span class=cl><span class=cm>         */</span>
+</span></span><span class=line><span class=cl>        <span class=kr>const</span> <span class=nx>isValid</span> <span class=o>=</span> <span class=nx>renderedRoutes</span><span class=p>.</span><span class=nx>every</span><span class=p>(</span><span class=nx>r</span> <span class=p>=&gt;</span> <span class=k>typeof</span> <span class=nx>r</span> <span class=o>===</span> <span class=s1>&#39;object&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=p>(</span><span class=nx>isValid</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>          <span class=k>return</span> <span class=nx>renderedRoutes</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>          <span class=k>throw</span> <span class=k>new</span> <span class=nb>Error</span><span class=p>(</span><span class=s1>&#39;...&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span><span class=line><span class=cl>      <span class=p>})</span>
+</span></span><span class=line><span class=cl>      <span class=p>.</span><span class=nx>then</span><span class=p>(</span><span class=nx>renderedRoutes</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=p>(</span><span class=k>this</span><span class=p>.</span><span class=nx>_options</span><span class=p>.</span><span class=nx>minify</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>          <span class=c1>// minify...
+</span></span></span><span class=line><span class=cl><span class=c1></span>          <span class=k>return</span> <span class=nx>renderedRoutes</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=nx>renderedRoutes</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>      <span class=p>})</span>
+</span></span><span class=line><span class=cl>      <span class=p>.</span><span class=nx>then</span><span class=p>(</span><span class=nx>renderedRoutes</span> <span class=p>=&gt;</span>
+</span></span><span class=line><span class=cl>        <span class=nb>Promise</span><span class=p>.</span><span class=nx>all</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>          <span class=nx>renderedRoutes</span><span class=p>.</span><span class=nx>map</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>            <span class=nx>renderedRoute</span> <span class=p>=&gt;</span>
+</span></span><span class=line><span class=cl>              <span class=k>new</span> <span class=nb>Promise</span><span class=p>((</span><span class=nx>resolve</span><span class=p>,</span> <span class=nx>reject</span><span class=p>)</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>                <span class=c1>// write files...
+</span></span></span><span class=line><span class=cl><span class=c1></span>                <span class=nx>resolve</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>              <span class=p>})</span>
+</span></span><span class=line><span class=cl>          <span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=p>)</span>
+</span></span><span class=line><span class=cl>      <span class=p>)</span>
+</span></span><span class=line><span class=cl>      <span class=p>.</span><span class=nx>then</span><span class=p>(()</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=c1>// 完成文件写入之后退出
+</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=nx>prender</span><span class=p>.</span><span class=nx>destory</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>        <span class=nx>callback</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>      <span class=p>})</span>
+</span></span><span class=line><span class=cl>      <span class=p>.</span><span class=k>catch</span><span class=p>(</span><span class=nx>error</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=nx>prender</span><span class=p>.</span><span class=nx>destory</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>        <span class=c1>// 如果有报错，在编译过程抛出
+</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=nx>compilation</span><span class=p>.</span><span class=nx>errors</span><span class=p>.</span><span class=nx>push</span><span class=p>(</span><span class=k>new</span> <span class=nb>Error</span><span class=p>(</span><span class=nx>error</span><span class=p>));</span>
+</span></span><span class=line><span class=cl>        <span class=nx>callback</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>      <span class=p>});</span>
+</span></span><span class=line><span class=cl>  <span class=p>};</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>plugin</span> <span class=o>=</span> <span class=p>{</span> <span class=nx>name</span><span class=o>:</span> <span class=s1>&#39;PrerenderSPAPlugin&#39;</span> <span class=p>};</span>
+</span></span><span class=line><span class=cl>  <span class=c1>// 向编译器的钩子上注册异步方法，可以对当前编译实例（过程）做操作
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=nx>compiler</span><span class=p>.</span><span class=nx>hooks</span><span class=p>.</span><span class=nx>afterEmit</span><span class=p>.</span><span class=nx>tapAsync</span><span class=p>(</span><span class=nx>plugin</span><span class=p>,</span> <span class=nx>afterEmit</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>});</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=两种文件>两种文件</h2><p>公司的 SEO 服务商让在服务器根目录放了几个“文件”，最有用的是两种是 Sitemap 和 robots。</p><p>Sitemap 是用来告诉蜘蛛网站上有哪些可供抓取的网页；Sitemap 可以是 XML、TXT、HTML 文件，其中包含了站点中的网址以及关于每个网址的元数据（更新时间、更新频率、重要程度、语言版本等），以便搜索引擎可以更加智能地抓取网站；Sitemap 并不能保证网页会被蜘蛛抓取，但可向蜘蛛提供一些提示以便网站被更有效地抓取：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-xml data-lang=xml><span class=line><span class=cl><span class=cp>&lt;?xml version=&#39;1.0&#39; encoding=&#39;UTF-8&#39;?&gt;</span>
+</span></span><span class=line><span class=cl><span class=nt>&lt;urlset&gt;</span>
+</span></span><span class=line><span class=cl><span class=nt>&lt;url&gt;</span>
+</span></span><span class=line><span class=cl><span class=nt>&lt;loc&gt;</span><span class=cp>&lt;![CDATA[https://www.example.com]]&gt;</span><span class=nt>&lt;/loc&gt;</span>
+</span></span><span class=line><span class=cl><span class=nt>&lt;lastmod&gt;</span>2020-10-28<span class=nt>&lt;/lastmod&gt;</span>
+</span></span><span class=line><span class=cl><span class=nt>&lt;changefreq&gt;</span>weekly<span class=nt>&lt;/changefreq&gt;</span>
+</span></span><span class=line><span class=cl><span class=nt>&lt;/url&gt;</span>
+</span></span><span class=line><span class=cl><span class=nt>&lt;url&gt;</span>
+</span></span><span class=line><span class=cl><span class=nt>&lt;loc&gt;</span><span class=cp>&lt;![CDATA[https://www.example.com/about/contact]]&gt;</span><span class=nt>&lt;/loc&gt;</span>
+</span></span><span class=line><span class=cl><span class=nt>&lt;lastmod&gt;</span>2020-10-28<span class=nt>&lt;/lastmod&gt;</span>
+</span></span><span class=line><span class=cl><span class=nt>&lt;changefreq&gt;</span>weekly<span class=nt>&lt;/changefreq&gt;</span>
+</span></span><span class=line><span class=cl><span class=nt>&lt;/url&gt;</span>
+</span></span><span class=line><span class=cl><span class=nt>&lt;url&gt;</span>
+</span></span><span class=line><span class=cl><span class=nt>&lt;loc&gt;</span><span class=cp>&lt;![CDATA[https://www.example.com/about/us]]&gt;</span><span class=nt>&lt;/loc&gt;</span>
+</span></span><span class=line><span class=cl><span class=nt>&lt;lastmod&gt;</span>2020-10-28<span class=nt>&lt;/lastmod&gt;</span>
+</span></span><span class=line><span class=cl><span class=nt>&lt;changefreq&gt;</span>weekly<span class=nt>&lt;/changefreq&gt;</span>
+</span></span><span class=line><span class=cl><span class=nt>&lt;/url&gt;</span>
+</span></span><span class=line><span class=cl><span class=nt>&lt;url&gt;</span>
+</span></span><span class=line><span class=cl><span class=nt>&lt;loc&gt;</span><span class=cp>&lt;![CDATA[https://www.example.com/solution/agriculture]]&gt;</span><span class=nt>&lt;/loc&gt;</span>
+</span></span><span class=line><span class=cl><span class=nt>&lt;lastmod&gt;</span>2020-10-28<span class=nt>&lt;/lastmod&gt;</span>
+</span></span><span class=line><span class=cl><span class=nt>&lt;changefreq&gt;</span>weekly<span class=nt>&lt;/changefreq&gt;</span>
+</span></span><span class=line><span class=cl><span class=nt>&lt;/url&gt;</span>
+</span></span><span class=line><span class=cl><span class=nt>&lt;url&gt;</span>
+</span></span><span class=line><span class=cl><span class=nt>&lt;loc&gt;</span><span class=cp>&lt;![CDATA[https://www.example.com/solution/hybrid]]&gt;</span><span class=nt>&lt;/loc&gt;</span>
+</span></span><span class=line><span class=cl><span class=nt>&lt;lastmod&gt;</span>2020-10-28<span class=nt>&lt;/lastmod&gt;</span>
+</span></span><span class=line><span class=cl><span class=nt>&lt;changefreq&gt;</span>weekly<span class=nt>&lt;/changefreq&gt;</span>
+</span></span><span class=line><span class=cl><span class=nt>&lt;/url&gt;</span>
+</span></span><span class=line><span class=cl><span class=nt>&lt;url&gt;</span>
+</span></span><span class=line><span class=cl><span class=nt>&lt;loc&gt;</span><span class=cp>&lt;![CDATA[https://www.example.com/support/ask]]&gt;</span><span class=nt>&lt;/loc&gt;</span>
+</span></span><span class=line><span class=cl><span class=nt>&lt;lastmod&gt;</span>2020-10-28<span class=nt>&lt;/lastmod&gt;</span>
+</span></span><span class=line><span class=cl><span class=nt>&lt;changefreq&gt;</span>weekly<span class=nt>&lt;/changefreq&gt;</span>
+</span></span><span class=line><span class=cl><span class=nt>&lt;/url&gt;</span>
+</span></span><span class=line><span class=cl><span class=nt>&lt;/urlset&gt;</span>
+</span></span></code></pre></td></tr></table></div></div><p>Sitemap 适用情形：</p><ul><li>网站规模很大，蜘蛛有可能在抓取时漏掉部分新网页或最近更新的网页；</li><li>有大量内容页归档，并且内容页之间互不关联或缺少有效链接；</li><li>网站为新网站且指向该网站的外部链接不多；</li><li>您的网站包含大量媒体内容（视频、图片）。</li></ul><p>robots 文件是用来告诉搜索引擎，网站上的哪些页面可以抓取，哪些页面不能抓取；User-agent、Allow、Disallow 等字段精确地对不同搜索引擎的抓取工作进行控制：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-markdown data-lang=markdown><span class=line><span class=cl>User-agent: Googlebot
+</span></span><span class=line><span class=cl>Disallow: /
+</span></span><span class=line><span class=cl>Allow: /content/
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>User-agent: Baiduspider
+</span></span><span class=line><span class=cl>Disallow: /admin/
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>Sitemap: https://www.example.com/sitemap.txt
+</span></span><span class=line><span class=cl>Sitemap: https://www.example.com/sitemap.html
+</span></span></code></pre></td></tr></table></div></div><p>robots 适用情形：</p><ul><li>在某个阶段不公开某些网页 (例如：在搭建网站雏形时)；</li><li>防止抓取内部搜索页面；</li><li>防止抓取重复页面；</li><li>防止服务器过载。</li></ul><h2 id=参考>参考</h2><ul><li><a class=link href=https://ahrefs.com/blog/zh/robots-txt target=_blank rel=noopener>关于 Robots.txt 和 SEO：你所需要知道的一切</a></li><li><a class=link href=https://www.sitemaps.org/zh_CN/index.html target=_blank rel=noopener>什么是 Sitemap？</a></li><li><a class=link href=https://developers.google.com/search/docs target=_blank rel=noopener>Google 搜索中心</a></li><li><a class=link href="https://help.baidu.com/question?prod_id=99" target=_blank rel=noopener>百度站长平台</a></li></ul></section><footer class=article-footer><section class=article-copyright><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span></section></footer></article><footer class=site-footer><section class=copyright>&copy;
+2017 -
+2024
+<a href=https://github.com/Vikingama target=_blank>馬腊咯稽</a></section><section class=powerby>Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a>, Deploy by Actions<br>主题 <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.13.0>Stack</a></b> 由 <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a> 设计</section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">目录</h2><div class=widget--toc><nav id=TableOfContents><ol><li><a href=#搜索引擎如何工作>搜索引擎如何工作</a></li><li><a href=#搜索引擎蜘蛛>搜索引擎蜘蛛</a></li><li><a href=#spa-如何产生有内容的html>SPA 如何产生“有内容的”HTML</a><ol><li><a href=#预渲染>预渲染</a></li><li><a href=#服务端同构渲染>服务端同构渲染</a></li><li><a href=#基于-ua-的动态渲染>基于 UA 的动态渲染</a></li><li><a href=#预渲染配置>预渲染配置</a></li><li><a href=#prerenderspaplugin-逻辑>PrerenderSPAPlugin 逻辑</a></li></ol></li><li><a href=#两种文件>两种文件</a></li><li><a href=#参考>参考</a></li></ol></nav></div></section></aside></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=/ts/main.js defer></script></body></html>

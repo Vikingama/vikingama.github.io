@@ -1,0 +1,215 @@
+<!doctype html><html lang=zh-cn dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content='折腾了一周，终于上线；记录一下遇到的坑'><title>前端 SPA 应用通过 OpenTelemetry 接入“链路追踪” · Stay Hungry · Stay Foolish</title>
+<link rel=canonical href=https://vikingama.github.io/p/%E5%89%8D%E7%AB%AF-spa-%E5%BA%94%E7%94%A8%E9%80%9A%E8%BF%87-opentelemetry-%E6%8E%A5%E5%85%A5%E9%93%BE%E8%B7%AF%E8%BF%BD%E8%B8%AA/><link rel=stylesheet href=/scss/style.min.38c15d3a5c1bca30008bb625a46636d24f5deb4bf3217095e667a3abc843eaef.css><meta property='og:title' content='前端 SPA 应用通过 OpenTelemetry 接入“链路追踪”'><meta property='og:description' content='折腾了一周，终于上线；记录一下遇到的坑'><meta property='og:url' content='https://vikingama.github.io/p/%E5%89%8D%E7%AB%AF-spa-%E5%BA%94%E7%94%A8%E9%80%9A%E8%BF%87-opentelemetry-%E6%8E%A5%E5%85%A5%E9%93%BE%E8%B7%AF%E8%BF%BD%E8%B8%AA/'><meta property='og:site_name' content='馬腊咯稽'><meta property='og:type' content='article'><meta property='article:section' content='Post'><meta property='article:published_time' content='2023-02-06T00:00:00+00:00'><meta property='article:modified_time' content='2023-02-06T00:00:00+00:00'><meta property='og:image' content='https://vikingama.github.io/img/cover/opentelemetry.png'><meta name=twitter:title content="前端 SPA 应用通过 OpenTelemetry 接入“链路追踪”"><meta name=twitter:description content="折腾了一周，终于上线；记录一下遇到的坑"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content='https://vikingama.github.io/img/cover/opentelemetry.png'><link rel="shortcut icon" href=/favicon.ico><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><meta name=theme-color content="#ffffff"><meta name=robots content="noarchive"><div class=warning-banner>因为 GitHub 账号二次验证失败，计划迁往
+<a href=https://elementref.github.io/>新地址&rarr;</a></div></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label=切换菜单>
+<span class=hamburger-box><span class=hamburger-inner></span></span></button><header><figure class=site-avatar><a href=/><img src=/img/avatar_huae06eac29c2bc6aa7e83a685ea2f6536_13838_300x0_resize_box_3.png width=300 height=404 class=site-logo loading=lazy alt=Avatar></a></figure><div class=site-meta><h1 class=site-name><a href=/>馬腊咯稽</a></h1><h2 class=site-description>Stay Hungry · Stay Foolish</h2></div></header><ol class=menu id=main-menu><li><a href=/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg>
+<span>首页</span></a></li><li><a href=/archives/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><rect x="3" y="4" width="18" height="4" rx="2"/><path d="M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+<span>归档</span></a></li><li><a href=/search/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="10" cy="10" r="7"/><line x1="21" y1="21" x2="15" y2="15"/></svg>
+<span>搜索</span></a></li><li><a href=https://github.com/ElementRef/AboutConfig target=_blank><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-infinity" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M9.828 9.172a4 4 0 100 5.656A10 10 0 0012 12a10 10 0 012.172-2.828 4 4 0 110 5.656A10 10 0 0112 12 10 10 0 009.828 9.172"/></svg>
+<span>配置</span></a></li><li><a href=/%E5%90%AF%E5%8F%91/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M10 14a3.5 3.5.0 005 0l4-4a3.5 3.5.0 00-5-5l-.5.5"/><path d="M14 10a3.5 3.5.0 00-5 0l-4 4a3.5 3.5.0 005 5l.5-.5"/></svg>
+<span>启发</span></a></li><li><a href=/%E5%91%BD%E4%BB%A4/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-terminal" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 7l5 5-5 5"/><line x1="12" y1="19" x2="19" y2="19"/></svg>
+<span>命令</span></a></li><li><a href=/%E5%85%B3%E4%BA%8E/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="7" r="4"/><path d="M6 21v-2a4 4 0 014-4h4a4 4 0 014 4v2"/></svg>
+<span>关于</span></a></li><div class=menu-bottom-section><li id=dark-mode-toggle><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<span>深色</span></li></div></ol></aside><main class="main full-width"><article class="has-image main-article"><header class=article-header><div class=article-image><a href=/p/%E5%89%8D%E7%AB%AF-spa-%E5%BA%94%E7%94%A8%E9%80%9A%E8%BF%87-opentelemetry-%E6%8E%A5%E5%85%A5%E9%93%BE%E8%B7%AF%E8%BF%BD%E8%B8%AA/><img src=/img/cover/opentelemetry.png loading=lazy alt="前端 SPA 应用通过 OpenTelemetry 接入“链路追踪”"></a></div><div class=article-details><header class=article-category><a href=/categories/opentelemetry/>OpenTelemetry</a></header><div class=article-title-wrapper><h2 class=article-title><a href=/p/%E5%89%8D%E7%AB%AF-spa-%E5%BA%94%E7%94%A8%E9%80%9A%E8%BF%87-opentelemetry-%E6%8E%A5%E5%85%A5%E9%93%BE%E8%B7%AF%E8%BF%BD%E8%B8%AA/>前端 SPA 应用通过 OpenTelemetry 接入“链路追踪”</a></h2><h3 class=article-subtitle>折腾了一周，终于上线；记录一下遇到的坑</h3></div><footer class=article-time><div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>Feb 06, 2023</time></div><div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>阅读时长：2 分钟</time></div></footer></div></header><section class=article-content><h2 id=事例代码>事例代码</h2><p>新建 tracing.ts：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span><span class=lnt>55
+</span><span class=lnt>56
+</span><span class=lnt>57
+</span><span class=lnt>58
+</span><span class=lnt>59
+</span><span class=lnt>60
+</span><span class=lnt>61
+</span><span class=lnt>62
+</span><span class=lnt>63
+</span><span class=lnt>64
+</span><span class=lnt>65
+</span><span class=lnt>66
+</span><span class=lnt>67
+</span><span class=lnt>68
+</span><span class=lnt>69
+</span><span class=lnt>70
+</span><span class=lnt>71
+</span><span class=lnt>72
+</span><span class=lnt>73
+</span><span class=lnt>74
+</span><span class=lnt>75
+</span><span class=lnt>76
+</span><span class=lnt>77
+</span><span class=lnt>78
+</span><span class=lnt>79
+</span><span class=lnt>80
+</span><span class=lnt>81
+</span><span class=lnt>82
+</span><span class=lnt>83
+</span><span class=lnt>84
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-ts data-lang=ts><span class=line><span class=cl><span class=kr>import</span> <span class=p>{</span> <span class=nx>ZoneContextManager</span> <span class=p>}</span> <span class=kr>from</span> <span class=s1>&#39;@opentelemetry/context-zone&#39;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>import</span> <span class=p>{</span> <span class=nx>OTLPTraceExporter</span> <span class=p>}</span> <span class=kr>from</span> <span class=s1>&#39;@opentelemetry/exporter-trace-otlp-http&#39;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>import</span> <span class=p>{</span> <span class=nx>registerInstrumentations</span> <span class=p>}</span> <span class=kr>from</span> <span class=s1>&#39;@opentelemetry/instrumentation&#39;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>import</span> <span class=p>{</span> <span class=nx>DocumentLoadInstrumentation</span> <span class=p>}</span> <span class=kr>from</span> <span class=s1>&#39;@opentelemetry/instrumentation-document-load&#39;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>import</span> <span class=p>{</span> <span class=nx>FetchInstrumentation</span> <span class=p>}</span> <span class=kr>from</span> <span class=s1>&#39;@opentelemetry/instrumentation-fetch&#39;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>import</span> <span class=p>{</span> <span class=nx>UserInteractionInstrumentation</span> <span class=p>}</span> <span class=kr>from</span> <span class=s1>&#39;@opentelemetry/instrumentation-user-interaction&#39;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>import</span> <span class=p>{</span> <span class=nx>XMLHttpRequestInstrumentation</span> <span class=p>}</span> <span class=kr>from</span> <span class=s1>&#39;@opentelemetry/instrumentation-xml-http-request&#39;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>import</span> <span class=p>{</span> <span class=nx>Resource</span> <span class=p>}</span> <span class=kr>from</span> <span class=s1>&#39;@opentelemetry/resources&#39;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>import</span> <span class=p>{</span> <span class=nx>BatchSpanProcessor</span> <span class=p>}</span> <span class=kr>from</span> <span class=s1>&#39;@opentelemetry/sdk-trace-base&#39;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>import</span> <span class=p>{</span> <span class=nx>WebTracerProvider</span> <span class=p>}</span> <span class=kr>from</span> <span class=s1>&#39;@opentelemetry/sdk-trace-web&#39;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>import</span> <span class=p>{</span> <span class=nx>SemanticResourceAttributes</span> <span class=p>}</span> <span class=kr>from</span> <span class=s1>&#39;@opentelemetry/semantic-conventions&#39;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>import</span> <span class=p>{</span> <span class=nx>environment</span> <span class=p>}</span> <span class=kr>from</span> <span class=s1>&#39;src/environments/environment&#39;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=c1>// Init
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kr>const</span> <span class=nx>resource</span> <span class=o>=</span> <span class=nx>Resource</span><span class=p>.</span><span class=k>default</span><span class=p>().</span><span class=nx>merge</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>  <span class=k>new</span> <span class=nx>Resource</span><span class=p>({</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 通过 environment.name 变量来区分不同环境的应用
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=p>[</span><span class=nx>SemanticResourceAttributes</span><span class=p>.</span><span class=nx>SERVICE_NAME</span><span class=p>]</span><span class=o>:</span> <span class=sb>`</span><span class=si>${</span><span class=nx>environment</span><span class=p>.</span><span class=nx>name</span><span class=si>}</span><span class=sb>`</span>
+</span></span><span class=line><span class=cl>  <span class=p>})</span>
+</span></span><span class=line><span class=cl><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=c1>// Tracing
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kr>const</span> <span class=nx>provider</span> <span class=o>=</span> <span class=k>new</span> <span class=nx>WebTracerProvider</span><span class=p>({</span>
+</span></span><span class=line><span class=cl>  <span class=nx>resource</span>
+</span></span><span class=line><span class=cl><span class=p>});</span>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=p>(</span><span class=o>!</span><span class=nx>environment</span><span class=p>.</span><span class=nx>production</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=c1>// 开发环境使用 ConsoleSpanExporter，便于调试
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=kr>const</span> <span class=nx>consoleExporter</span> <span class=o>=</span> <span class=k>new</span> <span class=nx>ConsoleSpanExporter</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>consoleProcessor</span> <span class=o>=</span> <span class=k>new</span> <span class=nx>SimpleSpanProcessor</span><span class=p>(</span><span class=nx>consoleExporter</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=nx>provider</span><span class=p>.</span><span class=nx>addSpanProcessor</span><span class=p>(</span><span class=nx>consoleProcessor</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=c1>// 生产环境使用 OTLPTraceExporter
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=kr>const</span> <span class=nx>traceUrl</span> <span class=o>=</span> <span class=s1>&#39;https://otelcol.xxx.com/v1/traces&#39;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>traceExporter</span> <span class=o>=</span> <span class=k>new</span> <span class=nx>OTLPTraceExporter</span><span class=p>({</span>
+</span></span><span class=line><span class=cl>    <span class=nx>url</span>: <span class=kt>traceUrl</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nx>headers</span><span class=o>:</span> <span class=p>{}</span> <span class=c1>// 使用 xhr 而不是 navigator.sendBeacon
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=p>});</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>traceProcessor</span> <span class=o>=</span> <span class=k>new</span> <span class=nx>BatchSpanProcessor</span><span class=p>(</span><span class=nx>traceExporter</span><span class=p>,</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>maxExportBatchSize</span>: <span class=kt>10</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nx>maxQueueSize</span>: <span class=kt>100</span>
+</span></span><span class=line><span class=cl>  <span class=p>});</span>
+</span></span><span class=line><span class=cl>  <span class=nx>provider</span><span class=p>.</span><span class=nx>addSpanProcessor</span><span class=p>(</span><span class=nx>traceProcessor</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=nx>provider</span><span class=p>.</span><span class=nx>register</span><span class=p>({</span>
+</span></span><span class=line><span class=cl>  <span class=nx>contextManager</span>: <span class=kt>new</span> <span class=nx>ZoneContextManager</span><span class=p>()</span>
+</span></span><span class=line><span class=cl><span class=p>});</span>
+</span></span><span class=line><span class=cl><span class=c1>// Register
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kr>const</span> <span class=nx>propagateTraceHeaderCorsUrls</span> <span class=o>=</span> <span class=sr>/.+/g</span><span class=p>;</span> <span class=c1>// 哪些跨域接口添加“追踪请求头”
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kr>const</span> <span class=nx>ignoreUrls</span> <span class=o>=</span> <span class=p>[</span>
+</span></span><span class=line><span class=cl>  <span class=cm>/**
+</span></span></span><span class=line><span class=cl><span class=cm>   * 哪些接口不添加“追踪请求头”：
+</span></span></span><span class=line><span class=cl><span class=cm>   * 1.本地 DevServer/HMR 接口
+</span></span></span><span class=line><span class=cl><span class=cm>   * 2.第三方 SDK 调用的接口
+</span></span></span><span class=line><span class=cl><span class=cm>   * 3.加载静态资源的接口
+</span></span></span><span class=line><span class=cl><span class=cm>   */</span>
+</span></span><span class=line><span class=cl>  <span class=sr>/^(https:\/\/static-offline-objects.xxx.com|https:\/\/static-objects.xxx.com|https:\/\/qiniu.xxx.com|https:\/\/oss.xxx.com)/g</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=sr>/^(https:\/\/eos-scp-int.sit.xxx-express.com)/g</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=sr>/^(https:\/\/eos-scp.sit.xxx-express.com)/g</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=sr>/^(https:\/\/eos-scp-int.xxx-express.com)/g</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=sr>/^(https:\/\/eos-scp.xxx-express.com)/g</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=sr>/^(https:\/\/s9.cnzz.com\/z_stat.php)/g</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=sr>/^(http:\/\/localhost)/g</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=sr>/^(http:\/\/192.168)/g</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=sr>/^(http:\/\/0.0.0.0)/g</span>
+</span></span><span class=line><span class=cl><span class=p>];</span>
+</span></span><span class=line><span class=cl><span class=nx>registerInstrumentations</span><span class=p>({</span>
+</span></span><span class=line><span class=cl>  <span class=nx>instrumentations</span><span class=o>:</span> <span class=p>[</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 处理页面加载
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=k>new</span> <span class=nx>DocumentLoadInstrumentation</span><span class=p>(),</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 处理用户交互
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=k>new</span> <span class=nx>UserInteractionInstrumentation</span><span class=p>(),</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 处理 Fetch
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=k>new</span> <span class=nx>FetchInstrumentation</span><span class=p>({</span>
+</span></span><span class=line><span class=cl>      <span class=nx>clearTimingResources</span>: <span class=kt>true</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>      <span class=nx>propagateTraceHeaderCorsUrls</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>      <span class=nx>ignoreUrls</span>
+</span></span><span class=line><span class=cl>    <span class=p>}),</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 处理 XHR
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=k>new</span> <span class=nx>XMLHttpRequestInstrumentation</span><span class=p>({</span>
+</span></span><span class=line><span class=cl>      <span class=nx>clearTimingResources</span>: <span class=kt>true</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>      <span class=nx>propagateTraceHeaderCorsUrls</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>      <span class=nx>ignoreUrls</span>
+</span></span><span class=line><span class=cl>    <span class=p>})</span>
+</span></span><span class=line><span class=cl>  <span class=p>],</span>
+</span></span><span class=line><span class=cl>  <span class=nx>tracerProvider</span>: <span class=kt>provider</span>
+</span></span><span class=line><span class=cl><span class=p>});</span>
+</span></span></code></pre></td></tr></table></div></div><p>在应用入口（以 Angular 为例，如遇接口报错，尝试更新 NgZone 版本）引入 tracing.ts：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-ts data-lang=ts><span class=line><span class=cl><span class=kr>import</span> <span class=p>{</span> <span class=nx>enableProdMode</span> <span class=p>}</span> <span class=kr>from</span> <span class=s1>&#39;@angular/core&#39;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>import</span> <span class=p>{</span> <span class=nx>platformBrowserDynamic</span> <span class=p>}</span> <span class=kr>from</span> <span class=s1>&#39;@angular/platform-browser-dynamic&#39;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>import</span> <span class=p>{</span> <span class=nx>AppModule</span> <span class=p>}</span> <span class=kr>from</span> <span class=s1>&#39;./app/app.module&#39;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>import</span> <span class=p>{</span> <span class=nx>environment</span> <span class=p>}</span> <span class=kr>from</span> <span class=s1>&#39;./environments/environment&#39;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>import</span> <span class=s1>&#39;./tracing&#39;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=p>(</span><span class=nx>environment</span><span class=p>.</span><span class=nx>production</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>enableProdMode</span><span class=p>();</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=nx>platformBrowserDynamic</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>  <span class=p>.</span><span class=nx>bootstrapModule</span><span class=p>(</span><span class=nx>AppModule</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>  <span class=p>.</span><span class=k>catch</span><span class=p>(</span><span class=nx>err</span> <span class=o>=&gt;</span> <span class=nx>console</span><span class=p>.</span><span class=nx>error</span><span class=p>(</span><span class=nx>err</span><span class=p>));</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=数据传递流程>数据传递流程</h2><p>每次从前端发起请求时，OTLP 会在<strong>请求头</strong>中注入 <strong>traceparent/X-B3</strong> 字段（取决于使用的是 <a class=link href=https://www.w3.org/TR/trace-context/#traceparent-header-field-values target=_blank rel=noopener>W3C 规范
+</a>还是 <a class=link href=https://github.com/openzipkin/b3-propagation target=_blank rel=noopener>B3 规范
+</a>），用来将前后端链路信息关联起来；同时，客户端会将收集到的<strong>链路数据</strong>通过 <strong>OTLPTraceExporter</strong> 提交给追踪服务器；服务端会将收集到的<strong>链路数据</strong>通过 <strong>Java Agent</strong> 提交给追踪服务器。</p><h2 id=参考>参考</h2><ul><li><a class=link href=https://mp.weixin.qq.com/s/7fZizQem467a-agFsB8j4A target=_blank rel=noopener>到底什么是 RUM？生产环境如何选择靠谱的前端监控系统</a></li><li><a class=link href=https://gethelios.dev/blog/what-can-opentelemetry-do-for-frontend-developers/ target=_blank rel=noopener>What Can OpenTelemetry Do for Frontend Developers?</a></li><li><a class=link href=https://timdeschryver.dev/blog/adding-opentelemetry-to-an-angular-application/ target=_blank rel=noopener>Adding OpenTelemetry to An Angular Application</a></li><li><a class=link href=https://opentelemetry.io/docs/instrumentation/js/ target=_blank rel=noopener>OpenTelemetry Documentation</a></li><li><a class=link href=https://jckling.github.io/2021/04/02/Jaeger/OpenTelemetry%20%E8%A7%84%E8%8C%83%E9%98%85%E8%AF%BB/ target=_blank rel=noopener>OpenTelemetry 规范阅读</a></li></ul></section><footer class=article-footer><section class=article-copyright><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span></section></footer></article><footer class=site-footer><section class=copyright>&copy;
+2017 -
+2024
+<a href=https://github.com/Vikingama target=_blank>馬腊咯稽</a></section><section class=powerby>Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a>, Deploy by Actions<br>主题 <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.13.0>Stack</a></b> 由 <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a> 设计</section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">目录</h2><div class=widget--toc><nav id=TableOfContents><ol><li><a href=#事例代码>事例代码</a></li><li><a href=#数据传递流程>数据传递流程</a></li><li><a href=#参考>参考</a></li></ol></nav></div></section></aside></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=/ts/main.js defer></script></body></html>

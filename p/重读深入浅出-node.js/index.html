@@ -1,0 +1,1193 @@
+<!doctype html><html lang=zh-cn dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content='一直在学 Node，从来没有成功过'><title>重读《深入浅出 Node.js》 · Stay Hungry · Stay Foolish</title>
+<link rel=canonical href=https://vikingama.github.io/p/%E9%87%8D%E8%AF%BB%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA-node.js/><link rel=stylesheet href=/scss/style.min.38c15d3a5c1bca30008bb625a46636d24f5deb4bf3217095e667a3abc843eaef.css><meta property='og:title' content='重读《深入浅出 Node.js》'><meta property='og:description' content='一直在学 Node，从来没有成功过'><meta property='og:url' content='https://vikingama.github.io/p/%E9%87%8D%E8%AF%BB%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA-node.js/'><meta property='og:site_name' content='馬腊咯稽'><meta property='og:type' content='article'><meta property='article:section' content='Post'><meta property='article:published_time' content='2020-08-02T00:00:00+00:00'><meta property='article:modified_time' content='2020-08-02T00:00:00+00:00'><meta property='og:image' content='https://vikingama.github.io/img/cover/node.png'><meta name=twitter:title content="重读《深入浅出 Node.js》"><meta name=twitter:description content="一直在学 Node，从来没有成功过"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content='https://vikingama.github.io/img/cover/node.png'><link rel="shortcut icon" href=/favicon.ico><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><meta name=theme-color content="#ffffff"><meta name=robots content="noarchive"><div class=warning-banner>因为 GitHub 账号二次验证失败，计划迁往
+<a href=https://elementref.github.io/>新地址&rarr;</a></div></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label=切换菜单>
+<span class=hamburger-box><span class=hamburger-inner></span></span></button><header><figure class=site-avatar><a href=/><img src=/img/avatar_huae06eac29c2bc6aa7e83a685ea2f6536_13838_300x0_resize_box_3.png width=300 height=404 class=site-logo loading=lazy alt=Avatar></a></figure><div class=site-meta><h1 class=site-name><a href=/>馬腊咯稽</a></h1><h2 class=site-description>Stay Hungry · Stay Foolish</h2></div></header><ol class=menu id=main-menu><li><a href=/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg>
+<span>首页</span></a></li><li><a href=/archives/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><rect x="3" y="4" width="18" height="4" rx="2"/><path d="M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+<span>归档</span></a></li><li><a href=/search/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="10" cy="10" r="7"/><line x1="21" y1="21" x2="15" y2="15"/></svg>
+<span>搜索</span></a></li><li><a href=https://github.com/ElementRef/AboutConfig target=_blank><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-infinity" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M9.828 9.172a4 4 0 100 5.656A10 10 0 0012 12a10 10 0 012.172-2.828 4 4 0 110 5.656A10 10 0 0112 12 10 10 0 009.828 9.172"/></svg>
+<span>配置</span></a></li><li><a href=/%E5%90%AF%E5%8F%91/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M10 14a3.5 3.5.0 005 0l4-4a3.5 3.5.0 00-5-5l-.5.5"/><path d="M14 10a3.5 3.5.0 00-5 0l-4 4a3.5 3.5.0 005 5l.5-.5"/></svg>
+<span>启发</span></a></li><li><a href=/%E5%91%BD%E4%BB%A4/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-terminal" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 7l5 5-5 5"/><line x1="12" y1="19" x2="19" y2="19"/></svg>
+<span>命令</span></a></li><li><a href=/%E5%85%B3%E4%BA%8E/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="7" r="4"/><path d="M6 21v-2a4 4 0 014-4h4a4 4 0 014 4v2"/></svg>
+<span>关于</span></a></li><div class=menu-bottom-section><li id=dark-mode-toggle><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<span>深色</span></li></div></ol></aside><main class="main full-width"><article class="has-image main-article"><header class=article-header><div class=article-image><a href=/p/%E9%87%8D%E8%AF%BB%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA-node.js/><img src=/img/cover/node.png loading=lazy alt="重读《深入浅出 Node.js》"></a></div><div class=article-details><header class=article-category><a href=/categories/node.js/>Node.js</a></header><div class=article-title-wrapper><h2 class=article-title><a href=/p/%E9%87%8D%E8%AF%BB%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA-node.js/>重读《深入浅出 Node.js》</a></h2><h3 class=article-subtitle>一直在学 Node，从来没有成功过</h3></div><footer class=article-time><div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>Aug 02, 2020</time></div><div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>阅读时长：20 分钟</time></div></footer></div></header><section class=article-content><h2 id=node-简介>Node 简介</h2><p><img src=/p/%E9%87%8D%E8%AF%BB%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA-node.js/node-chrome.png width=2352 height=990 srcset="/p/%E9%87%8D%E8%AF%BB%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA-node.js/node-chrome_hu19437707a01eb56004be25719a7827b1_35581_480x0_resize_box_3.png 480w, /p/%E9%87%8D%E8%AF%BB%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA-node.js/node-chrome_hu19437707a01eb56004be25719a7827b1_35581_1024x0_resize_box_3.png 1024w" class=gallery-image data-flex-grow=237 data-flex-basis=570px loading=lazy></p><p>Node 的结构与 Chrome 十分相似，它们都是基于事件驱动的异步架构，浏览器通过事件驱动来服务界面上的交互，Node 通过事件驱动来服务 I/O；作为后端 JS 的运行平台，Node 没有改写语言本身的任何特性，它将前端中广泛运用的思想迁移到了服务器端。</p><p><img src=/p/%E9%87%8D%E8%AF%BB%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA-node.js/libuv.png width=2104 height=948 srcset="/p/%E9%87%8D%E8%AF%BB%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA-node.js/libuv_hue5d621de1da278be5771a2200a9ded60_10896_480x0_resize_box_3.png 480w, /p/%E9%87%8D%E8%AF%BB%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA-node.js/libuv_hue5d621de1da278be5771a2200a9ded60_10896_1024x0_resize_box_3.png 1024w" class=gallery-image data-flex-grow=221 data-flex-basis=532px loading=lazy></p><p>Node 特点：异步输入输出、回调函数、单线程、基于 libuv 实现跨平台。</p><h2 id=模块化>模块化</h2><p>Node 中模块分为两类：核心模块和文件模块；核心模块在 Node 启动时被直接加载进内存中，文件模块则是在运行时动态加载。Node 对引入过的模块都会进行缓存，同浏览器缓存文件一样，不同的是 Node 缓存的是编译和执行之后的对象。</p><p>Node 在对 JS 模块编译的过程中对文件内容进行了头尾包装，这样每个模块文件之间都进行了作用域隔离。包装之后的代码会通过原生模块的 runInThisContext 方法执行，返回一个 function 对象。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=p>(</span><span class=kd>function</span> <span class=p>(</span><span class=nx>exports</span><span class=p>,</span> <span class=nx>require</span><span class=p>,</span> <span class=nx>module</span><span class=p>,</span> <span class=nx>__filename</span><span class=p>,</span> <span class=nx>__dirname</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=kd>var</span> <span class=nx>math</span> <span class=o>=</span> <span class=nx>require</span><span class=p>(</span><span class=s1>&#39;math&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=nx>exports</span><span class=p>.</span><span class=nx>area</span> <span class=o>=</span> <span class=kd>function</span> <span class=p>(</span><span class=nx>radius</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=nb>Math</span><span class=p>.</span><span class=nx>PI</span> <span class=o>*</span> <span class=nx>radius</span> <span class=o>*</span> <span class=nx>radius</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>};</span>
+</span></span><span class=line><span class=cl><span class=p>});</span>
+</span></span></code></pre></td></tr></table></div></div><p>Node 对 C/C++模块调用 process.dlopen 进行加载和执行，dlopen 方法在 Windows 和 *nix 平台下分别有不同的实现，通过 libuv 兼容层进行了封装。</p><p>Node 在对 JSON 文件编译时，利用 fs 模块同步读取 JSON 文件的内容之后，调用 JSON.parse 得到对象，然后将它赋给模块对象的 exports，以供外部调用。</p><p>Node 最初采用的是 CommonJS 规范，从 v13.2 版本开始，Node 默认支持 ES6 模块；ES6 的模块规范和 CommonJS 规范的差别在于：</p><ol><li>CommonJS 模块输出的是一个值的拷贝，ES6 模块输出的是值的引用；</li><li>CommonJS 模块是运行时加载，ES6 模块是编译时输出接口；</li><li>CommonJS 模块的顶层 this 指向当前模块，ES6 模块中，顶层的 this 指向 undefined；</li><li>ES6 模块中不存在：arguments、require、module、exports、__filename、__dirname。</li></ol><p>CommonJS 加载的是一个对象，该对象只有在脚本运行完才会生成；而 ES6 模块不是对象，它的对外接口只是一种静态定义，在代码静态解析阶段就会生成，Webpack 的 TreeShaking 就利用了 ES6 模块可以静态分析的特点。</p><p>Node 要求 ES6 模块采用 .mjs 文件扩展名；Node 遇到 .mjs 文件，就认为它是 ES6 模块，默认启用严格模式；如果不希望将后缀名改成 .mjs，可以在项目的 package.json 文件中，指定 type 字段为 module；如果这时还要使用 CommonJS 模块，那么需要将 CommonJS 脚本的后缀名都改成 .cjs。</p><p>总之，.mjs 文件总是以 ES6 模块加载，.cjs 文件总是以 CommonJS 模块加载，.js 文件的加载取决于 package.json 里面 type 字段的设置。</p><h2 id=异步-io>异步 I/O</h2><p><img src=/p/%E9%87%8D%E8%AF%BB%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA-node.js/async-io.png width=2154 height=1314 srcset="/p/%E9%87%8D%E8%AF%BB%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA-node.js/async-io_hudb21f84d8c51862208a6d327ee16eb50_30065_480x0_resize_box_3.png 480w, /p/%E9%87%8D%E8%AF%BB%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA-node.js/async-io_hudb21f84d8c51862208a6d327ee16eb50_30065_1024x0_resize_box_3.png 1024w" class=gallery-image data-flex-grow=163 data-flex-basis=393px loading=lazy></p><p>Node 利用单线程，远离多线程死锁、状态同步等问题；利用异步 I/O，让单线程远离阻塞，以更好地使用 CPU。为了弥补单线程无法利用多核 CPU 的缺点，Node 提供了子进程，子进程可以通过工作进程高效地利用 CPU。</p><p><img src=/p/%E9%87%8D%E8%AF%BB%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA-node.js/perfect-io.png width=1996 height=1372 srcset="/p/%E9%87%8D%E8%AF%BB%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA-node.js/perfect-io_hu4c10448426d723ed6b61d97c17bde2eb_32512_480x0_resize_box_3.png 480w, /p/%E9%87%8D%E8%AF%BB%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA-node.js/perfect-io_hu4c10448426d723ed6b61d97c17bde2eb_32512_1024x0_resize_box_3.png 1024w" class=gallery-image data-flex-grow=145 data-flex-basis=349px loading=lazy></p><p>操作系统内核对于 I/O 只有两种方式：阻塞与非阻塞；阻塞 I/O 的一个特点是调用之后一定要等到系统内核层面完成所有操作后，调用才结束。非阻塞 I/O 则不带数据直接返回，返回之后，CPU 的时间片可以用来处理其他事务，性能提升是明显的；但由于完整的 I/O 并没有完成，立即返回的并不是业务层期望的数据，而仅仅是当前调用的状态；为了获取完整的数据，应用程序需要重复调用 I/O 操作来确认是否完成。</p><p><img src=/p/%E9%87%8D%E8%AF%BB%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA-node.js/true-io.png width=2254 height=1186 srcset="/p/%E9%87%8D%E8%AF%BB%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA-node.js/true-io_hu5a2b5634ff9ad89d9380e84103a01920_29321_480x0_resize_box_3.png 480w, /p/%E9%87%8D%E8%AF%BB%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA-node.js/true-io_hu5a2b5634ff9ad89d9380e84103a01920_29321_1024x0_resize_box_3.png 1024w" class=gallery-image data-flex-grow=190 data-flex-basis=456px loading=lazy></p><p>由于 Windows 平台和 *nix 平台的差异，Node 提供了 libuv 作为抽象封装层，使得所有平台兼容性的判断都由这一层来完成，并保证上层的 Node 与下层的自定义线程池及 IOCP 之间各自独立。Node 在编译期间会判断平台条件，选择性编译 *nix 目录或是 Win 目录下的源文件到目标程序中。</p><p><img src=/p/%E9%87%8D%E8%AF%BB%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA-node.js/base-libuv.png width=1808 height=836 srcset="/p/%E9%87%8D%E8%AF%BB%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA-node.js/base-libuv_hu6b4ab618116df8d83e6c910e89f83cbc_15660_480x0_resize_box_3.png 480w, /p/%E9%87%8D%E8%AF%BB%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA-node.js/base-libuv_hu6b4ab618116df8d83e6c910e89f83cbc_15660_1024x0_resize_box_3.png 1024w" class=gallery-image data-flex-grow=216 data-flex-basis=519px loading=lazy></p><p>事件循环、观察者、请求对象、I/O 线程池这四者共同构成了异步 I/O 模型的基本要素。事实上，在 Node 中，除了 JS 是单线程外，Node 自身其实是多线程的；除了用户代码无法并行执行外，所有的 I/O（磁盘 I/O 和网络 I/O 等）则是可以并行的。</p><p><img src=/p/%E9%87%8D%E8%AF%BB%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA-node.js/whole-io.png width=2406 height=1888 srcset="/p/%E9%87%8D%E8%AF%BB%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA-node.js/whole-io_hu584784da0b4b21f366d432c45c6d3af9_120633_480x0_resize_box_3.png 480w, /p/%E9%87%8D%E8%AF%BB%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA-node.js/whole-io_hu584784da0b4b21f366d432c45c6d3af9_120633_1024x0_resize_box_3.png 1024w" class=gallery-image data-flex-grow=127 data-flex-basis=305px loading=lazy></p><h2 id=事件循环>事件循环</h2><p>事件循环对观察者的检查是有先后顺序的，process.nextTick 属于 idle 观察者，setImmediate 属于 check 观察者。在每一个轮循环检查中，idle 观察者先于 I/O 观察者，I/O 观察者先于 check 观察者。</p><p>process.nextTick 的回调函数保存在一个数组中，setImmediate 的结果则是保存在链表中；在行为上，process.nextTick 在每轮循环中会将数组中的回调函数全部执行完，而 setImmediate 在每轮循环中执行链表中的一个回调函数。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=s1>&#39;start&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=nx>setTimeout</span><span class=p>(</span><span class=kd>function</span> <span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=s1>&#39;setTimeout one&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>},</span> <span class=mi>0</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=nx>process</span><span class=p>.</span><span class=nx>nextTick</span><span class=p>(</span><span class=kd>function</span> <span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=s1>&#39;process.nextTick one&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>});</span>
+</span></span><span class=line><span class=cl><span class=nx>setImmediate</span><span class=p>(</span><span class=kd>function</span> <span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=s1>&#39;setImmediate one&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=nx>process</span><span class=p>.</span><span class=nx>nextTick</span><span class=p>(</span><span class=kd>function</span> <span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=s1>&#39;process.nextTick in setImmediate&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=p>});</span>
+</span></span><span class=line><span class=cl><span class=p>});</span>
+</span></span><span class=line><span class=cl><span class=nx>setTimeout</span><span class=p>(</span><span class=kd>function</span> <span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=s1>&#39;setTimeout two&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>},</span> <span class=mi>0</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=nx>process</span><span class=p>.</span><span class=nx>nextTick</span><span class=p>(</span><span class=kd>function</span> <span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=s1>&#39;process.nextTick two&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>});</span>
+</span></span><span class=line><span class=cl><span class=nx>setImmediate</span><span class=p>(</span><span class=kd>function</span> <span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=s1>&#39;setImmediate two&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>});</span>
+</span></span><span class=line><span class=cl><span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=s1>&#39;end&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=cm>/**
+</span></span></span><span class=line><span class=cl><span class=cm> * start
+</span></span></span><span class=line><span class=cl><span class=cm> * end
+</span></span></span><span class=line><span class=cl><span class=cm> * process.nextTick one
+</span></span></span><span class=line><span class=cl><span class=cm> * process.nextTick two
+</span></span></span><span class=line><span class=cl><span class=cm> * setTimeout one
+</span></span></span><span class=line><span class=cl><span class=cm> * setTimeout two
+</span></span></span><span class=line><span class=cl><span class=cm> * setImmediate one
+</span></span></span><span class=line><span class=cl><span class=cm> * process.nextTick in setImmediate
+</span></span></span><span class=line><span class=cl><span class=cm> * setImmediate two
+</span></span></span><span class=line><span class=cl><span class=cm> */</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=垃圾回收>垃圾回收</h2><p>调用 process.memoryUsage() 可以看到 Node 进程的内存占用情况，每个属性值的单位为字节：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>rss</span><span class=o>:</span> <span class=mi>27152384</span><span class=p>,</span> <span class=c1>// 常驻内存，为进程分配了多少物理内存，包含所有的 C++ 和 JS 对象与代码
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=nx>heapTotal</span><span class=o>:</span> <span class=mi>5959680</span><span class=p>,</span> <span class=c1>// 堆中总共『申请』的内存量
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=nx>heapUsed</span><span class=o>:</span> <span class=mi>3728776</span><span class=p>,</span> <span class=c1>// 堆中『使用中』的内存量
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=nx>external</span><span class=o>:</span> <span class=mi>1393760</span> <span class=c1>// V8 管理的、绑定到 JS 的 C++ 对象的内存量
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>当在代码中声明变量并赋值时，所使用对象的内存就分配在堆中。如果已申请的堆空闲内存不够分配新的对象，将继续申请堆内存，直到堆的大小超过 V8 的限制为止。V8 限制堆的大小的原因是 V8 的垃圾回收机制的限制；V8 做一次小的垃圾回收需要 50 毫秒以上，做一次非增量式的垃圾回收甚至要 1 秒以上；这是垃圾回收中引起 JS 线程暂停执行的时间，在这样的时间花销下，应用的性能和响应能力都会直线下降；因此，在当时的考虑下直接限制堆内存是一个好的选择。</p><p>V8 提供了选项让我们使用更多的内存；Node 在启动时可以传递 max_old_space_size 或 max_new_space_size 来调整内存限制的大小：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=c1>// 设置老生代内存空间的最大值，单位为 MB
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=nx>node</span> <span class=o>--</span><span class=nx>max_old_space_size</span><span class=o>=</span><span class=mi>2048</span> <span class=nx>test</span><span class=p>.</span><span class=nx>js</span>
+</span></span><span class=line><span class=cl><span class=c1>// 设置新生代内存空间的最大值，单位为 KB
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=nx>node</span> <span class=o>--</span><span class=nx>max_new_space_size</span><span class=o>=</span><span class=mi>1024</span> <span class=nx>test</span><span class=p>.</span><span class=nx>js</span>
+</span></span></code></pre></td></tr></table></div></div><p><img src=/p/%E9%87%8D%E8%AF%BB%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA-node.js/v8-memory.png width=2190 height=318 srcset="/p/%E9%87%8D%E8%AF%BB%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA-node.js/v8-memory_huad7e6b1181895ff90af6cb7369abb0d2_10832_480x0_resize_box_3.png 480w, /p/%E9%87%8D%E8%AF%BB%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA-node.js/v8-memory_huad7e6b1181895ff90af6cb7369abb0d2_10832_1024x0_resize_box_3.png 1024w" class=gallery-image data-flex-grow=688 data-flex-basis=1652px loading=lazy></p><p>V8 的垃圾回收策略主要基于分代式垃圾回收机制；按照对象的存活时间将内存进行不同的分代，然后分别对不同分代的内存施以不同的算法。</p><p>在 V8 中，主要将内存分为新生代和老生代两代，新生代中的对象为存活时间较短的对象，老生代中的对象为存活时间较长或常驻内存的对象。V8 使用的内存没有办法根据使用情况自动扩充，当内存分配过程中超过极限值时，就会引起进程出错。</p><p>对于新生代内存，主要通过 Scavenge 算法进行垃圾回收；将堆内存一分为二，在这两个 semispace 空间中，只有一个处于使用中（From 空间），另一个处于闲置状态（To 空间）。当分配对象时，先是在 From 中进行分配；当开始进行垃圾回收时，会检查 From 中的存活对象，存活对象将被复制到 To 中，而非存活对象占用的空间将会被释放；完成复制后，From 和 To 的角色发生对换。简而言之，就是将存活对象在两个 semispace 空间之间进行复制。</p><p><img src=/p/%E9%87%8D%E8%AF%BB%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA-node.js/scavenge.png width=2120 height=402 srcset="/p/%E9%87%8D%E8%AF%BB%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA-node.js/scavenge_hu5488c011b4c05ea73fe5465dafd96324_16756_480x0_resize_box_3.png 480w, /p/%E9%87%8D%E8%AF%BB%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA-node.js/scavenge_hu5488c011b4c05ea73fe5465dafd96324_16756_1024x0_resize_box_3.png 1024w" class=gallery-image data-flex-grow=527 data-flex-basis=1265px loading=lazy></p><p>Scavenge 的缺点是只能使用堆内存中的一半，但在时间效率上有优异的表现。</p><p>当一个对象经过多次复制依然存活时，它将会被认为是生命周期较长的对象；这种对象随后会被移动到老生代中，采用新的算法进行管理；对象从新生代中移动到老生代中的过程称为晋升。对象晋升的条件主要有两个：一个是对象是否经历过 Scavenge 回收，一个是 To 空间的内存占用比超过限制。</p><img style=width:48% src=promote-one.png>
+<img style=width:48% src=promote-two.png><p>对于老生代中的对象，采用标记清除算法；在标记阶段遍历堆中的所有对象，并标记活着的对象，在随后的清除阶段中，只清除没有被标记的对象。Scavenge 中只复制活着的对象，而 Mark-Sweep 只清理死亡对象；活对象在新生代中只占较小部分，死对象在老生代中只占较小部分。</p><p><img src=/p/%E9%87%8D%E8%AF%BB%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA-node.js/mark-sweep.png width=2098 height=420 srcset="/p/%E9%87%8D%E8%AF%BB%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA-node.js/mark-sweep_hud14d53fa8ff74763af514a38e7a368cb_55388_480x0_resize_box_3.png 480w, /p/%E9%87%8D%E8%AF%BB%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA-node.js/mark-sweep_hud14d53fa8ff74763af514a38e7a368cb_55388_1024x0_resize_box_3.png 1024w" class=gallery-image data-flex-grow=499 data-flex-basis=1198px loading=lazy></p><p>Mark-Sweep 最大的问题是在进行一次标记清除回收后，内存空间会出现不连续的状态；这种内存碎片会对后续的内存分配造成问题，为了解决 Mark-Sweep 的内存碎片问题，Mark-Compact 被提出来。标记整理是在 Mark-Sweep 的基础上演变而来的，它们的差别在于对象在标记为死亡后，在整理的过程中将活着的对象往一端移动，移动完成后直接清理掉边界外的内存。</p><p>由于 Mark-Compact 需要移动对象，它的执行速度不可能很快，所以在取舍上，V8 主要使用 Mark-Sweep，在空间不足以对从新生代中晋升过来的对象进行分配时才使用 Mark-Compact。</p><p><img src=/p/%E9%87%8D%E8%AF%BB%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA-node.js/mark-compact.png width=2086 height=842 srcset="/p/%E9%87%8D%E8%AF%BB%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA-node.js/mark-compact_hu86bdfdfa8704eaba626cb694951b0eb0_90420_480x0_resize_box_3.png 480w, /p/%E9%87%8D%E8%AF%BB%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA-node.js/mark-compact_hu86bdfdfa8704eaba626cb694951b0eb0_90420_1024x0_resize_box_3.png 1024w" class=gallery-image data-flex-grow=247 data-flex-basis=594px loading=lazy></p><p>在 V8 的回收策略中两者是结合使用的，目前介绍到的 3 种主要垃圾回收算法的简单对比：</p><p><img src=/p/%E9%87%8D%E8%AF%BB%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA-node.js/memory-pk.png width=2870 height=422 srcset="/p/%E9%87%8D%E8%AF%BB%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA-node.js/memory-pk_hud527d07d65c00ca8a91f8e76088d8bf5_32368_480x0_resize_box_3.png 480w, /p/%E9%87%8D%E8%AF%BB%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA-node.js/memory-pk_hud527d07d65c00ca8a91f8e76088d8bf5_32368_1024x0_resize_box_3.png 1024w" class=gallery-image data-flex-grow=680 data-flex-basis=1632px loading=lazy></p><p>垃圾回收的 3 种基本算法都需要将应用逻辑暂停下来，待执行完垃圾回收后再恢复执行应用逻辑，这种行为被称为“全停顿”；由于新生代内存默认配置得较小，且其中存活对象通常较少，所以即便全停顿影响也不大；老生代内存通常配置得较大，且存活对象较多，垃圾回收的标记、清理、整理等动作造成的停顿就会比较可怕；为此，V8 从标记阶段入手，引入增量标记（从行为上看很像 React Fiber），将原本要一口气停顿完成的动作是拆分为许多小“步进”，垃圾回收与应用逻辑交替执行直到标记阶段完成。</p><p><img src=/p/%E9%87%8D%E8%AF%BB%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA-node.js/incremental-marking.png width=2032 height=556 srcset="/p/%E9%87%8D%E8%AF%BB%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA-node.js/incremental-marking_hu62cca05886a98d429ef93121d0aa702d_23340_480x0_resize_box_3.png 480w, /p/%E9%87%8D%E8%AF%BB%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA-node.js/incremental-marking_hu62cca05886a98d429ef93121d0aa702d_23340_1024x0_resize_box_3.png 1024w" class=gallery-image data-flex-grow=365 data-flex-basis=877px loading=lazy></p><h2 id=内存指标>内存指标</h2><p>os.totalmem() 和 os.freemem() 这两个方法用于查看操作系统的内存使用情况，它们分别返回系统的总内存和闲置内存，单位为字节：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=o>&gt;</span> <span class=nx>os</span><span class=p>.</span><span class=nx>totalmem</span><span class=p>()</span>
+</span></span><span class=line><span class=cl><span class=mi>17179869184</span>
+</span></span><span class=line><span class=cl><span class=o>&gt;</span> <span class=nx>os</span><span class=p>.</span><span class=nx>freemem</span><span class=p>()</span>
+</span></span><span class=line><span class=cl><span class=mi>1706803200</span>
+</span></span></code></pre></td></tr></table></div></div><p>通过 process.momoryUsage() 的结果可以看到，堆中的内存用量总是小于进程的常驻内存用量；这意味着 Node 中的内存使用并非都是通过 V8 进行分配的；那些不是通过 V8 分配的内存称为堆外内存。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=kd>var</span> <span class=nx>total</span> <span class=o>=</span> <span class=p>[];</span>
+</span></span><span class=line><span class=cl><span class=k>for</span> <span class=p>(</span><span class=kd>var</span> <span class=nx>j</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=nx>j</span> <span class=o>&lt;</span> <span class=mi>15</span><span class=p>;</span> <span class=nx>j</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>showMem</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>  <span class=nx>total</span><span class=p>.</span><span class=nx>push</span><span class=p>(</span><span class=nx>useMem</span><span class=p>());</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=nx>showMem</span><span class=p>();</span>
+</span></span><span class=line><span class=cl><span class=kd>function</span> <span class=nx>showMem</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=kd>var</span> <span class=nx>mem</span> <span class=o>=</span> <span class=nx>process</span><span class=p>.</span><span class=nx>memoryUsage</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>  <span class=kd>var</span> <span class=nx>format</span> <span class=o>=</span> <span class=kd>function</span> <span class=p>(</span><span class=nx>bytes</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=p>(</span><span class=nx>bytes</span> <span class=o>/</span> <span class=mi>1024</span> <span class=o>/</span> <span class=mi>1024</span><span class=p>).</span><span class=nx>toFixed</span><span class=p>(</span><span class=mi>2</span><span class=p>)</span> <span class=o>+</span> <span class=s1>&#39; MB&#39;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>};</span>
+</span></span><span class=line><span class=cl>  <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>    <span class=s1>&#39;Process: heapTotal &#39;</span> <span class=o>+</span>
+</span></span><span class=line><span class=cl>      <span class=nx>format</span><span class=p>(</span><span class=nx>mem</span><span class=p>.</span><span class=nx>heapTotal</span><span class=p>)</span> <span class=o>+</span>
+</span></span><span class=line><span class=cl>      <span class=s1>&#39; heapUsed &#39;</span> <span class=o>+</span>
+</span></span><span class=line><span class=cl>      <span class=nx>format</span><span class=p>(</span><span class=nx>mem</span><span class=p>.</span><span class=nx>heapUsed</span><span class=p>)</span> <span class=o>+</span>
+</span></span><span class=line><span class=cl>      <span class=s1>&#39; rss &#39;</span> <span class=o>+</span>
+</span></span><span class=line><span class=cl>      <span class=nx>format</span><span class=p>(</span><span class=nx>mem</span><span class=p>.</span><span class=nx>rss</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>  <span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=s1>&#39;---------------------------------------&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=kd>function</span> <span class=nx>useMem</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>size</span> <span class=o>=</span> <span class=mi>200</span> <span class=o>*</span> <span class=mi>1024</span> <span class=o>*</span> <span class=mi>1024</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>buffer</span> <span class=o>=</span> <span class=k>new</span> <span class=nx>Buffer</span><span class=p>.</span><span class=nx>alloc</span><span class=p>(</span><span class=nx>size</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=k>for</span> <span class=p>(</span><span class=kd>var</span> <span class=nx>i</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=nx>i</span> <span class=o>&lt;</span> <span class=nx>size</span><span class=p>;</span> <span class=nx>i</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>buffer</span><span class=p>[</span><span class=nx>i</span><span class=p>]</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=nx>buffer</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>在 node 中运行以上代码，输出以下结果：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>Process: heapTotal 4.05 MB heapUsed 2.06 MB rss 21.72 MB
+</span></span><span class=line><span class=cl>---------------------------------------
+</span></span><span class=line><span class=cl>Process: heapTotal 5.48 MB heapUsed 2.72 MB rss 225.77 MB
+</span></span><span class=line><span class=cl>---------------------------------------
+</span></span><span class=line><span class=cl>Process: heapTotal 5.48 MB heapUsed 2.73 MB rss 425.98 MB
+</span></span><span class=line><span class=cl>---------------------------------------
+</span></span><span class=line><span class=cl>...
+</span></span><span class=line><span class=cl>...
+</span></span><span class=line><span class=cl>...
+</span></span><span class=line><span class=cl>Process: heapTotal 4.48 MB heapUsed 2.03 MB rss 2624.34 MB
+</span></span><span class=line><span class=cl>---------------------------------------
+</span></span><span class=line><span class=cl>Process: heapTotal 4.48 MB heapUsed 2.03 MB rss 2824.34 MB
+</span></span><span class=line><span class=cl>---------------------------------------
+</span></span><span class=line><span class=cl>Process: heapTotal 4.48 MB heapUsed 1.95 MB rss 3024.34 MB
+</span></span><span class=line><span class=cl>---------------------------------------
+</span></span></code></pre></td></tr></table></div></div><p>heapTotal 与 heapUsed 的变化极小，rss 的值已经超过 V8 的限制值；原因是 Buffer 对象不同于其他对象，它不经过 V8 的内存分配机制，不会有堆内存的大小限制；这意味着利用堆外内存可以突破内存限制的问题。</p><h2 id=内存泄漏>内存泄漏</h2><p>造成内存泄漏的原因有：</p><ul><li>缓存；</li><li>队列消费不及时；</li><li>作用域未释放。</li></ul><p>缓存的访问效率要比 I/O 的效率高，一旦命中缓存，就可以节省一次 I/O 的时间；一旦一个对象被当做缓存来使用，那它将会常驻在老生代内存中；这将影响垃圾回收的效率。对象不同于严格意义的缓存，缓存有着完善的过期策略，而普通对象并没有；所以在 Node 中，任何试图拿内存当缓存的行为都应当被限制。</p><p>目前比较好的解决方案是采用进程外的缓存（例如：Redis），进程自身不存储状态；外部的缓存有着良好的缓存过期淘汰策略以及内存管理，不影响 Node 进程的性能：</p><ul><li>将缓存转移到外部，减少常驻内存的对象的数量，让垃圾回收更高效；</li><li>进程之间可以共享缓存。</li></ul><h2 id=eventemitter>EventEmitter</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=kr>const</span> <span class=nx>EventEmitter</span> <span class=o>=</span> <span class=nx>require</span><span class=p>(</span><span class=s1>&#39;events&#39;</span><span class=p>).</span><span class=nx>EventEmitter</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>const</span> <span class=nx>AudioDevice</span> <span class=o>=</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>play</span><span class=o>:</span> <span class=kd>function</span> <span class=p>(</span><span class=nx>track</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=s1>&#39;play&#39;</span><span class=p>,</span> <span class=nx>track</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=p>},</span>
+</span></span><span class=line><span class=cl>  <span class=nx>stop</span><span class=o>:</span> <span class=kd>function</span> <span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=s1>&#39;stop&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>};</span>
+</span></span><span class=line><span class=cl><span class=kr>class</span> <span class=nx>MusicPlayer</span> <span class=kr>extends</span> <span class=nx>EventEmitter</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>constructor</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=kr>super</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>    <span class=k>this</span><span class=p>.</span><span class=nx>playing</span> <span class=o>=</span> <span class=kc>false</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=kr>const</span> <span class=nx>musicPlayer</span> <span class=o>=</span> <span class=k>new</span> <span class=nx>MusicPlayer</span><span class=p>();</span>
+</span></span><span class=line><span class=cl><span class=nx>musicPlayer</span><span class=p>.</span><span class=nx>on</span><span class=p>(</span><span class=s1>&#39;play&#39;</span><span class=p>,</span> <span class=kd>function</span> <span class=p>(</span><span class=nx>track</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=k>this</span><span class=p>.</span><span class=nx>playing</span> <span class=o>=</span> <span class=kc>true</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=nx>AudioDevice</span><span class=p>.</span><span class=nx>play</span><span class=p>(</span><span class=nx>track</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>});</span>
+</span></span><span class=line><span class=cl><span class=nx>musicPlayer</span><span class=p>.</span><span class=nx>on</span><span class=p>(</span><span class=s1>&#39;stop&#39;</span><span class=p>,</span> <span class=kd>function</span> <span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=k>this</span><span class=p>.</span><span class=nx>playing</span> <span class=o>=</span> <span class=kc>false</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=nx>AudioDevice</span><span class=p>.</span><span class=nx>stop</span><span class=p>();</span>
+</span></span><span class=line><span class=cl><span class=p>});</span>
+</span></span><span class=line><span class=cl><span class=cm>/**
+</span></span></span><span class=line><span class=cl><span class=cm> * EventEmitter 实例发生错误会发出一个 error 事件
+</span></span></span><span class=line><span class=cl><span class=cm> * 如果没有监听器，默认动作是打印一个堆栈并退出程序
+</span></span></span><span class=line><span class=cl><span class=cm> */</span>
+</span></span><span class=line><span class=cl><span class=nx>musicPlayer</span><span class=p>.</span><span class=nx>on</span><span class=p>(</span><span class=s1>&#39;error&#39;</span><span class=p>,</span> <span class=kd>function</span> <span class=p>(</span><span class=nx>err</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>console</span><span class=p>.</span><span class=nx>error</span><span class=p>(</span><span class=s1>&#39;Error:&#39;</span><span class=p>,</span> <span class=nx>err</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>});</span>
+</span></span><span class=line><span class=cl><span class=nx>musicPlayer</span><span class=p>.</span><span class=nx>emit</span><span class=p>(</span><span class=s1>&#39;play&#39;</span><span class=p>,</span> <span class=s1>&#39;The Roots - The Fire&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=nx>setTimeout</span><span class=p>(</span><span class=kd>function</span> <span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>musicPlayer</span><span class=p>.</span><span class=nx>emit</span><span class=p>(</span><span class=s1>&#39;stop&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>},</span> <span class=mi>1000</span><span class=p>);</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=buffer>Buffer</h2><p>Buffer 是一个类数组对象，它的元素为 16 进制的两位数，即 0 到 255 的数值，主要用于操作字节；它将性能相关的部分用 C++ 实现（node_buffer），将非性能相关的部分用 JS 实现（Buffer/SlowBuffer）。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=kd>var</span> <span class=nx>str</span> <span class=o>=</span> <span class=s1>&#39;深入浅出 node.js&#39;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kd>var</span> <span class=nx>buf</span> <span class=o>=</span> <span class=nx>Buffer</span><span class=p>.</span><span class=nx>from</span><span class=p>(</span><span class=nx>str</span><span class=p>,</span> <span class=s1>&#39;utf-8&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=nx>buf</span><span class=p>);</span> <span class=c1>// &lt;Buffer e6 b7 b1 e5 85 a5 e6 b5 85 e5 87 ba 20 6e 6f 64 65 2e 6a 73&gt;
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=nx>buf</span><span class=p>.</span><span class=nx>length</span><span class=p>);</span> <span class=c1>// 20
+</span></span></span><span class=line><span class=cl><span class=c1>// 如果是小数，舍弃小数部分，只保留整数部分
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=nx>buf</span><span class=p>[</span><span class=mi>0</span><span class=p>]</span> <span class=o>=</span> <span class=mf>3.1415</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=nx>buf</span><span class=p>[</span><span class=mi>0</span><span class=p>]);</span> <span class=c1>// 3
+</span></span></span><span class=line><span class=cl><span class=c1>// 赋值如果小于 0，就将该值逐次加 256，直到得到一个 0 到 255 之间的整数
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=nx>buf</span><span class=p>[</span><span class=mi>1</span><span class=p>]</span> <span class=o>=</span> <span class=o>-</span><span class=mi>1</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=nx>buf</span><span class=p>[</span><span class=mi>1</span><span class=p>]);</span> <span class=c1>// 255
+</span></span></span><span class=line><span class=cl><span class=c1>// 如果得到的数值大于 255，就逐次减 256，直到得到一个 0 到 255 之间的整数
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=nx>buf</span><span class=p>[</span><span class=mi>2</span><span class=p>]</span> <span class=o>=</span> <span class=mi>256</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=nx>buf</span><span class=p>[</span><span class=mi>2</span><span class=p>]);</span> <span class=c1>// 0
+</span></span></span></code></pre></td></tr></table></div></div><p>Node 在内存的使用上应用的是<strong>在 C++ 层面『申请』内存、在 JS 中『分配』内存</strong>的策略；Node 采用动态内存管理机制（slab）高效地使用申请来的内存；slab 是一块申请好的固定大小的内存区域，具有如下 3 种状态：</p><ul><li>full，完全分配状态；</li><li>partial，部分分配状态；</li><li>empty，没有被分配状态。</li></ul><p>Buffer 的内存分配是在 Node 的 C++ 层面实现的；Node 以 8KB（每个 slab 的大小）为界限来区分 Buffer 是大对象还是小对象。</p><p>Buffer 对象可以与字符串之间相互转换，Node 当前支持 utf8、utf16le、latin1、base64、hex、ascii、binary（latin1 的别名）、ucs2（utf16le 的别名）字符编码。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=c1>// 判断编码是否支持转换
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=nx>Buffer</span><span class=p>.</span><span class=nx>isEncoding</span><span class=p>(</span><span class=s1>&#39;GB2312&#39;</span><span class=p>);</span> <span class=c1>// false
+</span></span></span><span class=line><span class=cl><span class=c1>// utf8 是默认编码
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kr>const</span> <span class=nx>buf</span> <span class=o>=</span> <span class=nx>Buffer</span><span class=p>.</span><span class=nx>from</span><span class=p>(</span><span class=s1>&#39;hello world&#39;</span><span class=p>,</span> <span class=s1>&#39;utf8&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=nx>buf</span><span class=p>.</span><span class=nx>toString</span><span class=p>(</span><span class=s1>&#39;hex&#39;</span><span class=p>));</span> <span class=c1>// 68656c6c6f20776f726c64
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=nx>buf</span><span class=p>.</span><span class=nx>toString</span><span class=p>(</span><span class=s1>&#39;base64&#39;</span><span class=p>));</span> <span class=c1>// aGVsbG8gd29ybGQ=
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=nx>Buffer</span><span class=p>.</span><span class=nx>from</span><span class=p>(</span><span class=s1>&#39;fhqwhgads&#39;</span><span class=p>,</span> <span class=s1>&#39;utf8&#39;</span><span class=p>));</span> <span class=c1>// &lt;Buffer 66 68 71 77 68 67 61 64 73&gt;
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=nx>Buffer</span><span class=p>.</span><span class=nx>from</span><span class=p>(</span><span class=s1>&#39;fhqwhgads&#39;</span><span class=p>,</span> <span class=s1>&#39;utf16le&#39;</span><span class=p>));</span> <span class=c1>// &lt;Buffer 66 00 68 00 71 00 77 00 68 00 67 00 61 00 64 00 73 00&gt;
+</span></span></span></code></pre></td></tr></table></div></div><p>Buffer 在使用场景中，通常是以一段一段的方式传输：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=kd>var</span> <span class=nx>fs</span> <span class=o>=</span> <span class=nx>require</span><span class=p>(</span><span class=s1>&#39;fs&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=kd>var</span> <span class=nx>rs</span> <span class=o>=</span> <span class=nx>fs</span><span class=p>.</span><span class=nx>createReadStream</span><span class=p>(</span><span class=s1>&#39;ThinkInSilence.md&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=c1>// 设置可读流编码可以解决乱码问题；这里的 highWaterMark 是指每次读取的长度，其大小决定会触发系统调用和 data 事件的次数
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=kd>var</span> <span class=nx>rs</span> <span class=o>=</span> <span class=nx>fs</span><span class=p>.</span><span class=nx>createReadStream</span><span class=p>(</span><span class=s1>&#39;ThinkInSilence.md&#39;</span><span class=p>,</span> <span class=p>{</span> <span class=nx>highWaterMark</span><span class=o>:</span> <span class=mi>11</span> <span class=p>});</span>
+</span></span><span class=line><span class=cl>  <span class=cm>/**
+</span></span></span><span class=line><span class=cl><span class=cm>   * 可读流在内部设置了一个 decoder 对象（来自 StringDecoder 的实例）
+</span></span></span><span class=line><span class=cl><span class=cm>   * 每次 data 事件都通过该 decoder 对象进行 Buffer 到字符串的解码
+</span></span></span><span class=line><span class=cl><span class=cm>   * data 不再收到原始的 Buffer 对象
+</span></span></span><span class=line><span class=cl><span class=cm>   */</span>
+</span></span><span class=line><span class=cl>  <span class=nx>rs</span><span class=p>.</span><span class=nx>setEncoding</span><span class=p>(</span><span class=s1>&#39;utf8&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=kd>var</span> <span class=nx>data</span> <span class=o>=</span> <span class=s1>&#39;&#39;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=nx>rs</span><span class=p>.</span><span class=nx>on</span><span class=p>(</span><span class=s1>&#39;data&#39;</span><span class=p>,</span> <span class=kd>function</span> <span class=p>(</span><span class=nx>chunk</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=c1>// 这里暗含了 toString 操作，一旦输入流中有宽字节编码时，就会出现乱码
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=nx>data</span> <span class=o>+=</span> <span class=nx>chunk</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>});</span>
+</span></span><span class=line><span class=cl><span class=nx>rs</span><span class=p>.</span><span class=nx>on</span><span class=p>(</span><span class=s1>&#39;end&#39;</span><span class=p>,</span> <span class=kd>function</span> <span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=c1>// toString 方法默认以 UTF-8 为编码，中文字在 UTF-8 下占 3 个字节，Buffer 大小可能会造成乱码
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=nx>data</span><span class=p>);</span> <span class=c1>// 床前明���光，疑���地上霜；举头���明月，���头思故乡。
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=p>});</span>
+</span></span></code></pre></td></tr></table></div></div><p>Buffer 正确的拼接方式并不是『+=』，而是使用 Buffer.concat(Array) 的方式：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=kd>var</span> <span class=nx>chunks</span> <span class=o>=</span> <span class=p>[];</span>
+</span></span><span class=line><span class=cl><span class=kd>var</span> <span class=nx>size</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=nx>res</span><span class=p>.</span><span class=nx>on</span><span class=p>(</span><span class=s1>&#39;data&#39;</span><span class=p>,</span> <span class=kd>function</span> <span class=p>(</span><span class=nx>chunk</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>chunks</span><span class=p>.</span><span class=nx>push</span><span class=p>(</span><span class=nx>chunk</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=nx>size</span> <span class=o>+=</span> <span class=nx>chunk</span><span class=p>.</span><span class=nx>length</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>});</span>
+</span></span><span class=line><span class=cl><span class=nx>res</span><span class=p>.</span><span class=nx>on</span><span class=p>(</span><span class=s1>&#39;end&#39;</span><span class=p>,</span> <span class=kd>function</span> <span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=kd>var</span> <span class=nx>buf</span> <span class=o>=</span> <span class=nx>Buffer</span><span class=p>.</span><span class=nx>concat</span><span class=p>(</span><span class=nx>chunks</span><span class=p>,</span> <span class=nx>size</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=kd>var</span> <span class=nx>str</span> <span class=o>=</span> <span class=nx>iconv</span><span class=p>.</span><span class=nx>decode</span><span class=p>(</span><span class=nx>buf</span><span class=p>,</span> <span class=s1>&#39;utf8&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=nx>str</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>});</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=cookie>Cookie</h2><p>HTTP 是一个无状态的协议，Cookie 用来记录服务器与客户端之间的状态；Cookie 的处理分为如下几步：</p><ul><li>服务器向客户端发送 Cookie；</li><li>浏览器将 Cookie 保存；</li><li>每次发生请求都会将 Cookie 发向服务器。</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=c1>// Cookie 格式是 key1=value2;key2=value2 形式的
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kd>function</span> <span class=nx>parseCookie</span><span class=p>(</span><span class=nx>cookie</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=k>if</span> <span class=p>(</span><span class=o>!</span><span class=nx>cookie</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>entries</span> <span class=o>=</span> <span class=nx>cookie</span><span class=p>.</span><span class=nx>split</span><span class=p>(</span><span class=s1>&#39;;&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>temp</span> <span class=o>=</span> <span class=p>{};</span>
+</span></span><span class=line><span class=cl>  <span class=nx>entries</span><span class=p>.</span><span class=nx>forEach</span><span class=p>(</span><span class=nx>item</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=kr>const</span> <span class=nx>arr</span> <span class=o>=</span> <span class=nx>item</span><span class=p>.</span><span class=nx>split</span><span class=p>(</span><span class=s1>&#39;=&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=kr>const</span> <span class=nx>key</span> <span class=o>=</span> <span class=nx>arr</span><span class=p>[</span><span class=mi>0</span><span class=p>].</span><span class=nx>trim</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>    <span class=kr>const</span> <span class=nx>value</span> <span class=o>=</span> <span class=nx>arr</span><span class=p>[</span><span class=mi>1</span><span class=p>]</span> <span class=o>||</span> <span class=s1>&#39;&#39;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=nx>temp</span><span class=p>[</span><span class=nx>key</span><span class=p>]</span> <span class=o>=</span> <span class=nx>value</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>});</span>
+</span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=nx>temp</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=session>Session</h2><p>Session 只保留在服务器端，数据的安全性得到一定的保障，数据也无须在每次请求中都被传递；如何将客户端和服务器中的 Session 对应呢：</p><ul><li>基于 Cookie 来实现用户和数据的映射；</li><li>通过查询字符串来实现客户端和服务器数据的对应。</li></ul><p>一旦服务器端启用了 Session，它将约定一个键值作为 Session 口令；将 Session 口令放在 Cookie 中；如果用户请求 Cookie 中没有携带口令，它就会为之生成一个值，这个值是唯一且不重复的值，并设定超时时间；如果口令被篹改，客户端就丢失了与 Session 的映射关系，也无法修改服务器端存在的数据了。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=kr>const</span> <span class=nx>EXPIRES</span> <span class=o>=</span> <span class=mi>20</span> <span class=o>*</span> <span class=mi>60</span> <span class=o>*</span> <span class=mi>1000</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>const</span> <span class=nx>sessions</span> <span class=o>=</span> <span class=p>{};</span> <span class=c1>// 将所有 Session 保存在内存中，会有性能问题
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kr>const</span> <span class=nx>key</span> <span class=o>=</span> <span class=s1>&#39;session_id&#39;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=c1>// 生成 Session
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kd>function</span> <span class=nx>generate</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>session</span> <span class=o>=</span> <span class=p>{};</span>
+</span></span><span class=line><span class=cl>  <span class=nx>session</span><span class=p>.</span><span class=nx>id</span> <span class=o>=</span> <span class=nb>Date</span><span class=p>.</span><span class=nx>now</span><span class=p>()</span> <span class=o>+</span> <span class=nb>Math</span><span class=p>.</span><span class=nx>random</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>  <span class=nx>session</span><span class=p>.</span><span class=nx>cookie</span> <span class=o>=</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 设置过期时间
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=nx>expire</span><span class=o>:</span> <span class=nb>Date</span><span class=p>.</span><span class=nx>now</span><span class=p>()</span> <span class=o>+</span> <span class=nx>EXPIRES</span>
+</span></span><span class=line><span class=cl>  <span class=p>};</span>
+</span></span><span class=line><span class=cl>  <span class=nx>sessions</span><span class=p>[</span><span class=nx>session</span><span class=p>.</span><span class=nx>id</span><span class=p>]</span> <span class=o>=</span> <span class=nx>session</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=nx>session</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=c1>// 处理请求，检查 Cookie 口令与服务端数据
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kd>function</span> <span class=nx>handler</span><span class=p>(</span><span class=nx>req</span><span class=p>,</span> <span class=nx>res</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=kd>let</span> <span class=nx>id</span> <span class=o>=</span> <span class=nx>req</span><span class=p>.</span><span class=nx>cookies</span><span class=p>[</span><span class=nx>key</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>  <span class=k>if</span> <span class=p>(</span><span class=o>!</span><span class=nx>id</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>req</span><span class=p>.</span><span class=nx>session</span> <span class=o>=</span> <span class=nx>generate</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=kd>let</span> <span class=nx>session</span> <span class=o>=</span> <span class=nx>sessions</span><span class=p>[</span><span class=nx>id</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=o>!</span><span class=nx>session</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=nx>req</span><span class=p>.</span><span class=nx>session</span> <span class=o>=</span> <span class=nx>generate</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=k>if</span> <span class=p>(</span><span class=nx>session</span><span class=p>.</span><span class=nx>cookie</span><span class=p>.</span><span class=nx>expire</span> <span class=o>&gt;</span> <span class=nb>Date</span><span class=p>.</span><span class=nx>now</span><span class=p>())</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=nx>session</span><span class=p>.</span><span class=nx>cookie</span><span class=p>.</span><span class=nx>expire</span> <span class=o>=</span> <span class=nb>Date</span><span class=p>.</span><span class=nx>now</span><span class=p>()</span> <span class=o>+</span> <span class=nx>EXPIRES</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=nx>req</span><span class=p>.</span><span class=nx>session</span> <span class=o>=</span> <span class=nx>session</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>      <span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=k>delete</span> <span class=nx>sessions</span><span class=p>[</span><span class=nx>id</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>        <span class=nx>req</span><span class=p>.</span><span class=nx>session</span> <span class=o>=</span> <span class=nx>generate</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>      <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=k>if</span> <span class=p>(</span><span class=o>!</span><span class=nx>req</span><span class=p>.</span><span class=nx>session</span><span class=p>.</span><span class=nx>isVisit</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>res</span><span class=p>.</span><span class=nx>session</span><span class=p>.</span><span class=nx>isVisit</span> <span class=o>=</span> <span class=kc>true</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=nx>res</span><span class=p>.</span><span class=nx>writeHead</span><span class=p>(</span><span class=mi>200</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=nx>res</span><span class=p>.</span><span class=nx>end</span><span class=p>(</span><span class=s1>&#39;欢迎『首次』访问&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>res</span><span class=p>.</span><span class=nx>writeHead</span><span class=p>(</span><span class=mi>200</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=nx>res</span><span class=p>.</span><span class=nx>end</span><span class=p>(</span><span class=s1>&#39;欢迎『再次』访问&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=c1>// 响应请求时，设置 Session
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kd>var</span> <span class=nx>writeHead</span> <span class=o>=</span> <span class=nx>res</span><span class=p>.</span><span class=nx>writeHead</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=nx>res</span><span class=p>.</span><span class=nx>writeHead</span> <span class=o>=</span> <span class=p>()</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=kd>let</span> <span class=nx>cookies</span> <span class=o>=</span> <span class=nx>res</span><span class=p>.</span><span class=nx>getHeader</span><span class=p>(</span><span class=s1>&#39;Set-Cookie&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=kd>let</span> <span class=nx>session</span> <span class=o>=</span> <span class=nx>serialize</span><span class=p>(</span><span class=s1>&#39;Set-Cookie&#39;</span><span class=p>,</span> <span class=nx>req</span><span class=p>.</span><span class=nx>session</span><span class=p>.</span><span class=nx>id</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=nx>cookies</span> <span class=o>=</span> <span class=nb>Array</span><span class=p>.</span><span class=nx>isArray</span><span class=p>(</span><span class=nx>cookies</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=o>?</span> <span class=nx>cookies</span><span class=p>.</span><span class=nx>concat</span><span class=p>(</span><span class=nx>session</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=o>:</span> <span class=p>[</span><span class=nx>cookies</span><span class=p>,</span> <span class=nx>session</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>  <span class=nx>res</span><span class=p>.</span><span class=nx>setHeader</span><span class=p>(</span><span class=s1>&#39;Set-Cookie&#39;</span><span class=p>,</span> <span class=nx>cookies</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=nx>writeHead</span><span class=p>.</span><span class=nx>apply</span><span class=p>(</span><span class=k>this</span><span class=p>,</span> <span class=nx>arguments</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>};</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=文件上传>文件上传</h2><p>通过报头的 Transfer-Encoding 或 Content-Length 可判断请求中是否带有内容：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=kd>function</span> <span class=nx>hasBody</span><span class=p>(</span><span class=nx>req</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=s1>&#39;transfer-encoding&#39;</span> <span class=k>in</span> <span class=nx>req</span><span class=p>.</span><span class=nx>headers</span> <span class=o>||</span> <span class=s1>&#39;content-length&#39;</span> <span class=k>in</span> <span class=nx>req</span><span class=p>.</span><span class=nx>headers</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>报文内容部分会通过 data 事件触发，我们需要以流的方式处理：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=kd>function</span> <span class=nx>handler</span><span class=p>(</span><span class=nx>req</span><span class=p>,</span> <span class=nx>res</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=k>if</span> <span class=p>(</span><span class=nx>hasBody</span><span class=p>(</span><span class=nx>req</span><span class=p>))</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=kd>var</span> <span class=nx>bufs</span> <span class=o>=</span> <span class=p>[];</span>
+</span></span><span class=line><span class=cl>    <span class=nx>req</span><span class=p>.</span><span class=nx>on</span><span class=p>(</span><span class=s1>&#39;data&#39;</span><span class=p>,</span> <span class=nx>chunk</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=nx>bufs</span><span class=p>.</span><span class=nx>push</span><span class=p>(</span><span class=nx>chunk</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=p>});</span>
+</span></span><span class=line><span class=cl>    <span class=nx>req</span><span class=p>.</span><span class=nx>on</span><span class=p>(</span><span class=s1>&#39;end&#39;</span><span class=p>,</span> <span class=p>()</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=nx>req</span><span class=p>.</span><span class=nx>rawBody</span> <span class=o>=</span> <span class=nx>Buffer</span><span class=p>.</span><span class=nx>concat</span><span class=p>(</span><span class=nx>bufs</span><span class=p>).</span><span class=nx>toString</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>      <span class=c1>// ...
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=p>});</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// ...
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=restful>RESTful</h2><p>RESTful 设计哲学是将服务器端提供的内容实体看作一个资源，并表现在 URL 上；一个用户的地址『/users/jacksontian』代表了一个资源，对这个资源的操作，主要体现在 HTTP 请求方法上，不是体现在 URL 上：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>过去的设计：操作行为主要体现在行为上，主要使用的请求方法是 POST 和 GET
+</span></span><span class=line><span class=cl>POST    /user/add?username=jacksontian      增
+</span></span><span class=line><span class=cl>GET     /user/remove?username=jacksontian   删
+</span></span><span class=line><span class=cl>POST    /user/update?username=jacksontian   改
+</span></span><span class=line><span class=cl>GET     /user/get?username=jacksontian      查
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>RESTful：通过 URL 设计资源、通过请求方法定义资源的操作、通过 Accept 决定资源的表现形式
+</span></span><span class=line><span class=cl>POST    /user/jacksontian
+</span></span><span class=line><span class=cl>DELETE  /user/jacksontian
+</span></span><span class=line><span class=cl>PUT     /user/jacksontian
+</span></span><span class=line><span class=cl>GET     /user/jacksontian
+</span></span></code></pre></td></tr></table></div></div><p>举个例子：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=kr>const</span> <span class=nx>express</span> <span class=o>=</span> <span class=nx>require</span><span class=p>(</span><span class=s1>&#39;express&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=kr>const</span> <span class=nx>routes</span> <span class=o>=</span> <span class=nx>require</span><span class=p>(</span><span class=s1>&#39;./routes&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=kr>const</span> <span class=nx>app</span> <span class=o>=</span> <span class=nx>express</span><span class=p>();</span>
+</span></span><span class=line><span class=cl><span class=nx>app</span><span class=p>.</span><span class=nx>use</span><span class=p>(</span><span class=nx>express</span><span class=p>.</span><span class=nx>json</span><span class=p>());</span>
+</span></span><span class=line><span class=cl><span class=nx>app</span><span class=p>.</span><span class=nx>use</span><span class=p>(</span><span class=nx>express</span><span class=p>.</span><span class=nx>methodOverride</span><span class=p>());</span>
+</span></span><span class=line><span class=cl><span class=nx>app</span><span class=p>.</span><span class=nx>get</span><span class=p>(</span><span class=s1>&#39;/pages&#39;</span><span class=p>,</span> <span class=nx>routes</span><span class=p>.</span><span class=nx>pages</span><span class=p>.</span><span class=nx>index</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=nx>app</span><span class=p>.</span><span class=nx>get</span><span class=p>(</span><span class=s1>&#39;/pages/:id&#39;</span><span class=p>,</span> <span class=nx>routes</span><span class=p>.</span><span class=nx>pages</span><span class=p>.</span><span class=nx>show</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=nx>app</span><span class=p>.</span><span class=nx>post</span><span class=p>(</span><span class=s1>&#39;/pages&#39;</span><span class=p>,</span> <span class=nx>routes</span><span class=p>.</span><span class=nx>pages</span><span class=p>.</span><span class=nx>create</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=nx>app</span><span class=p>.</span><span class=nx>patch</span><span class=p>(</span><span class=s1>&#39;/pages/:id&#39;</span><span class=p>,</span> <span class=nx>routes</span><span class=p>.</span><span class=nx>pages</span><span class=p>.</span><span class=nx>patch</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=nx>app</span><span class=p>.</span><span class=nx>put</span><span class=p>(</span><span class=s1>&#39;/pages/:id&#39;</span><span class=p>,</span> <span class=nx>routes</span><span class=p>.</span><span class=nx>pages</span><span class=p>.</span><span class=nx>update</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=nx>app</span><span class=p>.</span><span class=nx>del</span><span class=p>(</span><span class=s1>&#39;/pages/:id&#39;</span><span class=p>,</span> <span class=nx>routes</span><span class=p>.</span><span class=nx>pages</span><span class=p>.</span><span class=nx>remove</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=nx>modules</span><span class=p>.</span><span class=nx>exports</span> <span class=o>=</span> <span class=nx>app</span><span class=p>;</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=中间件>中间件</h2><p>中间件的行为比较类似 Java 中的过滤器，在进入具体的业务处理之前，先让过滤器处理一些与业务无关的技术细节；由于 Node 异步的原因，我们需要提供一种机制，在当前中间件处理完成后，通知下一个中间件执行：</p><p><img src=/p/%E9%87%8D%E8%AF%BB%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA-node.js/middleware-model.png width=2566 height=1406 srcset="/p/%E9%87%8D%E8%AF%BB%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA-node.js/middleware-model_hu0c6f04338f95c97ebc12b517de9e1211_78152_480x0_resize_box_3.png 480w, /p/%E9%87%8D%E8%AF%BB%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA-node.js/middleware-model_hu0c6f04338f95c97ebc12b517de9e1211_78152_1024x0_resize_box_3.png 1024w" class=gallery-image data-flex-grow=182 data-flex-basis=438px loading=lazy></p><p>中间件往往先于业务逻辑执行，为了让业务逻辑提早执行，中间件的编写和使用需要注意两点：</p><ul><li>编写高效的中间件：尽早调用 next 执行后续逻辑、缓存需要重复计算的结果、避免不必要的计算（比如『报文体解析』对于 GET 是不必要的）；</li><li>合理利用路由，避免不必要的中间件执行。</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=kd>function</span> <span class=nx>staticFile</span><span class=p>(</span><span class=nx>req</span><span class=p>,</span> <span class=nx>res</span><span class=p>,</span> <span class=nx>next</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=kr>const</span> <span class=nx>pathname</span> <span class=o>=</span> <span class=nx>url</span><span class=p>.</span><span class=nx>parse</span><span class=p>(</span><span class=nx>req</span><span class=p>.</span><span class=nx>url</span><span class=p>).</span><span class=nx>pathname</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=nx>fs</span><span class=p>.</span><span class=nx>readFile</span><span class=p>(</span><span class=nx>path</span><span class=p>.</span><span class=nx>join</span><span class=p>(</span><span class=nx>ROOT</span><span class=p>,</span> <span class=nx>pathname</span><span class=p>),</span> <span class=p>(</span><span class=nx>err</span><span class=p>,</span> <span class=nx>file</span><span class=p>)</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=p>(</span><span class=nx>err</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=k>return</span> <span class=nx>next</span><span class=p>(</span><span class=nx>err</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span><span class=line><span class=cl>        <span class=nx>res</span><span class=p>.</span><span class=nx>writeHead</span><span class=p>(</span><span class=mi>200</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=nx>res</span><span class=p>.</span><span class=nx>end</span><span class=p>(</span><span class=nx>file</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=p>});</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=nx>functon</span> <span class=nx>xmlMiddleware</span><span class=p>(</span><span class=nx>req</span><span class=p>,</span><span class=nx>res</span><span class=p>,</span><span class=nx>next</span><span class=p>){</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span><span class=p>(</span><span class=o>!</span><span class=nx>req</span><span class=p>.</span><span class=nx>is</span><span class=p>(</span><span class=s2>&#34;xml&#34;</span><span class=p>)){</span>
+</span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=nx>next</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=kd>let</span> <span class=nx>body</span> <span class=o>=</span> <span class=s2>&#34;&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=nx>req</span><span class=p>.</span><span class=nx>on</span><span class=p>(</span><span class=s2>&#34;data&#34;</span><span class=p>,</span><span class=nx>str</span><span class=p>=&gt;{</span>
+</span></span><span class=line><span class=cl>        <span class=nx>body</span><span class=o>+=</span><span class=nx>str</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=p>})</span>
+</span></span><span class=line><span class=cl>    <span class=nx>req</span><span class=p>.</span><span class=nx>on</span><span class=p>(</span><span class=s2>&#34;end&#34;</span><span class=p>,()=&gt;{</span>
+</span></span><span class=line><span class=cl>        <span class=nx>req</span><span class=p>.</span><span class=nx>body</span> <span class=o>=</span> <span class=nx>xml2json</span><span class=p>.</span><span class=nx>toJson</span><span class=p>(</span><span class=nx>body</span><span class=p>.</span><span class=nx>toString</span><span class=p>(),{</span>
+</span></span><span class=line><span class=cl>            <span class=nx>object</span><span class=o>:</span><span class=kc>true</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>            <span class=nx>sanitize</span><span class=o>:</span><span class=kc>false</span>
+</span></span><span class=line><span class=cl>        <span class=p>})</span>
+</span></span><span class=line><span class=cl>        <span class=nx>next</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>    <span class=p>})</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=c1>// 对所有路径都会使用中间件
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=nx>app</span><span class=p>.</span><span class=nx>use</span><span class=p>(</span><span class=nx>staticFile</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=c1>// 仅对静态目录使用中间件，提升匹配效率
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=nx>app</span><span class=p>.</span><span class=nx>use</span><span class=p>(</span><span class=s1>&#39;/public/xml&#39;</span><span class=p>,</span> <span class=nx>xmlMiddleware</span><span class=p>);</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=响应客户端>响应客户端</h2><p>服务器端响应的报文，最终都要被客户端处理；服务器端的响应从一定程度上决定或指示了客户端该如何处理响应的内容；在内容响应的过程中，响应报头中的 Content-* 字段会告知客户端响应的内容信息：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>内容以 gzip 编码
+</span></span><span class=line><span class=cl>Content-Encoding: gzip
+</span></span><span class=line><span class=cl>内容长度为 21170 个字节
+</span></span><span class=line><span class=cl>Content-Length: 21170
+</span></span><span class=line><span class=cl>内容类型为 JS，字符集为 UTF-8
+</span></span><span class=line><span class=cl>Content-Type: text/javascript; charset=utf-8
+</span></span></code></pre></td></tr></table></div></div><p>客户端在接收到这个报文后，正确的处理过程是通过 gzip 来解码报文体中的内容，用长度校验报文体内容是否正确，然后再以字符集 UTF-8 将解码后的脚本插入到文档节点中。</p><p>浏览器通过不同的 Content-Type 的值来决定何种渲染方式，这个值我们简称为 MIME 值：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=c1>// 纯文本
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=nx>res</span><span class=p>.</span><span class=nx>writeHead</span><span class=p>(</span><span class=mi>200</span><span class=p>,</span> <span class=p>{</span> <span class=s1>&#39;Content-Type&#39;</span><span class=o>:</span> <span class=s1>&#39;text/plain&#39;</span> <span class=p>});</span>
+</span></span><span class=line><span class=cl><span class=nx>res</span><span class=p>.</span><span class=nx>end</span><span class=p>(</span><span class=s1>&#39;&lt;html&gt;&lt;body&gt;Hello World&lt;/body&gt;&lt;/html&gt;\n&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=c1>// HTML
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=nx>res</span><span class=p>.</span><span class=nx>writeHead</span><span class=p>(</span><span class=mi>200</span><span class=p>,</span> <span class=p>{</span> <span class=s1>&#39;Content-Type&#39;</span><span class=o>:</span> <span class=s1>&#39;text/html&#39;</span> <span class=p>});</span>
+</span></span><span class=line><span class=cl><span class=nx>res</span><span class=p>.</span><span class=nx>end</span><span class=p>(</span><span class=s1>&#39;&lt;html&gt;&lt;body&gt;Hello World&lt;/body&gt;&lt;/html&gt;\n&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=c1>// 使用 mime 模块获知文件的 MIME 值
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kd>var</span> <span class=nx>mime</span> <span class=o>=</span> <span class=nx>require</span><span class=p>(</span><span class=s1>&#39;mime&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=nx>mime</span><span class=p>.</span><span class=nx>lookup</span><span class=p>(</span><span class=s1>&#39;/path/to/file.txt&#39;</span><span class=p>);</span> <span class=c1>// =&gt; &#39;text/plain&#39;
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=nx>mime</span><span class=p>.</span><span class=nx>lookup</span><span class=p>(</span><span class=s1>&#39;file.txt&#39;</span><span class=p>);</span> <span class=c1>// =&gt; &#39;text/plain&#39;
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=nx>mime</span><span class=p>.</span><span class=nx>lookup</span><span class=p>(</span><span class=s1>&#39;.TXT&#39;</span><span class=p>);</span> <span class=c1>// =&gt; &#39;text/plain&#39;
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=nx>mime</span><span class=p>.</span><span class=nx>lookup</span><span class=p>(</span><span class=s1>&#39;htm&#39;</span><span class=p>);</span> <span class=c1>// =&gt; &#39;text/html&#39;
+</span></span></span></code></pre></td></tr></table></div></div><p>在附件下载场景下，无论响应内容是什么 MIME 值，需要客户端去下载它；为了满足这种需求，需要设置 Content-Disposition 字段，客户端会根据它的值判断是应该将报文数据解析还是下载；当内容只需即时查看时，它的值为 inline，当数据可以存为附件时，它的值为 attachment；Content-Disposition 字段还能通过参数指定保存时应该使用的文件名。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>Content-Disposition: attachment; filename=&#34;filename.ext&#34;
+</span></span></code></pre></td></tr></table></div></div><p>响应附件下载：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=nx>res</span><span class=p>.</span><span class=nx>sendfile</span> <span class=o>=</span> <span class=nx>filepath</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=c1>// 检查文件是否存在
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=nx>fs</span><span class=p>.</span><span class=nx>stat</span><span class=p>(</span><span class=nx>filepath</span><span class=p>,</span> <span class=p>(</span><span class=nx>err</span><span class=p>,</span> <span class=nx>stat</span><span class=p>)</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=nx>err</span><span class=p>)</span> <span class=k>return</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=kd>var</span> <span class=nx>stream</span> <span class=o>=</span> <span class=nx>fs</span><span class=p>.</span><span class=nx>createReadStream</span><span class=p>(</span><span class=nx>filepath</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 设置内容
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=nx>res</span><span class=p>.</span><span class=nx>setHeader</span><span class=p>(</span><span class=s1>&#39;Content-Type&#39;</span><span class=p>,</span> <span class=nx>mime</span><span class=p>.</span><span class=nx>lookup</span><span class=p>(</span><span class=nx>filepath</span><span class=p>));</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 设置大小
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=nx>res</span><span class=p>.</span><span class=nx>setHeader</span><span class=p>(</span><span class=s1>&#39;Content-Length&#39;</span><span class=p>,</span> <span class=nx>stat</span><span class=p>.</span><span class=nx>size</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 设置为附件
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=nx>res</span><span class=p>.</span><span class=nx>setHeader</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>      <span class=s1>&#39;Content-Disposition&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>      <span class=sb>`attachment; filename=</span><span class=si>${</span><span class=nx>path</span><span class=p>.</span><span class=nx>basename</span><span class=p>(</span><span class=nx>filepath</span><span class=p>)</span><span class=si>}</span><span class=sb>`</span>
+</span></span><span class=line><span class=cl>    <span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=nx>res</span><span class=p>.</span><span class=nx>writeHead</span><span class=p>(</span><span class=mi>200</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=nx>stream</span><span class=p>.</span><span class=nx>pipe</span><span class=p>(</span><span class=nx>res</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=p>});</span>
+</span></span><span class=line><span class=cl><span class=p>};</span>
+</span></span></code></pre></td></tr></table></div></div><p>响应 JSON：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=nx>res</span><span class=p>.</span><span class=nx>json</span> <span class=o>=</span> <span class=nx>json</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>res</span><span class=p>.</span><span class=nx>setHeader</span><span class=p>(</span><span class=s1>&#39;Content-Type&#39;</span><span class=p>,</span> <span class=s1>&#39;application/json&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=nx>res</span><span class=p>.</span><span class=nx>writeHead</span><span class=p>(</span><span class=mi>200</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=nx>res</span><span class=p>.</span><span class=nx>end</span><span class=p>(</span><span class=nx>JSON</span><span class=p>.</span><span class=nx>stringify</span><span class=p>(</span><span class=nx>json</span><span class=p>));</span>
+</span></span><span class=line><span class=cl><span class=p>};</span>
+</span></span></code></pre></td></tr></table></div></div><p>响应跳转：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=nx>res</span><span class=p>.</span><span class=nx>redirect</span> <span class=o>=</span> <span class=nx>url</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>res</span><span class=p>.</span><span class=nx>setHeader</span><span class=p>(</span><span class=s1>&#39;Location&#39;</span><span class=p>,</span> <span class=nx>url</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=nx>res</span><span class=p>.</span><span class=nx>writeHead</span><span class=p>(</span><span class=mi>302</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=nx>res</span><span class=p>.</span><span class=nx>end</span><span class=p>(</span><span class=nx>url</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>};</span>
+</span></span></code></pre></td></tr></table></div></div><p>响应 HTML：</p><p><img src=/p/%E9%87%8D%E8%AF%BB%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA-node.js/render-tech.png width=2026 height=952 srcset="/p/%E9%87%8D%E8%AF%BB%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA-node.js/render-tech_huee185c7daf2ae29b3a15e01f9abf1b7a_37049_480x0_resize_box_3.png 480w, /p/%E9%87%8D%E8%AF%BB%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA-node.js/render-tech_huee185c7daf2ae29b3a15e01f9abf1b7a_37049_1024x0_resize_box_3.png 1024w" class=gallery-image data-flex-grow=212 data-flex-basis=510px loading=lazy></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=nx>res</span><span class=p>.</span><span class=nx>render</span> <span class=o>=</span> <span class=p>(</span><span class=nx>view</span><span class=p>,</span> <span class=nx>data</span><span class=p>)</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>res</span><span class=p>.</span><span class=nx>setHeader</span><span class=p>(</span><span class=s1>&#39;Content-Type&#39;</span><span class=p>,</span> <span class=s1>&#39;text/html&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=nx>res</span><span class=p>.</span><span class=nx>writeHead</span><span class=p>(</span><span class=mi>200</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=c1>// 通过模板引擎（Pug、Mustache...）将数据渲染为 HTML
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=kd>var</span> <span class=nx>html</span> <span class=o>=</span> <span class=nx>render</span><span class=p>(</span><span class=nx>view</span><span class=p>,</span> <span class=nx>data</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=nx>res</span><span class=p>.</span><span class=nx>end</span><span class=p>(</span><span class=nx>html</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>};</span>
+</span></span><span class=line><span class=cl><span class=kd>function</span> <span class=nx>render</span><span class=p>(</span><span class=nx>view</span><span class=p>,</span> <span class=nx>data</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=kd>let</span> <span class=nx>template</span> <span class=o>=</span> <span class=nx>view</span><span class=p>.</span><span class=nx>replace</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>    <span class=sr>/&lt;%=([\s\S]+?)%&gt;/g</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=p>(</span><span class=nx>match</span><span class=p>,</span> <span class=nx>code</span><span class=p>)</span> <span class=p>=&gt;</span> <span class=sb>`obj.</span><span class=si>${</span><span class=nx>code</span><span class=si>}</span><span class=sb>`</span>
+</span></span><span class=line><span class=cl>  <span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=nx>template</span> <span class=o>=</span> <span class=sb>`var tpl = </span><span class=si>${</span><span class=nx>template</span><span class=si>}</span><span class=sb>\nreturn tpl;`</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=kd>let</span> <span class=nx>complied</span> <span class=o>=</span> <span class=k>new</span> <span class=nb>Function</span><span class=p>(</span><span class=s1>&#39;obj&#39;</span><span class=p>,</span> <span class=nx>template</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=nx>complied</span><span class=p>(</span><span class=nx>data</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=主从模式>主从模式</h2><p>Node 决定在 V8 上构建时就不得不面对两个问题：如何充分利用多核 CPU？如何保证主进程的健壮性和稳定性？Node 的 child_process 模块提供了衍生子进程，可以实现对多个进程的控制。</p><p>Master-Worker 主从模式：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=c1>// master.js
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kr>const</span> <span class=nx>fork</span> <span class=o>=</span> <span class=nx>require</span><span class=p>(</span><span class=s1>&#39;child_process&#39;</span><span class=p>).</span><span class=nx>fork</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>const</span> <span class=nx>cpus</span> <span class=o>=</span> <span class=nx>require</span><span class=p>(</span><span class=s1>&#39;os&#39;</span><span class=p>).</span><span class=nx>cpus</span><span class=p>();</span>
+</span></span><span class=line><span class=cl><span class=k>for</span> <span class=p>(</span><span class=kd>let</span> <span class=nx>i</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=nx>i</span> <span class=o>&lt;</span> <span class=nx>cpus</span><span class=p>.</span><span class=nx>length</span><span class=p>;</span> <span class=nx>i</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=cm>/**
+</span></span></span><span class=line><span class=cl><span class=cm>   * 通过 fork 复制的进程都是一个独立的进程，有着独立而全新的 V8 实例
+</span></span></span><span class=line><span class=cl><span class=cm>   * 这里启动多个进程只是为了充分将 CPU 资源利用起来，而不是为了解决并发问题
+</span></span></span><span class=line><span class=cl><span class=cm>   */</span>
+</span></span><span class=line><span class=cl>  <span class=nx>fork</span><span class=p>(</span><span class=s1>&#39;./worker.js&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=c1>// worker.js
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kr>const</span> <span class=nx>http</span> <span class=o>=</span> <span class=nx>require</span><span class=p>(</span><span class=s1>&#39;http&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=nx>http</span>
+</span></span><span class=line><span class=cl>  <span class=p>.</span><span class=nx>createServer</span><span class=p>((</span><span class=nx>req</span><span class=p>,</span> <span class=nx>res</span><span class=p>)</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>res</span><span class=p>.</span><span class=nx>writeHead</span><span class=p>(</span><span class=mi>200</span><span class=p>,</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=s1>&#39;Content-Type&#39;</span><span class=o>:</span> <span class=s1>&#39;text/plain&#39;</span>
+</span></span><span class=line><span class=cl>    <span class=p>});</span>
+</span></span><span class=line><span class=cl>    <span class=nx>res</span><span class=p>.</span><span class=nx>end</span><span class=p>(</span><span class=s1>&#39;i am worker&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=p>})</span>
+</span></span><span class=line><span class=cl>  <span class=p>.</span><span class=nx>listen</span><span class=p>(</span><span class=nb>Math</span><span class=p>.</span><span class=nx>round</span><span class=p>((</span><span class=mi>1</span> <span class=o>+</span> <span class=nb>Math</span><span class=p>.</span><span class=nx>random</span><span class=p>())</span> <span class=o>*</span> <span class=mi>1000</span><span class=p>),</span> <span class=s1>&#39;127.0.0.1&#39;</span><span class=p>);</span>
+</span></span></code></pre></td></tr></table></div></div><p>运行 node master.js 将会复制多个 Node 进程；主进程仅负责调度或管理工作进程，工作进程负责具体的业务处理。</p><p><img src=/p/%E9%87%8D%E8%AF%BB%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA-node.js/child-process.png width=1417 height=417 srcset="/p/%E9%87%8D%E8%AF%BB%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA-node.js/child-process_hu3426f55aaeb4a75aa064b526db41d93b_10415_480x0_resize_box_3.png 480w, /p/%E9%87%8D%E8%AF%BB%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA-node.js/child-process_hu3426f55aaeb4a75aa064b526db41d93b_10415_1024x0_resize_box_3.png 1024w" class=gallery-image data-flex-grow=339 data-flex-basis=815px loading=lazy></p><p>child_process 模块给予 Node 随意创建子进程的能力；它提供了 4 个方法用于创建子进程：</p><ul><li>child_process.spawn 使用给定的命令衍生新的进程，并传入 args 中的命令行参数（默认为空数组）；</li><li>child_process.fork 是 child_process.spawn 的特例，专门用于衍生新的进程；与 child_process.spawn 一样返回 ChildProcess 对象；返回的 ChildProcess 会内置额外的通信通道，允许消息在父进程和子进程之间来回传递；</li><li>child_process.exec 与 child_process.spawn 不同的是其接口不同，它有一个回调函数获知子进程的状况；</li><li>child_process.execFile 类似于 child_process.exec 但默认情况下不会衍生 shell；比 child_process.exec 稍微更高效。</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=kd>var</span> <span class=nx>cp</span> <span class=o>=</span> <span class=nx>require</span><span class=p>(</span><span class=s1>&#39;child_process&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=nx>cp</span><span class=p>.</span><span class=nx>spawn</span><span class=p>(</span><span class=s1>&#39;node&#39;</span><span class=p>,</span> <span class=p>[</span><span class=s1>&#39;worker.js&#39;</span><span class=p>]);</span>
+</span></span><span class=line><span class=cl><span class=nx>cp</span><span class=p>.</span><span class=nx>fork</span><span class=p>(</span><span class=s1>&#39;./worker.js&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=nx>cp</span><span class=p>.</span><span class=nx>exec</span><span class=p>(</span><span class=s1>&#39;node worker.js&#39;</span><span class=p>,</span> <span class=kd>function</span> <span class=p>(</span><span class=nx>err</span><span class=p>,</span> <span class=nx>stdout</span><span class=p>,</span> <span class=nx>stderr</span><span class=p>)</span> <span class=p>{});</span>
+</span></span><span class=line><span class=cl><span class=nx>cp</span><span class=p>.</span><span class=nx>execFile</span><span class=p>(</span><span class=s1>&#39;worker.js&#39;</span><span class=p>,</span> <span class=kd>function</span> <span class=p>(</span><span class=nx>err</span><span class=p>,</span> <span class=nx>stdout</span><span class=p>,</span> <span class=nx>stderr</span><span class=p>)</span> <span class=p>{});</span>
+</span></span></code></pre></td></tr></table></div></div><p>父子进程之间会创建 IPC 通道进行通信：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=c1>// parent
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kr>const</span> <span class=nx>cp</span> <span class=o>=</span> <span class=nx>require</span><span class=p>(</span><span class=s1>&#39;child_process&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=kr>const</span> <span class=nx>sub</span> <span class=o>=</span> <span class=nx>cp</span><span class=p>.</span><span class=nx>fork</span><span class=p>(</span><span class=nx>__dirname</span> <span class=o>+</span> <span class=s1>&#39;/sub.js&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=nx>sub</span><span class=p>.</span><span class=nx>on</span><span class=p>(</span><span class=s1>&#39;message&#39;</span><span class=p>,</span> <span class=nx>m</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=s1>&#39;parent got msg from child: &#39;</span> <span class=o>+</span> <span class=nx>m</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>});</span>
+</span></span><span class=line><span class=cl><span class=nx>sub</span><span class=p>.</span><span class=nx>send</span><span class=p>({</span> <span class=nx>msg</span><span class=o>:</span> <span class=s1>&#39;hello son&#39;</span> <span class=p>});</span>
+</span></span><span class=line><span class=cl><span class=c1>// child
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=nx>process</span><span class=p>.</span><span class=nx>on</span><span class=p>(</span><span class=s1>&#39;message&#39;</span><span class=p>,</span> <span class=nx>m</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=s1>&#39;child got msg from parent: &#39;</span> <span class=o>+</span> <span class=nx>m</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>});</span>
+</span></span><span class=line><span class=cl><span class=nx>process</span><span class=p>.</span><span class=nx>send</span><span class=p>({</span> <span class=nx>msg</span><span class=o>:</span> <span class=s1>&#39;hello papa&#39;</span> <span class=p>});</span>
+</span></span></code></pre></td></tr></table></div></div><p>IPC 的目的是为了让不同的进程能够互相访问资源并进行协调工作，Node 中 IPC 是由管道（pipe）技术实现的（libuv 提供）；在 Windows 下由<strong>命名管道</strong>实现，在 *nix 下由 Unix Domain Socket 实现。</p><p>父进程在实际创建子进程之前，会创建 IPC 通道并监听它，然后才真正创建出子进程，并通过环境变量 NODE_CHANNEL_FD 告诉子进程这个 IPC 通道的文件描述符；子进程在启动的过程中，根据文件描述符去连接这个已存在的 IPC 通道，从而完成父子进程之间的连接。</p><p><img src=/p/%E9%87%8D%E8%AF%BB%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA-node.js/ipc.png width=1988 height=666 srcset="/p/%E9%87%8D%E8%AF%BB%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA-node.js/ipc_hu5d392570b5919408a4b1fecf620e099e_18948_480x0_resize_box_3.png 480w, /p/%E9%87%8D%E8%AF%BB%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA-node.js/ipc_hu5d392570b5919408a4b1fecf620e099e_18948_1024x0_resize_box_3.png 1024w" class=gallery-image data-flex-grow=298 data-flex-basis=716px loading=lazy></p><p>由于 IPC 通道与 socket 的行为比较类似，属于双向通信；不同的是它们在系统内核中就完成了进程间的通信，而不用经过实际的网络层，非常高效；只有启动的子进程是 Node 进程时，子进程才会根据环境变量去连接 IPC 通道，对于其他类型的子进程则无法实现进程间通信，除非其他进程也按约定去连接这个已经创建好的 IPC 通道。</p><h2 id=句柄>句柄</h2><p>句柄（标识符）是一种可以用来<strong>标识资源的引用</strong>，它的内部包含了指向对象的文件描述符；句柄可以用来标识一个 socket 对象、一个 UDP 套接字、一个管道等。通过进程间发送句柄可以实现多个进程监听同一端口；主进程接收到 socket 请求后，将这个 socket 直接发送给工作进程，而不是重新与工作进程之间建立新的 socket 连接来转发数据。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=c1>// 主进程
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kr>const</span> <span class=nx>child_one</span> <span class=o>=</span> <span class=nx>require</span><span class=p>(</span><span class=s1>&#39;child_process&#39;</span><span class=p>).</span><span class=nx>fork</span><span class=p>(</span><span class=s1>&#39;./child.js&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=kr>const</span> <span class=nx>child_two</span> <span class=o>=</span> <span class=nx>require</span><span class=p>(</span><span class=s1>&#39;child_process&#39;</span><span class=p>).</span><span class=nx>fork</span><span class=p>(</span><span class=s1>&#39;./child.js&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=kr>const</span> <span class=nx>server</span> <span class=o>=</span> <span class=nx>require</span><span class=p>(</span><span class=s1>&#39;net&#39;</span><span class=p>).</span><span class=nx>createServer</span><span class=p>();</span>
+</span></span><span class=line><span class=cl><span class=nx>server</span><span class=p>.</span><span class=nx>on</span><span class=p>(</span><span class=s1>&#39;connection&#39;</span><span class=p>,</span> <span class=nx>socket</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>socket</span><span class=p>.</span><span class=nx>end</span><span class=p>(</span><span class=s1>&#39;handled by parent\n&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>});</span>
+</span></span><span class=line><span class=cl><span class=nx>server</span><span class=p>.</span><span class=nx>listen</span><span class=p>(</span><span class=mi>1337</span><span class=p>,</span> <span class=p>()</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>child_one</span><span class=p>.</span><span class=nx>send</span><span class=p>(</span><span class=s1>&#39;server&#39;</span><span class=p>,</span> <span class=nx>server</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=nx>child_two</span><span class=p>.</span><span class=nx>send</span><span class=p>(</span><span class=s1>&#39;server&#39;</span><span class=p>,</span> <span class=nx>server</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>});</span>
+</span></span><span class=line><span class=cl><span class=c1>// 子进程
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=nx>process</span><span class=p>.</span><span class=nx>on</span><span class=p>(</span><span class=s1>&#39;message&#39;</span><span class=p>,</span> <span class=p>(</span><span class=nx>m</span><span class=p>,</span> <span class=nx>server</span><span class=p>)</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>m</span> <span class=o>===</span> <span class=s1>&#39;server&#39;</span> <span class=o>&amp;&amp;</span>
+</span></span><span class=line><span class=cl>    <span class=nx>server</span><span class=p>.</span><span class=nx>on</span><span class=p>(</span><span class=s1>&#39;connection&#39;</span><span class=p>,</span> <span class=nx>socket</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=nx>socket</span><span class=p>.</span><span class=nx>end</span><span class=p>(</span><span class=s1>&#39;handled by child\n pid is &#39;</span> <span class=o>+</span> <span class=nx>process</span><span class=p>.</span><span class=nx>pid</span> <span class=o>+</span> <span class=s1>&#39;\n&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=p>});</span>
+</span></span><span class=line><span class=cl><span class=p>});</span>
+</span></span></code></pre></td></tr></table></div></div><p><img src=/p/%E9%87%8D%E8%AF%BB%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA-node.js/sentence.png width=822 height=417 srcset="/p/%E9%87%8D%E8%AF%BB%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA-node.js/sentence_hu9881f173cc79304501be66610c468d68_12325_480x0_resize_box_3.png 480w, /p/%E9%87%8D%E8%AF%BB%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA-node.js/sentence_hu9881f173cc79304501be66610c468d68_12325_1024x0_resize_box_3.png 1024w" class=gallery-image data-flex-grow=197 data-flex-basis=473px loading=lazy></p><p>对于主进程而言，我们甚至想要它更轻量一点，那么是否将服务器句柄发送给子进程之后，就可以关掉服务器的监听，让子进程来处理请求呢？</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=c1>// 主进程
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kr>const</span> <span class=nx>child_one</span> <span class=o>=</span> <span class=nx>require</span><span class=p>(</span><span class=s1>&#39;child_process&#39;</span><span class=p>).</span><span class=nx>fork</span><span class=p>(</span><span class=s1>&#39;./child.js&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=kr>const</span> <span class=nx>child_two</span> <span class=o>=</span> <span class=nx>require</span><span class=p>(</span><span class=s1>&#39;child_process&#39;</span><span class=p>).</span><span class=nx>fork</span><span class=p>(</span><span class=s1>&#39;./child.js&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=kr>const</span> <span class=nx>server</span> <span class=o>=</span> <span class=nx>require</span><span class=p>(</span><span class=s1>&#39;net&#39;</span><span class=p>).</span><span class=nx>createServer</span><span class=p>();</span>
+</span></span><span class=line><span class=cl><span class=nx>server</span><span class=p>.</span><span class=nx>listen</span><span class=p>(</span><span class=mi>1337</span><span class=p>,</span> <span class=p>()</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>child_one</span><span class=p>.</span><span class=nx>send</span><span class=p>(</span><span class=s1>&#39;server&#39;</span><span class=p>,</span> <span class=nx>server</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=nx>child_two</span><span class=p>.</span><span class=nx>send</span><span class=p>(</span><span class=s1>&#39;server&#39;</span><span class=p>,</span> <span class=nx>server</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=nx>server</span><span class=p>.</span><span class=nx>close</span><span class=p>();</span>
+</span></span><span class=line><span class=cl><span class=p>});</span>
+</span></span><span class=line><span class=cl><span class=c1>// 子进程
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kr>const</span> <span class=nx>http</span> <span class=o>=</span> <span class=nx>require</span><span class=p>(</span><span class=s1>&#39;http&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=kr>const</span> <span class=nx>server</span> <span class=o>=</span> <span class=nx>http</span><span class=p>.</span><span class=nx>createServer</span><span class=p>((</span><span class=nx>req</span><span class=p>,</span> <span class=nx>res</span><span class=p>)</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>res</span><span class=p>.</span><span class=nx>writeHead</span><span class=p>(</span><span class=mi>200</span><span class=p>,</span> <span class=p>{</span> <span class=s1>&#39;Content-Type&#39;</span><span class=o>:</span> <span class=s1>&#39;text/plain&#39;</span> <span class=p>});</span>
+</span></span><span class=line><span class=cl>  <span class=nx>res</span><span class=p>.</span><span class=nx>end</span><span class=p>(</span><span class=s1>&#39;handled by child\n pid is &#39;</span> <span class=o>+</span> <span class=nx>process</span><span class=p>.</span><span class=nx>pid</span> <span class=o>+</span> <span class=s1>&#39;\n&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>});</span>
+</span></span><span class=line><span class=cl><span class=nx>process</span><span class=p>.</span><span class=nx>on</span><span class=p>(</span><span class=s1>&#39;message&#39;</span><span class=p>,</span> <span class=p>(</span><span class=nx>m</span><span class=p>,</span> <span class=nx>tcp</span><span class=p>)</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>m</span> <span class=o>===</span> <span class=s1>&#39;server&#39;</span> <span class=o>&amp;&amp;</span>
+</span></span><span class=line><span class=cl>    <span class=nx>tcp</span><span class=p>.</span><span class=nx>on</span><span class=p>(</span><span class=s1>&#39;connection&#39;</span><span class=p>,</span> <span class=nx>socket</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=nx>server</span><span class=p>.</span><span class=nx>emit</span><span class=p>(</span><span class=s1>&#39;connection&#39;</span><span class=p>,</span> <span class=nx>socket</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=p>});</span>
+</span></span><span class=line><span class=cl><span class=p>});</span>
+</span></span></code></pre></td></tr></table></div></div><img style="display:inline-block;margin:0 auto;width:49%" src=9-5.png>
+<img style="display:inline-block;margin:0 auto;width:49%" src=9-6.png><p>子进程对象 send 方法可以发送的句柄类型包括如下几种：</p><ul><li>net.Socket TCP 套接字；</li><li>net.Server TCP 服务器；</li><li>net.Native C++ 层面的 TCP 套接字或 IPC 管道；</li><li>dgram.Socket UDP 套接字；</li><li>dgram.Native C++ 层面的 UDP 套接字。</li></ul><p>send 方法在将消息发送到 IPC 管道前，将消息组装成两个对象，一个参数是 handle，另一个是 message；发送到 IPC 管道中的实际上是我们要发送的句柄文件描述符。message 对象在写入到 IPC 管道时也会通过 JSON.stringify 进行序列化，最终发送到 IPC 通道中的信息都是字符串。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>cmd</span><span class=o>:</span> <span class=s1>&#39;NODE_HANDLE&#39;</span><span class=p>,</span> <span class=c1>// 如果以 NODE_ 为前缀，它将响应一个内部事件 internalMessage；NODE_HANDLE 表示它将取出 message.type 值和得到的文件描述符一起还原出一个对应的对象
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=nx>type</span><span class=o>:</span> <span class=s1>&#39;net.Server&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nx>msg</span><span class=o>:</span> <span class=nx>message</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p><img src=/p/%E9%87%8D%E8%AF%BB%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA-node.js/send-message.png width=2282 height=294 srcset="/p/%E9%87%8D%E8%AF%BB%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA-node.js/send-message_hu9aa9df53a68b4c28f8ce1b2b7098c60e_21936_480x0_resize_box_3.png 480w, /p/%E9%87%8D%E8%AF%BB%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA-node.js/send-message_hu9aa9df53a68b4c28f8ce1b2b7098c60e_21936_1024x0_resize_box_3.png 1024w" class=gallery-image data-flex-grow=776 data-flex-basis=1862px loading=lazy></p><p>Node 进程之间只有消息传递，不会真正地传递对象，这种错觉是抽象封装的结果。</p><h2 id=自动重启>自动重启</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=c1>// master.js
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kr>const</span> <span class=nx>fork</span> <span class=o>=</span> <span class=nx>require</span><span class=p>(</span><span class=s1>&#39;child_process&#39;</span><span class=p>).</span><span class=nx>fork</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>const</span> <span class=nx>cpus</span> <span class=o>=</span> <span class=nx>require</span><span class=p>(</span><span class=s1>&#39;os&#39;</span><span class=p>).</span><span class=nx>cpus</span><span class=p>();</span>
+</span></span><span class=line><span class=cl><span class=kr>const</span> <span class=nx>server</span> <span class=o>=</span> <span class=nx>require</span><span class=p>(</span><span class=s1>&#39;net&#39;</span><span class=p>).</span><span class=nx>createServer</span><span class=p>();</span>
+</span></span><span class=line><span class=cl><span class=kr>const</span> <span class=nx>workers</span> <span class=o>=</span> <span class=p>{};</span>
+</span></span><span class=line><span class=cl><span class=nx>server</span><span class=p>.</span><span class=nx>listen</span><span class=p>(</span><span class=mi>1337</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=k>for</span> <span class=p>(</span><span class=kd>let</span> <span class=nx>i</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=nx>i</span> <span class=o>&lt;</span> <span class=nx>cpus</span><span class=p>.</span><span class=nx>length</span><span class=p>;</span> <span class=nx>i</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>createWorker</span><span class=p>();</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=kd>function</span> <span class=nx>createWorker</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=kd>let</span> <span class=nx>worker</span> <span class=o>=</span> <span class=nx>fork</span><span class=p>(</span><span class=nx>__dirname</span> <span class=o>+</span> <span class=s1>&#39;./worker.js&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=nx>worker</span><span class=p>.</span><span class=nx>on</span><span class=p>(</span><span class=s1>&#39;exit&#39;</span><span class=p>,</span> <span class=p>()</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=s1>&#39;worker: &#39;</span> <span class=o>+</span> <span class=nx>worker</span><span class=p>.</span><span class=nx>pid</span> <span class=o>+</span> <span class=s1>&#39; exited.&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=k>delete</span> <span class=nx>workers</span><span class=p>[</span><span class=nx>worker</span><span class=p>.</span><span class=nx>pid</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>    <span class=nx>createWorker</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>  <span class=p>});</span>
+</span></span><span class=line><span class=cl>  <span class=nx>worker</span><span class=p>.</span><span class=nx>send</span><span class=p>(</span><span class=s1>&#39;server&#39;</span><span class=p>,</span> <span class=nx>server</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=nx>workers</span><span class=p>[</span><span class=nx>worker</span><span class=p>.</span><span class=nx>pid</span><span class=p>]</span> <span class=o>=</span> <span class=nx>worker</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=s1>&#39;create worker. pid: &#39;</span> <span class=o>+</span> <span class=nx>worker</span><span class=p>.</span><span class=nx>pid</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=c1>// worker.js
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=nx>process</span><span class=p>.</span><span class=nx>on</span><span class=p>(</span><span class=s1>&#39;exit&#39;</span><span class=p>,</span> <span class=p>()</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=k>for</span> <span class=p>(</span><span class=kd>let</span> <span class=nx>pid</span> <span class=k>in</span> <span class=nx>workers</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>workers</span><span class=p>[</span><span class=nx>pid</span><span class=p>].</span><span class=nx>kill</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>});</span>
+</span></span><span class=line><span class=cl><span class=nx>process</span><span class=p>.</span><span class=nx>on</span><span class=p>(</span><span class=s1>&#39;uncaughtException&#39;</span><span class=p>,</span> <span class=nx>err</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>logger</span><span class=p>.</span><span class=nx>error</span><span class=p>(</span><span class=nx>err</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=nx>process</span><span class=p>.</span><span class=nx>send</span><span class=p>({</span>
+</span></span><span class=line><span class=cl>    <span class=nx>act</span><span class=o>:</span> <span class=s1>&#39;suicide&#39;</span>
+</span></span><span class=line><span class=cl>  <span class=p>});</span>
+</span></span><span class=line><span class=cl>  <span class=c1>// 如果有未捕获的异常，退出进程
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=nx>worker</span><span class=p>.</span><span class=nx>close</span><span class=p>(()</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>process</span><span class=p>.</span><span class=nx>exit</span><span class=p>(</span><span class=mi>1</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=p>});</span>
+</span></span><span class=line><span class=cl><span class=p>});</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=限量重启>限量重启</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=kd>let</span> <span class=nx>limit</span> <span class=o>=</span> <span class=mi>10</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kd>let</span> <span class=nx>duration</span> <span class=o>=</span> <span class=mi>60000</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>const</span> <span class=nx>restart</span> <span class=o>=</span> <span class=p>[];</span>
+</span></span><span class=line><span class=cl><span class=kr>const</span> <span class=nx>workers</span> <span class=o>=</span> <span class=p>{};</span>
+</span></span><span class=line><span class=cl><span class=kd>function</span> <span class=nx>createWorker</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=k>if</span> <span class=p>(</span><span class=nx>isTooFrequently</span><span class=p>())</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 如果重启太过频繁，不再重启
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=nx>process</span><span class=p>.</span><span class=nx>emit</span><span class=p>(</span><span class=s1>&#39;giveup&#39;</span><span class=p>,</span> <span class=nx>length</span><span class=p>,</span> <span class=nx>duration</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=kd>let</span> <span class=nx>worker</span> <span class=o>=</span> <span class=nx>fork</span><span class=p>(</span><span class=nx>__dirname</span> <span class=o>+</span> <span class=s1>&#39;/work.js&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=nx>worker</span><span class=p>.</span><span class=nx>on</span><span class=p>(</span><span class=s1>&#39;exit&#39;</span><span class=p>,</span> <span class=p>()</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=s1>&#39;worker &#39;</span> <span class=o>+</span> <span class=nx>worker</span><span class=p>.</span><span class=nx>pid</span> <span class=o>+</span> <span class=s1>&#39; exited.&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=k>delete</span> <span class=nx>workers</span><span class=p>[</span><span class=nx>worker</span><span class=p>.</span><span class=nx>pid</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>  <span class=p>});</span>
+</span></span><span class=line><span class=cl>  <span class=nx>worker</span><span class=p>.</span><span class=nx>on</span><span class=p>(</span><span class=s1>&#39;message&#39;</span><span class=p>,</span> <span class=nx>message</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>message</span><span class=p>.</span><span class=nx>act</span> <span class=o>===</span> <span class=s1>&#39;suicide&#39;</span> <span class=o>&amp;&amp;</span> <span class=nx>createWorker</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>  <span class=p>});</span>
+</span></span><span class=line><span class=cl>  <span class=nx>worker</span><span class=p>.</span><span class=nx>send</span><span class=p>(</span><span class=s1>&#39;server&#39;</span><span class=p>,</span> <span class=nx>server</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=nx>workers</span><span class=p>[</span><span class=nx>worker</span><span class=p>.</span><span class=nx>pid</span><span class=p>]</span> <span class=o>=</span> <span class=nx>worker</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=s1>&#39;create worker. pid: &#39;</span> <span class=o>+</span> <span class=nx>worker</span><span class=p>.</span><span class=nx>pid</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=kd>function</span> <span class=nx>isTooFrequently</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=kd>let</span> <span class=nx>time</span> <span class=o>=</span> <span class=nb>Date</span><span class=p>.</span><span class=nx>now</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>  <span class=kd>let</span> <span class=nx>length</span> <span class=o>=</span> <span class=nx>restart</span><span class=p>.</span><span class=nx>push</span><span class=p>(</span><span class=nx>time</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=k>if</span> <span class=p>(</span><span class=nx>length</span> <span class=o>&gt;</span> <span class=nx>limit</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>restart</span> <span class=o>=</span> <span class=nx>restart</span><span class=p>.</span><span class=nx>slice</span><span class=p>(</span><span class=nx>limit</span> <span class=o>*</span> <span class=o>-</span><span class=mi>1</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=p>(</span>
+</span></span><span class=line><span class=cl>    <span class=nx>restart</span><span class=p>.</span><span class=nx>length</span> <span class=o>&gt;=</span> <span class=nx>limit</span> <span class=o>&amp;&amp;</span>
+</span></span><span class=line><span class=cl>    <span class=nx>restart</span><span class=p>[</span><span class=nx>restart</span><span class=p>.</span><span class=nx>length</span> <span class=o>-</span> <span class=mi>1</span><span class=p>]</span> <span class=o>-</span> <span class=nx>restart</span><span class=p>[</span><span class=mi>0</span><span class=p>]</span> <span class=o>&lt;</span> <span class=nx>duration</span>
+</span></span><span class=line><span class=cl>  <span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=c1>// 监听自定义 giveup 事件
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=nx>process</span><span class=p>.</span><span class=nx>on</span><span class=p>(</span><span class=s1>&#39;giveup&#39;</span><span class=p>,</span> <span class=p>(</span><span class=nx>count</span><span class=p>,</span> <span class=nx>time</span><span class=p>)</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>process</span><span class=p>.</span><span class=nx>close</span><span class=p>(()</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>process</span><span class=p>.</span><span class=nx>exit</span><span class=p>(</span><span class=mi>1</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=p>});</span>
+</span></span><span class=line><span class=cl>  <span class=nx>setTimeout</span><span class=p>(()</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>process</span><span class=p>.</span><span class=nx>exit</span><span class=p>(</span><span class=mi>1</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=p>},</span> <span class=mi>5000</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>});</span>
+</span></span><span class=line><span class=cl><span class=c1>// 监听主进程退出，退出所有子进程
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=nx>process</span><span class=p>.</span><span class=nx>on</span><span class=p>(</span><span class=s1>&#39;exit&#39;</span><span class=p>,</span> <span class=p>()</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=k>for</span> <span class=p>(</span><span class=kd>let</span> <span class=nx>key</span> <span class=k>in</span> <span class=nx>workers</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>workers</span><span class=p>[</span><span class=nx>key</span><span class=p>].</span><span class=nx>kill</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>});</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=负载均衡>负载均衡</h2><p>Node 默认提供的负载均衡机制是采用操作系统的抢占式策略，各个进程可以根据自己的繁忙度（CPU、I/O）来进行抢占；影响抢占的是 CPU 繁忙度。Node 在 v0.11.2 新增了轮叫调度（Round-Robin），可以通过设置 NODE_CLUSTER_SCHED_POLICY 环境变量来实现；轮叫调度的工作方式是由主进程接受连接，将其依次分发给工作进程。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=nx>cluster</span><span class=p>.</span><span class=nx>schedulingPolicy</span> <span class=o>=</span> <span class=nx>cluster</span><span class=p>.</span><span class=nx>SCHED_RR</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=nx>cluster</span><span class=p>.</span><span class=nx>schedulingPolicy</span> <span class=o>=</span> <span class=nx>cluster</span><span class=p>.</span><span class=nx>SCHED_NONE</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>export</span> <span class=nx>NODE_CLUSTER_SCHED_POLICY</span><span class=o>=</span><span class=nx>rr</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>export</span> <span class=nx>NODE_CLUSTER_SCHED_POLICY</span><span class=o>=</span><span class=nx>none</span><span class=p>;</span>
+</span></span></code></pre></td></tr></table></div></div><p>cluster 模块用以解决多核 CPU 的利用率问题，它的底层实现还是 child_process，同时提供了较完善的 API 用以处理进程的健壮性问题，允许简易的创建共享服务器端口的子进程。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=kr>const</span> <span class=nx>http</span> <span class=o>=</span> <span class=nx>require</span><span class=p>(</span><span class=s1>&#39;http&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=kr>const</span> <span class=nx>cluster</span> <span class=o>=</span> <span class=nx>require</span><span class=p>(</span><span class=s1>&#39;cluster&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=kr>const</span> <span class=nx>numCPUs</span> <span class=o>=</span> <span class=nx>require</span><span class=p>(</span><span class=s1>&#39;os&#39;</span><span class=p>).</span><span class=nx>cpus</span><span class=p>().</span><span class=nx>length</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=c1>// cluster.isWorker = (&#39;NODE_UNIQUE_ID&#39; in process.env);
+</span></span></span><span class=line><span class=cl><span class=c1>// cluster.isMaster = (cluster.isWorker === false);
+</span></span></span><span class=line><span class=cl><span class=c1>// 如果是主进程
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=k>if</span> <span class=p>(</span><span class=nx>cluster</span><span class=p>.</span><span class=nx>isMaster</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=sb>`主进程 </span><span class=si>${</span><span class=nx>process</span><span class=p>.</span><span class=nx>pid</span><span class=si>}</span><span class=sb> 正在运行`</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=c1>// 修改 fork 默认行为
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=nx>cluster</span><span class=p>.</span><span class=nx>setupMaster</span><span class=p>({</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// some config...
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=p>});</span>
+</span></span><span class=line><span class=cl>  <span class=c1>// 衍生工作进程
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=k>for</span> <span class=p>(</span><span class=kd>let</span> <span class=nx>i</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=nx>i</span> <span class=o>&lt;</span> <span class=nx>numCPUs</span><span class=p>;</span> <span class=nx>i</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>cluster</span><span class=p>.</span><span class=nx>fork</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=nx>cluster</span><span class=p>.</span><span class=nx>on</span><span class=p>(</span><span class=s1>&#39;exit&#39;</span><span class=p>,</span> <span class=p>(</span><span class=nx>worker</span><span class=p>,</span> <span class=nx>code</span><span class=p>,</span> <span class=nx>signal</span><span class=p>)</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=sb>`工作进程 </span><span class=si>${</span><span class=nx>worker</span><span class=p>.</span><span class=nx>process</span><span class=p>.</span><span class=nx>pid</span><span class=si>}</span><span class=sb> 已退出`</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=p>});</span>
+</span></span><span class=line><span class=cl><span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>http</span>
+</span></span><span class=line><span class=cl>    <span class=p>.</span><span class=nx>createServer</span><span class=p>((</span><span class=nx>req</span><span class=p>,</span> <span class=nx>res</span><span class=p>)</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=nx>res</span><span class=p>.</span><span class=nx>writeHead</span><span class=p>(</span><span class=mi>200</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>      <span class=nx>res</span><span class=p>.</span><span class=nx>end</span><span class=p>(</span><span class=s1>&#39;你好世界\n&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=p>})</span>
+</span></span><span class=line><span class=cl>    <span class=p>.</span><span class=nx>listen</span><span class=p>(</span><span class=mi>8000</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=sb>`工作进程 </span><span class=si>${</span><span class=nx>process</span><span class=p>.</span><span class=nx>pid</span><span class=si>}</span><span class=sb> 已启动`</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=最佳实践>最佳实践</h2><ul><li>动静分离：将动态请求和静态请求分离后，Node 专注于处理动态请求；</li><li>启用缓存：消减同步 I/O 带来的时间浪费；</li><li>多进程架构：使用工具进行进程管理；</li><li>读写分离：将数据库进行主从设计，减少读写操作的相互影响；</li><li>记录日志：记录那些意外产生的异常错误；</li><li>文件分组：按照业务角色分组比按技术角色分组更好。</li></ul><h2 id=参考>参考</h2><ul><li><a class=link href=https://github.com/goldbergyoni/nodebestpractices target=_blank rel=noopener>The Node.js Best Practices List</a></li><li><a class=link href=https://github.com/ringcrl/node-point target=_blank rel=noopener>构建自己的 Node.js 知识体系</a></li></ul></section><footer class=article-footer><section class=article-copyright><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span></section></footer></article><aside class=related-content--wrapper><h2 class=section-title>相关文章</h2><div class=related-content><div class="flex article-list--tile"><article class=has-image><a href=/p/nodeschool-%E4%B9%8B-learnyounode/><div class=article-image><img src=/img/cover/node.png loading=lazy data-key data-hash=/img/cover/node.png></div><div class=article-details><h2 class=article-title>NodeSchool 之 LearnYouNode</h2></div></a></article></div></div></aside><footer class=site-footer><section class=copyright>&copy;
+2017 -
+2024
+<a href=https://github.com/Vikingama target=_blank>馬腊咯稽</a></section><section class=powerby>Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a>, Deploy by Actions<br>主题 <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.13.0>Stack</a></b> 由 <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a> 设计</section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">目录</h2><div class=widget--toc><nav id=TableOfContents><ol><li><a href=#node-简介>Node 简介</a></li><li><a href=#模块化>模块化</a></li><li><a href=#异步-io>异步 I/O</a></li><li><a href=#事件循环>事件循环</a></li><li><a href=#垃圾回收>垃圾回收</a></li><li><a href=#内存指标>内存指标</a></li><li><a href=#内存泄漏>内存泄漏</a></li><li><a href=#eventemitter>EventEmitter</a></li><li><a href=#buffer>Buffer</a></li><li><a href=#cookie>Cookie</a></li><li><a href=#session>Session</a></li><li><a href=#文件上传>文件上传</a></li><li><a href=#restful>RESTful</a></li><li><a href=#中间件>中间件</a></li><li><a href=#响应客户端>响应客户端</a></li><li><a href=#主从模式>主从模式</a></li><li><a href=#句柄>句柄</a></li><li><a href=#自动重启>自动重启</a></li><li><a href=#限量重启>限量重启</a></li><li><a href=#负载均衡>负载均衡</a></li><li><a href=#最佳实践>最佳实践</a></li><li><a href=#参考>参考</a></li></ol></nav></div></section></aside></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=/ts/main.js defer></script></body></html>

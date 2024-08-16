@@ -1,0 +1,802 @@
+<!doctype html><html lang=zh-cn dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content='老板终于受不了 uni-app 糟糕的开发体验和性能了'><title>JSBridge 初上手 · Stay Hungry · Stay Foolish</title>
+<link rel=canonical href=https://vikingama.github.io/p/jsbridge-%E5%88%9D%E4%B8%8A%E6%89%8B/><link rel=stylesheet href=/scss/style.min.38c15d3a5c1bca30008bb625a46636d24f5deb4bf3217095e667a3abc843eaef.css><meta property='og:title' content='JSBridge 初上手'><meta property='og:description' content='老板终于受不了 uni-app 糟糕的开发体验和性能了'><meta property='og:url' content='https://vikingama.github.io/p/jsbridge-%E5%88%9D%E4%B8%8A%E6%89%8B/'><meta property='og:site_name' content='馬腊咯稽'><meta property='og:type' content='article'><meta property='article:section' content='Post'><meta property='article:published_time' content='2023-06-05T00:00:00+00:00'><meta property='article:modified_time' content='2023-06-05T00:00:00+00:00'><meta property='og:image' content='https://vikingama.github.io/img/cover/jsbridge.png'><meta name=twitter:title content="JSBridge 初上手"><meta name=twitter:description content="老板终于受不了 uni-app 糟糕的开发体验和性能了"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content='https://vikingama.github.io/img/cover/jsbridge.png'><link rel="shortcut icon" href=/favicon.ico><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><meta name=theme-color content="#ffffff"><meta name=robots content="noarchive"><div class=warning-banner>因为 GitHub 账号二次验证失败，计划迁往
+<a href=https://elementref.github.io/>新地址&rarr;</a></div></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label=切换菜单>
+<span class=hamburger-box><span class=hamburger-inner></span></span></button><header><figure class=site-avatar><a href=/><img src=/img/avatar_huae06eac29c2bc6aa7e83a685ea2f6536_13838_300x0_resize_box_3.png width=300 height=404 class=site-logo loading=lazy alt=Avatar></a></figure><div class=site-meta><h1 class=site-name><a href=/>馬腊咯稽</a></h1><h2 class=site-description>Stay Hungry · Stay Foolish</h2></div></header><ol class=menu id=main-menu><li><a href=/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg>
+<span>首页</span></a></li><li><a href=/archives/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><rect x="3" y="4" width="18" height="4" rx="2"/><path d="M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+<span>归档</span></a></li><li><a href=/search/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="10" cy="10" r="7"/><line x1="21" y1="21" x2="15" y2="15"/></svg>
+<span>搜索</span></a></li><li><a href=https://github.com/ElementRef/AboutConfig target=_blank><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-infinity" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M9.828 9.172a4 4 0 100 5.656A10 10 0 0012 12a10 10 0 012.172-2.828 4 4 0 110 5.656A10 10 0 0112 12 10 10 0 009.828 9.172"/></svg>
+<span>配置</span></a></li><li><a href=/%E5%90%AF%E5%8F%91/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M10 14a3.5 3.5.0 005 0l4-4a3.5 3.5.0 00-5-5l-.5.5"/><path d="M14 10a3.5 3.5.0 00-5 0l-4 4a3.5 3.5.0 005 5l.5-.5"/></svg>
+<span>启发</span></a></li><li><a href=/%E5%91%BD%E4%BB%A4/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-terminal" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 7l5 5-5 5"/><line x1="12" y1="19" x2="19" y2="19"/></svg>
+<span>命令</span></a></li><li><a href=/%E5%85%B3%E4%BA%8E/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="7" r="4"/><path d="M6 21v-2a4 4 0 014-4h4a4 4 0 014 4v2"/></svg>
+<span>关于</span></a></li><div class=menu-bottom-section><li id=dark-mode-toggle><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<span>深色</span></li></div></ol></aside><main class="main full-width"><article class="has-image main-article"><header class=article-header><div class=article-image><a href=/p/jsbridge-%E5%88%9D%E4%B8%8A%E6%89%8B/><img src=/img/cover/jsbridge.png loading=lazy alt="JSBridge 初上手"></a></div><div class=article-details><header class=article-category><a href=/categories/native/>Native</a></header><div class=article-title-wrapper><h2 class=article-title><a href=/p/jsbridge-%E5%88%9D%E4%B8%8A%E6%89%8B/>JSBridge 初上手</a></h2><h3 class=article-subtitle>老板终于受不了 uni-app 糟糕的开发体验和性能了</h3></div><footer class=article-time><div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>Jun 05, 2023</time></div><div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>阅读时长：7 分钟</time></div></footer></div></header><section class=article-content><p>政策转向，面向 B 端的业务不得不转向 C 端；而 C 端用户显然对性能和交互更为挑剔，于是老板决定上原生。为了赶工期，采用 Native + Web 的开发方式；经过调研，Native 和 Web 之间较为常用的通信方式为 JSBridge。为此，小组还开发了一个<a class=link href=https://www.npmjs.com/package/@hema-npm/js-bridge target=_blank rel=noopener>
+包
+</a>来满足业务需要。</p><h2 id=webview>WebView</h2><p>如果 iOS/Android 要访问 Web 页面，需要使用 WebView（一个嵌入在操作系统里的组件）；<a class=link href=https://developer.apple.com/documentation/webkit/wkwebview target=_blank rel=noopener>
+WKWebView
+</a>基于 Safari，<a class=link href=https://developer.android.com/reference/android/webkit/WebView target=_blank rel=noopener>
+Android System WebView
+</a>基于 Chrome，当然还有微软的 <a class=link href=https://learn.microsoft.com/zh-cn/microsoft-edge/webview2 target=_blank rel=noopener>Microsoft Edge WebView2
+</a>。</p><p>在我看来，WebView 像是一个继承自浏览器引擎的类，具有完整的浏览器功能；开发者可以在其基础上对其进行定制化来满足业务需要；比如说，可以对 UA 进行定制，这样 Web 就可以对当前的运行环境做判断：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=kr>export</span> <span class=kr>const</span> <span class=nx>isWeChatWebView</span> <span class=o>=</span> <span class=p>()</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=cm>/**
+</span></span></span><span class=line><span class=cl><span class=cm>   * 如果 UA 不满足条件，可以拒绝服务
+</span></span></span><span class=line><span class=cl><span class=cm>   * 比如“请在微信中访问”
+</span></span></span><span class=line><span class=cl><span class=cm>   */</span>
+</span></span><span class=line><span class=cl>  <span class=k>if</span> <span class=p>(</span><span class=sr>/(WeChat)/i</span><span class=p>.</span><span class=nx>test</span><span class=p>(</span><span class=nx>navigator</span><span class=p>.</span><span class=nx>userAgent</span><span class=p>))</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=kc>true</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=kc>false</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>};</span>
+</span></span></code></pre></td></tr></table></div></div><p>以 WKWebView 为例，<a class=link href=https://developer.apple.com/documentation/webkit/wkwebviewconfiguration target=_blank rel=noopener>
+WKWebViewConfiguration
+</a>用来配置 WKWebView，<a class=link href=https://developer.apple.com/documentation/foundation/urlrequest target=_blank rel=noopener>
+URLRequest
+</a>用来指定访问的内容。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-swift data-lang=swift><span class=line><span class=cl><span class=kd>class</span> <span class=nc>ViewController</span><span class=p>:</span> <span class=n>UIViewController</span><span class=p>,</span> <span class=n>WKUIDelegate</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=kd>var</span> <span class=nv>webView</span><span class=p>:</span> <span class=n>WKWebView</span><span class=p>!</span>
+</span></span><span class=line><span class=cl>  <span class=c1>// 加载 WKWebView</span>
+</span></span><span class=line><span class=cl>  <span class=kr>override</span> <span class=kd>func</span> <span class=nf>loadView</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 使用 WKWebViewConfiguration 对 WKWebView 进行配置</span>
+</span></span><span class=line><span class=cl>    <span class=kd>let</span> <span class=nv>webConfiguration</span> <span class=p>=</span> <span class=n>WKWebViewConfiguration</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>    <span class=n>webView</span> <span class=p>=</span> <span class=n>WKWebView</span><span class=p>(</span><span class=n>frame</span><span class=p>:</span> <span class=p>.</span><span class=n>zero</span><span class=p>,</span> <span class=n>configuration</span><span class=p>:</span> <span class=n>webConfiguration</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>webView</span><span class=p>.</span><span class=n>uiDelegate</span> <span class=p>=</span> <span class=kc>self</span>
+</span></span><span class=line><span class=cl>    <span class=n>view</span> <span class=p>=</span> <span class=n>webView</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=kr>override</span> <span class=kd>func</span> <span class=nf>viewDidLoad</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 调用父级 viewDidLoad</span>
+</span></span><span class=line><span class=cl>    <span class=kc>super</span><span class=p>.</span><span class=n>viewDidLoad</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 指定访问的 URL</span>
+</span></span><span class=line><span class=cl>    <span class=kd>let</span> <span class=nv>myURL</span> <span class=p>=</span> <span class=n>URL</span><span class=p>(</span><span class=n>string</span><span class=p>:</span> <span class=s>&#34;https://www.apple.com&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=kd>let</span> <span class=nv>myRequest</span> <span class=p>=</span> <span class=n>URLRequest</span><span class=p>(</span><span class=n>url</span><span class=p>:</span> <span class=n>myURL</span><span class=p>!)</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 加载 URL</span>
+</span></span><span class=line><span class=cl>    <span class=n>webView</span><span class=p>.</span><span class=n>load</span><span class=p>(</span><span class=n>myRequest</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=jsbridge>JSBridge</h2><p>因为 Native 和 Web 处于两个不同的运行环境中，为了进行通信，需要一个<strong>桥</strong>的东西来连接 Native 和 Web，这个桥就是 JSBridge。对于 Native 和 Web 这两个角色，Native 拥有更大的权限，它可以通过初始化一个 WebView 打开页面，也可以直接销毁 WebView 实例关闭页面；既然 Native 对 WebView 可以有完全的控制，那么 Native 就可以通过更改 WebView 实例中的 JS 运行时来间接的影响 Web 的行为，比如：</p><ul><li>在 window 上添加双方约定好的属性，比如 window.attr4Shared：<ul><li>Android 可以通过 <a class=link href=https://developer.android.com/reference/android/webkit/WebView#evaluateJavascript%28java.lang.String,%20android.webkit.ValueCallback%3Cjava.lang.String%3E%29 target=_blank rel=noopener>evaluateJavascript
+</a>调用 Web 逻辑；</li><li>iOS 可以通过 <a class=link href=https://developer.apple.com/documentation/webkit/wkwebview/1415017-evaluatejavascript target=_blank rel=noopener>evaluateJavaScript:javaScriptString
+</a>调用 Web 逻辑；</li><li>Web 可以调用 Android 通过 <a class=link href=https://developer.android.com/reference/android/webkit/WebView#addJavascriptInterface%28java.lang.Object,%20java.lang.String%29 target=_blank rel=noopener>addJavascriptInterface
+</a>注入的全局属性/方法；</li><li>Web 可以调用 iOS 通过 <a class=link href=https://developer.apple.com/documentation/webkit/wkscriptmessagehandler target=_blank rel=noopener>WKScriptMessageHandler
+</a>注入的全局属性/方法。</li></ul></li><li>拦截 Web 对外部资源的访问，比如链接跳转、<a class=link href=https://developer.apple.com/documentation/xcode/defining-a-custom-url-scheme-for-your-app target=_blank rel=noopener>
+URLScheme
+</a>；<ul><li>Android 可以通过 <a class=link href=https://developer.android.com/reference/android/webkit/WebViewClient#shouldOverrideUrlLoading%28android.webkit.WebView,%20android.webkit.WebResourceRequest%29 target=_blank rel=noopener>shouldOverrideUrlLoading
+</a>拦截 Web 对 URL 访问，实现 Web 对 Android 逻辑的调用；</li><li>iOS 可以通过 <a class=link href=https://developer.apple.com/documentation/webkit/wknavigationdelegate target=_blank rel=noopener>WKNavigationDelegate
+</a>拦截 Web 对 URL 访问，实现 Web 对 iOS 逻辑的调用。</li></ul></li><li>拦截全局方法的默认行为，比如 window.prompt：<ul><li>Android 可以通过 <a class=link href=https://developer.android.com/reference/android/webkit/WebChromeClient target=_blank rel=noopener>WebChromeClient
+</a>拦截 Web API 默认行为，实现 Web 对 Android 逻辑的调用；</li><li>iOS 可以通过 <a class=link href=https://developer.apple.com/documentation/webkit/wkuidelegate target=_blank rel=noopener>WKUIDelegate
+</a>拦截 Web API 默认行为，实现 Web 对 iOS 逻辑的调用。</li></ul></li></ul><h3 id=android-使用-shouldoverrideurlloading-拦截对-url-的访问web-调用-native>Android 使用 shouldOverrideUrlLoading 拦截对 URL 的访问（Web 调用 Native）</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=c1>// 无法在短时间内回调多次 ​shouldOverrideUrlLoading​ 方法，也就是说频繁交互的情况下，会有较大概率只回调一次该方法</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=kd>public</span><span class=w> </span><span class=kd>class</span> <span class=nc>CustomWebViewClient</span><span class=w> </span><span class=kd>extends</span><span class=w> </span><span class=n>WebViewClient</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nd>@Override</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=kd>public</span><span class=w> </span><span class=kt>boolean</span><span class=w> </span><span class=nf>shouldOverrideUrlLoading</span><span class=p>(</span><span class=n>WebView</span><span class=w> </span><span class=n>view</span><span class=p>,</span><span class=w> </span><span class=n>String</span><span class=w> </span><span class=n>url</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=k>if</span><span class=w> </span><span class=p>(</span><span class=n>url</span><span class=p>.</span><span class=na>equals</span><span class=p>(</span><span class=s>&#34;xxx&#34;</span><span class=p>))</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=c1>// 执行 Web 逻辑</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=n>view</span><span class=p>.</span><span class=na>loadUrl</span><span class=p>(</span><span class=s>&#34;javascript:setAllContent(&#34;</span><span class=w> </span><span class=o>+</span><span class=w> </span><span class=n>json</span><span class=w> </span><span class=o>+</span><span class=w> </span><span class=s>&#34;);&#34;</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=k>return</span><span class=w> </span><span class=kc>true</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=k>return</span><span class=w> </span><span class=kd>super</span><span class=p>.</span><span class=na>shouldOverrideUrlLoading</span><span class=p>(</span><span class=n>view</span><span class=p>,</span><span class=w> </span><span class=n>url</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><h3 id=android-使用-addjavascriptinterface-向-web-注入内容web-调用-native>Android 使用 addJavascriptInterface 向 Web 注入内容（Web 调用 Native）</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=c1>// 该方法是阻塞的，会等待 ​Native​ 方法的返回，​Native​ 会在一个后台线程中执行该方法调用</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=kd>class</span> <span class=nc>Bridge</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nd>@JavascriptInterface</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=n>fun</span><span class=w> </span><span class=nf>send</span><span class=p>(</span><span class=n>msg</span><span class=p>:</span><span class=w> </span><span class=n>String</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=n>doSomething</span><span class=p>()</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=c1>// Web 加载完毕后，window 对象上会多出一个 _sBridge 属性</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=n>webview</span><span class=p>.</span><span class=na>addJavascriptinterface</span><span class=p>(</span><span class=n>Bridge</span><span class=p>(),</span><span class=w> </span><span class=s>&#34;_sBridge&#34;</span><span class=p>)</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><h3 id=android-使用-webchromeclient-拦截-web-apiweb-调用-native>Android 使用 WebChromeClient 拦截 Web API（Web 调用 Native）</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=kd>public</span><span class=w> </span><span class=kd>class</span> <span class=nc>JSBridgeWebChromeClient</span><span class=w> </span><span class=kd>extends</span><span class=w> </span><span class=n>WebChromeClient</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nd>@Override</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=kd>public</span><span class=w> </span><span class=kt>boolean</span><span class=w> </span><span class=nf>onJsPrompt</span><span class=p>(</span><span class=n>WebView</span><span class=w> </span><span class=n>view</span><span class=p>,</span><span class=w> </span><span class=n>String</span><span class=w> </span><span class=n>url</span><span class=p>,</span><span class=w> </span><span class=n>Stringt</span><span class=w> </span><span class=n>message</span><span class=p>,</span><span class=w> </span><span class=n>String</span><span class=w> </span><span class=n>defaultValue</span><span class=p>,</span><span class=w> </span><span class=n>JsPromptResult</span><span class=w> </span><span class=n>result</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=c1>// 处理具体逻辑</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=k>return</span><span class=w> </span><span class=kc>true</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><h3 id=android-使用-evaluatejavascript-调用-webnative-调用-web>Android 使用 evaluateJavascript 调用 Web（Native 调用 Web）</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=kd>private</span><span class=w> </span><span class=kt>void</span><span class=w> </span><span class=nf>testEvaluateJavascript</span><span class=p>(</span><span class=n>WebView</span><span class=w> </span><span class=n>webView</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=n>webView</span><span class=p>.</span><span class=na>evaluateJavascript</span><span class=p>(</span><span class=s>&#34;window.getGreetings()&#34;</span><span class=p>,</span><span class=w> </span><span class=k>new</span><span class=w> </span><span class=n>ValueCallback</span><span class=w> </span><span class=o>&lt;</span><span class=n>String</span><span class=o>&gt;</span><span class=w> </span><span class=p>()</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nd>@Override</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=kd>public</span><span class=w> </span><span class=kt>void</span><span class=w> </span><span class=nf>onReceiveValue</span><span class=p>(</span><span class=n>String</span><span class=w> </span><span class=n>value</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=c1>// 处理结果</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=p>});</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><h3 id=ios-使用-wknavigationdelegate-拦截对-url-的访问web-调用-native>iOS 使用 WKNavigationDelegate 拦截对 URL 的访问（Web 调用 Native）</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-swift data-lang=swift><span class=line><span class=cl><span class=kd>func</span> <span class=nf>webView</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>  <span class=kc>_</span> <span class=n>webView</span><span class=p>:</span> <span class=n>WKWebView</span><span class=p>,</span> <span class=n>decidePolicyFor</span> <span class=n>navigationAction</span><span class=p>:</span> <span class=n>WKNavigationAction</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=n>decisionHandler</span><span class=p>:</span> <span class=p>@</span><span class=n>escaping</span> <span class=p>(</span><span class=n>WKNavigationActionPolicy</span><span class=p>)</span> <span class=p>-&gt;</span> <span class=nb>Void</span>
+</span></span><span class=line><span class=cl><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=k>if</span> <span class=n>navigationAction</span><span class=p>.</span><span class=n>request</span><span class=p>.</span><span class=n>url</span><span class=p>?.</span><span class=n>scheme</span> <span class=p>==</span> <span class=s>&#34;haleyaction&#34;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=kd>let</span> <span class=nv>url</span> <span class=p>=</span> <span class=n>navigationAction</span><span class=p>.</span><span class=n>request</span><span class=p>.</span><span class=n>url</span>
+</span></span><span class=line><span class=cl>    <span class=n>handleCustomAction</span><span class=p>(</span><span class=n>url</span><span class=p>:</span> <span class=n>url</span><span class=p>!)</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 取消加载</span>
+</span></span><span class=line><span class=cl>    <span class=n>decisionHandler</span><span class=p>(</span><span class=n>WKNavigationActionPolicy</span><span class=p>.</span><span class=n>cancel</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=c1>// 允许加载</span>
+</span></span><span class=line><span class=cl>  <span class=n>decisionHandler</span><span class=p>(</span><span class=n>WKNavigationActionPolicy</span><span class=p>.</span><span class=n>allow</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=kd>func</span> <span class=nf>handleCustomAction</span><span class=p>(</span><span class=n>url</span><span class=p>:</span> <span class=n>URL</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=kd>let</span> <span class=nv>host</span> <span class=p>=</span> <span class=n>url</span><span class=p>.</span><span class=n>host</span><span class=p>!</span>
+</span></span><span class=line><span class=cl>  <span class=k>switch</span> <span class=n>host</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=k>case</span> <span class=s>&#34;scanClick&#34;</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>    <span class=bp>print</span><span class=p>(</span><span class=s>&#34;saoyisao&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>  <span class=k>case</span> <span class=s>&#34;shareClick&#34;</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>    <span class=n>share</span><span class=p>(</span><span class=n>url</span><span class=p>:</span> <span class=n>url</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>  <span class=k>case</span> <span class=s>&#34;getLocation&#34;</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>    <span class=n>getLocation</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>  <span class=k>case</span> <span class=s>&#34;setColor&#34;</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>    <span class=n>changeBackGroundColor</span><span class=p>(</span><span class=n>url</span><span class=p>:</span> <span class=n>url</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>  <span class=k>case</span> <span class=s>&#34;payAction&#34;</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>    <span class=n>payAction</span><span class=p>(</span><span class=n>url</span><span class=p>:</span> <span class=n>url</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>  <span class=k>case</span> <span class=s>&#34;shake&#34;</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>    <span class=n>sharkeAction</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>  <span class=k>case</span> <span class=s>&#34;back&#34;</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>    <span class=n>goBack</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>  <span class=k>default</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>    <span class=k>break</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=ios-使用-wkscriptmessagehandler-向-web-注入内容web-调用-native>iOS 使用 WKScriptMessageHandler 向 Web 注入内容（Web 调用 Native）</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-swift data-lang=swift><span class=line><span class=cl><span class=kd>let</span> <span class=nv>wkConfig</span> <span class=p>=</span> <span class=n>WKWebViewConfiguration</span><span class=p>()</span>
+</span></span><span class=line><span class=cl><span class=kd>let</span> <span class=nv>wkUserContentController</span> <span class=p>=</span> <span class=n>WKUserContentController</span><span class=p>()</span>
+</span></span><span class=line><span class=cl><span class=cm>/**
+</span></span></span><span class=line><span class=cl><span class=cm> * Web 加载完毕后，window.webkit.messageHandlers 对象上会多出一个 getUserInfo 属性
+</span></span></span><span class=line><span class=cl><span class=cm> * 可以通过调用 getUserInfo.postMessage 完成对 Native 的通信
+</span></span></span><span class=line><span class=cl><span class=cm> */</span>
+</span></span><span class=line><span class=cl><span class=n>wkUserContentController</span><span class=p>.</span><span class=n>add</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>  <span class=kc>self</span> <span class=k>as</span> <span class=n>WKScriptMessageHandler</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=n>name</span><span class=p>:</span> <span class=s>&#34;getUserInfo&#34;</span>
+</span></span><span class=line><span class=cl><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>wkConfig</span><span class=p>.</span><span class=n>userContentController</span> <span class=p>=</span> <span class=n>wkUserContentController</span>
+</span></span><span class=line><span class=cl><span class=cm>/**
+</span></span></span><span class=line><span class=cl><span class=cm> * https://developer.apple.com/documentation/webkit/wkscriptmessagehandler/1396222-usercontentcontroller
+</span></span></span><span class=line><span class=cl><span class=cm> * 重写 WKScriptMessageHandler 中的 userContentController
+</span></span></span><span class=line><span class=cl><span class=cm> */</span>
+</span></span><span class=line><span class=cl><span class=kd>extension</span> <span class=nc>WKWebViewWithMessageHandler</span><span class=p>:</span> <span class=n>WKScriptMessageHandler</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=kd>func</span> <span class=nf>userContentController</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>    <span class=kc>_</span> <span class=n>userContentController</span><span class=p>:</span> <span class=n>WKUserContentController</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=n>didReceive</span> <span class=n>message</span><span class=p>:</span> <span class=n>WKScriptMessage</span>
+</span></span><span class=line><span class=cl>  <span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=kd>let</span> <span class=nv>msg</span> <span class=p>=</span> <span class=n>message</span><span class=p>.</span><span class=n>body</span> <span class=k>as</span><span class=p>!</span> <span class=nb>String</span>
+</span></span><span class=line><span class=cl>    <span class=kd>let</span> <span class=nv>ac</span> <span class=p>=</span> <span class=n>UIAlertController</span><span class=p>(</span><span class=n>title</span><span class=p>:</span> <span class=n>msg</span><span class=p>,</span> <span class=n>message</span><span class=p>:</span> <span class=n>msg</span><span class=p>,</span> <span class=n>preferredStyle</span><span class=p>:</span> <span class=p>.</span><span class=n>alert</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>ac</span><span class=p>.</span><span class=n>addAction</span><span class=p>(</span><span class=n>UIAlertAction</span><span class=p>(</span><span class=n>title</span><span class=p>:</span> <span class=s>&#34;Ok&#34;</span><span class=p>,</span> <span class=n>style</span><span class=p>:</span> <span class=p>.</span><span class=k>default</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>    <span class=kc>self</span><span class=p>.</span><span class=n>present</span><span class=p>(</span><span class=n>ac</span><span class=p>,</span> <span class=n>animated</span><span class=p>:</span> <span class=kc>true</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=ios-使用-wkuidelegate-拦截-web-apiweb-调用-native>iOS 使用 WKUIDelegate 拦截 Web API（Web 调用 Native）</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-swift data-lang=swift><span class=line><span class=cl><span class=kd>extension</span> <span class=nc>ViewController</span><span class=p>:</span> <span class=n>WKUIDelegate</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=c1>// 获取 window.alert 内容</span>
+</span></span><span class=line><span class=cl>  <span class=kd>func</span> <span class=nf>webView</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>    <span class=kc>_</span> <span class=n>webView</span><span class=p>:</span> <span class=n>WKWebView</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=n>runJavaScriptAlertPanelWithMessage</span> <span class=n>message</span><span class=p>:</span> <span class=nb>String</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=n>initiatedByFrame</span> <span class=n>frame</span><span class=p>:</span> <span class=n>WKFrameInfo</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=n>completionHandler</span><span class=p>:</span> <span class=p>@</span><span class=n>escaping</span> <span class=p>()</span> <span class=p>-&gt;</span> <span class=nb>Void</span>
+</span></span><span class=line><span class=cl>  <span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 逻辑处理</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=kd>extension</span> <span class=nc>ViewController</span><span class=p>:</span> <span class=n>WKUIDelegate</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=c1>// 获取 window.confirm 内容</span>
+</span></span><span class=line><span class=cl>  <span class=kd>func</span> <span class=nf>webView</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>    <span class=kc>_</span> <span class=n>webView</span><span class=p>:</span> <span class=n>WKWebView</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=n>runJavaScriptConfirmPanelWithMessage</span> <span class=n>message</span><span class=p>:</span> <span class=nb>String</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=n>initiatedByFrame</span> <span class=n>frame</span><span class=p>:</span> <span class=n>WKFrameInfo</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=n>completionHandler</span><span class=p>:</span> <span class=p>@</span><span class=n>escaping</span> <span class=p>(</span><span class=nb>Bool</span><span class=p>)</span> <span class=p>-&gt;</span> <span class=nb>Void</span>
+</span></span><span class=line><span class=cl>  <span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 逻辑处理</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=kd>extension</span> <span class=nc>ViewController</span><span class=p>:</span> <span class=n>WKUIDelegate</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=c1>// 获取 window.prompt 内容</span>
+</span></span><span class=line><span class=cl>  <span class=kd>func</span> <span class=nf>webView</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>    <span class=kc>_</span> <span class=n>webView</span><span class=p>:</span> <span class=n>WKWebView</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=n>runJavaScriptTextInputPanelWithPrompt</span> <span class=n>prompt</span><span class=p>:</span> <span class=nb>String</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=n>defaultText</span><span class=p>:</span> <span class=nb>String</span><span class=p>?,</span>
+</span></span><span class=line><span class=cl>    <span class=n>initiatedByFrame</span> <span class=n>frame</span><span class=p>:</span> <span class=n>WKFrameInfo</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=n>completionHandler</span><span class=p>:</span> <span class=p>@</span><span class=n>escaping</span> <span class=p>(</span><span class=nb>String</span><span class=p>?)</span> <span class=p>-&gt;</span> <span class=nb>Void</span>
+</span></span><span class=line><span class=cl>  <span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 逻辑处理</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=ios-使用-evaluatejavascript-调用-webnative-调用-web>iOS 使用 evaluateJavaScript 调用 Web（Native 调用 Web）</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-swift data-lang=swift><span class=line><span class=cl><span class=c1>// evaluateJavaScript</span>
+</span></span><span class=line><span class=cl><span class=kd>extension</span> <span class=nc>NativeInvokeJavaScriptBrowserViewController</span><span class=p>:</span> <span class=n>WKNavigationDelegate</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=kd>func</span> <span class=nf>webView</span><span class=p>(</span><span class=kc>_</span> <span class=n>webView</span><span class=p>:</span> <span class=n>WKWebView</span><span class=p>,</span> <span class=n>didFinish</span> <span class=n>navigation</span><span class=p>:</span> <span class=n>WKNavigation</span><span class=p>!)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>switch</span> <span class=n>requestJavaScriptMethod</span><span class=p>!</span>
+</span></span><span class=line><span class=cl>    <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>case</span> <span class=s>&#34;Switch2Font&#34;</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>      <span class=n>wkWebView</span><span class=p>.</span><span class=n>evaluateJavaScript</span><span class=p>(</span><span class=s>&#34;window.nativeRegister.onSwitch2Font(&#39;true&#39;)&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=k>case</span> <span class=s>&#34;Switch2Back&#34;</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>      <span class=n>wkWebView</span><span class=p>.</span><span class=n>evaluateJavaScript</span><span class=p>(</span><span class=s>&#34;window.nativeRegister.onSwitch2Font(&#39;false&#39;)&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=k>default</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>      <span class=n>wkWebView</span><span class=p>.</span><span class=n>evaluateJavaScript</span><span class=p>(</span><span class=s>&#34;window.nativeRegister.sayHello()&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=具体实现>具体实现</h2><p>首先，需要定义一个全局对象，用来保存 JSBridge 相关的属性/方法：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=kr>export</span> <span class=kr>const</span> <span class=nx>isAndroid</span> <span class=o>=</span> <span class=p>()</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=k>if</span> <span class=p>(</span><span class=sr>/Android/i</span><span class=p>.</span><span class=nx>test</span><span class=p>(</span><span class=nx>navigator</span><span class=p>.</span><span class=nx>userAgent</span><span class=p>))</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=kc>true</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=kc>false</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>};</span>
+</span></span><span class=line><span class=cl><span class=kr>export</span> <span class=kr>const</span> <span class=nx>isIOS</span> <span class=o>=</span> <span class=p>()</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=k>if</span> <span class=p>(</span><span class=sr>/(iPhone|iPad|iPod|iOS)/i</span><span class=p>.</span><span class=nx>test</span><span class=p>(</span><span class=nx>navigator</span><span class=p>.</span><span class=nx>userAgent</span><span class=p>))</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=kc>true</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=kc>false</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>};</span>
+</span></span><span class=line><span class=cl><span class=kr>export</span> <span class=kr>const</span> <span class=nx>isXLMWebView</span> <span class=o>=</span> <span class=p>()</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=k>if</span> <span class=p>(</span><span class=sr>/(XiaoLanMa)/i</span><span class=p>.</span><span class=nx>test</span><span class=p>(</span><span class=nx>navigator</span><span class=p>.</span><span class=nx>userAgent</span><span class=p>))</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=kc>true</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=kc>false</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>};</span>
+</span></span><span class=line><span class=cl><span class=nb>window</span><span class=p>.</span><span class=nx>XiaoLanMaBridge</span> <span class=o>=</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>isAndroid</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nx>isIOS</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nx>isXLMWebView</span>
+</span></span><span class=line><span class=cl><span class=p>};</span>
+</span></span></code></pre></td></tr></table></div></div><p>isAndroid ｜ isIOS ｜ isXLMWebView 这三个属性是用来给 Web 判断运行环境的，如果运行环境不满足需要，可以拒绝服务。</p><p>然后，和 Native 明确 Web 需要调用的方法；Native 创建 WebView 时，向 WebView 的上下文注入一些方法，方便 Web 调用：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span><span class=lnt>55
+</span><span class=lnt>56
+</span><span class=lnt>57
+</span><span class=lnt>58
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-ts data-lang=ts><span class=line><span class=cl><span class=kr>interface</span> <span class=nx>UploadParams</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>chooseType</span><span class=o>:</span> <span class=s1>&#39;Camera&#39;</span> <span class=o>|</span> <span class=s1>&#39;PhotoAlbum&#39;</span> <span class=o>|</span> <span class=s1>&#39;File&#39;</span><span class=p>;</span> <span class=c1>// 拍照 ｜相册｜文件
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=nx>isPrivate</span>: <span class=kt>boolean</span><span class=p>;</span> <span class=c1>// 是否开启“私有化”上传
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=nx>maxNumber</span>: <span class=kt>number</span><span class=p>;</span> <span class=c1>// 最大文件个数
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=nx>mimeTypes</span>: <span class=kt>Array</span><span class=o>&lt;</span><span class=s1>&#39;image/jpeg&#39;</span> <span class=o>|</span> <span class=s1>&#39;image/png&#39;</span> <span class=o>|</span> <span class=s1>&#39;application/pdf&#39;</span><span class=o>&gt;</span><span class=p>;</span> <span class=c1>// 支持的文件类型
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=c1>// 这些都是和 APP 开发人员约定好的
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kr>export</span> <span class=kr>const</span> <span class=nx>nativeEventMapForWeb</span> <span class=o>=</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=c1>// 文件上传
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=nx>fileUpload</span><span class=p>(</span><span class=nx>params</span>: <span class=kt>UploadParams</span><span class=p>,</span> <span class=nx>callbackName</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=nx>isAndroid</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=c1>// Android 在全局暴露的方法
+</span></span></span><span class=line><span class=cl><span class=c1></span>      <span class=nb>window</span><span class=p>.</span><span class=nx>XiaoLanMaBridgeFromNative</span><span class=p>.</span><span class=nx>fileUpload</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>        <span class=nx>JSON</span><span class=p>.</span><span class=nx>stringify</span><span class=p>(</span><span class=nx>params</span><span class=p>),</span>
+</span></span><span class=line><span class=cl>        <span class=nx>callbackName</span>
+</span></span><span class=line><span class=cl>      <span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=nx>isIOS</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=c1>// iOS 在全局暴露的方法
+</span></span></span><span class=line><span class=cl><span class=c1></span>      <span class=nb>window</span><span class=p>.</span><span class=nx>webkit</span><span class=p>.</span><span class=nx>messageHandlers</span><span class=p>.</span><span class=nx>fileUpload</span><span class=p>.</span><span class=nx>postMessage</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>        <span class=nx>JSON</span><span class=p>.</span><span class=nx>stringify</span><span class=p>({</span>
+</span></span><span class=line><span class=cl>          <span class=nx>callbackName</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>          <span class=nx>data</span>: <span class=kt>params</span>
+</span></span><span class=line><span class=cl>        <span class=p>})</span>
+</span></span><span class=line><span class=cl>      <span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=p>},</span>
+</span></span><span class=line><span class=cl>  <span class=c1>// 获取用户信息
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=nx>getUserInfo</span><span class=p>(</span><span class=nx>params</span><span class=p>,</span> <span class=nx>callbackName</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=nx>isAndroid</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=nb>window</span><span class=p>.</span><span class=nx>XiaoLanMaBridgeFromNative</span><span class=p>.</span><span class=nx>getUserInfo</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>        <span class=nx>JSON</span><span class=p>.</span><span class=nx>stringify</span><span class=p>(</span><span class=nx>params</span><span class=p>),</span>
+</span></span><span class=line><span class=cl>        <span class=nx>callbackName</span>
+</span></span><span class=line><span class=cl>      <span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=nx>isIOS</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=nb>window</span><span class=p>.</span><span class=nx>webkit</span><span class=p>.</span><span class=nx>messageHandlers</span><span class=p>.</span><span class=nx>getUserInfo</span><span class=p>.</span><span class=nx>postMessage</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>        <span class=nx>JSON</span><span class=p>.</span><span class=nx>stringify</span><span class=p>({</span>
+</span></span><span class=line><span class=cl>          <span class=nx>callbackName</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>          <span class=nx>data</span>: <span class=kt>params</span>
+</span></span><span class=line><span class=cl>        <span class=p>})</span>
+</span></span><span class=line><span class=cl>      <span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=p>},</span>
+</span></span><span class=line><span class=cl>  <span class=c1>// 关闭 WebView
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=nx>closeWebView</span><span class=p>(</span><span class=nx>params</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=nx>isAndroid</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=nb>window</span><span class=p>.</span><span class=nx>XiaoLanMaBridgeFromNative</span><span class=p>.</span><span class=nx>closeWebView</span><span class=p>(</span><span class=nx>JSON</span><span class=p>.</span><span class=nx>stringify</span><span class=p>(</span><span class=nx>params</span><span class=p>));</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=nx>isIOS</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=nb>window</span><span class=p>.</span><span class=nx>webkit</span><span class=p>.</span><span class=nx>messageHandlers</span><span class=p>.</span><span class=nx>closeWebView</span><span class=p>.</span><span class=nx>postMessage</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>        <span class=nx>JSON</span><span class=p>.</span><span class=nx>stringify</span><span class=p>({</span>
+</span></span><span class=line><span class=cl>          <span class=nx>data</span>: <span class=kt>params</span>
+</span></span><span class=line><span class=cl>        <span class=p>})</span>
+</span></span><span class=line><span class=cl>      <span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>};</span>
+</span></span></code></pre></td></tr></table></div></div><p>接着，还需要一个对象来保存不同 EventName 对应的回调函数：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=nb>window</span><span class=p>.</span><span class=nx>XiaoLanMaBridge</span> <span class=o>=</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>callNativeCallback</span><span class=o>:</span> <span class=p>{}</span> <span class=c1>// 用来保存 callNative 对应的回调函数
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=p>};</span>
+</span></span></code></pre></td></tr></table></div></div><p>这样，当 Native 部分的逻辑执行完毕后，就可以通过调用我们事先约定好的全局函数将执行结果告诉 Web 端。</p><p>最后，我们需要实现一个<strong>Web 调用 Native 功能</strong>的方法 callNative，用来<strong>注册</strong> EventName 对应的回调函数：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=nb>window</span><span class=p>.</span><span class=nx>XiaoLanMaBridge</span> <span class=o>=</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>callNative</span><span class=p>(</span><span class=nx>nativeEventName</span><span class=p>,</span> <span class=nx>paramsToNative</span><span class=p>,</span> <span class=nx>callback</span><span class=p>,</span> <span class=nx>needLoop</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=o>!</span><span class=nx>isXLMWebView</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=k>throw</span> <span class=k>new</span> <span class=nb>Error</span><span class=p>(</span><span class=s1>&#39;请在 xxx 中运行&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=kr>const</span> <span class=nx>callbackName</span> <span class=o>=</span> <span class=sb>`</span><span class=si>${</span><span class=nx>nativeEventName</span><span class=si>}</span><span class=sb>Callback`</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=nx>needLoop</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=c1>// 需要轮询调用 callback，比如查看“上传进度”
+</span></span></span><span class=line><span class=cl><span class=c1></span>      <span class=k>if</span> <span class=p>(</span><span class=nx>callback</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=c1>// 保存 nativeEventName 对应的回调函数
+</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=k>this</span><span class=p>.</span><span class=nx>callNativeCallback</span><span class=p>[</span><span class=nx>callbackName</span><span class=p>]</span> <span class=o>=</span> <span class=nx>responseFromNative</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>          <span class=c1>// Native 回传的结果一般为字符串
+</span></span></span><span class=line><span class=cl><span class=c1></span>          <span class=kr>const</span> <span class=p>{</span> <span class=nx>success</span><span class=p>,</span> <span class=nx>data</span><span class=p>,</span> <span class=nx>error</span><span class=p>,</span> <span class=nx>isFinished</span> <span class=p>}</span> <span class=o>=</span>
+</span></span><span class=line><span class=cl>            <span class=nx>JSON</span><span class=p>.</span><span class=nx>parse</span><span class=p>(</span><span class=nx>responseFromNative</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>          <span class=k>if</span> <span class=p>(</span><span class=nx>success</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=nx>callback</span><span class=p>({</span> <span class=nx>data</span><span class=p>,</span> <span class=nx>isFinished</span> <span class=p>});</span>
+</span></span><span class=line><span class=cl>          <span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=nx>callback</span><span class=p>({</span> <span class=nx>error</span><span class=p>,</span> <span class=nx>isFinished</span><span class=o>:</span> <span class=kc>true</span> <span class=p>});</span>
+</span></span><span class=line><span class=cl>          <span class=p>}</span>
+</span></span><span class=line><span class=cl>          <span class=c1>// 如果轮询结束，记得清理回调函数
+</span></span></span><span class=line><span class=cl><span class=c1></span>          <span class=k>if</span> <span class=p>(</span><span class=nx>isFinished</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=k>delete</span> <span class=k>this</span><span class=p>.</span><span class=nx>callNativeCallback</span><span class=p>[</span><span class=nx>callbackName</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>          <span class=p>}</span>
+</span></span><span class=line><span class=cl>        <span class=p>};</span>
+</span></span><span class=line><span class=cl>        <span class=c1>// 调用 Native 逻辑，Native 处理完毕之后，会去调用我们的 callback
+</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=nx>nativeEventMapForWeb</span><span class=p>[</span><span class=nx>nativeEventName</span><span class=p>](</span><span class=nx>paramsToNative</span><span class=p>,</span> <span class=nx>callbackName</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>      <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=c1>// 不需要轮询调用 callback，所以 reslove 就是此时的 callback
+</span></span></span><span class=line><span class=cl><span class=c1></span>      <span class=k>return</span> <span class=k>new</span> <span class=nb>Promise</span><span class=p>((</span><span class=nx>resolve</span><span class=p>,</span> <span class=nx>reject</span><span class=p>)</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=k>this</span><span class=p>.</span><span class=nx>callNativeCallback</span><span class=p>[</span><span class=nx>callbackName</span><span class=p>]</span> <span class=o>=</span> <span class=nx>responseFromNative</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>          <span class=c1>// 返回值需要和 Native 提前定义好
+</span></span></span><span class=line><span class=cl><span class=c1></span>          <span class=kr>const</span> <span class=p>{</span> <span class=nx>success</span><span class=p>,</span> <span class=nx>data</span><span class=p>,</span> <span class=nx>error</span> <span class=p>}</span> <span class=o>=</span> <span class=nx>JSON</span><span class=p>.</span><span class=nx>parse</span><span class=p>(</span><span class=nx>responseFromNative</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>          <span class=k>if</span> <span class=p>(</span><span class=nx>success</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=nx>resolve</span><span class=p>(</span><span class=nx>data</span><span class=p>);</span> <span class=c1>// 返回结果
+</span></span></span><span class=line><span class=cl><span class=c1></span>          <span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=nx>reject</span><span class=p>(</span><span class=nx>error</span><span class=p>);</span> <span class=c1>// 抛出错误
+</span></span></span><span class=line><span class=cl><span class=c1></span>          <span class=p>}</span>
+</span></span><span class=line><span class=cl>          <span class=k>delete</span> <span class=k>this</span><span class=p>.</span><span class=nx>callNativeCallback</span><span class=p>[</span><span class=nx>callbackName</span><span class=p>];</span> <span class=c1>// 记得清理回调函数
+</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=p>};</span>
+</span></span><span class=line><span class=cl>        <span class=nx>nativeEventMapForWeb</span><span class=p>[</span><span class=nx>nativeEventName</span><span class=p>](</span><span class=nx>paramsToNative</span><span class=p>,</span> <span class=nx>callbackName</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>      <span class=p>});</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>};</span>
+</span></span></code></pre></td></tr></table></div></div><p>以上就是 Web 主动调用 Native 方法的大致逻辑了；那么 Web 怎么订阅 Native 事件呢？比如 APP 从后台切换到前台、系统切换 Dark 模式等。</p><p>这种场景也需要和 Native 开发人员确定订阅场景；当场景被触发时，Native 需要主动调用 nativeRegister 中的方法来通知 Web：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=nb>window</span><span class=p>.</span><span class=nx>XiaoLanMaBridge</span> <span class=o>=</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=c1>// 这里需要预先声明好所有的回调场景
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=nx>nativeRegister</span><span class=o>:</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>onSwitch2Font</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=c1>// 可以看出，运行之前，需要先向 nativeRegisterCallback 添加 onSwitch2FontCallback 回调
+</span></span></span><span class=line><span class=cl><span class=c1></span>      <span class=nb>window</span><span class=p>.</span><span class=nx>XiaoLanMaBridge</span><span class=p>.</span><span class=nx>nativeRegisterCallback</span><span class=p>.</span><span class=nx>onSwitch2FontCallback</span><span class=p>({</span>
+</span></span><span class=line><span class=cl>        <span class=nx>success</span><span class=o>:</span> <span class=kc>true</span>
+</span></span><span class=line><span class=cl>      <span class=p>});</span>
+</span></span><span class=line><span class=cl>    <span class=p>},</span>
+</span></span><span class=line><span class=cl>    <span class=nx>onTheme2Light</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=nb>window</span><span class=p>.</span><span class=nx>XiaoLanMaBridge</span><span class=p>.</span><span class=nx>nativeRegisterCallback</span><span class=p>.</span><span class=nx>onTheme2LightCallback</span><span class=p>({</span>
+</span></span><span class=line><span class=cl>        <span class=nx>success</span><span class=o>:</span> <span class=kc>true</span>
+</span></span><span class=line><span class=cl>      <span class=p>});</span>
+</span></span><span class=line><span class=cl>    <span class=p>},</span>
+</span></span><span class=line><span class=cl>    <span class=nx>onTheme2Dark</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=nb>window</span><span class=p>.</span><span class=nx>XiaoLanMaBridge</span><span class=p>.</span><span class=nx>nativeRegisterCallback</span><span class=p>.</span><span class=nx>onTheme2DarkCallback</span><span class=p>({</span>
+</span></span><span class=line><span class=cl>        <span class=nx>success</span><span class=o>:</span> <span class=kc>true</span>
+</span></span><span class=line><span class=cl>      <span class=p>});</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=p>},</span>
+</span></span><span class=line><span class=cl>  <span class=c1>// 保存 nativeRegister 回调
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=nx>nativeRegisterCallback</span><span class=o>:</span> <span class=p>{}</span>
+</span></span><span class=line><span class=cl><span class=p>};</span>
+</span></span></code></pre></td></tr></table></div></div><p>接着，也需要在 window.XiaoLanMaBridge 定义一个 addNativeEventListener 方法，用来将对应的回调函数保存至 nativeRegisterCallback 中：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=nb>window</span><span class=p>.</span><span class=nx>XiaoLanMaBridge</span> <span class=o>=</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>addNativeEventListener</span><span class=p>(</span><span class=nx>nativeEventName</span><span class=p>,</span> <span class=nx>callback</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=o>!</span><span class=nx>isXLMWebView</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=k>throw</span> <span class=k>new</span> <span class=nb>Error</span><span class=p>(</span><span class=s1>&#39;请在 xxx 中运行&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=k>this</span><span class=p>.</span><span class=nx>nativeRegister</span><span class=p>[</span><span class=nx>nativeEventName</span><span class=p>])</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=k>this</span><span class=p>.</span><span class=nx>nativeRegisterCallback</span><span class=p>[</span><span class=sb>`</span><span class=si>${</span><span class=nx>nativeEventName</span><span class=si>}</span><span class=sb>CallBack`</span><span class=p>]</span> <span class=o>=</span> <span class=p>({</span>
+</span></span><span class=line><span class=cl>        <span class=nx>success</span>
+</span></span><span class=line><span class=cl>      <span class=p>})</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=nx>callback</span><span class=p>(</span><span class=nx>success</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>      <span class=p>};</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=k>throw</span> <span class=k>new</span> <span class=nb>Error</span><span class=p>(</span><span class=sb>`</span><span class=si>${</span><span class=nx>webEventName</span><span class=si>}</span><span class=sb> 事件不存在`</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>};</span>
+</span></span></code></pre></td></tr></table></div></div><p>其实这种<strong>事件订阅</strong>的场景就是上一个<strong>调用 Native 方法</strong>的简化版；区别是 nativeRegister 中的方法需要 Native 主动去调用。</p><h2 id=具体应用>具体应用</h2><p>当需要通过 Native 选择并上传文件时，可以调用 upload 来实现；因为 Web 需要回显上传进度，需要轮询调用：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=nb>window</span><span class=p>.</span><span class=nx>XiaoLanMaBridge</span><span class=p>.</span><span class=nx>callNative</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>  <span class=s1>&#39;upload&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>chooseType</span><span class=o>:</span> <span class=s1>&#39;File&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nx>isPrivate</span><span class=o>:</span> <span class=kc>true</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nx>maxNumber</span><span class=o>:</span> <span class=mi>1</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nx>mimeTypes</span><span class=o>:</span> <span class=p>[</span><span class=s1>&#39;application/pdf&#39;</span><span class=p>]</span>
+</span></span><span class=line><span class=cl>  <span class=p>},</span>
+</span></span><span class=line><span class=cl>  <span class=p>({</span> <span class=nx>data</span><span class=p>,</span> <span class=nx>error</span><span class=p>,</span> <span class=nx>isFinished</span> <span class=p>})</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=nx>error</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=c1>// 上传出错
+</span></span></span><span class=line><span class=cl><span class=c1></span>      <span class=nx>Toast</span><span class=p>.</span><span class=nx>error</span><span class=p>(</span><span class=nx>error</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=k>if</span> <span class=p>(</span><span class=nx>isFinished</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=nx>data</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=nx>Toast</span><span class=p>.</span><span class=nx>success</span><span class=p>(</span><span class=s1>&#39;上传成功&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>      <span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=nx>Toast</span><span class=p>.</span><span class=nx>loading</span><span class=p>(</span><span class=sb>`已上传 </span><span class=si>${</span><span class=nx>data</span><span class=p>.</span><span class=nx>percent</span><span class=si>}</span><span class=sb>%，请稍后`</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>      <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=p>},</span>
+</span></span><span class=line><span class=cl>  <span class=kc>true</span>
+</span></span><span class=line><span class=cl><span class=p>);</span>
+</span></span></code></pre></td></tr></table></div></div><p>当需要通过 Native 获取用户信息时，可以调用 getUserInfo 通知 APP 请求接口获取最新的用户信息并返回：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=p>(</span><span class=kr>async</span> <span class=p>()</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=k>try</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=kr>const</span> <span class=nx>userInfo</span> <span class=o>=</span> <span class=kr>await</span> <span class=nb>window</span><span class=p>.</span><span class=nx>XiaoLanMaBridge</span><span class=p>.</span><span class=nx>callNative</span><span class=p>(</span><span class=s1>&#39;getUserInfo&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=s1>&#39;userInfo&#39;</span><span class=p>,</span> <span class=nx>userInfo</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span> <span class=k>catch</span> <span class=p>(</span><span class=nx>error</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>Toast</span><span class=p>.</span><span class=nx>error</span><span class=p>(</span><span class=nx>error</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>})();</span>
+</span></span></code></pre></td></tr></table></div></div><p>当 APP 从后台切回前台时，想要刷新数据，可以通过订阅事件来解决：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=nb>window</span><span class=p>.</span><span class=nx>XiaoLanMaBridge</span><span class=p>.</span><span class=nx>addNativeEventListener</span><span class=p>(</span><span class=s1>&#39;onSwitch2Font&#39;</span><span class=p>,</span> <span class=nx>isSuccess</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=k>if</span> <span class=p>(</span><span class=nx>isSuccess</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>this</span><span class=p>.</span><span class=nx>getData</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>});</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=参考>参考</h2><ul><li><a class=link href=https://moxo.io/blog/2017/04/19/ios-and-javascript-3-wkwebview/ target=_blank rel=noopener>iOS 与 JavaScript 的交互（三）WKWebView</a></li><li><a class=link href=https://viseator.github.io/2018/09/07/android_JSBridge/ target=_blank rel=noopener>Android JSBridge 原理与实现</a></li></ul></section><footer class=article-footer><section class=article-copyright><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span></section></footer></article><footer class=site-footer><section class=copyright>&copy;
+2017 -
+2024
+<a href=https://github.com/Vikingama target=_blank>馬腊咯稽</a></section><section class=powerby>Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a>, Deploy by Actions<br>主题 <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.13.0>Stack</a></b> 由 <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a> 设计</section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">目录</h2><div class=widget--toc><nav id=TableOfContents><ol><li><a href=#webview>WebView</a></li><li><a href=#jsbridge>JSBridge</a><ol><li><a href=#android-使用-shouldoverrideurlloading-拦截对-url-的访问web-调用-native>Android 使用 shouldOverrideUrlLoading 拦截对 URL 的访问（Web 调用 Native）</a></li><li><a href=#android-使用-addjavascriptinterface-向-web-注入内容web-调用-native>Android 使用 addJavascriptInterface 向 Web 注入内容（Web 调用 Native）</a></li><li><a href=#android-使用-webchromeclient-拦截-web-apiweb-调用-native>Android 使用 WebChromeClient 拦截 Web API（Web 调用 Native）</a></li><li><a href=#android-使用-evaluatejavascript-调用-webnative-调用-web>Android 使用 evaluateJavascript 调用 Web（Native 调用 Web）</a></li><li><a href=#ios-使用-wknavigationdelegate-拦截对-url-的访问web-调用-native>iOS 使用 WKNavigationDelegate 拦截对 URL 的访问（Web 调用 Native）</a></li><li><a href=#ios-使用-wkscriptmessagehandler-向-web-注入内容web-调用-native>iOS 使用 WKScriptMessageHandler 向 Web 注入内容（Web 调用 Native）</a></li><li><a href=#ios-使用-wkuidelegate-拦截-web-apiweb-调用-native>iOS 使用 WKUIDelegate 拦截 Web API（Web 调用 Native）</a></li><li><a href=#ios-使用-evaluatejavascript-调用-webnative-调用-web>iOS 使用 evaluateJavaScript 调用 Web（Native 调用 Web）</a></li></ol></li><li><a href=#具体实现>具体实现</a></li><li><a href=#具体应用>具体应用</a></li><li><a href=#参考>参考</a></li></ol></nav></div></section></aside></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=/ts/main.js defer></script></body></html>

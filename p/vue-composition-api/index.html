@@ -1,0 +1,831 @@
+<!doctype html><html lang=zh-cn dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content='新 API 的引入是为了更方便的逻辑复用、更清晰的代码结构和更完整的类型检查'><title>Vue Composition API · Stay Hungry · Stay Foolish</title>
+<link rel=canonical href=https://vikingama.github.io/p/vue-composition-api/><link rel=stylesheet href=/scss/style.min.38c15d3a5c1bca30008bb625a46636d24f5deb4bf3217095e667a3abc843eaef.css><meta property='og:title' content='Vue Composition API'><meta property='og:description' content='新 API 的引入是为了更方便的逻辑复用、更清晰的代码结构和更完整的类型检查'><meta property='og:url' content='https://vikingama.github.io/p/vue-composition-api/'><meta property='og:site_name' content='馬腊咯稽'><meta property='og:type' content='article'><meta property='article:section' content='Post'><meta property='article:published_time' content='2020-04-23T00:00:00+00:00'><meta property='article:modified_time' content='2020-04-23T00:00:00+00:00'><meta property='og:image' content='https://vikingama.github.io/img/cover/vue.png'><meta name=twitter:title content="Vue Composition API"><meta name=twitter:description content="新 API 的引入是为了更方便的逻辑复用、更清晰的代码结构和更完整的类型检查"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content='https://vikingama.github.io/img/cover/vue.png'><link rel="shortcut icon" href=/favicon.ico><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><meta name=theme-color content="#ffffff"><meta name=robots content="noarchive"><div class=warning-banner>因为 GitHub 账号二次验证失败，计划迁往
+<a href=https://elementref.github.io/>新地址&rarr;</a></div></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label=切换菜单>
+<span class=hamburger-box><span class=hamburger-inner></span></span></button><header><figure class=site-avatar><a href=/><img src=/img/avatar_huae06eac29c2bc6aa7e83a685ea2f6536_13838_300x0_resize_box_3.png width=300 height=404 class=site-logo loading=lazy alt=Avatar></a></figure><div class=site-meta><h1 class=site-name><a href=/>馬腊咯稽</a></h1><h2 class=site-description>Stay Hungry · Stay Foolish</h2></div></header><ol class=menu id=main-menu><li><a href=/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg>
+<span>首页</span></a></li><li><a href=/archives/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><rect x="3" y="4" width="18" height="4" rx="2"/><path d="M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+<span>归档</span></a></li><li><a href=/search/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="10" cy="10" r="7"/><line x1="21" y1="21" x2="15" y2="15"/></svg>
+<span>搜索</span></a></li><li><a href=https://github.com/ElementRef/AboutConfig target=_blank><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-infinity" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M9.828 9.172a4 4 0 100 5.656A10 10 0 0012 12a10 10 0 012.172-2.828 4 4 0 110 5.656A10 10 0 0112 12 10 10 0 009.828 9.172"/></svg>
+<span>配置</span></a></li><li><a href=/%E5%90%AF%E5%8F%91/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M10 14a3.5 3.5.0 005 0l4-4a3.5 3.5.0 00-5-5l-.5.5"/><path d="M14 10a3.5 3.5.0 00-5 0l-4 4a3.5 3.5.0 005 5l.5-.5"/></svg>
+<span>启发</span></a></li><li><a href=/%E5%91%BD%E4%BB%A4/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-terminal" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 7l5 5-5 5"/><line x1="12" y1="19" x2="19" y2="19"/></svg>
+<span>命令</span></a></li><li><a href=/%E5%85%B3%E4%BA%8E/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="7" r="4"/><path d="M6 21v-2a4 4 0 014-4h4a4 4 0 014 4v2"/></svg>
+<span>关于</span></a></li><div class=menu-bottom-section><li id=dark-mode-toggle><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<span>深色</span></li></div></ol></aside><main class="main full-width"><article class="has-image main-article"><header class=article-header><div class=article-image><a href=/p/vue-composition-api/><img src=/img/cover/vue.png loading=lazy alt="Vue Composition API"></a></div><div class=article-details><header class=article-category><a href=/categories/vue/>Vue</a></header><div class=article-title-wrapper><h2 class=article-title><a href=/p/vue-composition-api/>Vue Composition API</a></h2><h3 class=article-subtitle>新 API 的引入是为了更方便的逻辑复用、更清晰的代码结构和更完整的类型检查</h3></div><footer class=article-time><div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>Apr 23, 2020</time></div><div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>阅读时长：8 分钟</time></div></footer></div></header><section class=article-content><h2 id=与-hooks-的区别>与 Hooks 的区别</h2><ol><li>更符合 JS 习惯；</li><li>对调用顺序不敏感；</li><li>在每次渲染的过程中不会重复调用，对垃圾回收机制的压力更小；</li><li>避免了内联处理程序导致子组件重复渲染的问题（在 React 中需要使用 useCallback）；</li><li>不需要像 useEffect 和 useMemo 那样需要正确的设置依赖，Vue 会自动的追踪。</li></ol><h2 id=值传递与引用传递>值传递与引用传递</h2><img style="display:block;margin:0 auto;width:70%" src=reference.gif><p>新的 API 非常依赖引用传递，这样 Vue 才能及时捕获数据变化；这也是为什么 toRef 会将普通类型数据包装成对象的原因；reactive 包装的对象在解构时为了保持响应性需要用 toRefs 包装也是这个原因。</p><h2 id=setup>setup</h2><p>作为 Composition API 在 Vue 组件中的入口；它会在组件实例被创建，props 完成初始化之后调用；和模板一起使用时，返回的对象会自动合并到渲染上下文中。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-html data-lang=html><span class=line><span class=cl><span class=p>&lt;</span><span class=nt>template</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  <span class=p>&lt;</span><span class=nt>div</span><span class=p>&gt;</span>{{ count }} {{ object.foo }}<span class=p>&lt;/</span><span class=nt>div</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;/</span><span class=nt>template</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;</span><span class=nt>script</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  <span class=kr>import</span> <span class=p>{</span> <span class=nx>ref</span><span class=p>,</span> <span class=nx>reactive</span> <span class=p>}</span> <span class=nx>from</span> <span class=s1>&#39;vue&#39;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=kr>export</span> <span class=k>default</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>setup</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=c1>// ref 在 setup 中返回并在模板中使用时会自动解构，不需要通过 count.value 访问
+</span></span></span><span class=line><span class=cl><span class=c1></span>      <span class=kr>const</span> <span class=nx>count</span> <span class=o>=</span> <span class=nx>ref</span><span class=p>(</span><span class=mi>0</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>      <span class=kr>const</span> <span class=nx>object</span> <span class=o>=</span> <span class=nx>reactive</span><span class=p>({</span> <span class=nx>foo</span><span class=o>:</span> <span class=s1>&#39;bar&#39;</span> <span class=p>});</span>
+</span></span><span class=line><span class=cl>      <span class=k>return</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=nx>count</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=nx>object</span>
+</span></span><span class=line><span class=cl>      <span class=p>};</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=p>};</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;/</span><span class=nt>script</span><span class=p>&gt;</span>
+</span></span></code></pre></td></tr></table></div></div><p>setup 也可以返回一个渲染函数，渲染函数可以直接使用所在作用域中的响应式状态。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=kr>import</span> <span class=p>{</span> <span class=nx>h</span><span class=p>,</span> <span class=nx>ref</span><span class=p>,</span> <span class=nx>reactive</span> <span class=p>}</span> <span class=nx>from</span> <span class=s1>&#39;vue&#39;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>export</span> <span class=k>default</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>setup</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=kr>const</span> <span class=nx>count</span> <span class=o>=</span> <span class=nx>ref</span><span class=p>(</span><span class=mi>0</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=kr>const</span> <span class=nx>object</span> <span class=o>=</span> <span class=nx>reactive</span><span class=p>({</span> <span class=nx>foo</span><span class=o>:</span> <span class=s1>&#39;bar&#39;</span> <span class=p>});</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=p>()</span> <span class=p>=&gt;</span> <span class=nx>h</span><span class=p>(</span><span class=s1>&#39;div&#39;</span><span class=p>,</span> <span class=p>[</span><span class=nx>count</span><span class=p>.</span><span class=nx>value</span><span class=p>,</span> <span class=nx>object</span><span class=p>.</span><span class=nx>foo</span><span class=p>]);</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>};</span>
+</span></span></code></pre></td></tr></table></div></div><p>setup 的第一个参数接收 props。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=kr>export</span> <span class=k>default</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>props</span><span class=o>:</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>name</span><span class=o>:</span> <span class=nb>String</span>
+</span></span><span class=line><span class=cl>  <span class=p>},</span>
+</span></span><span class=line><span class=cl>  <span class=nx>setup</span><span class=p>(</span><span class=nx>props</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// props 对象是响应式的并且是不可变（immutable）对象，不要尝试去修改它
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=nx>props</span><span class=p>.</span><span class=nx>name</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=nx>watchEffect</span><span class=p>(()</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=sb>`name is: `</span> <span class=o>+</span> <span class=nx>props</span><span class=p>.</span><span class=nx>name</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=p>});</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>};</span>
+</span></span></code></pre></td></tr></table></div></div><p>不要对 props 进行解构，这样就不再是响应式对象了。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=kr>export</span> <span class=k>default</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>props</span><span class=o>:</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>name</span><span class=o>:</span> <span class=nb>String</span>
+</span></span><span class=line><span class=cl>  <span class=p>},</span>
+</span></span><span class=line><span class=cl>  <span class=nx>setup</span><span class=p>({</span> <span class=nx>name</span> <span class=p>})</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>watchEffect</span><span class=p>(()</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=c1>// props 变化时，不会重新执行
+</span></span></span><span class=line><span class=cl><span class=c1></span>      <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=sb>`name is: `</span> <span class=o>+</span> <span class=nx>name</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=p>});</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>};</span>
+</span></span></code></pre></td></tr></table></div></div><p>第二个参数是 context 对象，context 中包含着一些属性；context 可以被解构。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=kr>const</span> <span class=nx>OneComponent</span> <span class=o>=</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>setup</span><span class=p>(</span><span class=nx>props</span><span class=p>,</span> <span class=nx>context</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>context</span><span class=p>.</span><span class=nx>attrs</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=nx>context</span><span class=p>.</span><span class=nx>slots</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=nx>context</span><span class=p>.</span><span class=nx>emit</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>};</span>
+</span></span><span class=line><span class=cl><span class=kr>const</span> <span class=nx>TwoComponent</span> <span class=o>=</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>setup</span><span class=p>(</span><span class=nx>props</span><span class=p>,</span> <span class=p>{</span> <span class=nx>attrs</span> <span class=p>})</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=cm>/**
+</span></span></span><span class=line><span class=cl><span class=cm>     * 之所以没有把 props 作为 context 的一个属性的原因：
+</span></span></span><span class=line><span class=cl><span class=cm>     * 1. props 更常用
+</span></span></span><span class=line><span class=cl><span class=cm>     * 2. 可以更好的用 TS 对其类型做限制
+</span></span></span><span class=line><span class=cl><span class=cm>     */</span>
+</span></span><span class=line><span class=cl>    <span class=kd>function</span> <span class=nx>onClick</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=nx>attrs</span><span class=p>.</span><span class=nx>foo</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>      <span class=c1>// setup 中无法访问 this
+</span></span></span><span class=line><span class=cl><span class=c1></span>      <span class=k>this</span> <span class=o>&amp;&amp;</span> <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=k>this</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>};</span>
+</span></span></code></pre></td></tr></table></div></div><p>setup 的类型：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-ts data-lang=ts><span class=line><span class=cl><span class=kr>interface</span> <span class=nx>Data</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=p>[</span><span class=nx>propsName</span>: <span class=kt>string</span><span class=p>]</span><span class=o>:</span> <span class=kt>unknown</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=kr>interface</span> <span class=nx>SetupContext</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>attrs</span>: <span class=kt>Data</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=nx>slots</span>: <span class=kt>Slots</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=nx>emit</span><span class=o>:</span> <span class=p>(</span><span class=nx>event</span>: <span class=kt>string</span><span class=p>,</span> <span class=p>...</span><span class=nx>args</span>: <span class=kt>unknown</span><span class=p>[])</span> <span class=o>=&gt;</span> <span class=k>void</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=kd>function</span> <span class=nx>setup</span><span class=p>(</span><span class=nx>props</span>: <span class=kt>Data</span><span class=p>,</span> <span class=nx>context</span>: <span class=kt>SetupContext</span><span class=p>)</span><span class=o>:</span> <span class=nx>Data</span><span class=p>;</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=reactive>reactive</h2><p>reactive 接受一个对象并返回一个响应式代理，相当于 2.x 版本的 Vue.observable({})。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-ts data-lang=ts><span class=line><span class=cl><span class=c1>// 响应式转换是深层的，会影响所有嵌套的属性
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kd>function</span> <span class=nx>reactive</span><span class=p>&lt;</span><span class=nt>T</span> <span class=na>extends</span> <span class=na>object</span><span class=p>&gt;(</span><span class=nx>raw</span>: <span class=kt>T</span><span class=p>)</span><span class=o>:</span> <span class=nx>T</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>const</span> <span class=nx>obj</span> <span class=o>=</span> <span class=nx>reactive</span><span class=p>({</span> <span class=nx>count</span>: <span class=kt>0</span> <span class=p>});</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=ref>ref</h2><p>ref 的返回值是一个响应式的可变对象，对象只有一个属性 value；如果传入一个对象，这个对象会被 reactive 方法进行响应式转换。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=kr>const</span> <span class=nx>count</span> <span class=o>=</span> <span class=nx>ref</span><span class=p>(</span><span class=mi>0</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=kr>const</span> <span class=nx>otherCount</span> <span class=o>=</span> <span class=nx>ref</span><span class=p>(</span><span class=mi>2</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=c1>// 如果 ref 作为响应式对象的一个属性，也会自动展开内部的 value，就像普通属性一样
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kr>const</span> <span class=nx>state</span> <span class=o>=</span> <span class=nx>reactive</span><span class=p>({</span> <span class=nx>count</span> <span class=p>});</span>
+</span></span><span class=line><span class=cl><span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=nx>state</span><span class=p>.</span><span class=nx>count</span><span class=p>);</span> <span class=c1>// 0
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=nx>state</span><span class=p>.</span><span class=nx>count</span> <span class=o>=</span> <span class=mi>1</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=nx>count</span><span class=p>.</span><span class=nx>value</span><span class=p>);</span> <span class=c1>// 1
+</span></span></span><span class=line><span class=cl><span class=c1>// count 被替换了，两个 ref 之间并没有建立任何联系
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=nx>state</span><span class=p>.</span><span class=nx>count</span> <span class=o>=</span> <span class=nx>otherCount</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=nx>state</span><span class=p>.</span><span class=nx>count</span><span class=p>);</span> <span class=c1>// 2
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=nx>count</span><span class=p>.</span><span class=nx>value</span><span class=p>);</span> <span class=c1>// 1
+</span></span></span></code></pre></td></tr></table></div></div><p>ref 在 setup 中返回并在模板中使用时会自动解构，不需要通过 count.value 访问；如果从响应式数组或其他响应式的数据类型中获取 ref 的值时，还是需要访问 value 属性。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=kr>const</span> <span class=nx>arr</span> <span class=o>=</span> <span class=nx>reactive</span><span class=p>([</span><span class=nx>ref</span><span class=p>(</span><span class=mi>0</span><span class=p>)]);</span>
+</span></span><span class=line><span class=cl><span class=kr>const</span> <span class=nx>map</span> <span class=o>=</span> <span class=nx>reactive</span><span class=p>(</span><span class=k>new</span> <span class=nx>Map</span><span class=p>([[</span><span class=s1>&#39;foo&#39;</span><span class=p>,</span> <span class=nx>ref</span><span class=p>(</span><span class=mi>0</span><span class=p>)]]));</span>
+</span></span><span class=line><span class=cl><span class=c1>// 需要访问 value 属性
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=nx>arr</span><span class=p>[</span><span class=mi>0</span><span class=p>].</span><span class=nx>value</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=nx>map</span><span class=p>.</span><span class=nx>get</span><span class=p>(</span><span class=s1>&#39;foo&#39;</span><span class=p>).</span><span class=nx>value</span><span class=p>);</span>
+</span></span></code></pre></td></tr></table></div></div><p>ref 类型：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-ts data-lang=ts><span class=line><span class=cl><span class=kr>interface</span> <span class=nx>Ref</span><span class=p>&lt;</span><span class=nt>T</span><span class=p>&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>value</span>: <span class=kt>T</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=kd>function</span> <span class=nx>ref</span><span class=p>&lt;</span><span class=nt>T</span><span class=p>&gt;(</span><span class=nx>value</span>: <span class=kt>T</span><span class=p>)</span><span class=o>:</span> <span class=nx>Ref</span><span class=p>&lt;</span><span class=nt>T</span><span class=p>&gt;;</span>
+</span></span><span class=line><span class=cl><span class=kr>const</span> <span class=nx>foo</span> <span class=o>=</span> <span class=nx>ref</span><span class=p>&lt;</span><span class=nt>string</span> <span class=err>|</span> <span class=na>number</span><span class=p>&gt;(</span><span class=s1>&#39;foo&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=nx>foo</span><span class=p>.</span><span class=nx>value</span> <span class=o>=</span> <span class=mi>123</span><span class=p>;</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=computed>computed</h2><p>传入一个 getter 函数并返回一个不可变的响应式的 ref 对象。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=kr>const</span> <span class=nx>count</span> <span class=o>=</span> <span class=nx>ref</span><span class=p>(</span><span class=mi>1</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=kr>const</span> <span class=nx>plusOne</span> <span class=o>=</span> <span class=nx>computed</span><span class=p>(()</span> <span class=p>=&gt;</span> <span class=nx>count</span><span class=p>.</span><span class=nx>value</span> <span class=o>+</span> <span class=mi>1</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=nx>plusOne</span><span class=p>.</span><span class=nx>value</span><span class=p>);</span> <span class=c1>// 2
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=nx>plusOne</span><span class=p>.</span><span class=nx>value</span><span class=o>++</span><span class=p>;</span> <span class=c1>// 报错
+</span></span></span></code></pre></td></tr></table></div></div><p>如果传入一个有 getter 和 setter 函数的对象，则返回一个可写的 ref 对象。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=kr>const</span> <span class=nx>count</span> <span class=o>=</span> <span class=nx>ref</span><span class=p>(</span><span class=mi>1</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=kr>const</span> <span class=nx>plusOne</span> <span class=o>=</span> <span class=nx>computed</span><span class=p>({</span>
+</span></span><span class=line><span class=cl>  <span class=nx>get</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=nx>count</span><span class=p>.</span><span class=nx>value</span> <span class=o>+</span> <span class=mi>1</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>},</span>
+</span></span><span class=line><span class=cl>  <span class=nx>set</span><span class=p>(</span><span class=nx>val</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>count</span><span class=p>.</span><span class=nx>value</span> <span class=o>=</span> <span class=nx>val</span> <span class=o>-</span> <span class=mi>1</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>});</span>
+</span></span><span class=line><span class=cl><span class=nx>plusOne</span><span class=p>.</span><span class=nx>value</span> <span class=o>=</span> <span class=mi>1</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=nx>count</span><span class=p>.</span><span class=nx>value</span><span class=p>);</span> <span class=c1>// 0
+</span></span></span></code></pre></td></tr></table></div></div><p>computed 的类型：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-ts data-lang=ts><span class=line><span class=cl><span class=kd>function</span> <span class=nx>computed</span><span class=p>&lt;</span><span class=nt>T</span><span class=p>&gt;(</span><span class=nx>getter</span><span class=o>:</span> <span class=p>()</span> <span class=o>=&gt;</span> <span class=nx>T</span><span class=p>)</span><span class=o>:</span> <span class=nx>Readonly</span><span class=p>&lt;</span><span class=nt>Ref</span><span class=err>&lt;</span><span class=na>Readonly</span><span class=err>&lt;</span><span class=na>T</span><span class=p>&gt;</span><span class=o>&gt;&gt;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kd>function</span> <span class=nx>computed</span><span class=p>&lt;</span><span class=nt>T</span><span class=p>&gt;(</span><span class=nx>options</span><span class=o>:</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=kr>get</span><span class=o>:</span> <span class=p>()</span> <span class=o>=&gt;</span> <span class=nx>T</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=kr>set</span><span class=o>:</span> <span class=p>(</span><span class=nx>value</span>: <span class=kt>T</span><span class=p>)</span> <span class=o>=&gt;</span> <span class=k>void</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>})</span><span class=o>:</span> <span class=nx>Ref</span><span class=p>&lt;</span><span class=nt>T</span><span class=p>&gt;;</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=readonly>readonly</h2><p>返回一个原始对象的只读代理，代理中所有嵌套的属性都将是只读的。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=kr>const</span> <span class=nx>original</span> <span class=o>=</span> <span class=nx>reactive</span><span class=p>({</span> <span class=nx>count</span><span class=o>:</span> <span class=mi>0</span> <span class=p>});</span>
+</span></span><span class=line><span class=cl><span class=kr>const</span> <span class=nx>copy</span> <span class=o>=</span> <span class=nx>readonly</span><span class=p>(</span><span class=nx>original</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=nx>watchEffect</span><span class=p>(()</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=nx>copy</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>});</span>
+</span></span><span class=line><span class=cl><span class=c1>// 改变原始对象会触发 watcher 的执行，因为 watcher 依赖了原始对象的只读代理
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=nx>original</span><span class=p>.</span><span class=nx>count</span><span class=o>++</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=c1>// 改变只读对象会报警告并失败
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=nx>copy</span><span class=p>.</span><span class=nx>count</span><span class=o>++</span><span class=p>;</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=watcheffect>watchEffect</h2><p>在追踪响应式依赖时会立即执行，当依赖发生变化时会重新运行；就像 React.useEffect 的自动设置依赖的版本。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=kr>const</span> <span class=nx>count</span> <span class=o>=</span> <span class=nx>ref</span><span class=p>(</span><span class=mi>0</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=nx>watchEffect</span><span class=p>(()</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=nx>count</span><span class=p>.</span><span class=nx>value</span><span class=p>);</span> <span class=c1>// 0, 1, 2, ...
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=p>});</span>
+</span></span><span class=line><span class=cl><span class=nx>setTimeout</span><span class=p>(()</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>count</span><span class=p>.</span><span class=nx>value</span><span class=o>++</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>},</span> <span class=mi>1000</span><span class=p>);</span>
+</span></span></code></pre></td></tr></table></div></div><p>当 watchEffect 在 setup 或生命周期函数中调用时，watcher 会被关联到组件的生命周期上，当组件被卸载时会自动停止执行。当然它会返回一个函数，调用这个函数也可以停止 watcher。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=kr>const</span> <span class=nx>stopWatcher</span> <span class=o>=</span> <span class=nx>watchEffect</span><span class=p>(()</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=s1>&#39;...&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>});</span>
+</span></span><span class=line><span class=cl><span class=nx>stopWatcher</span><span class=p>();</span>
+</span></span></code></pre></td></tr></table></div></div><p>有时 watchEffect 中会进行一些异步的副作用操作，当副作用失效时需要进行一些清理工作（比如，在副作用执行完毕之前，依赖发生了变化）；副作用函数可以接受一个 onInvalidate 函数，这个函数会在这些情况下被调用：</p><ul><li>副作用将被重新执行的时候；</li><li>watcher 被停止的时候。</li></ul><p>鹅，好像 React.useEffect 的返回函数。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=nx>watchEffect</span><span class=p>(</span><span class=nx>onInvalidate</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>token</span> <span class=o>=</span> <span class=nx>performAsyncOperation</span><span class=p>(</span><span class=nx>id</span><span class=p>.</span><span class=nx>value</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=nx>onInvalidate</span><span class=p>(()</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 终止之前正在进行的异步操作
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=nx>token</span><span class=p>.</span><span class=nx>cancel</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>  <span class=p>});</span>
+</span></span><span class=line><span class=cl><span class=p>});</span>
+</span></span></code></pre></td></tr></table></div></div><p>Vue 的响应式系统会缓冲失效的副作用并且异步地释放掉他们来避免在一个事件循环中进行太多非必要的重复调用；在 Vue 内部，组件更新函数也是一个被观察的操作，当一个用户操作被加入到队列中时，在组件更新之后，它总是会被调用。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-html data-lang=html><span class=line><span class=cl><span class=p>&lt;</span><span class=nt>template</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  <span class=p>&lt;</span><span class=nt>div</span><span class=p>&gt;</span>{{ count }}<span class=p>&lt;/</span><span class=nt>div</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;/</span><span class=nt>template</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;</span><span class=nt>script</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  <span class=kr>export</span> <span class=k>default</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>setup</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=kr>const</span> <span class=nx>count</span> <span class=o>=</span> <span class=nx>ref</span><span class=p>(</span><span class=mi>0</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>      <span class=nx>watchEffect</span><span class=p>(()</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=cm>/**
+</span></span></span><span class=line><span class=cl><span class=cm>         * 将在初始化时同步运行，初始化运行会在组件挂载之前
+</span></span></span><span class=line><span class=cl><span class=cm>         * 当 count 改变时，回调函数会在组件更新之后调用
+</span></span></span><span class=line><span class=cl><span class=cm>         */</span>
+</span></span><span class=line><span class=cl>        <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=nx>count</span><span class=p>.</span><span class=nx>value</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>      <span class=p>});</span>
+</span></span><span class=line><span class=cl>      <span class=k>return</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=nx>count</span>
+</span></span><span class=line><span class=cl>      <span class=p>};</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=p>};</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;/</span><span class=nt>script</span><span class=p>&gt;</span>
+</span></span></code></pre></td></tr></table></div></div><p>watchEffect 的初始化运行发生在组件挂载之前，如果想要在 watchEffect 中访问 DOM/refs，需要把 watchEffect 放在 onMounted 中。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=nx>onMounted</span><span class=p>(()</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>watchEffect</span><span class=p>(()</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 这里可以访问 DOM
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=p>});</span>
+</span></span><span class=line><span class=cl><span class=p>});</span>
+</span></span></code></pre></td></tr></table></div></div><p>watchEffect 可以接受第二个参数来控制副作用的执行时机。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=c1>// 同步调用
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=nx>watchEffect</span><span class=p>(()</span> <span class=p>=&gt;</span> <span class=p>{},</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>flush</span><span class=o>:</span> <span class=s1>&#39;sync&#39;</span> <span class=c1>// 默认值是 post
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=p>});</span>
+</span></span><span class=line><span class=cl><span class=c1>// 在组件更新之前
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=nx>watchEffect</span><span class=p>(()</span> <span class=p>=&gt;</span> <span class=p>{},</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>flush</span><span class=o>:</span> <span class=s1>&#39;pre&#39;</span>
+</span></span><span class=line><span class=cl><span class=p>});</span>
+</span></span><span class=line><span class=cl><span class=c1>// 调试
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=nx>watchEffect</span><span class=p>(()</span> <span class=p>=&gt;</span> <span class=p>{},</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=c1>// 这两个函数只在开发环境会被执行
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=nx>onTrack</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 当响应式属性或者 ref 作为一个依赖被追踪到时调用
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=p>},</span>
+</span></span><span class=line><span class=cl>  <span class=nx>onTrigger</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 当依赖更新 watcher 回调被调用后调用
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=kr>debugger</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>});</span>
+</span></span></code></pre></td></tr></table></div></div><p>watchEffect 的类型：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-ts data-lang=ts><span class=line><span class=cl><span class=kr>type</span> <span class=nx>StopHandle</span> <span class=o>=</span> <span class=p>()</span> <span class=o>=&gt;</span> <span class=k>void</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>type</span> <span class=nx>InvalidateCbRegistrator</span> <span class=o>=</span> <span class=p>(</span><span class=nx>invalidate</span><span class=o>:</span> <span class=p>()</span> <span class=o>=&gt;</span> <span class=k>void</span><span class=p>)</span> <span class=o>=&gt;</span> <span class=k>void</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>interface</span> <span class=nx>DebuggerEvent</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>effect</span>: <span class=kt>ReactiveEffect</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=nx>target</span>: <span class=kt>any</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=kr>type</span><span class=o>:</span> <span class=nx>OperationTypes</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=nx>key</span>: <span class=kt>string</span> <span class=o>|</span> <span class=kt>symbol</span> <span class=o>|</span> <span class=kc>undefined</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=kr>interface</span> <span class=nx>WatchEffectOptions</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>flush</span><span class=o>?:</span> <span class=s1>&#39;pre&#39;</span> <span class=o>|</span> <span class=s1>&#39;post&#39;</span> <span class=o>|</span> <span class=s1>&#39;sync&#39;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=nx>onTrack</span><span class=o>?:</span> <span class=p>(</span><span class=nx>event</span>: <span class=kt>DebuggerEvent</span><span class=p>)</span> <span class=o>=&gt;</span> <span class=k>void</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=nx>onTrigger</span><span class=o>?:</span> <span class=p>(</span><span class=nx>event</span>: <span class=kt>DebuggerEvent</span><span class=p>)</span> <span class=o>=&gt;</span> <span class=k>void</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=kd>function</span> <span class=nx>watchEffect</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>  <span class=nx>effect</span><span class=o>:</span> <span class=p>(</span><span class=nx>onInvalidate</span>: <span class=kt>InvalidateCbRegistrator</span><span class=p>)</span> <span class=o>=&gt;</span> <span class=k>void</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nx>options?</span>: <span class=kt>WatchEffectOptions</span>
+</span></span><span class=line><span class=cl><span class=p>)</span><span class=o>:</span> <span class=nx>StopHandle</span><span class=p>;</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=watch>watch</h2><p>和 2.x 的 this.$watch 一模一样，用来观察数据并（惰性的）执行对应的副作用：</p><ol><li>可以同时获取状态改变前后的值；</li><li>watch 是惰性的（对比计算值前后有没有改变）；</li><li>更加有针对性，也就是说可以明确指定要追踪的依赖。</li></ol><p>watch 可以监视 getter、一个或多个 ref：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=kr>const</span> <span class=nx>state</span> <span class=o>=</span> <span class=nx>reactive</span><span class=p>({</span>
+</span></span><span class=line><span class=cl>  <span class=nx>count</span><span class=o>:</span> <span class=mi>0</span>
+</span></span><span class=line><span class=cl><span class=p>});</span>
+</span></span><span class=line><span class=cl><span class=kr>const</span> <span class=nx>count</span> <span class=o>=</span> <span class=nx>ref</span><span class=p>(</span><span class=mi>0</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=nx>watch</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>  <span class=p>()</span> <span class=p>=&gt;</span> <span class=nx>state</span><span class=p>.</span><span class=nx>count</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=p>(</span><span class=nx>count</span><span class=p>,</span> <span class=nx>prevCount</span><span class=p>)</span> <span class=p>=&gt;</span> <span class=p>{}</span>
+</span></span><span class=line><span class=cl><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=nx>watch</span><span class=p>(</span><span class=nx>count</span><span class=p>,</span> <span class=p>(</span><span class=nx>count</span><span class=p>,</span> <span class=nx>prevCount</span><span class=p>)</span> <span class=p>=&gt;</span> <span class=p>{});</span>
+</span></span><span class=line><span class=cl><span class=nx>watch</span><span class=p>([</span><span class=nx>fooRef</span><span class=p>,</span> <span class=nx>barRef</span><span class=p>],</span> <span class=p>([</span><span class=nx>foo</span><span class=p>,</span> <span class=nx>bar</span><span class=p>],</span> <span class=p>[</span><span class=nx>prevFoo</span><span class=p>,</span> <span class=nx>prevBar</span><span class=p>])</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=cm>/* ... */</span>
+</span></span><span class=line><span class=cl><span class=p>});</span>
+</span></span></code></pre></td></tr></table></div></div><p>取消观察、取消副作用、时机控制和调试方面，watch 的行为和 watchEffect 行为一致。</p><p>watch 的类型：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-ts data-lang=ts><span class=line><span class=cl><span class=kr>type</span> <span class=nx>WatcherSource</span><span class=p>&lt;</span><span class=nt>T</span><span class=p>&gt;</span> <span class=o>=</span> <span class=nx>Ref</span><span class=p>&lt;</span><span class=nt>T</span><span class=p>&gt;</span> <span class=o>|</span> <span class=p>(()</span> <span class=o>=&gt;</span> <span class=nx>T</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=kr>type</span> <span class=nx>MapSources</span><span class=p>&lt;</span><span class=nt>T</span><span class=p>&gt;</span> <span class=o>=</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=p>[</span><span class=nx>K</span> <span class=k>in</span> <span class=k>keyof</span> <span class=nx>T</span><span class=p>]</span><span class=o>:</span> <span class=nx>T</span><span class=p>[</span><span class=nx>K</span><span class=p>]</span> <span class=kr>extends</span> <span class=nx>WatcherSource</span><span class=p>&lt;</span><span class=nt>infer</span> <span class=na>V</span><span class=p>&gt;</span> <span class=o>?</span> <span class=nx>V</span> : <span class=kt>never</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>};</span>
+</span></span><span class=line><span class=cl><span class=kr>interface</span> <span class=nx>WatchEffectOptions</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>flush</span><span class=o>?:</span> <span class=s1>&#39;pre&#39;</span> <span class=o>|</span> <span class=s1>&#39;post&#39;</span> <span class=o>|</span> <span class=s1>&#39;sync&#39;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=nx>onTrack</span><span class=o>?:</span> <span class=p>(</span><span class=nx>event</span>: <span class=kt>DebuggerEvent</span><span class=p>)</span> <span class=o>=&gt;</span> <span class=k>void</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=nx>onTrigger</span><span class=o>?:</span> <span class=p>(</span><span class=nx>event</span>: <span class=kt>DebuggerEvent</span><span class=p>)</span> <span class=o>=&gt;</span> <span class=k>void</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=kr>interface</span> <span class=nx>WatchOptions</span> <span class=kr>extends</span> <span class=nx>WatchEffectOptions</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>immediate?</span>: <span class=kt>boolean</span><span class=p>;</span> <span class=c1>// 默认是 false
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=nx>deep?</span>: <span class=kt>boolean</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=kd>function</span> <span class=nx>watch</span><span class=p>&lt;</span><span class=nt>T</span><span class=p>&gt;(</span>
+</span></span><span class=line><span class=cl>  <span class=nx>source</span>: <span class=kt>WatchSource</span><span class=p>&lt;</span><span class=nt>T</span><span class=p>&gt;,</span>
+</span></span><span class=line><span class=cl>  <span class=nx>callback</span><span class=o>:</span> <span class=p>(</span>
+</span></span><span class=line><span class=cl>    <span class=nx>value</span>: <span class=kt>T</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nx>oldValue</span>: <span class=kt>T</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nx>onInvalidate</span>: <span class=kt>InvalidateCbRegistrator</span>
+</span></span><span class=line><span class=cl>  <span class=p>)</span> <span class=o>=&gt;</span> <span class=k>void</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nx>options?</span>: <span class=kt>WatchOptions</span>
+</span></span><span class=line><span class=cl><span class=p>)</span><span class=o>:</span> <span class=nx>StopHandle</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kd>function</span> <span class=nx>watch</span><span class=p>&lt;</span><span class=nt>T</span> <span class=na>extends</span> <span class=na>WatcherSource</span><span class=err>&lt;</span><span class=na>unknown</span><span class=p>&gt;[]</span><span class=o>&gt;</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>  <span class=nx>source</span>: <span class=kt>T</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nx>callback</span><span class=o>:</span> <span class=p>(</span>
+</span></span><span class=line><span class=cl>    <span class=nx>values</span>: <span class=kt>MapSources</span><span class=p>&lt;</span><span class=nt>T</span><span class=p>&gt;,</span>
+</span></span><span class=line><span class=cl>    <span class=nx>oldValues</span>: <span class=kt>MapSources</span><span class=p>&lt;</span><span class=nt>T</span><span class=p>&gt;,</span>
+</span></span><span class=line><span class=cl>    <span class=nx>onInvalidate</span>: <span class=kt>InvalidateCbRegistrator</span>
+</span></span><span class=line><span class=cl>  <span class=p>)</span> <span class=o>=&gt;</span> <span class=k>void</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nx>options?</span>: <span class=kt>WatchOptions</span>
+</span></span><span class=line><span class=cl><span class=p>)</span><span class=o>:</span> <span class=nx>StopHandle</span><span class=p>;</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=生命周期>生命周期</h2><p>生命周期函数只能用在 setup 里，因为它们依赖内部的全局状态来定位当前活跃的组件实例，否则会报错。</p><p>对比 2.x 的生命周期函数：</p><ul><li><del>beforeCreate</del> -> setup</li><li><del>created</del> -> setup</li><li><del>beforeMount</del> -> onBeforeMount</li><li><del>mounted</del> -> onMounted</li><li><del>beforeUpdate</del> -> onBeforeUpdate</li><li><del>updated</del> -> onUpdated</li><li><del>beforeDestroy</del> -> onBeforeUnmount</li><li><del>destroyed</del> -> onUnmounted</li><li><del>errorCaptured</del> -> onErrorCaptured</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=kr>import</span> <span class=p>{</span> <span class=nx>onMounted</span><span class=p>,</span> <span class=nx>onUpdated</span><span class=p>,</span> <span class=nx>onUnmounted</span> <span class=p>}</span> <span class=nx>from</span> <span class=s1>&#39;vue&#39;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>const</span> <span class=nx>MyComponent</span> <span class=o>=</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>setup</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>onMounted</span><span class=p>(()</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=s1>&#39;mounted!&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=p>});</span>
+</span></span><span class=line><span class=cl>    <span class=nx>onUpdated</span><span class=p>(()</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=s1>&#39;updated!&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=p>});</span>
+</span></span><span class=line><span class=cl>    <span class=nx>onUnmounted</span><span class=p>(()</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=s1>&#39;unmounted!&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=p>});</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>};</span>
+</span></span></code></pre></td></tr></table></div></div><p>3.0 还新赠送了两个钩子它们都接收 DebuggerEvent 作为参数，用来检查是哪些依赖导致组件重新渲染的：</p><ul><li>onRenderTracked</li><li>onRenderTriggered</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=kr>export</span> <span class=k>default</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>onRenderTriggered</span><span class=p>(</span><span class=nx>e</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=kr>debugger</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>};</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=依赖注入>依赖注入</h2><p>行为和 2.x 的 provide/inject 一样；两者需要在 setup 中使用。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=kr>import</span> <span class=p>{</span> <span class=nx>provide</span><span class=p>,</span> <span class=nx>inject</span> <span class=p>}</span> <span class=nx>from</span> <span class=s1>&#39;vue&#39;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>const</span> <span class=nx>ThemeSymbol</span> <span class=o>=</span> <span class=nx>Symbol</span><span class=p>();</span>
+</span></span><span class=line><span class=cl><span class=kr>const</span> <span class=nx>Ancestor</span> <span class=o>=</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>setup</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>provide</span><span class=p>(</span><span class=nx>ThemeSymbol</span><span class=p>,</span> <span class=s1>&#39;dark&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>};</span>
+</span></span><span class=line><span class=cl><span class=kr>const</span> <span class=nx>Descendent</span> <span class=o>=</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>setup</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// inject 的第二个参数是一个缺省值
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=kr>const</span> <span class=nx>theme</span> <span class=o>=</span> <span class=nx>inject</span><span class=p>(</span><span class=nx>ThemeSymbol</span><span class=p>,</span> <span class=s1>&#39;light&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=p>{</span> <span class=nx>theme</span> <span class=p>};</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>};</span>
+</span></span></code></pre></td></tr></table></div></div><p>可以注入一个 ref 来保持响应性，也可以传入一个响应式对象。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=c1>// provider
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kr>const</span> <span class=nx>themeRef</span> <span class=o>=</span> <span class=nx>ref</span><span class=p>(</span><span class=s1>&#39;dark&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=nx>provide</span><span class=p>(</span><span class=nx>ThemeSymbol</span><span class=p>,</span> <span class=nx>themeRef</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=c1>// comsumer
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kr>const</span> <span class=nx>theme</span> <span class=o>=</span> <span class=nx>inject</span><span class=p>(</span><span class=nx>ThemeSymbol</span><span class=p>,</span> <span class=nx>ref</span><span class=p>(</span><span class=s1>&#39;light&#39;</span><span class=p>));</span>
+</span></span><span class=line><span class=cl><span class=nx>watchEffect</span><span class=p>(()</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=sb>`theme set to: </span><span class=si>${</span><span class=nx>theme</span><span class=p>.</span><span class=nx>value</span><span class=si>}</span><span class=sb>`</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>});</span>
+</span></span></code></pre></td></tr></table></div></div><p>provide/inject 的类型：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-ts data-lang=ts><span class=line><span class=cl><span class=kr>interface</span> <span class=nx>InjectionKey</span><span class=p>&lt;</span><span class=nt>T</span><span class=p>&gt;</span> <span class=kr>extends</span> <span class=nx>Symbol</span> <span class=p>{}</span>
+</span></span><span class=line><span class=cl><span class=kd>function</span> <span class=nx>provide</span><span class=p>&lt;</span><span class=nt>T</span><span class=p>&gt;(</span><span class=nx>key</span>: <span class=kt>InjectionKey</span><span class=p>&lt;</span><span class=nt>T</span><span class=p>&gt;</span> <span class=o>|</span> <span class=kt>string</span><span class=p>,</span> <span class=nx>value</span>: <span class=kt>T</span><span class=p>)</span><span class=o>:</span> <span class=k>void</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kd>function</span> <span class=nx>inject</span><span class=p>&lt;</span><span class=nt>T</span><span class=p>&gt;(</span><span class=nx>key</span>: <span class=kt>InjectionKey</span><span class=p>&lt;</span><span class=nt>T</span><span class=p>&gt;</span> <span class=o>|</span> <span class=kt>string</span><span class=p>)</span><span class=o>:</span> <span class=nx>T</span> <span class=o>|</span> <span class=kc>undefined</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kd>function</span> <span class=nx>inject</span><span class=p>&lt;</span><span class=nt>T</span><span class=p>&gt;(</span><span class=nx>key</span>: <span class=kt>InjectionKey</span><span class=p>&lt;</span><span class=nt>T</span><span class=p>&gt;</span> <span class=o>|</span> <span class=kt>string</span><span class=p>,</span> <span class=nx>defaultValue</span>: <span class=kt>T</span><span class=p>)</span><span class=o>:</span> <span class=nx>T</span><span class=p>;</span>
+</span></span></code></pre></td></tr></table></div></div><p>Vue 提供一个继承于 Symbol 的 InjectionKey 接口：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-ts data-lang=ts><span class=line><span class=cl><span class=kr>import</span> <span class=p>{</span> <span class=nx>InjectionKey</span><span class=p>,</span> <span class=nx>provide</span><span class=p>,</span> <span class=nx>inject</span> <span class=p>}</span> <span class=kr>from</span> <span class=s1>&#39;vue&#39;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>const</span> <span class=nx>key</span>: <span class=kt>InjectionKey</span><span class=p>&lt;</span><span class=nt>string</span><span class=p>&gt;</span> <span class=o>=</span> <span class=nx>Symbol</span><span class=p>();</span>
+</span></span><span class=line><span class=cl><span class=c1>// provider
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=nx>provide</span><span class=p>(</span><span class=nx>key</span><span class=p>,</span> <span class=s1>&#39;foo&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=c1>// comsumer
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kr>const</span> <span class=nx>foo</span> <span class=o>=</span> <span class=nx>inject</span><span class=p>(</span><span class=nx>key</span><span class=p>,</span> <span class=s1>&#39;bar&#39;</span><span class=p>);</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=refs>refs</h2><p>在新 API 中，响应式 refs 和 模板 refs 的概念是统一的：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-html data-lang=html><span class=line><span class=cl><span class=p>&lt;</span><span class=nt>template</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  <span class=p>&lt;</span><span class=nt>div</span> <span class=na>ref</span><span class=o>=</span><span class=s>&#34;root&#34;</span><span class=p>&gt;&lt;/</span><span class=nt>div</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;/</span><span class=nt>template</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;</span><span class=nt>script</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  <span class=kr>import</span> <span class=p>{</span> <span class=nx>ref</span><span class=p>,</span> <span class=nx>onMounted</span> <span class=p>}</span> <span class=nx>from</span> <span class=s1>&#39;vue&#39;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=kr>export</span> <span class=k>default</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>setup</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=kr>const</span> <span class=nx>root</span> <span class=o>=</span> <span class=nx>ref</span><span class=p>(</span><span class=kc>null</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>      <span class=c1>// 在初始化时，DOM 元素会赋值给 ref
+</span></span></span><span class=line><span class=cl><span class=c1></span>      <span class=nx>onMounted</span><span class=p>(()</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=nx>root</span><span class=p>.</span><span class=nx>value</span><span class=p>);</span> <span class=c1>// &lt;div/&gt;
+</span></span></span><span class=line><span class=cl><span class=c1></span>      <span class=p>});</span>
+</span></span><span class=line><span class=cl>      <span class=k>return</span> <span class=p>{</span> <span class=nx>root</span> <span class=p>};</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=p>};</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;/</span><span class=nt>script</span><span class=p>&gt;</span>
+</span></span></code></pre></td></tr></table></div></div><p>在 VirtualDOM 的 patch 算法中，如果一个 VNode 的 ref 和渲染上下文中的 ref 对应，那么 VNode 对应的元素或组件实例会赋值给这个 ref；这发生在 VDOM 挂载/更新的过程中，所以 templateRefs 只会在渲染时被赋值。</p><p>和 JSX/渲染函数 一起使用：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=kr>export</span> <span class=k>default</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>setup</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=kr>const</span> <span class=nx>root</span> <span class=o>=</span> <span class=nx>ref</span><span class=p>(</span><span class=kc>null</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 渲染函数
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=k>return</span> <span class=p>()</span> <span class=p>=&gt;</span>
+</span></span><span class=line><span class=cl>      <span class=nx>h</span><span class=p>(</span><span class=s1>&#39;div&#39;</span><span class=p>,</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=nx>ref</span><span class=o>:</span> <span class=nx>root</span>
+</span></span><span class=line><span class=cl>      <span class=p>});</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// JSX
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=k>return</span> <span class=p>()</span> <span class=p>=&gt;</span> <span class=o>&lt;</span><span class=nx>div</span> <span class=nx>ref</span><span class=o>=</span><span class=p>{</span><span class=nx>root</span><span class=p>}</span> <span class=o>/&gt;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>};</span>
+</span></span></code></pre></td></tr></table></div></div><p>在 v-for 中使用：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-html data-lang=html><span class=line><span class=cl><span class=p>&lt;</span><span class=nt>template</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  <span class=p>&lt;</span><span class=nt>div</span> <span class=na>v-for</span><span class=o>=</span><span class=s>&#34;(item, i) in list&#34;</span> <span class=na>:ref</span><span class=o>=</span><span class=s>&#34;el =&gt; { divs[i] = el }&#34;</span><span class=p>&gt;</span>{{ item }}<span class=p>&lt;/</span><span class=nt>div</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;/</span><span class=nt>template</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;</span><span class=nt>script</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  <span class=kr>import</span> <span class=p>{</span> <span class=nx>ref</span><span class=p>,</span> <span class=nx>reactive</span><span class=p>,</span> <span class=nx>onBeforeUpdate</span> <span class=p>}</span> <span class=nx>from</span> <span class=s1>&#39;vue&#39;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=kr>export</span> <span class=k>default</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>setup</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=kr>const</span> <span class=nx>list</span> <span class=o>=</span> <span class=nx>reactive</span><span class=p>([</span><span class=mi>1</span><span class=p>,</span> <span class=mi>2</span><span class=p>,</span> <span class=mi>3</span><span class=p>]);</span>
+</span></span><span class=line><span class=cl>      <span class=kr>const</span> <span class=nx>divs</span> <span class=o>=</span> <span class=nx>ref</span><span class=p>([]);</span>
+</span></span><span class=line><span class=cl>      <span class=nx>onBeforeUpdate</span><span class=p>(()</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=nx>divs</span><span class=p>.</span><span class=nx>value</span> <span class=o>=</span> <span class=p>[];</span>
+</span></span><span class=line><span class=cl>      <span class=p>});</span>
+</span></span><span class=line><span class=cl>      <span class=k>return</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=nx>list</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=nx>divs</span>
+</span></span><span class=line><span class=cl>      <span class=p>};</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=p>};</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;/</span><span class=nt>script</span><span class=p>&gt;</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=unref>unref</h2><p>如果传入的是 ref，返回 ref.value；否则返回参数自身；val = isRef(val) ? val.value : val 的语法糖。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=kd>function</span> <span class=nx>useFoo</span><span class=p>(</span><span class=nx>x</span><span class=o>:</span> <span class=nx>number</span> <span class=o>|</span> <span class=nx>Ref</span><span class=o>&lt;</span><span class=nx>number</span><span class=o>&gt;</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>unwrapped</span> <span class=o>=</span> <span class=nx>unref</span><span class=p>(</span><span class=nx>x</span><span class=p>);</span> <span class=c1>// 黑人问号，这是为了保持 Vue API 巨多的传统吗？
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=toref>toRef</h2><p>使用响应式对象中的某个属性来创建 ref，这个 ref 会和那个属性保持响应式的连接。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=kr>const</span> <span class=nx>state</span> <span class=o>=</span> <span class=nx>reactive</span><span class=p>({</span>
+</span></span><span class=line><span class=cl>  <span class=nx>foo</span><span class=o>:</span> <span class=mi>1</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nx>bar</span><span class=o>:</span> <span class=mi>2</span>
+</span></span><span class=line><span class=cl><span class=p>});</span>
+</span></span><span class=line><span class=cl><span class=kr>const</span> <span class=nx>fooRef</span> <span class=o>=</span> <span class=nx>toRef</span><span class=p>(</span><span class=nx>state</span><span class=p>,</span> <span class=s1>&#39;foo&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=c1>// 两个会相互影响
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=nx>fooRef</span><span class=p>.</span><span class=nx>value</span><span class=o>++</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=nx>state</span><span class=p>.</span><span class=nx>foo</span><span class=p>);</span> <span class=c1>// 2
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=nx>state</span><span class=p>.</span><span class=nx>foo</span><span class=o>++</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=nx>fooRef</span><span class=p>.</span><span class=nx>value</span><span class=p>);</span> <span class=c1>// 3
+</span></span></span></code></pre></td></tr></table></div></div><p>toRef 这个时候最有用：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=kr>export</span> <span class=k>default</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>setup</span><span class=p>(</span><span class=nx>props</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>useSomeFeature</span><span class=p>(</span><span class=nx>toRef</span><span class=p>(</span><span class=nx>props</span><span class=p>,</span> <span class=s1>&#39;foo&#39;</span><span class=p>));</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>};</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=torefs>toRefs</h2><p>将响应式对象转化为普通对象，这个对象的每个属性都是一个 ref，指向原来的对象。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=kr>const</span> <span class=nx>state</span> <span class=o>=</span> <span class=nx>reactive</span><span class=p>({</span>
+</span></span><span class=line><span class=cl>  <span class=nx>foo</span><span class=o>:</span> <span class=mi>1</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nx>bar</span><span class=o>:</span> <span class=mi>2</span>
+</span></span><span class=line><span class=cl><span class=p>});</span>
+</span></span><span class=line><span class=cl><span class=cm>/**
+</span></span></span><span class=line><span class=cl><span class=cm> * Type of stateAsRefs:
+</span></span></span><span class=line><span class=cl><span class=cm> * {
+</span></span></span><span class=line><span class=cl><span class=cm> *    foo: Ref&lt;number&gt;,
+</span></span></span><span class=line><span class=cl><span class=cm> *    bar: Ref&lt;number&gt;
+</span></span></span><span class=line><span class=cl><span class=cm> * }
+</span></span></span><span class=line><span class=cl><span class=cm> */</span>
+</span></span><span class=line><span class=cl><span class=kr>const</span> <span class=nx>stateAsRefs</span> <span class=o>=</span> <span class=nx>toRefs</span><span class=p>(</span><span class=nx>state</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=c1>// ref 和原对象中对应的属性连接
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=nx>state</span><span class=p>.</span><span class=nx>foo</span><span class=o>++</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=nx>stateAsRefs</span><span class=p>.</span><span class=nx>foo</span><span class=p>);</span> <span class=c1>// 2
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=nx>stateAsRefs</span><span class=p>.</span><span class=nx>foo</span><span class=p>.</span><span class=nx>value</span><span class=o>++</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=nx>state</span><span class=p>.</span><span class=nx>foo</span><span class=p>);</span> <span class=c1>// 3
+</span></span></span></code></pre></td></tr></table></div></div><p>toRefs 这个时候最有用：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=kd>function</span> <span class=nx>useFeatureX</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>state</span> <span class=o>=</span> <span class=nx>reactive</span><span class=p>({</span>
+</span></span><span class=line><span class=cl>    <span class=nx>foo</span><span class=o>:</span> <span class=mi>1</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nx>bar</span><span class=o>:</span> <span class=mi>2</span>
+</span></span><span class=line><span class=cl>  <span class=p>});</span>
+</span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=nx>toRefs</span><span class=p>(</span><span class=nx>state</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=kr>export</span> <span class=k>default</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>setup</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 可以解构而不会丢失响应性
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=kr>const</span> <span class=p>{</span> <span class=nx>foo</span><span class=p>,</span> <span class=nx>bar</span> <span class=p>}</span> <span class=o>=</span> <span class=nx>useFeatureX</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=nx>foo</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>      <span class=nx>bar</span>
+</span></span><span class=line><span class=cl>    <span class=p>};</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>};</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=其他>其他</h2><ul><li>isProxy，判断对象是否是 reactive/readonly 创建的一个代理；</li><li>isReactive，判断对象是否是 reactive 创建的一个响应式代理；</li><li>isReadonly，判断对象是否是 readonly 创建的一个只读代理；</li><li>isRef，判断值是否为 ref 对象。</li></ul></section><footer class=article-footer><section class=article-copyright><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span></section></footer></article><aside class=related-content--wrapper><h2 class=section-title>相关文章</h2><div class=related-content><div class="flex article-list--tile"><article class=has-image><a href=/p/vuerouter-2.x-%E6%BA%90%E7%A0%81%E5%AD%A6%E4%B9%A0/><div class=article-image><img src=/img/cover/vue.png loading=lazy data-key data-hash=/img/cover/vue.png></div><div class=article-details><h2 class=article-title>VueRouter 2.x 源码学习</h2></div></a></article><article class=has-image><a href=/p/vue-2.x/3.x-%E6%AF%94%E8%BE%83%E5%9F%BA%E4%BA%8E%E6%BA%90%E7%A0%81/><div class=article-image><img src=/img/cover/vue.png loading=lazy data-key data-hash=/img/cover/vue.png></div><div class=article-details><h2 class=article-title>Vue 2.x/3.x 比较（基于源码）</h2></div></a></article><article class=has-image><a href=/p/%E5%9F%BA%E4%BA%8E%E4%BD%9C%E7%94%A8%E5%9F%9F%E6%8F%92%E6%A7%BD%E7%9A%84-renderless-%E7%BB%84%E4%BB%B6/><div class=article-image><img src=/img/cover/vue.png loading=lazy data-key data-hash=/img/cover/vue.png></div><div class=article-details><h2 class=article-title>基于作用域插槽的 Renderless 组件</h2></div></a></article><article class=has-image><a href=/p/vue-3.0-%E6%9D%A5%E4%BA%86/><div class=article-image><img src=/img/cover/vue.png loading=lazy data-key data-hash=/img/cover/vue.png></div><div class=article-details><h2 class=article-title>Vue 3.0 来了</h2></div></a></article><article class=has-image><a href=/p/vue-2.x-%E5%A4%8D%E4%B9%A0%E6%80%BB%E7%BB%93/><div class=article-image><img src=/img/cover/vue.png loading=lazy data-key data-hash=/img/cover/vue.png></div><div class=article-details><h2 class=article-title>Vue 2.x 复习总结</h2></div></a></article></div></div></aside><footer class=site-footer><section class=copyright>&copy;
+2017 -
+2024
+<a href=https://github.com/Vikingama target=_blank>馬腊咯稽</a></section><section class=powerby>Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a>, Deploy by Actions<br>主题 <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.13.0>Stack</a></b> 由 <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a> 设计</section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">目录</h2><div class=widget--toc><nav id=TableOfContents><ol><li><a href=#与-hooks-的区别>与 Hooks 的区别</a></li><li><a href=#值传递与引用传递>值传递与引用传递</a></li><li><a href=#setup>setup</a></li><li><a href=#reactive>reactive</a></li><li><a href=#ref>ref</a></li><li><a href=#computed>computed</a></li><li><a href=#readonly>readonly</a></li><li><a href=#watcheffect>watchEffect</a></li><li><a href=#watch>watch</a></li><li><a href=#生命周期>生命周期</a></li><li><a href=#依赖注入>依赖注入</a></li><li><a href=#refs>refs</a></li><li><a href=#unref>unref</a></li><li><a href=#toref>toRef</a></li><li><a href=#torefs>toRefs</a></li><li><a href=#其他>其他</a></li></ol></nav></div></section></aside></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=/ts/main.js defer></script></body></html>

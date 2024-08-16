@@ -1,0 +1,1794 @@
+<!doctype html><html lang=zh-cn dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content='接触 Ng 已经有半年时间里，想起学习 Vue 组件设计的经历，总结一下 Ng 的版本'><title>Angular 组件设计 · Stay Hungry · Stay Foolish</title>
+<link rel=canonical href=https://vikingama.github.io/p/angular-%E7%BB%84%E4%BB%B6%E8%AE%BE%E8%AE%A1/><link rel=stylesheet href=/scss/style.min.38c15d3a5c1bca30008bb625a46636d24f5deb4bf3217095e667a3abc843eaef.css><meta property='og:title' content='Angular 组件设计'><meta property='og:description' content='接触 Ng 已经有半年时间里，想起学习 Vue 组件设计的经历，总结一下 Ng 的版本'><meta property='og:url' content='https://vikingama.github.io/p/angular-%E7%BB%84%E4%BB%B6%E8%AE%BE%E8%AE%A1/'><meta property='og:site_name' content='馬腊咯稽'><meta property='og:type' content='article'><meta property='article:section' content='Post'><meta property='article:published_time' content='2022-11-03T00:00:00+00:00'><meta property='article:modified_time' content='2022-11-03T00:00:00+00:00'><meta property='og:image' content='https://vikingama.github.io/img/cover/angular.png'><meta name=twitter:title content="Angular 组件设计"><meta name=twitter:description content="接触 Ng 已经有半年时间里，想起学习 Vue 组件设计的经历，总结一下 Ng 的版本"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content='https://vikingama.github.io/img/cover/angular.png'><link rel="shortcut icon" href=/favicon.ico><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><meta name=theme-color content="#ffffff"><meta name=robots content="noarchive"><div class=warning-banner>因为 GitHub 账号二次验证失败，计划迁往
+<a href=https://elementref.github.io/>新地址&rarr;</a></div></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label=切换菜单>
+<span class=hamburger-box><span class=hamburger-inner></span></span></button><header><figure class=site-avatar><a href=/><img src=/img/avatar_huae06eac29c2bc6aa7e83a685ea2f6536_13838_300x0_resize_box_3.png width=300 height=404 class=site-logo loading=lazy alt=Avatar></a></figure><div class=site-meta><h1 class=site-name><a href=/>馬腊咯稽</a></h1><h2 class=site-description>Stay Hungry · Stay Foolish</h2></div></header><ol class=menu id=main-menu><li><a href=/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg>
+<span>首页</span></a></li><li><a href=/archives/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><rect x="3" y="4" width="18" height="4" rx="2"/><path d="M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+<span>归档</span></a></li><li><a href=/search/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="10" cy="10" r="7"/><line x1="21" y1="21" x2="15" y2="15"/></svg>
+<span>搜索</span></a></li><li><a href=https://github.com/ElementRef/AboutConfig target=_blank><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-infinity" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M9.828 9.172a4 4 0 100 5.656A10 10 0 0012 12a10 10 0 012.172-2.828 4 4 0 110 5.656A10 10 0 0112 12 10 10 0 009.828 9.172"/></svg>
+<span>配置</span></a></li><li><a href=/%E5%90%AF%E5%8F%91/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M10 14a3.5 3.5.0 005 0l4-4a3.5 3.5.0 00-5-5l-.5.5"/><path d="M14 10a3.5 3.5.0 00-5 0l-4 4a3.5 3.5.0 005 5l.5-.5"/></svg>
+<span>启发</span></a></li><li><a href=/%E5%91%BD%E4%BB%A4/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-terminal" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 7l5 5-5 5"/><line x1="12" y1="19" x2="19" y2="19"/></svg>
+<span>命令</span></a></li><li><a href=/%E5%85%B3%E4%BA%8E/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="7" r="4"/><path d="M6 21v-2a4 4 0 014-4h4a4 4 0 014 4v2"/></svg>
+<span>关于</span></a></li><div class=menu-bottom-section><li id=dark-mode-toggle><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<span>深色</span></li></div></ol></aside><main class="main full-width"><article class="has-image main-article"><header class=article-header><div class=article-image><a href=/p/angular-%E7%BB%84%E4%BB%B6%E8%AE%BE%E8%AE%A1/><img src=/img/cover/angular.png loading=lazy alt="Angular 组件设计"></a></div><div class=article-details><header class=article-category><a href=/categories/angular/>Angular</a></header><div class=article-title-wrapper><h2 class=article-title><a href=/p/angular-%E7%BB%84%E4%BB%B6%E8%AE%BE%E8%AE%A1/>Angular 组件设计</a></h2><h3 class=article-subtitle>接触 Ng 已经有半年时间里，想起学习 Vue 组件设计的经历，总结一下 Ng 的版本</h3></div><footer class=article-time><div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>Nov 03, 2022</time></div><div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>阅读时长：13 分钟</time></div></footer></div></header><section class=article-content><h2 id=ngtemplateoutlet>ngTemplateOutlet</h2><p>从字面来看，就像 &lt;router-outlet/> 之于 router 一样，ngTemplateOutlet 就是 <strong>TemplateRef</strong> 的“出口”。除了渲染 TemplateRef 之外，它还支持指定一个对象 context 作为“模版内容”的渲染上下文。</p><p>Vue 的 scopedSlots 和 React 的 renderProps 以及后来的 Composition API 和 Hooks 都在践行“逻辑与 UI”的分离；因为 UI 的自由度非常高，形态千变万化，而交互逻辑的自由度就小不少，UI 更多是内在逻辑的延伸。有了 ngTemplateOutlet，也可以在 Angular 中分离逻辑与 UI（虽然 Angular 在这方面的最佳实践是“依赖注入 Service”）。</p><p>使用 ngTemplateOutlet 构造 DynamicTabListSlotComponent：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span><span class=lnt>55
+</span><span class=lnt>56
+</span><span class=lnt>57
+</span><span class=lnt>58
+</span><span class=lnt>59
+</span><span class=lnt>60
+</span><span class=lnt>61
+</span><span class=lnt>62
+</span><span class=lnt>63
+</span><span class=lnt>64
+</span><span class=lnt>65
+</span><span class=lnt>66
+</span><span class=lnt>67
+</span><span class=lnt>68
+</span><span class=lnt>69
+</span><span class=lnt>70
+</span><span class=lnt>71
+</span><span class=lnt>72
+</span><span class=lnt>73
+</span><span class=lnt>74
+</span><span class=lnt>75
+</span><span class=lnt>76
+</span><span class=lnt>77
+</span><span class=lnt>78
+</span><span class=lnt>79
+</span><span class=lnt>80
+</span><span class=lnt>81
+</span><span class=lnt>82
+</span><span class=lnt>83
+</span><span class=lnt>84
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-ts data-lang=ts><span class=line><span class=cl><span class=c1>// 组件渲染了一个 ng-container，这就是 TemplateRef 的出口
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kd>@Component</span><span class=p>({</span>
+</span></span><span class=line><span class=cl>  <span class=nx>selector</span><span class=o>:</span> <span class=s1>&#39;dynamic-tab-list-slot&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nx>template</span><span class=o>:</span> <span class=sb>`
+</span></span></span><span class=line><span class=cl><span class=sb>    &lt;ng-container
+</span></span></span><span class=line><span class=cl><span class=sb>      *ngTemplateOutlet=&#34;tabListTemplate; context: temp&#34;
+</span></span></span><span class=line><span class=cl><span class=sb>    &gt;&lt;/ng-container&gt;
+</span></span></span><span class=line><span class=cl><span class=sb>  `</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=cm>/**
+</span></span></span><span class=line><span class=cl><span class=cm>   * ngTemplateOutlet
+</span></span></span><span class=line><span class=cl><span class=cm>   * 可以拆成
+</span></span></span><span class=line><span class=cl><span class=cm>   * [ngTemplateOutlet]、[ngTemplateOutletContext]
+</span></span></span><span class=line><span class=cl><span class=cm>   * 两个属性
+</span></span></span><span class=line><span class=cl><span class=cm>   */</span>
+</span></span><span class=line><span class=cl>  <span class=nx>template</span><span class=o>:</span> <span class=sb>`
+</span></span></span><span class=line><span class=cl><span class=sb>    &lt;ng-container
+</span></span></span><span class=line><span class=cl><span class=sb>      [ngTemplateOutlet]=&#34;tabListTemplate&#34;
+</span></span></span><span class=line><span class=cl><span class=sb>      [ngTemplateOutletContext]=&#34;temp&#34;
+</span></span></span><span class=line><span class=cl><span class=sb>    &gt;&lt;/ng-container&gt;
+</span></span></span><span class=line><span class=cl><span class=sb>  `</span>
+</span></span><span class=line><span class=cl><span class=p>})</span>
+</span></span><span class=line><span class=cl><span class=kr>export</span> <span class=kr>class</span> <span class=nx>DynamicTabListSlotComponent</span> <span class=kr>implements</span> <span class=nx>OnChanges</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=c1>// 传入的请求参数
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=kd>@Input</span><span class=p>()</span> <span class=nx>orgId?</span>: <span class=kt>number</span> <span class=o>=</span> <span class=kc>null</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=c1>// 传入的函数，用来格式化接口返回的数据
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=kd>@Input</span><span class=p>()</span> <span class=nx>formatter</span> <span class=o>=</span> <span class=nx>v</span> <span class=o>=&gt;</span> <span class=nx>v</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=c1>// 传入的 tabListTemplate 所指向的 TemplateRef
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=kd>@Input</span><span class=p>()</span> <span class=nx>tabListTemplate</span>: <span class=kt>TemplateRef</span><span class=p>&lt;</span><span class=nt>any</span><span class=p>&gt;;</span>
+</span></span><span class=line><span class=cl>  <span class=c1>// 接口返回新的数据之后，通过自定义事件抛出
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=kd>@Output</span><span class=p>()</span> <span class=nx>updated</span> <span class=o>=</span> <span class=k>new</span> <span class=nx>EventEmitter</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>  <span class=cm>/**
+</span></span></span><span class=line><span class=cl><span class=cm>   * TemplateRef 渲染的上下文，其中包含了：
+</span></span></span><span class=line><span class=cl><span class=cm>   * 1. 数据集合
+</span></span></span><span class=line><span class=cl><span class=cm>   * 2. 请求状态
+</span></span></span><span class=line><span class=cl><span class=cm>   */</span>
+</span></span><span class=line><span class=cl>  <span class=nx>temp</span> <span class=o>=</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>loading</span>: <span class=kt>false</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nx>tabList</span><span class=o>:</span> <span class=p>[]</span>
+</span></span><span class=line><span class=cl>  <span class=p>};</span>
+</span></span><span class=line><span class=cl>  <span class=c1>// 依赖注入 ApiService
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=kr>constructor</span><span class=p>(</span><span class=kr>private</span> <span class=nx>apiService</span>: <span class=kt>ApiService</span><span class=p>)</span> <span class=p>{}</span>
+</span></span><span class=line><span class=cl>  <span class=c1>// 如果传入的“请求参数”变化，重新请求接口
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=nx>ngOnChanges</span><span class=p>(</span><span class=nx>changes</span>: <span class=kt>SimpleChanges</span><span class=p>)</span><span class=o>:</span> <span class=k>void</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=nx>changes</span><span class=o>?</span><span class=p>.</span><span class=nx>orgId</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=k>this</span><span class=p>.</span><span class=nx>getTabList</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=c1>// 副作用函数
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=nx>getTabList() {</span>
+</span></span><span class=line><span class=cl>    <span class=kr>const</span> <span class=nx>park</span> <span class=o>=</span> <span class=p>[];</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=k>typeof</span> <span class=k>this</span><span class=p>.</span><span class=nx>orgId</span> <span class=o>!==</span> <span class=s1>&#39;number&#39;</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=k>this</span><span class=p>.</span><span class=nx>temp</span><span class=p>.</span><span class=nx>tabList</span> <span class=o>=</span> <span class=nx>park</span><span class=p>.</span><span class=nx>map</span><span class=p>(</span><span class=k>this</span><span class=p>.</span><span class=nx>formatter</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>      <span class=k>this</span><span class=p>.</span><span class=nx>updated</span><span class=p>.</span><span class=nx>emit</span><span class=p>({</span>
+</span></span><span class=line><span class=cl>        <span class=nx>origin</span>: <span class=kt>park</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=nx>formatted</span>: <span class=kt>this.temp.tabList</span>
+</span></span><span class=line><span class=cl>      <span class=p>});</span>
+</span></span><span class=line><span class=cl>      <span class=k>return</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 可以直接修改“上下文”中的数据
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=k>this</span><span class=p>.</span><span class=nx>temp</span><span class=p>.</span><span class=nx>loading</span> <span class=o>=</span> <span class=kc>true</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>this</span><span class=p>.</span><span class=nx>apiService</span>
+</span></span><span class=line><span class=cl>      <span class=p>.</span><span class=nx>dynamicTabInDailyReconciliation</span><span class=p>({</span> <span class=nx>orgId</span>: <span class=kt>this.orgId</span> <span class=p>})</span>
+</span></span><span class=line><span class=cl>      <span class=p>.</span><span class=nx>subscribe</span><span class=p>(</span><span class=nx>response</span> <span class=o>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=p>(</span><span class=nx>response</span><span class=p>.</span><span class=nx>success</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>          <span class=c1>// 请求成功，更新“上下文”
+</span></span></span><span class=line><span class=cl><span class=c1></span>          <span class=k>this</span><span class=p>.</span><span class=nx>temp</span><span class=p>.</span><span class=nx>tabList</span> <span class=o>=</span> <span class=p>[...</span><span class=nx>response</span><span class=p>.</span><span class=nx>data</span><span class=p>].</span><span class=nx>map</span><span class=p>(</span><span class=k>this</span><span class=p>.</span><span class=nx>formatter</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>          <span class=c1>// 通过自定义事件抛出数据
+</span></span></span><span class=line><span class=cl><span class=c1></span>          <span class=k>this</span><span class=p>.</span><span class=nx>updated</span><span class=p>.</span><span class=nx>emit</span><span class=p>({</span>
+</span></span><span class=line><span class=cl>            <span class=nx>origin</span><span class=o>:</span> <span class=p>[...</span><span class=nx>response</span><span class=p>.</span><span class=nx>data</span><span class=p>],</span>
+</span></span><span class=line><span class=cl>            <span class=nx>formatted</span>: <span class=kt>this.temp.tabList</span>
+</span></span><span class=line><span class=cl>          <span class=p>});</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>          <span class=c1>// 请求失败
+</span></span></span><span class=line><span class=cl><span class=c1></span>          <span class=k>this</span><span class=p>.</span><span class=nx>temp</span><span class=p>.</span><span class=nx>tabList</span> <span class=o>=</span> <span class=nx>park</span><span class=p>.</span><span class=nx>map</span><span class=p>(</span><span class=k>this</span><span class=p>.</span><span class=nx>formatter</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>          <span class=k>this</span><span class=p>.</span><span class=nx>updated</span><span class=p>.</span><span class=nx>emit</span><span class=p>({</span>
+</span></span><span class=line><span class=cl>            <span class=nx>origin</span>: <span class=kt>park</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>            <span class=nx>formatted</span>: <span class=kt>this.temp.tabList</span>
+</span></span><span class=line><span class=cl>          <span class=p>});</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span><span class=line><span class=cl>        <span class=c1>// 更新“请求状态”
+</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=k>this</span><span class=p>.</span><span class=nx>temp</span><span class=p>.</span><span class=nx>loading</span> <span class=o>=</span> <span class=kc>false</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>      <span class=p>});</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>使用 DynamicTabListSlotComponent：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span><span class=lnt>55
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-html data-lang=html><span class=line><span class=cl><span class=c>&lt;!--
+</span></span></span><span class=line><span class=cl><span class=c>  当 currentOrgId 发生变化
+</span></span></span><span class=line><span class=cl><span class=c>  会重新发起请求，拉取最新数据
+</span></span></span><span class=line><span class=cl><span class=c>  更新“上下文”，触发 updated
+</span></span></span><span class=line><span class=cl><span class=c> --&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;</span><span class=nt>app-dynamic-tab-list-slot</span>
+</span></span><span class=line><span class=cl>  <span class=err>(</span><span class=na>updated</span><span class=err>)=&#34;</span><span class=na>handleTabListUpdate</span><span class=err>($</span><span class=na>event</span><span class=err>)&#34;</span>
+</span></span><span class=line><span class=cl>  <span class=err>[</span><span class=na>tabListTemplate</span><span class=err>]=&#34;</span><span class=na>tabListTemplate</span><span class=err>&#34;</span>
+</span></span><span class=line><span class=cl>  <span class=err>[</span><span class=na>formatter</span><span class=err>]=&#34;</span><span class=na>tabListFormatter</span><span class=err>&#34;</span>
+</span></span><span class=line><span class=cl>  <span class=err>[</span><span class=na>orgId</span><span class=err>]=&#34;</span><span class=na>currentOrgId</span><span class=err>&#34;</span>
+</span></span><span class=line><span class=cl><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  <span class=c>&lt;!--
+</span></span></span><span class=line><span class=cl><span class=c>     tabListTemplate 指向的 ng-template 包含了“渲染模版”
+</span></span></span><span class=line><span class=cl><span class=c>     使用 let-* 语法，解构“上下文”中的属性值
+</span></span></span><span class=line><span class=cl><span class=c>     tabListLoading -&gt; context.loading
+</span></span></span><span class=line><span class=cl><span class=c>     tabList -&gt; context.tabList
+</span></span></span><span class=line><span class=cl><span class=c>   --&gt;</span>
+</span></span><span class=line><span class=cl>  <span class=p>&lt;</span><span class=nt>ng-template</span>
+</span></span><span class=line><span class=cl>    <span class=err>#</span><span class=na>tabListTemplate</span>
+</span></span><span class=line><span class=cl>    <span class=na>let-tabList</span><span class=o>=</span><span class=s>&#34;tabList&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=na>let-tabListLoading</span><span class=o>=</span><span class=s>&#34;loading&#34;</span>
+</span></span><span class=line><span class=cl>  <span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>    <span class=c>&lt;!--
+</span></span></span><span class=line><span class=cl><span class=c>      这里不仅可以是 nz-tabset，也可以是 nz-checkbox、nz-radio、nz-select ...
+</span></span></span><span class=line><span class=cl><span class=c>     --&gt;</span>
+</span></span><span class=line><span class=cl>    <span class=p>&lt;</span><span class=nt>nz-tabset</span>
+</span></span><span class=line><span class=cl>      <span class=na>nzSize</span><span class=o>=</span><span class=s>&#34;small&#34;</span>
+</span></span><span class=line><span class=cl>      <span class=na>nzTabPosition</span><span class=o>=</span><span class=s>&#34;top&#34;</span>
+</span></span><span class=line><span class=cl>      <span class=err>[</span><span class=na>nzTabBarGutter</span><span class=err>]=&#34;</span><span class=na>4</span><span class=err>&#34;</span>
+</span></span><span class=line><span class=cl>      <span class=err>[</span><span class=na>nzTabBarExtraContent</span><span class=err>]=&#34;</span><span class=na>extraTemplate</span><span class=err>&#34;</span>
+</span></span><span class=line><span class=cl>      <span class=err>[(</span><span class=na>nzSelectedIndex</span><span class=err>)]=&#34;</span><span class=na>currentSelectedIndex</span><span class=err>&#34;</span>
+</span></span><span class=line><span class=cl>      <span class=err>(</span><span class=na>nzSelectedIndexChange</span><span class=err>)=&#34;</span><span class=na>handleSelectedIndexChange</span><span class=err>($</span><span class=na>event</span><span class=err>)&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>      <span class=p>&lt;</span><span class=nt>nz-tab</span> <span class=na>nzTitle</span><span class=o>=</span><span class=s>&#34;代征&#34;</span> <span class=err>*</span><span class=na>ngIf</span><span class=o>=</span><span class=s>&#34;tabList.includes(Service.dz)&#34;</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>        <span class=p>&lt;</span><span class=nt>ng-template</span> <span class=na>nz-tab</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>          <span class=p>&lt;</span><span class=nt>app-reconciliation</span>
+</span></span><span class=line><span class=cl>            <span class=err>[</span><span class=na>orgId</span><span class=err>]=&#34;</span><span class=na>currentOrgId</span><span class=err>&#34;</span>
+</span></span><span class=line><span class=cl>            <span class=err>[</span><span class=na>platform</span><span class=err>]=&#34;</span><span class=na>Service</span><span class=err>.</span><span class=na>dz</span><span class=err>&#34;</span>
+</span></span><span class=line><span class=cl>            <span class=err>[</span><span class=na>selectedIndex</span><span class=err>]=&#34;</span><span class=na>currentSelectedIndex</span><span class=err>&#34;</span>
+</span></span><span class=line><span class=cl>          <span class=p>&gt;&lt;/</span><span class=nt>app-reconciliation</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>        <span class=p>&lt;/</span><span class=nt>ng-template</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>      <span class=p>&lt;/</span><span class=nt>nz-tab</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>      <span class=p>&lt;</span><span class=nt>nz-tab</span> <span class=na>nzTitle</span><span class=o>=</span><span class=s>&#34;轻税&#34;</span> <span class=err>*</span><span class=na>ngIf</span><span class=o>=</span><span class=s>&#34;tabList.includes(Service.qs)&#34;</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>        <span class=p>&lt;</span><span class=nt>ng-template</span> <span class=na>nz-tab</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>          <span class=p>&lt;</span><span class=nt>app-reconciliation</span>
+</span></span><span class=line><span class=cl>            <span class=err>[</span><span class=na>orgId</span><span class=err>]=&#34;</span><span class=na>currentOrgId</span><span class=err>&#34;</span>
+</span></span><span class=line><span class=cl>            <span class=err>[</span><span class=na>platform</span><span class=err>]=&#34;</span><span class=na>Service</span><span class=err>.</span><span class=na>qs</span><span class=err>&#34;</span>
+</span></span><span class=line><span class=cl>            <span class=err>[</span><span class=na>selectedIndex</span><span class=err>]=&#34;</span><span class=na>currentSelectedIndex</span><span class=err>&#34;</span>
+</span></span><span class=line><span class=cl>          <span class=p>&gt;&lt;/</span><span class=nt>app-reconciliation</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>        <span class=p>&lt;/</span><span class=nt>ng-template</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>      <span class=p>&lt;/</span><span class=nt>nz-tab</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>      ...
+</span></span><span class=line><span class=cl>    <span class=p>&lt;/</span><span class=nt>nz-tabset</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  <span class=p>&lt;/</span><span class=nt>ng-template</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;/</span><span class=nt>app-dynamic-tab-list-slot</span><span class=p>&gt;</span>
+</span></span></code></pre></td></tr></table></div></div><p>createEmbeddedView 可以替代 ngTemplateOutlet 指令；同时，如果“逻辑组件”仅有一个 ngTemplateOutlet（仅渲染一个 TemplateRef），可以使用 ContentChild 获取 TemplateRef：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>  1
+</span><span class=lnt>  2
+</span><span class=lnt>  3
+</span><span class=lnt>  4
+</span><span class=lnt>  5
+</span><span class=lnt>  6
+</span><span class=lnt>  7
+</span><span class=lnt>  8
+</span><span class=lnt>  9
+</span><span class=lnt> 10
+</span><span class=lnt> 11
+</span><span class=lnt> 12
+</span><span class=lnt> 13
+</span><span class=lnt> 14
+</span><span class=lnt> 15
+</span><span class=lnt> 16
+</span><span class=lnt> 17
+</span><span class=lnt> 18
+</span><span class=lnt> 19
+</span><span class=lnt> 20
+</span><span class=lnt> 21
+</span><span class=lnt> 22
+</span><span class=lnt> 23
+</span><span class=lnt> 24
+</span><span class=lnt> 25
+</span><span class=lnt> 26
+</span><span class=lnt> 27
+</span><span class=lnt> 28
+</span><span class=lnt> 29
+</span><span class=lnt> 30
+</span><span class=lnt> 31
+</span><span class=lnt> 32
+</span><span class=lnt> 33
+</span><span class=lnt> 34
+</span><span class=lnt> 35
+</span><span class=lnt> 36
+</span><span class=lnt> 37
+</span><span class=lnt> 38
+</span><span class=lnt> 39
+</span><span class=lnt> 40
+</span><span class=lnt> 41
+</span><span class=lnt> 42
+</span><span class=lnt> 43
+</span><span class=lnt> 44
+</span><span class=lnt> 45
+</span><span class=lnt> 46
+</span><span class=lnt> 47
+</span><span class=lnt> 48
+</span><span class=lnt> 49
+</span><span class=lnt> 50
+</span><span class=lnt> 51
+</span><span class=lnt> 52
+</span><span class=lnt> 53
+</span><span class=lnt> 54
+</span><span class=lnt> 55
+</span><span class=lnt> 56
+</span><span class=lnt> 57
+</span><span class=lnt> 58
+</span><span class=lnt> 59
+</span><span class=lnt> 60
+</span><span class=lnt> 61
+</span><span class=lnt> 62
+</span><span class=lnt> 63
+</span><span class=lnt> 64
+</span><span class=lnt> 65
+</span><span class=lnt> 66
+</span><span class=lnt> 67
+</span><span class=lnt> 68
+</span><span class=lnt> 69
+</span><span class=lnt> 70
+</span><span class=lnt> 71
+</span><span class=lnt> 72
+</span><span class=lnt> 73
+</span><span class=lnt> 74
+</span><span class=lnt> 75
+</span><span class=lnt> 76
+</span><span class=lnt> 77
+</span><span class=lnt> 78
+</span><span class=lnt> 79
+</span><span class=lnt> 80
+</span><span class=lnt> 81
+</span><span class=lnt> 82
+</span><span class=lnt> 83
+</span><span class=lnt> 84
+</span><span class=lnt> 85
+</span><span class=lnt> 86
+</span><span class=lnt> 87
+</span><span class=lnt> 88
+</span><span class=lnt> 89
+</span><span class=lnt> 90
+</span><span class=lnt> 91
+</span><span class=lnt> 92
+</span><span class=lnt> 93
+</span><span class=lnt> 94
+</span><span class=lnt> 95
+</span><span class=lnt> 96
+</span><span class=lnt> 97
+</span><span class=lnt> 98
+</span><span class=lnt> 99
+</span><span class=lnt>100
+</span><span class=lnt>101
+</span><span class=lnt>102
+</span><span class=lnt>103
+</span><span class=lnt>104
+</span><span class=lnt>105
+</span><span class=lnt>106
+</span><span class=lnt>107
+</span><span class=lnt>108
+</span><span class=lnt>109
+</span><span class=lnt>110
+</span><span class=lnt>111
+</span><span class=lnt>112
+</span><span class=lnt>113
+</span><span class=lnt>114
+</span><span class=lnt>115
+</span><span class=lnt>116
+</span><span class=lnt>117
+</span><span class=lnt>118
+</span><span class=lnt>119
+</span><span class=lnt>120
+</span><span class=lnt>121
+</span><span class=lnt>122
+</span><span class=lnt>123
+</span><span class=lnt>124
+</span><span class=lnt>125
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-ts data-lang=ts><span class=line><span class=cl><span class=kd>@Component</span><span class=p>({</span>
+</span></span><span class=line><span class=cl>  <span class=nx>selector</span><span class=o>:</span> <span class=s1>&#39;app-codes&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nx>template</span><span class=o>:</span> <span class=sb>`
+</span></span></span><span class=line><span class=cl><span class=sb>    &lt;ng-container #vcf&gt;&lt;/ng-container&gt;
+</span></span></span><span class=line><span class=cl><span class=sb>  `</span>
+</span></span><span class=line><span class=cl><span class=p>})</span>
+</span></span><span class=line><span class=cl><span class=kr>export</span> <span class=kr>class</span> <span class=nx>CodesComponent</span> <span class=kr>implements</span> <span class=nx>OnInit</span><span class=p>,</span> <span class=nx>AfterViewInit</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=c1>// 这里不再使用 @Input，而是直接通过 ContentChild 获取 TemplateRef
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=kd>@ContentChild</span><span class=p>(</span><span class=nx>TemplateRef</span><span class=p>)</span> <span class=nx>content</span>: <span class=kt>TemplateRef</span><span class=p>&lt;</span><span class=nt>any</span><span class=p>&gt;;</span>
+</span></span><span class=line><span class=cl>  <span class=c1>// 这里必须使用 { read: ViewContainerRef } 明确 ViewChild 的类型
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=kd>@ViewChild</span><span class=p>(</span><span class=s1>&#39;vcf&#39;</span><span class=p>,</span> <span class=p>{</span> <span class=nx>read</span>: <span class=kt>ViewContainerRef</span> <span class=p>})</span> <span class=nx>vcf</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=kd>@Output</span><span class=p>()</span> <span class=nx>update</span> <span class=o>=</span> <span class=k>new</span> <span class=nx>EventEmitter</span><span class=p>&lt;</span><span class=nt>string</span><span class=err>[]</span><span class=p>&gt;();</span>
+</span></span><span class=line><span class=cl>  <span class=kd>@Input</span><span class=p>()</span> <span class=nx>codes</span>: <span class=kt>Array</span><span class=p>&lt;</span><span class=nt>string</span><span class=p>&gt;;</span>
+</span></span><span class=line><span class=cl>  <span class=kd>@Input</span><span class=p>()</span> <span class=kr>type</span><span class=o>:</span> <span class=kt>string</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=nx>list</span>: <span class=kt>CodeItem</span><span class=p>[]</span> <span class=o>=</span> <span class=p>[</span>
+</span></span><span class=line><span class=cl>    <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=nx>name</span><span class=o>:</span> <span class=s1>&#39;云票&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>      <span class=nx>code</span><span class=o>:</span> <span class=s1>&#39;yp&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>      <span class=nx>children</span><span class=o>:</span> <span class=p>[...</span><span class=nx>adminMenus</span><span class=p>()]</span>
+</span></span><span class=line><span class=cl>    <span class=p>},</span>
+</span></span><span class=line><span class=cl>    <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=nx>name</span><span class=o>:</span> <span class=s1>&#39;账套管理&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>      <span class=nx>code</span><span class=o>:</span> <span class=s1>&#39;zt&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>      <span class=nx>children</span><span class=o>:</span> <span class=p>[...</span><span class=nx>adminBatchMenus</span><span class=p>()]</span>
+</span></span><span class=line><span class=cl>    <span class=p>},</span>
+</span></span><span class=line><span class=cl>    <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=nx>name</span><span class=o>:</span> <span class=s1>&#39;记账中心&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>      <span class=nx>code</span><span class=o>:</span> <span class=s1>&#39;jz&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>      <span class=nx>children</span><span class=o>:</span> <span class=p>[...</span><span class=nx>adminNoteMenus</span><span class=p>()]</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=p>];</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=kr>constructor</span><span class=p>(</span><span class=kr>private</span> <span class=nx>cdf</span>: <span class=kt>ChangeDetectorRef</span><span class=p>)</span> <span class=p>{}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=nx>ngOnInit</span><span class=p>()</span><span class=o>:</span> <span class=k>void</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 使用传来的 codes 对数据进行初始化
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=kd>let</span> <span class=nx>temp</span> <span class=o>=</span> <span class=p>[...</span><span class=k>this</span><span class=p>.</span><span class=nx>list</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>    <span class=nx>temp</span> <span class=o>=</span> <span class=k>this</span><span class=p>.</span><span class=nx>handleInitWithFilter</span><span class=p>(</span><span class=nx>temp</span> <span class=kr>as</span> <span class=nx>CodeItem</span><span class=p>[]);</span>
+</span></span><span class=line><span class=cl>    <span class=nx>temp</span> <span class=o>=</span> <span class=k>this</span><span class=p>.</span><span class=nx>handleInitWithCodes</span><span class=p>(</span><span class=nx>temp</span> <span class=kr>as</span> <span class=nx>CodeItem</span><span class=p>[]);</span>
+</span></span><span class=line><span class=cl>    <span class=nx>temp</span><span class=p>[</span><span class=mi>0</span><span class=p>].</span><span class=nx>active</span> <span class=o>=</span> <span class=kc>true</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>this</span><span class=p>.</span><span class=nx>list</span> <span class=o>=</span> <span class=p>[...</span><span class=nx>temp</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=nx>ngAfterViewInit() {</span>
+</span></span><span class=line><span class=cl>    <span class=cm>/**
+</span></span></span><span class=line><span class=cl><span class=cm>     * this.vcf 初始化完成后，在 this.vcf 中渲染 this.content
+</span></span></span><span class=line><span class=cl><span class=cm>     * createEmbeddedView 的第二个参数为“渲染上下文”
+</span></span></span><span class=line><span class=cl><span class=cm>     * 这里将数据 list 绑定到“缺省”属性 $implicit 上
+</span></span></span><span class=line><span class=cl><span class=cm>     * 同时将“用户操作”封装在 handleChecked 中
+</span></span></span><span class=line><span class=cl><span class=cm>     */</span>
+</span></span><span class=line><span class=cl>    <span class=k>this</span><span class=o>?</span><span class=p>.</span><span class=nx>vcf</span><span class=o>?</span><span class=p>.</span><span class=nx>createEmbeddedView</span><span class=p>(</span><span class=k>this</span><span class=p>.</span><span class=nx>content</span><span class=p>,</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=nx>handleChecked</span><span class=o>:</span> <span class=p>(</span><span class=nx>v</span><span class=p>,</span> <span class=nx>o</span><span class=p>)</span> <span class=o>=&gt;</span> <span class=k>this</span><span class=p>.</span><span class=nx>handleChecked</span><span class=p>(</span><span class=nx>o</span><span class=p>),</span>
+</span></span><span class=line><span class=cl>      <span class=nx>$implicit</span>: <span class=kt>this.list</span>
+</span></span><span class=line><span class=cl>    <span class=p>});</span>
+</span></span><span class=line><span class=cl>    <span class=k>this</span><span class=p>.</span><span class=nx>cdf</span><span class=p>.</span><span class=nx>detectChanges</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=c1>// 下面这些繁琐复杂的逻辑被封装在组件内部，对外只暴露了“渲染上下文”中的两个属性
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=nx>handleInitWithFilter</span><span class=p>(</span><span class=nx>arr</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=p>[...</span><span class=nx>arr</span><span class=p>].</span><span class=nx>filter</span><span class=p>(</span><span class=nx>item</span> <span class=o>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=k>if</span> <span class=p>(</span><span class=nb>Array</span><span class=p>.</span><span class=nx>isArray</span><span class=p>(</span><span class=nx>item</span><span class=o>?</span><span class=p>.</span><span class=nx>children</span><span class=p>)</span> <span class=o>&amp;&amp;</span> <span class=nx>item</span><span class=o>?</span><span class=p>.</span><span class=nx>children</span><span class=o>?</span><span class=p>.</span><span class=nx>length</span> <span class=o>&gt;</span> <span class=mi>0</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=nx>item</span><span class=p>.</span><span class=nx>children</span> <span class=o>=</span> <span class=k>this</span><span class=p>.</span><span class=nx>handleInitWithFilter</span><span class=p>(</span><span class=nx>item</span><span class=p>.</span><span class=nx>children</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>      <span class=p>}</span>
+</span></span><span class=line><span class=cl>      <span class=k>return</span> <span class=o>!</span><span class=nx>item</span><span class=o>?</span><span class=p>.</span><span class=nx>hiddenForSetting</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=p>});</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=nx>handleInitWithCodes</span><span class=p>(</span><span class=nx>arr</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=p>[...</span><span class=nx>arr</span><span class=p>].</span><span class=nx>map</span><span class=p>(</span><span class=nx>item</span> <span class=o>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=kd>let</span> <span class=nx>checked</span> <span class=o>=</span> <span class=kc>false</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>      <span class=k>if</span> <span class=p>(</span><span class=nb>Array</span><span class=p>.</span><span class=nx>isArray</span><span class=p>(</span><span class=nx>item</span><span class=o>?</span><span class=p>.</span><span class=nx>children</span><span class=p>)</span> <span class=o>&amp;&amp;</span> <span class=nx>item</span><span class=o>?</span><span class=p>.</span><span class=nx>children</span><span class=o>?</span><span class=p>.</span><span class=nx>length</span> <span class=o>&gt;</span> <span class=mi>0</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=nx>item</span><span class=p>.</span><span class=nx>children</span> <span class=o>=</span> <span class=k>this</span><span class=p>.</span><span class=nx>handleInitWithCodes</span><span class=p>(</span><span class=nx>item</span><span class=p>.</span><span class=nx>children</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=kr>const</span> <span class=p>{</span> <span class=nx>length</span>: <span class=kt>l1</span> <span class=p>}</span> <span class=o>=</span> <span class=nx>item</span><span class=p>.</span><span class=nx>children</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=kr>const</span> <span class=p>{</span> <span class=nx>length</span>: <span class=kt>l2</span> <span class=p>}</span> <span class=o>=</span> <span class=nx>item</span><span class=p>.</span><span class=nx>children</span><span class=p>.</span><span class=nx>filter</span><span class=p>(({</span> <span class=nx>checked</span> <span class=p>})</span> <span class=o>=&gt;</span> <span class=nx>checked</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=nx>checked</span> <span class=o>=</span> <span class=nx>l1</span> <span class=o>===</span> <span class=nx>l2</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>      <span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=nx>checked</span> <span class=o>=</span> <span class=k>this</span><span class=o>?</span><span class=p>.</span><span class=nx>codes</span><span class=o>?</span><span class=p>.</span><span class=nx>includes</span><span class=p>(</span><span class=nx>item</span><span class=p>.</span><span class=nx>code</span><span class=p>)</span> <span class=o>?</span> <span class=kc>true</span> <span class=o>:</span> <span class=kc>false</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>      <span class=p>}</span>
+</span></span><span class=line><span class=cl>      <span class=k>return</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=p>...</span><span class=nx>item</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=nx>active</span>: <span class=kt>false</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=nx>checked</span>
+</span></span><span class=line><span class=cl>      <span class=p>};</span>
+</span></span><span class=line><span class=cl>    <span class=p>});</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=nx>handleGenCodes</span><span class=p>(</span><span class=nx>arr</span><span class=p>,</span> <span class=nx>temp</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>arr</span><span class=p>.</span><span class=nx>forEach</span><span class=p>(</span><span class=nx>item</span> <span class=o>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=k>if</span> <span class=p>(</span><span class=nb>Array</span><span class=p>.</span><span class=nx>isArray</span><span class=p>(</span><span class=nx>item</span><span class=o>?</span><span class=p>.</span><span class=nx>children</span><span class=p>)</span> <span class=o>&amp;&amp;</span> <span class=nx>item</span><span class=o>?</span><span class=p>.</span><span class=nx>children</span><span class=o>?</span><span class=p>.</span><span class=nx>length</span> <span class=o>&gt;</span> <span class=mi>0</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=k>this</span><span class=p>.</span><span class=nx>handleGenCodes</span><span class=p>(</span><span class=nx>item</span><span class=p>.</span><span class=nx>children</span><span class=p>,</span> <span class=nx>temp</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>      <span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=p>(</span><span class=nx>item</span><span class=p>.</span><span class=nx>checked</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>          <span class=nx>temp</span><span class=p>.</span><span class=nx>push</span><span class=p>(</span><span class=nx>item</span><span class=p>.</span><span class=nx>code</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span><span class=line><span class=cl>      <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=p>});</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=nx>handleChecked</span><span class=p>({</span> <span class=nx>code</span> <span class=p>})</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=kd>let</span> <span class=nx>temp</span> <span class=o>=</span> <span class=p>[];</span>
+</span></span><span class=line><span class=cl>    <span class=k>this</span><span class=p>.</span><span class=nx>list</span> <span class=o>=</span> <span class=p>[...</span><span class=k>this</span><span class=p>.</span><span class=nx>list</span><span class=p>].</span><span class=nx>map</span><span class=p>(</span><span class=nx>item</span> <span class=o>=&gt;</span> <span class=k>this</span><span class=p>.</span><span class=nx>handleItem</span><span class=p>(</span><span class=nx>code</span><span class=p>,</span> <span class=nx>item</span><span class=p>));</span>
+</span></span><span class=line><span class=cl>    <span class=k>this</span><span class=p>.</span><span class=nx>handleGenCodes</span><span class=p>(</span><span class=k>this</span><span class=p>.</span><span class=nx>list</span><span class=p>,</span> <span class=nx>temp</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=k>this</span><span class=p>.</span><span class=nx>update</span><span class=p>.</span><span class=nx>emit</span><span class=p>(</span><span class=nx>temp</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=nx>handleItem</span><span class=p>(</span><span class=nx>code</span><span class=p>,</span> <span class=nx>item</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=nx>item</span><span class=p>.</span><span class=nx>code</span> <span class=o>===</span> <span class=nx>code</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=nx>item</span><span class=p>.</span><span class=nx>checked</span> <span class=o>=</span> <span class=o>!</span><span class=nx>item</span><span class=p>.</span><span class=nx>checked</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>      <span class=k>if</span> <span class=p>(</span><span class=nb>Array</span><span class=p>.</span><span class=nx>isArray</span><span class=p>(</span><span class=nx>item</span><span class=o>?</span><span class=p>.</span><span class=nx>children</span><span class=p>)</span> <span class=o>&amp;&amp;</span> <span class=nx>item</span><span class=o>?</span><span class=p>.</span><span class=nx>children</span><span class=o>?</span><span class=p>.</span><span class=nx>length</span> <span class=o>&gt;</span> <span class=mi>0</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=nx>item</span><span class=p>.</span><span class=nx>children</span> <span class=o>=</span> <span class=nx>item</span><span class=p>.</span><span class=nx>children</span><span class=p>.</span><span class=nx>map</span><span class=p>(</span><span class=nx>child</span> <span class=o>=&gt;</span>
+</span></span><span class=line><span class=cl>          <span class=k>this</span><span class=p>.</span><span class=nx>handleAll</span><span class=p>(</span><span class=nx>child</span><span class=p>,</span> <span class=nx>item</span><span class=p>.</span><span class=nx>checked</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=p>);</span>
+</span></span><span class=line><span class=cl>      <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=nb>Array</span><span class=p>.</span><span class=nx>isArray</span><span class=p>(</span><span class=nx>item</span><span class=o>?</span><span class=p>.</span><span class=nx>children</span><span class=p>)</span> <span class=o>&amp;&amp;</span> <span class=nx>item</span><span class=o>?</span><span class=p>.</span><span class=nx>children</span><span class=o>?</span><span class=p>.</span><span class=nx>length</span> <span class=o>&gt;</span> <span class=mi>0</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=nx>item</span><span class=p>.</span><span class=nx>children</span> <span class=o>=</span> <span class=nx>item</span><span class=p>.</span><span class=nx>children</span><span class=p>.</span><span class=nx>map</span><span class=p>(</span><span class=nx>child</span> <span class=o>=&gt;</span> <span class=k>this</span><span class=p>.</span><span class=nx>handleItem</span><span class=p>(</span><span class=nx>code</span><span class=p>,</span> <span class=nx>child</span><span class=p>));</span>
+</span></span><span class=line><span class=cl>      <span class=nx>item</span><span class=p>.</span><span class=nx>checked</span> <span class=o>=</span> <span class=nx>item</span><span class=p>.</span><span class=nx>children</span><span class=p>.</span><span class=nx>every</span><span class=p>(</span><span class=nx>child</span> <span class=o>=&gt;</span> <span class=nx>child</span><span class=p>.</span><span class=nx>checked</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=nx>item</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=nx>handleAll</span><span class=p>(</span><span class=nx>item</span><span class=p>,</span> <span class=nx>checked</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>item</span><span class=p>.</span><span class=nx>checked</span> <span class=o>=</span> <span class=nx>checked</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=nb>Array</span><span class=p>.</span><span class=nx>isArray</span><span class=p>(</span><span class=nx>item</span><span class=o>?</span><span class=p>.</span><span class=nx>children</span><span class=p>)</span> <span class=o>&amp;&amp;</span> <span class=nx>item</span><span class=o>?</span><span class=p>.</span><span class=nx>children</span><span class=o>?</span><span class=p>.</span><span class=nx>length</span> <span class=o>&gt;</span> <span class=mi>0</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=nx>item</span><span class=p>.</span><span class=nx>children</span> <span class=o>=</span> <span class=nx>item</span><span class=p>.</span><span class=nx>children</span><span class=p>.</span><span class=nx>map</span><span class=p>(</span><span class=nx>child</span> <span class=o>=&gt;</span>
+</span></span><span class=line><span class=cl>        <span class=k>this</span><span class=p>.</span><span class=nx>handleAll</span><span class=p>(</span><span class=nx>child</span><span class=p>,</span> <span class=nx>checked</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>      <span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=nx>item</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>从 context 中取出 list 和 handleChecked 即可完成 UI 的渲染：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span><span class=lnt>55
+</span><span class=lnt>56
+</span><span class=lnt>57
+</span><span class=lnt>58
+</span><span class=lnt>59
+</span><span class=lnt>60
+</span><span class=lnt>61
+</span><span class=lnt>62
+</span><span class=lnt>63
+</span><span class=lnt>64
+</span><span class=lnt>65
+</span><span class=lnt>66
+</span><span class=lnt>67
+</span><span class=lnt>68
+</span><span class=lnt>69
+</span><span class=lnt>70
+</span><span class=lnt>71
+</span><span class=lnt>72
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-html data-lang=html><span class=line><span class=cl><span class=p>&lt;</span><span class=nt>app-codes</span> <span class=err>[</span><span class=na>type</span><span class=err>]=&#34;</span><span class=na>type</span><span class=err>&#34;</span> <span class=err>[</span><span class=na>codes</span><span class=err>]=&#34;</span><span class=na>role</span><span class=err>.</span><span class=na>codes</span><span class=err>&#34;</span> <span class=err>(</span><span class=na>update</span><span class=err>)=&#34;</span><span class=na>handleUpdate</span><span class=err>($</span><span class=na>event</span><span class=err>)&#34;</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  <span class=c>&lt;!--
+</span></span></span><span class=line><span class=cl><span class=c>    UI 包含在 ng-template 中，背后的逻辑封装在 CodesComponent 中
+</span></span></span><span class=line><span class=cl><span class=c>    CodesComponent 内部 ContentChild 的存在使得不再需要“模版变量”
+</span></span></span><span class=line><span class=cl><span class=c>    CodesComponent 通过 ContentChild 来获取 ng-template 的引用
+</span></span></span><span class=line><span class=cl><span class=c>    同时，通过 let-* 语法，解构出 context 中的属性
+</span></span></span><span class=line><span class=cl><span class=c>   --&gt;</span>
+</span></span><span class=line><span class=cl>  <span class=p>&lt;</span><span class=nt>ng-template</span> <span class=na>let-list</span> <span class=na>let-handleChecked</span><span class=o>=</span><span class=s>&#34;handleChecked&#34;</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>    <span class=p>&lt;</span><span class=nt>div</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>      <span class=p>&lt;</span><span class=nt>nz-collapse</span> <span class=err>[</span><span class=na>nzAccordion</span><span class=err>]=&#34;</span><span class=na>true</span><span class=err>&#34;</span> <span class=err>[</span><span class=na>nzBordered</span><span class=err>]=&#34;</span><span class=na>false</span><span class=err>&#34;</span> <span class=err>[</span><span class=na>nzGhost</span><span class=err>]=&#34;</span><span class=na>false</span><span class=err>&#34;</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>        <span class=p>&lt;</span><span class=nt>nz-collapse-panel</span>
+</span></span><span class=line><span class=cl>          <span class=err>*</span><span class=na>ngFor</span><span class=o>=</span><span class=s>&#34;let f1 of list&#34;</span>
+</span></span><span class=line><span class=cl>          <span class=err>[</span><span class=na>nzHeader</span><span class=err>]=&#34;</span><span class=na>collapsePanelHeader</span><span class=err>&#34;</span>
+</span></span><span class=line><span class=cl>          <span class=err>[(</span><span class=na>nzActive</span><span class=err>)]=&#34;</span><span class=na>f1</span><span class=err>.</span><span class=na>active</span><span class=err>&#34;</span>
+</span></span><span class=line><span class=cl>          <span class=err>[</span><span class=na>nzShowArrow</span><span class=err>]=&#34;</span><span class=na>false</span><span class=err>&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>          <span class=p>&lt;</span><span class=nt>div</span> <span class=na>class</span><span class=o>=</span><span class=s>&#34;collapse-panel-content&#34;</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>            <span class=p>&lt;</span><span class=nt>div</span> <span class=na>nz-row</span> <span class=err>*</span><span class=na>ngFor</span><span class=o>=</span><span class=s>&#34;let f2 of f1.children&#34;</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>              <span class=p>&lt;</span><span class=nt>div</span> <span class=na>nz-col</span> <span class=na>nzSpan</span><span class=o>=</span><span class=s>&#34;6&#34;</span> <span class=na>class</span><span class=o>=</span><span class=s>&#34;left-cell label-cell&#34;</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>                <span class=p>&lt;</span><span class=nt>label</span>
+</span></span><span class=line><span class=cl>                  <span class=na>nz-checkbox</span>
+</span></span><span class=line><span class=cl>                  <span class=err>[</span><span class=na>ngModel</span><span class=err>]=&#34;</span><span class=na>f2</span><span class=err>.</span><span class=na>checked</span><span class=err>&#34;</span>
+</span></span><span class=line><span class=cl>                  <span class=err>[</span><span class=na>ngModelOptions</span><span class=err>]=&#34;{</span> <span class=na>standalone:</span> <span class=na>true</span> <span class=err>}&#34;</span>
+</span></span><span class=line><span class=cl>                  <span class=err>(</span><span class=na>ngModelChange</span><span class=err>)=&#34;</span><span class=na>handleChecked</span><span class=err>($</span><span class=na>event</span><span class=err>,</span> <span class=na>f2</span><span class=err>)&#34;</span>
+</span></span><span class=line><span class=cl>                <span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>                  {{ f2.name }}
+</span></span><span class=line><span class=cl>                <span class=p>&lt;/</span><span class=nt>label</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>              <span class=p>&lt;/</span><span class=nt>div</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>              <span class=p>&lt;</span><span class=nt>div</span> <span class=na>nz-col</span> <span class=na>nzSpan</span><span class=o>=</span><span class=s>&#34;18&#34;</span> <span class=na>class</span><span class=o>=</span><span class=s>&#34;right-cell label-cell&#34;</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>                <span class=p>&lt;</span><span class=nt>label</span>
+</span></span><span class=line><span class=cl>                  <span class=err>*</span><span class=na>ngFor</span><span class=o>=</span><span class=s>&#34;let f3 of f2.children&#34;</span>
+</span></span><span class=line><span class=cl>                  <span class=na>nz-checkbox</span>
+</span></span><span class=line><span class=cl>                  <span class=err>[</span><span class=na>ngModel</span><span class=err>]=&#34;</span><span class=na>f3</span><span class=err>.</span><span class=na>checked</span><span class=err>&#34;</span>
+</span></span><span class=line><span class=cl>                  <span class=err>[</span><span class=na>ngModelOptions</span><span class=err>]=&#34;{</span> <span class=na>standalone:</span> <span class=na>true</span> <span class=err>}&#34;</span>
+</span></span><span class=line><span class=cl>                  <span class=err>(</span><span class=na>ngModelChange</span><span class=err>)=&#34;</span><span class=na>handleChecked</span><span class=err>($</span><span class=na>event</span><span class=err>,</span> <span class=na>f3</span><span class=err>)&#34;</span>
+</span></span><span class=line><span class=cl>                <span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>                  {{ f3.name }}
+</span></span><span class=line><span class=cl>                <span class=p>&lt;/</span><span class=nt>label</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>              <span class=p>&lt;/</span><span class=nt>div</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>            <span class=p>&lt;/</span><span class=nt>div</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>          <span class=p>&lt;/</span><span class=nt>div</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>          <span class=p>&lt;</span><span class=nt>ng-template</span> <span class=err>#</span><span class=na>collapsePanelHeader</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>            <span class=p>&lt;</span><span class=nt>div</span> <span class=na>nz-row</span> <span class=na>class</span><span class=o>=</span><span class=s>&#34;collapse-panel-header&#34;</span> <span class=na>nzAlign</span><span class=o>=</span><span class=s>&#34;middle&#34;</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>              <span class=p>&lt;</span><span class=nt>div</span> <span class=na>nz-col</span> <span class=err>[</span><span class=na>nzSpan</span><span class=err>]=&#34;</span><span class=na>12</span><span class=err>&#34;</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>                <span class=p>&lt;</span><span class=nt>label</span>
+</span></span><span class=line><span class=cl>                  <span class=na>nz-checkbox</span>
+</span></span><span class=line><span class=cl>                  <span class=err>[</span><span class=na>ngModel</span><span class=err>]=&#34;</span><span class=na>f1</span><span class=err>.</span><span class=na>checked</span><span class=err>&#34;</span>
+</span></span><span class=line><span class=cl>                  <span class=err>[</span><span class=na>ngModelOptions</span><span class=err>]=&#34;{</span> <span class=na>standalone:</span> <span class=na>true</span> <span class=err>}&#34;</span>
+</span></span><span class=line><span class=cl>                  <span class=err>(</span><span class=na>ngModelChange</span><span class=err>)=&#34;</span><span class=na>handleChecked</span><span class=err>($</span><span class=na>event</span><span class=err>,</span> <span class=na>f1</span><span class=err>)&#34;</span>
+</span></span><span class=line><span class=cl>                <span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>                  {{ f1.name }}
+</span></span><span class=line><span class=cl>                <span class=p>&lt;/</span><span class=nt>label</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>              <span class=p>&lt;/</span><span class=nt>div</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>              <span class=p>&lt;</span><span class=nt>div</span> <span class=na>nz-col</span> <span class=err>[</span><span class=na>nzSpan</span><span class=err>]=&#34;</span><span class=na>12</span><span class=err>&#34;</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>                <span class=p>&lt;</span><span class=nt>div</span> <span class=na>nz-row</span> <span class=na>nzJustify</span><span class=o>=</span><span class=s>&#34;end&#34;</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>                  <span class=p>&lt;</span><span class=nt>a</span> <span class=na>nz-button</span> <span class=na>nzType</span><span class=o>=</span><span class=s>&#34;link&#34;</span> <span class=err>*</span><span class=na>ngIf</span><span class=o>=</span><span class=s>&#34;f1.active&#34;</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>                    收起
+</span></span><span class=line><span class=cl>                    <span class=p>&lt;</span><span class=nt>i</span> <span class=na>nz-icon</span> <span class=na>nzType</span><span class=o>=</span><span class=s>&#34;up&#34;</span> <span class=na>nzTheme</span><span class=o>=</span><span class=s>&#34;outline&#34;</span><span class=p>&gt;&lt;/</span><span class=nt>i</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>                  <span class=p>&lt;/</span><span class=nt>a</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>                  <span class=p>&lt;</span><span class=nt>a</span> <span class=na>nz-button</span> <span class=na>nzType</span><span class=o>=</span><span class=s>&#34;link&#34;</span> <span class=err>*</span><span class=na>ngIf</span><span class=o>=</span><span class=s>&#34;!f1.active&#34;</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>                    展开
+</span></span><span class=line><span class=cl>                    <span class=p>&lt;</span><span class=nt>i</span> <span class=na>nz-icon</span> <span class=na>nzType</span><span class=o>=</span><span class=s>&#34;down&#34;</span> <span class=na>nzTheme</span><span class=o>=</span><span class=s>&#34;outline&#34;</span><span class=p>&gt;&lt;/</span><span class=nt>i</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>                  <span class=p>&lt;/</span><span class=nt>a</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>                <span class=p>&lt;/</span><span class=nt>div</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>              <span class=p>&lt;/</span><span class=nt>div</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>            <span class=p>&lt;/</span><span class=nt>div</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>          <span class=p>&lt;/</span><span class=nt>ng-template</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>        <span class=p>&lt;/</span><span class=nt>nz-collapse-panel</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>      <span class=p>&lt;/</span><span class=nt>nz-collapse</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>    <span class=p>&lt;/</span><span class=nt>div</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  <span class=p>&lt;/</span><span class=nt>ng-template</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;/</span><span class=nt>app-codes</span><span class=p>&gt;</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=ngcomponentoutlet>ngComponentOutlet</h2><p>组件类装饰器中有一个可选的属性 selector，selector 决定了组件的实例化位置；当组件装饰器中缺少 selector 属性（或者 selector 属性值为空）时，Ng 会为其生成一个 &lt;ng-component/> 标签。</p><p>没有 selector 属性的组件可以通过以下两种方式渲染到页面中：</p><ol><li>ngComponentOutlet；</li><li>router-outlet。</li></ol><p>&lt;router-outlet/> 不用多说了；和 ngTemplateOutlet 一样，ngComponentOutlet 也是通过 ng-container 渲染组件的：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-ts data-lang=ts><span class=line><span class=cl><span class=kd>@Component</span><span class=p>({</span>
+</span></span><span class=line><span class=cl>  <span class=nx>selector</span><span class=o>:</span> <span class=s1>&#39;app-ng-component-outlet-example&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nx>template</span><span class=o>:</span> <span class=sb>`
+</span></span></span><span class=line><span class=cl><span class=sb>    &lt;ng-container *ngComponentOutlet=&#34;component&#34;&gt;&lt;/ng-container&gt;
+</span></span></span><span class=line><span class=cl><span class=sb>    &lt;button type=&#34;button&#34; (click)=&#34;handleComponentSwitch()&#34;&gt;switch&lt;/button&gt;
+</span></span></span><span class=line><span class=cl><span class=sb>  `</span>
+</span></span><span class=line><span class=cl><span class=p>})</span>
+</span></span><span class=line><span class=cl><span class=kr>export</span> <span class=kr>class</span> <span class=nx>NgComponentOutletExampleComponent</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>component</span>: <span class=kt>any</span> <span class=o>=</span> <span class=nx>AComponent</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=nx>handleComponentSwitch() {</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=k>this</span><span class=p>.</span><span class=nx>component</span><span class=p>.</span><span class=nx>name</span> <span class=o>===</span> <span class=s1>&#39;A&#39;</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=k>this</span><span class=p>.</span><span class=nx>component</span> <span class=o>=</span> <span class=nx>BComponent</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=k>this</span><span class=p>.</span><span class=nx>component</span> <span class=o>=</span> <span class=nx>AComponent</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=formcontrolname>formControlName</h2><p>在自定义元素上使用 formControlName：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>  1
+</span><span class=lnt>  2
+</span><span class=lnt>  3
+</span><span class=lnt>  4
+</span><span class=lnt>  5
+</span><span class=lnt>  6
+</span><span class=lnt>  7
+</span><span class=lnt>  8
+</span><span class=lnt>  9
+</span><span class=lnt> 10
+</span><span class=lnt> 11
+</span><span class=lnt> 12
+</span><span class=lnt> 13
+</span><span class=lnt> 14
+</span><span class=lnt> 15
+</span><span class=lnt> 16
+</span><span class=lnt> 17
+</span><span class=lnt> 18
+</span><span class=lnt> 19
+</span><span class=lnt> 20
+</span><span class=lnt> 21
+</span><span class=lnt> 22
+</span><span class=lnt> 23
+</span><span class=lnt> 24
+</span><span class=lnt> 25
+</span><span class=lnt> 26
+</span><span class=lnt> 27
+</span><span class=lnt> 28
+</span><span class=lnt> 29
+</span><span class=lnt> 30
+</span><span class=lnt> 31
+</span><span class=lnt> 32
+</span><span class=lnt> 33
+</span><span class=lnt> 34
+</span><span class=lnt> 35
+</span><span class=lnt> 36
+</span><span class=lnt> 37
+</span><span class=lnt> 38
+</span><span class=lnt> 39
+</span><span class=lnt> 40
+</span><span class=lnt> 41
+</span><span class=lnt> 42
+</span><span class=lnt> 43
+</span><span class=lnt> 44
+</span><span class=lnt> 45
+</span><span class=lnt> 46
+</span><span class=lnt> 47
+</span><span class=lnt> 48
+</span><span class=lnt> 49
+</span><span class=lnt> 50
+</span><span class=lnt> 51
+</span><span class=lnt> 52
+</span><span class=lnt> 53
+</span><span class=lnt> 54
+</span><span class=lnt> 55
+</span><span class=lnt> 56
+</span><span class=lnt> 57
+</span><span class=lnt> 58
+</span><span class=lnt> 59
+</span><span class=lnt> 60
+</span><span class=lnt> 61
+</span><span class=lnt> 62
+</span><span class=lnt> 63
+</span><span class=lnt> 64
+</span><span class=lnt> 65
+</span><span class=lnt> 66
+</span><span class=lnt> 67
+</span><span class=lnt> 68
+</span><span class=lnt> 69
+</span><span class=lnt> 70
+</span><span class=lnt> 71
+</span><span class=lnt> 72
+</span><span class=lnt> 73
+</span><span class=lnt> 74
+</span><span class=lnt> 75
+</span><span class=lnt> 76
+</span><span class=lnt> 77
+</span><span class=lnt> 78
+</span><span class=lnt> 79
+</span><span class=lnt> 80
+</span><span class=lnt> 81
+</span><span class=lnt> 82
+</span><span class=lnt> 83
+</span><span class=lnt> 84
+</span><span class=lnt> 85
+</span><span class=lnt> 86
+</span><span class=lnt> 87
+</span><span class=lnt> 88
+</span><span class=lnt> 89
+</span><span class=lnt> 90
+</span><span class=lnt> 91
+</span><span class=lnt> 92
+</span><span class=lnt> 93
+</span><span class=lnt> 94
+</span><span class=lnt> 95
+</span><span class=lnt> 96
+</span><span class=lnt> 97
+</span><span class=lnt> 98
+</span><span class=lnt> 99
+</span><span class=lnt>100
+</span><span class=lnt>101
+</span><span class=lnt>102
+</span><span class=lnt>103
+</span><span class=lnt>104
+</span><span class=lnt>105
+</span><span class=lnt>106
+</span><span class=lnt>107
+</span><span class=lnt>108
+</span><span class=lnt>109
+</span><span class=lnt>110
+</span><span class=lnt>111
+</span><span class=lnt>112
+</span><span class=lnt>113
+</span><span class=lnt>114
+</span><span class=lnt>115
+</span><span class=lnt>116
+</span><span class=lnt>117
+</span><span class=lnt>118
+</span><span class=lnt>119
+</span><span class=lnt>120
+</span><span class=lnt>121
+</span><span class=lnt>122
+</span><span class=lnt>123
+</span><span class=lnt>124
+</span><span class=lnt>125
+</span><span class=lnt>126
+</span><span class=lnt>127
+</span><span class=lnt>128
+</span><span class=lnt>129
+</span><span class=lnt>130
+</span><span class=lnt>131
+</span><span class=lnt>132
+</span><span class=lnt>133
+</span><span class=lnt>134
+</span><span class=lnt>135
+</span><span class=lnt>136
+</span><span class=lnt>137
+</span><span class=lnt>138
+</span><span class=lnt>139
+</span><span class=lnt>140
+</span><span class=lnt>141
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-ts data-lang=ts><span class=line><span class=cl><span class=cm>/**
+</span></span></span><span class=line><span class=cl><span class=cm> * 首先，需要明确一点
+</span></span></span><span class=line><span class=cl><span class=cm> * 无论是“模版驱动表单（ngModel）”
+</span></span></span><span class=line><span class=cl><span class=cm> * 还是“响应式表单（formControlName）”
+</span></span></span><span class=line><span class=cl><span class=cm> * 内部实现都是 FormControl
+</span></span></span><span class=line><span class=cl><span class=cm> * NgModel 内部继承了 FormControl
+</span></span></span><span class=line><span class=cl><span class=cm> */</span>
+</span></span><span class=line><span class=cl><span class=kr>type</span> <span class=nx>OnChangeType</span> <span class=o>=</span> <span class=p>(</span><span class=nx>value</span>: <span class=kt>any</span><span class=p>)</span> <span class=o>=&gt;</span> <span class=k>void</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>type</span> <span class=nx>OnTouchedType</span> <span class=o>=</span> <span class=p>()</span> <span class=o>=&gt;</span> <span class=kt>any</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kd>@Component</span><span class=p>({</span>
+</span></span><span class=line><span class=cl>  <span class=nx>selector</span><span class=o>:</span> <span class=s1>&#39;app-administrative-division&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nx>providers</span><span class=o>:</span> <span class=p>[</span>
+</span></span><span class=line><span class=cl>    <span class=cm>/**
+</span></span></span><span class=line><span class=cl><span class=cm>     * 这里没有使用 forwardRef 的必要
+</span></span></span><span class=line><span class=cl><span class=cm>     * forwardRef 的作用是“返回对‘值’的引用”
+</span></span></span><span class=line><span class=cl><span class=cm>     * 因为，“类修饰符”是在“类被定义”之后才生效的
+</span></span></span><span class=line><span class=cl><span class=cm>     * 所以，无需使用 forwardRef 将“类的引用”捕获在闭包里
+</span></span></span><span class=line><span class=cl><span class=cm>     */</span>
+</span></span><span class=line><span class=cl>    <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=c1>// useExisting: forwardRef(() =&gt; AdministrativeDivisionComponent),
+</span></span></span><span class=line><span class=cl><span class=c1></span>      <span class=nx>useExisting</span>: <span class=kt>AdministrativeDivisionComponent</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>      <span class=nx>provide</span>: <span class=kt>NG_VALUE_ACCESSOR</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>      <span class=nx>multi</span>: <span class=kt>true</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=p>]</span>
+</span></span><span class=line><span class=cl><span class=p>})</span>
+</span></span><span class=line><span class=cl><span class=kr>export</span> <span class=kr>class</span> <span class=nx>AdministrativeDivisionComponent</span>
+</span></span><span class=line><span class=cl>  <span class=kr>implements</span> <span class=nx>OnInit</span><span class=p>,</span> <span class=nx>ControlValueAccessor</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=cm>/**
+</span></span></span><span class=line><span class=cl><span class=cm>   * ControlValueAccessor 在“Form API”和“DOM”之间扮演者桥梁的角色
+</span></span></span><span class=line><span class=cl><span class=cm>   * 组件通过将自身注册为 NG_VALUE_ACCESSOR
+</span></span></span><span class=line><span class=cl><span class=cm>   * 并且 implements ControlValueAccessor
+</span></span></span><span class=line><span class=cl><span class=cm>   * 任何自定义组件都能和“Form API”进行沟通
+</span></span></span><span class=line><span class=cl><span class=cm>   * 原生表单元素能和“Form API”沟通的原因是
+</span></span></span><span class=line><span class=cl><span class=cm>   * Angular 内部已经帮助实现了一部分“指令”：
+</span></span></span><span class=line><span class=cl><span class=cm>   * SelectMultipleControlValueAccessor
+</span></span></span><span class=line><span class=cl><span class=cm>   * CheckboxControlValueAccessor
+</span></span></span><span class=line><span class=cl><span class=cm>   * SelectControlValueAccessor
+</span></span></span><span class=line><span class=cl><span class=cm>   * RadioControlValueAccessor
+</span></span></span><span class=line><span class=cl><span class=cm>   * DefaultValueAccessor
+</span></span></span><span class=line><span class=cl><span class=cm>   * NumberValueAccessor
+</span></span></span><span class=line><span class=cl><span class=cm>   * RangeValueAccessor
+</span></span></span><span class=line><span class=cl><span class=cm>   */</span>
+</span></span><span class=line><span class=cl>  <span class=kd>@Input</span><span class=p>()</span> <span class=nx>nzValue</span> <span class=o>=</span> <span class=kc>null</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=kd>@Input</span><span class=p>()</span> <span class=nx>nzDisabled</span> <span class=o>=</span> <span class=kc>false</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=kd>@Input</span><span class=p>()</span> <span class=nx>placeholder</span> <span class=o>=</span> <span class=s1>&#39;&#39;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=kd>@Output</span><span class=p>()</span> <span class=kr>readonly</span> <span class=nx>nzValueChange</span> <span class=o>=</span> <span class=k>new</span> <span class=nx>EventEmitter</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>  <span class=kd>@ViewChild</span><span class=p>(</span><span class=s1>&#39;buttonElement&#39;</span><span class=p>)</span> <span class=nx>buttonElement</span><span class=o>!:</span> <span class=nx>ElementRef</span><span class=p>&lt;</span><span class=nt>HTMLButtonElement</span><span class=p>&gt;;</span>
+</span></span><span class=line><span class=cl>  <span class=kd>@ViewChild</span><span class=p>(</span><span class=s1>&#39;selectElement&#39;</span><span class=p>)</span> <span class=nx>selectElement</span><span class=o>!:</span> <span class=nx>ElementRef</span><span class=p>&lt;</span><span class=nt>HTMLSelectElement</span><span class=p>&gt;;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=nx>provinceValue</span> <span class=o>=</span> <span class=kc>null</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=nx>cityValue</span> <span class=o>=</span> <span class=kc>null</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=nx>areaValue</span> <span class=o>=</span> <span class=kc>null</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=nx>currentProvinceList</span> <span class=o>=</span> <span class=p>[];</span>
+</span></span><span class=line><span class=cl>  <span class=nx>currentCityList</span> <span class=o>=</span> <span class=p>[];</span>
+</span></span><span class=line><span class=cl>  <span class=nx>currentAreaList</span> <span class=o>=</span> <span class=p>[];</span>
+</span></span><span class=line><span class=cl>  <span class=nx>loadingProvinceList</span> <span class=o>=</span> <span class=kc>false</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=nx>loadingCityList</span> <span class=o>=</span> <span class=kc>false</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=nx>loadingAreaList</span> <span class=o>=</span> <span class=kc>false</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=nx>isEditMode</span> <span class=o>=</span> <span class=kc>false</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=nx>onChange</span>: <span class=kt>OnChangeType</span> <span class=o>=</span> <span class=p>()</span> <span class=o>=&gt;</span> <span class=p>{};</span>
+</span></span><span class=line><span class=cl>  <span class=nx>onTouched</span>: <span class=kt>OnTouchedType</span> <span class=o>=</span> <span class=p>()</span> <span class=o>=&gt;</span> <span class=p>{};</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=kr>constructor</span><span class=p>(</span><span class=kr>private</span> <span class=nx>apiService</span>: <span class=kt>ApiService</span><span class=p>)</span> <span class=p>{}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=nx>ngOnInit() {</span>
+</span></span><span class=line><span class=cl>    <span class=k>this</span><span class=p>.</span><span class=nx>getCurrentProvinceList</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=nx>focus</span><span class=p>()</span><span class=o>:</span> <span class=k>void</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=k>this</span><span class=p>.</span><span class=nx>isEditMode</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=k>this</span><span class=p>.</span><span class=nx>selectElement</span><span class=p>.</span><span class=nx>nativeElement</span><span class=p>.</span><span class=nx>focus</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=k>this</span><span class=p>.</span><span class=nx>buttonElement</span><span class=p>.</span><span class=nx>nativeElement</span><span class=p>.</span><span class=nx>focus</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=nx>blur</span><span class=p>()</span><span class=o>:</span> <span class=k>void</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=k>this</span><span class=p>.</span><span class=nx>isEditMode</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=k>this</span><span class=p>.</span><span class=nx>selectElement</span><span class=p>.</span><span class=nx>nativeElement</span><span class=p>.</span><span class=nx>blur</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=k>this</span><span class=p>.</span><span class=nx>buttonElement</span><span class=p>.</span><span class=nx>nativeElement</span><span class=p>.</span><span class=nx>blur</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=cm>/**
+</span></span></span><span class=line><span class=cl><span class=cm>   * 接收 FormControl 传来的 value
+</span></span></span><span class=line><span class=cl><span class=cm>   * 将 value 更新到 UI 上
+</span></span></span><span class=line><span class=cl><span class=cm>   */</span>
+</span></span><span class=line><span class=cl>  <span class=nx>writeValue</span><span class=p>(</span><span class=nx>value</span>: <span class=kt>any</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>this</span><span class=p>.</span><span class=nx>nzValue</span> <span class=o>=</span> <span class=nx>value</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=cm>/**
+</span></span></span><span class=line><span class=cl><span class=cm>   * registerOnChange 会被 FormControl 用来注册回调 fn
+</span></span></span><span class=line><span class=cl><span class=cm>   * 当 UI 中的值变化时，fn 会被调用
+</span></span></span><span class=line><span class=cl><span class=cm>   */</span>
+</span></span><span class=line><span class=cl>  <span class=nx>registerOnChange</span><span class=p>(</span><span class=nx>fn</span>: <span class=kt>OnChangeType</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>this</span><span class=p>.</span><span class=nx>onChange</span> <span class=o>=</span> <span class=nx>fn</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=cm>/**
+</span></span></span><span class=line><span class=cl><span class=cm>   * 用来处理用户对组件的交互
+</span></span></span><span class=line><span class=cl><span class=cm>   * 通常可以不用处理交互
+</span></span></span><span class=line><span class=cl><span class=cm>   */</span>
+</span></span><span class=line><span class=cl>  <span class=nx>registerOnTouched</span><span class=p>(</span><span class=nx>fn</span>: <span class=kt>OnTouchedType</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>this</span><span class=p>.</span><span class=nx>onTouched</span> <span class=o>=</span> <span class=nx>fn</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=nx>setDisabledState</span><span class=p>(</span><span class=nx>disabled</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>this</span><span class=p>.</span><span class=nx>nzDisabled</span> <span class=o>=</span> <span class=nx>disabled</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=nx>handleSwitch2Edit() {</span>
+</span></span><span class=line><span class=cl>    <span class=k>this</span><span class=p>.</span><span class=nx>isEditMode</span> <span class=o>=</span> <span class=o>!</span><span class=k>this</span><span class=p>.</span><span class=nx>isEditMode</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=nx>handleProvinceValueChange</span><span class=p>(</span><span class=nx>value</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>this</span><span class=p>.</span><span class=nx>provinceValue</span> <span class=o>=</span> <span class=nx>value</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>this</span><span class=p>.</span><span class=nx>getCurrentCityList</span><span class=p>(</span><span class=nx>value</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=nx>handleCityValueChange</span><span class=p>(</span><span class=nx>value</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>this</span><span class=p>.</span><span class=nx>cityValue</span> <span class=o>=</span> <span class=nx>value</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>this</span><span class=p>.</span><span class=nx>getCurrentAreaList</span><span class=p>(</span><span class=nx>value</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=nx>handleAreaValueChange</span><span class=p>(</span><span class=nx>value</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>this</span><span class=p>.</span><span class=nx>areaValue</span> <span class=o>=</span> <span class=nx>value</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=kr>const</span> <span class=p>{</span> <span class=nx>provinceName</span> <span class=p>}</span> <span class=o>=</span> <span class=k>this</span><span class=p>.</span><span class=nx>provinceValue</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=kr>const</span> <span class=p>{</span> <span class=nx>cityName</span> <span class=p>}</span> <span class=o>=</span> <span class=k>this</span><span class=p>.</span><span class=nx>cityValue</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=kr>const</span> <span class=p>{</span> <span class=nx>areaName</span> <span class=p>}</span> <span class=o>=</span> <span class=k>this</span><span class=p>.</span><span class=nx>areaValue</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=kr>const</span> <span class=nx>temp</span> <span class=o>=</span> <span class=sb>`</span><span class=si>${</span><span class=nx>provinceName</span><span class=si>}${</span><span class=nx>cityName</span><span class=si>}${</span><span class=nx>areaName</span><span class=si>}</span><span class=sb>`</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>this</span><span class=p>.</span><span class=nx>nzValue</span> <span class=o>=</span> <span class=nx>temp</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>this</span><span class=p>.</span><span class=nx>isEditMode</span> <span class=o>=</span> <span class=kc>false</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>this</span><span class=p>.</span><span class=nx>onChange</span><span class=p>(</span><span class=k>this</span><span class=p>.</span><span class=nx>nzValue</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=k>this</span><span class=p>.</span><span class=nx>nzValueChange</span><span class=p>.</span><span class=nx>emit</span><span class=p>(</span><span class=k>this</span><span class=p>.</span><span class=nx>nzValue</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=nx>getCurrentProvinceList() {</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// ...
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=nx>getCurrentCityList</span><span class=p>({</span> <span class=nx>provinceId</span> <span class=p>})</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// ...
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=nx>getCurrentAreaList</span><span class=p>({</span> <span class=nx>cityId</span> <span class=p>})</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// ...
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>将自身注册为 NG_VALUE_ACCESSOR 这种方式有一些局限，它在 Validator 被触发时，不能根据验证结果作出反应；但是优势是<strong>可以绑定自定义事件</strong>。</p><p>如果需要对 Validator 作出反应，可以依赖注入 <strong>NgControl</strong>：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span><span class=lnt>55
+</span><span class=lnt>56
+</span><span class=lnt>57
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-ts data-lang=ts><span class=line><span class=cl><span class=kr>type</span> <span class=nx>OnChangeType</span> <span class=o>=</span> <span class=p>(</span><span class=nx>value</span>: <span class=kt>string</span><span class=p>[]</span> <span class=o>|</span> <span class=kc>null</span><span class=p>)</span> <span class=o>=&gt;</span> <span class=k>void</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>type</span> <span class=nx>OnTouchedType</span> <span class=o>=</span> <span class=p>()</span> <span class=o>=&gt;</span> <span class=kt>any</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kd>@Component</span><span class=p>({</span>
+</span></span><span class=line><span class=cl>  <span class=nx>selector</span><span class=o>:</span> <span class=s1>&#39;hema-quarterly-picker&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nx>templateUrl</span><span class=o>:</span> <span class=s1>&#39;./hema-quarterly-picker.component.html&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nx>styleUrls</span><span class=o>:</span> <span class=p>[</span><span class=s1>&#39;./hema-quarterly-picker.component.scss&#39;</span><span class=p>]</span>
+</span></span><span class=line><span class=cl><span class=p>})</span>
+</span></span><span class=line><span class=cl><span class=kr>export</span> <span class=kr>class</span> <span class=nx>HemaQuarterlyPickerComponent</span> <span class=kr>implements</span> <span class=nx>ControlValueAccessor</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=kd>@Input</span><span class=p>()</span> <span class=nx>nzValue</span>: <span class=kt>string</span><span class=p>[];</span> <span class=c1>// 默认日期
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=kd>@Input</span><span class=p>()</span> <span class=nx>nzDisabled</span> <span class=o>=</span> <span class=kc>false</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=kd>@Input</span><span class=p>()</span> <span class=nx>nzPlaceHolder</span> <span class=o>=</span> <span class=s1>&#39;请选择&#39;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=kd>@Input</span><span class=p>()</span> <span class=nx>nzAllowClear</span> <span class=o>=</span> <span class=kc>false</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=kd>@Input</span><span class=p>()</span> <span class=nx>style</span>: <span class=kt>any</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=nx>onChange</span>: <span class=kt>OnChangeType</span> <span class=o>=</span> <span class=p>()</span> <span class=o>=&gt;</span> <span class=p>{};</span>
+</span></span><span class=line><span class=cl>  <span class=nx>onTouched</span>: <span class=kt>OnTouchedType</span> <span class=o>=</span> <span class=p>()</span> <span class=o>=&gt;</span> <span class=p>{};</span>
+</span></span><span class=line><span class=cl>  <span class=nx>quarterMonth</span> <span class=o>=</span> <span class=p>[</span>
+</span></span><span class=line><span class=cl>    <span class=p>[</span><span class=mi>1</span><span class=p>,</span> <span class=mi>2</span><span class=p>,</span> <span class=mi>3</span><span class=p>],</span>
+</span></span><span class=line><span class=cl>    <span class=p>[</span><span class=mi>4</span><span class=p>,</span> <span class=mi>5</span><span class=p>,</span> <span class=mi>6</span><span class=p>],</span>
+</span></span><span class=line><span class=cl>    <span class=p>[</span><span class=mi>7</span><span class=p>,</span> <span class=mi>8</span><span class=p>,</span> <span class=mi>9</span><span class=p>],</span>
+</span></span><span class=line><span class=cl>    <span class=p>[</span><span class=mi>10</span><span class=p>,</span> <span class=mi>11</span><span class=p>,</span> <span class=mi>12</span><span class=p>]</span>
+</span></span><span class=line><span class=cl>  <span class=p>];</span>
+</span></span><span class=line><span class=cl>  <span class=nx>visible</span> <span class=o>=</span> <span class=kc>false</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=nx>quarterly</span>: <span class=kt>number</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=nx>year</span>: <span class=kt>number</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=nx>cachYear</span>: <span class=kt>number</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=nx>interval</span> <span class=o>=</span> <span class=kc>null</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=nx>showClose</span> <span class=o>=</span> <span class=kc>false</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=kr>get</span> <span class=nx>isError() {</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=k>this</span><span class=p>.</span><span class=nx>control</span><span class=p>.</span><span class=nx>dirty</span> <span class=o>&amp;&amp;</span> <span class=k>this</span><span class=p>.</span><span class=nx>control</span><span class=p>.</span><span class=nx>invalid</span> <span class=o>&amp;&amp;</span> <span class=o>!</span><span class=k>this</span><span class=p>.</span><span class=nx>control</span><span class=p>.</span><span class=nx>disabled</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=kr>constructor</span><span class=p>(</span><span class=kr>private</span> <span class=nx>control</span>: <span class=kt>NgControl</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 获取 NgControl 实例
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=k>this</span><span class=p>.</span><span class=nx>control</span> <span class=o>&amp;&amp;</span> <span class=p>(</span><span class=k>this</span><span class=p>.</span><span class=nx>control</span><span class=p>.</span><span class=nx>valueAccessor</span> <span class=o>=</span> <span class=k>this</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=nx>writeValue</span><span class=p>(</span><span class=nx>value</span>: <span class=kt>string</span><span class=p>[])</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>this</span><span class=p>.</span><span class=nx>nzValue</span> <span class=o>=</span> <span class=nx>value</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>this</span><span class=p>.</span><span class=nx>hendleInit</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=nx>registerOnChange</span><span class=p>(</span><span class=nx>fn</span>: <span class=kt>OnChangeType</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>this</span><span class=p>.</span><span class=nx>onChange</span> <span class=o>=</span> <span class=nx>fn</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=nx>registerOnTouched</span><span class=p>(</span><span class=nx>fn</span>: <span class=kt>OnTouchedType</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>this</span><span class=p>.</span><span class=nx>onTouched</span> <span class=o>=</span> <span class=nx>fn</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=nx>setDisabledState</span><span class=p>(</span><span class=nx>disabled</span>: <span class=kt>boolean</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>this</span><span class=p>.</span><span class=nx>nzDisabled</span> <span class=o>=</span> <span class=nx>disabled</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=nx>handleChange</span><span class=p>(</span><span class=nx>value</span>: <span class=kt>string</span><span class=p>[])</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>this</span><span class=p>.</span><span class=nx>nzValue</span> <span class=o>=</span> <span class=nx>value</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>this</span><span class=p>.</span><span class=nx>onChange</span><span class=p>(</span><span class=k>this</span><span class=p>.</span><span class=nx>nzValue</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// ...
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=asyncpipe>asyncPipe</h2><p>一般情况下，我们会在 ngOnInit 中请求组件需要的初始化数据；但是这会导致相关的副作用散落在组件的各个部分。</p><p>借助 Angular 提供的 AsyncPipe，组件可以以流的形式来处理这部分逻辑；这样，相关逻辑就被数据流“串联”起来了：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span><span class=lnt>55
+</span><span class=lnt>56
+</span><span class=lnt>57
+</span><span class=lnt>58
+</span><span class=lnt>59
+</span><span class=lnt>60
+</span><span class=lnt>61
+</span><span class=lnt>62
+</span><span class=lnt>63
+</span><span class=lnt>64
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-ts data-lang=ts><span class=line><span class=cl><span class=kd>@Component</span><span class=p>({</span>
+</span></span><span class=line><span class=cl>  <span class=nx>template</span><span class=o>:</span> <span class=sb>`
+</span></span></span><span class=line><span class=cl><span class=sb>    &lt;nz-table
+</span></span></span><span class=line><span class=cl><span class=sb>      (nzPageIndexChange)=&#34;handlePageIndexChange($event)&#34;
+</span></span></span><span class=line><span class=cl><span class=sb>      (nzPageSizeChange)=&#34;handlePageSizeChange($event)&#34;
+</span></span></span><span class=line><span class=cl><span class=sb>      [nzData]=&#34;banlanceList$ | async as banlanceList&#34;
+</span></span></span><span class=line><span class=cl><span class=sb>      [nzPageIndex]=&#34;paginationData.pageIndex&#34;
+</span></span></span><span class=line><span class=cl><span class=sb>      [nzPageSize]=&#34;paginationData.pageSize&#34;
+</span></span></span><span class=line><span class=cl><span class=sb>      [nzTotal]=&#34;paginationData.total&#34;
+</span></span></span><span class=line><span class=cl><span class=sb>      [nzLoading]=&#34;loading&#34;
+</span></span></span><span class=line><span class=cl><span class=sb>    &gt;
+</span></span></span><span class=line><span class=cl><span class=sb>      &lt;tbody&gt;
+</span></span></span><span class=line><span class=cl><span class=sb>        &lt;tr *ngFor=&#34;let item of banlanceList&#34;&gt;...&lt;/tr&gt;
+</span></span></span><span class=line><span class=cl><span class=sb>      &lt;/tbody&gt;
+</span></span></span><span class=line><span class=cl><span class=sb>    &lt;/nz-table&gt;
+</span></span></span><span class=line><span class=cl><span class=sb>  `</span>
+</span></span><span class=line><span class=cl><span class=p>})</span>
+</span></span><span class=line><span class=cl><span class=kr>export</span> <span class=kr>class</span> <span class=nx>ExclusiveAccountBalanceComponent</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=c1>// 数据流起始于路由查询参数
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=nx>banlanceList$</span> <span class=o>=</span> <span class=k>this</span><span class=p>.</span><span class=nx>route</span><span class=p>.</span><span class=nx>queryParams</span><span class=p>.</span><span class=nx>pipe</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 执行“请求发起前”的副作用
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=nx>tap</span><span class=p>((</span><span class=nx>params</span>: <span class=kt>SearchParams</span><span class=p>)</span> <span class=o>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=k>this</span><span class=p>.</span><span class=nx>lastQueryParams</span> <span class=o>=</span> <span class=nx>params</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>      <span class=k>this</span><span class=p>.</span><span class=nx>loading</span> <span class=o>=</span> <span class=kc>true</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=p>}),</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 切换到数据请求数据流，发起请求并会自动舍弃上次请求（自动处理竞态问题）
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=nx>switchMap</span><span class=p>(</span><span class=nx>params</span> <span class=o>=&gt;</span>
+</span></span><span class=line><span class=cl>      <span class=k>this</span><span class=p>.</span><span class=nx>apiService</span><span class=p>.</span><span class=nx>exclusiveDailyAccountBalancePage</span><span class=p>(</span><span class=nx>params</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=p>),</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 执行“请求发起后”的副作用
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=nx>tap</span><span class=p>(({</span> <span class=nx>pages</span> <span class=o>=</span> <span class=mi>0</span><span class=p>,</span> <span class=nx>paginationData</span> <span class=o>=</span> <span class=p>{}</span> <span class=p>})</span> <span class=o>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=k>this</span><span class=p>.</span><span class=nx>paginationData</span> <span class=o>=</span> <span class=nx>paginationData</span> <span class=kr>as</span> <span class=nx>PaginationData</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>      <span class=k>this</span><span class=p>.</span><span class=nx>pages</span> <span class=o>=</span> <span class=nx>pages</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>      <span class=k>this</span><span class=p>.</span><span class=nx>loading</span> <span class=o>=</span> <span class=kc>false</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=p>}),</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 对数据流进行格式化
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=nx>map</span><span class=p>(({</span> <span class=nx>records</span> <span class=o>=</span> <span class=p>[]</span> <span class=p>})</span> <span class=o>=&gt;</span> <span class=nx>records</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>  <span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=nx>paginationData</span>: <span class=kt>PaginationData</span> <span class=o>=</span> <span class=p>{</span> <span class=nx>pageIndex</span>: <span class=kt>1</span><span class=p>,</span> <span class=nx>pageSize</span>: <span class=kt>10</span><span class=p>,</span> <span class=nx>total</span>: <span class=kt>0</span> <span class=p>};</span>
+</span></span><span class=line><span class=cl>  <span class=nx>pages</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=nx>lastQueryParams</span>: <span class=kt>SearchParams</span> <span class=o>=</span> <span class=p>{};</span>
+</span></span><span class=line><span class=cl>  <span class=nx>loading</span> <span class=o>=</span> <span class=kc>false</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=kr>constructor</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>    <span class=kr>private</span> <span class=nx>apiService</span>: <span class=kt>ApiService</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=kr>private</span> <span class=nx>router</span>: <span class=kt>Router</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=kr>private</span> <span class=nx>route</span>: <span class=kt>ActivatedRoute</span>
+</span></span><span class=line><span class=cl>  <span class=p>)</span> <span class=p>{}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=nx>handleSearched</span><span class=p>(</span><span class=nx>queryParams</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 路由查询参数变化，新的数据被放入数据流中
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=k>this</span><span class=p>.</span><span class=nx>router</span><span class=p>.</span><span class=nx>navigate</span><span class=p>([],</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=nx>relativeTo</span>: <span class=kt>this.route</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>      <span class=nx>queryParams</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>      <span class=nx>queryParamsHandling</span><span class=o>:</span> <span class=s1>&#39;merge&#39;</span>
+</span></span><span class=line><span class=cl>    <span class=p>});</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=nx>handleRefreshed() {</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 将上次的查询数据，重新放入数据流中
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=p>(</span><span class=k>this</span><span class=p>.</span><span class=nx>banlanceList$</span> <span class=kr>as</span> <span class=nx>AnonymousSubject</span><span class=p>&lt;</span><span class=nt>SearchParams</span><span class=p>&gt;).</span><span class=nx>next</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>      <span class=k>this</span><span class=p>.</span><span class=nx>lastQueryParams</span>
+</span></span><span class=line><span class=cl>    <span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=directive>directive</h2><p>指令的好处是，可以在同一元素上叠加多个指令来完成不同的逻辑。</p><p><img src=/p/angular-%E7%BB%84%E4%BB%B6%E8%AE%BE%E8%AE%A1/directive.svg alt=LocalImage loading=lazy></p><ul><li>指令 carousel 绑定了三个 key：from、autoplay、withDelay；</li><li>对应传入的值也有三个：images、&lsquo;on&rsquo;、2000。</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span><span class=lnt>55
+</span><span class=lnt>56
+</span><span class=lnt>57
+</span><span class=lnt>58
+</span><span class=lnt>59
+</span><span class=lnt>60
+</span><span class=lnt>61
+</span><span class=lnt>62
+</span><span class=lnt>63
+</span><span class=lnt>64
+</span><span class=lnt>65
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-ts data-lang=ts><span class=line><span class=cl><span class=kd>@Directive</span><span class=p>({</span>
+</span></span><span class=line><span class=cl>  <span class=nx>selector</span><span class=o>:</span> <span class=s1>&#39;[carousel]&#39;</span>
+</span></span><span class=line><span class=cl><span class=p>})</span>
+</span></span><span class=line><span class=cl><span class=kr>export</span> <span class=kr>class</span> <span class=nx>CarouselDirective</span> <span class=kr>implements</span> <span class=nx>OnInit</span><span class=p>,</span> <span class=nx>OnDestroy</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=kd>@Input</span><span class=p>(</span><span class=nx>carouselFrom</span><span class=p>)</span> <span class=nx>images</span>: <span class=kt>string</span><span class=p>[];</span>
+</span></span><span class=line><span class=cl>  <span class=kd>@Input</span><span class=p>(</span><span class=nx>carouselAutoplay</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>  <span class=kr>set</span> <span class=nx>autoplay</span><span class=p>(</span><span class=nx>autoplay</span><span class=o>:</span> <span class=s1>&#39;on&#39;</span> <span class=o>|</span> <span class=s1>&#39;off&#39;</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>autoplay</span> <span class=o>===</span> <span class=s1>&#39;on&#39;</span> <span class=o>?</span> <span class=k>this</span><span class=p>.</span><span class=nx>setAutoplayTimer</span><span class=p>()</span> <span class=o>:</span> <span class=k>this</span><span class=p>.</span><span class=nx>clearAutoplayTimer</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=kd>@Input</span><span class=p>(</span><span class=nx>carouselWithDelay</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>  <span class=kr>set</span> <span class=nx>delay</span><span class=p>(</span><span class=nx>delay</span>: <span class=kt>number</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>this</span><span class=p>.</span><span class=nx>_autoplayDelay</span> <span class=o>=</span> <span class=nx>delay</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=kr>get</span> <span class=nx>delay() {</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=k>this</span><span class=p>.</span><span class=nx>_autoplayDelay</span> <span class=o>||</span> <span class=mi>1000</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=kr>private</span> <span class=nx>_autoplayDelay</span>: <span class=kt>number</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=kr>private</span> <span class=nx>setAutoplayTimer() {</span>
+</span></span><span class=line><span class=cl>    <span class=k>this</span><span class=p>.</span><span class=nx>timerId</span> <span class=o>=</span> <span class=nx>setInterval</span><span class=p>(()</span> <span class=o>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=k>this</span><span class=p>.</span><span class=nx>next</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>    <span class=p>},</span> <span class=k>this</span><span class=p>.</span><span class=nx>delay</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=kr>private</span> <span class=nx>clearAutoplayTimer() {</span>
+</span></span><span class=line><span class=cl>    <span class=nx>clearInterval</span><span class=p>(</span><span class=k>this</span><span class=p>.</span><span class=nx>timerId</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=nx>context</span>: <span class=kt>CarouselContext</span> <span class=o>|</span> <span class=kc>null</span> <span class=o>=</span> <span class=kc>null</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=nx>timerId</span>: <span class=kt>number</span> <span class=o>|</span> <span class=kc>null</span> <span class=o>=</span> <span class=kc>null</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=nx>index</span>: <span class=kt>number</span> <span class=o>|</span> <span class=kc>null</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=kr>constructor</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>    <span class=kr>private</span> <span class=nx>tpl</span>: <span class=kt>TemplateRef</span><span class=p>&lt;</span><span class=nt>CarouselContext</span><span class=p>&gt;,</span>
+</span></span><span class=line><span class=cl>    <span class=kr>private</span> <span class=nx>vcr</span>: <span class=kt>ViewContainerRef</span>
+</span></span><span class=line><span class=cl>  <span class=p>)</span> <span class=p>{}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=nx>ngOnInit() {</span>
+</span></span><span class=line><span class=cl>    <span class=k>this</span><span class=p>.</span><span class=nx>context</span> <span class=o>=</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=nx>$implicit</span>: <span class=kt>this.images</span><span class=p>[</span><span class=mi>0</span><span class=p>],</span>
+</span></span><span class=line><span class=cl>      <span class=nx>controller</span><span class=o>:</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=nx>next</span><span class=o>:</span> <span class=p>()</span> <span class=o>=&gt;</span> <span class=k>this</span><span class=p>.</span><span class=nx>next</span><span class=p>(),</span>
+</span></span><span class=line><span class=cl>        <span class=nx>prev</span><span class=o>:</span> <span class=p>()</span> <span class=o>=&gt;</span> <span class=k>this</span><span class=p>.</span><span class=nx>prev</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>      <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=p>};</span>
+</span></span><span class=line><span class=cl>    <span class=k>this</span><span class=p>.</span><span class=nx>vcr</span><span class=p>.</span><span class=nx>createEmbeddedView</span><span class=p>(</span><span class=k>this</span><span class=p>.</span><span class=nx>tpl</span><span class=p>,</span> <span class=k>this</span><span class=p>.</span><span class=nx>context</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=nx>ngOnDestroy() {</span>
+</span></span><span class=line><span class=cl>    <span class=k>this</span><span class=p>.</span><span class=nx>clearAutoplayTimer</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=nx>next() {</span>
+</span></span><span class=line><span class=cl>    <span class=k>this</span><span class=p>.</span><span class=nx>index</span><span class=o>++</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=k>this</span><span class=p>.</span><span class=nx>index</span> <span class=o>&gt;=</span> <span class=k>this</span><span class=p>.</span><span class=nx>images</span><span class=p>.</span><span class=nx>length</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=k>this</span><span class=p>.</span><span class=nx>index</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=k>this</span><span class=p>.</span><span class=nx>context</span><span class=p>.</span><span class=nx>$implicit</span> <span class=o>=</span> <span class=k>this</span><span class=p>.</span><span class=nx>images</span><span class=p>[</span><span class=k>this</span><span class=p>.</span><span class=nx>index</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=nx>prev() {</span>
+</span></span><span class=line><span class=cl>    <span class=k>this</span><span class=p>.</span><span class=nx>index</span><span class=o>--</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=k>this</span><span class=p>.</span><span class=nx>index</span> <span class=o>&lt;</span> <span class=mi>0</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=k>this</span><span class=p>.</span><span class=nx>index</span> <span class=o>=</span> <span class=k>this</span><span class=p>.</span><span class=nx>images</span><span class=p>.</span><span class=nx>length</span> <span class=o>-</span> <span class=mi>1</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=k>this</span><span class=p>.</span><span class=nx>context</span><span class=p>.</span><span class=nx>$implicit</span> <span class=o>=</span> <span class=k>this</span><span class=p>.</span><span class=nx>images</span><span class=p>[</span><span class=k>this</span><span class=p>.</span><span class=nx>index</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>使用指令：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-html data-lang=html><span class=line><span class=cl><span class=p>&lt;</span><span class=nt>div</span> <span class=err>*</span><span class=na>carousel</span><span class=o>=</span><span class=s>&#34;let item from images autoplay &#39;on&#39; withDelay 1500&#34;</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  <span class=p>&lt;</span><span class=nt>img</span> <span class=err>[</span><span class=na>src</span><span class=err>]=&#34;</span><span class=na>item</span><span class=err>&#34;</span> <span class=p>/&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;/</span><span class=nt>div</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;</span><span class=nt>div</span> <span class=err>*</span><span class=na>carousel</span><span class=o>=</span><span class=s>&#34;let item from images; let ctrl = controller autoplay &#39;off&#39;&#34;</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  <span class=p>&lt;</span><span class=nt>img</span> <span class=err>[</span><span class=na>src</span><span class=err>]=&#34;</span><span class=na>item</span><span class=err>&#34;</span> <span class=p>/&gt;</span>
+</span></span><span class=line><span class=cl>  <span class=p>&lt;</span><span class=nt>button</span> <span class=err>(</span><span class=na>click</span><span class=err>)=&#34;</span><span class=na>ctrl</span><span class=err>.</span><span class=na>prev</span><span class=err>()&#34;</span><span class=p>&gt;</span><span class=ni>&amp;lt;</span><span class=p>&lt;/</span><span class=nt>button</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  <span class=p>&lt;</span><span class=nt>button</span> <span class=err>(</span><span class=na>click</span><span class=err>)=&#34;</span><span class=na>ctrl</span><span class=err>.</span><span class=na>next</span><span class=err>()&#34;</span><span class=p>&gt;</span><span class=ni>&amp;gt;</span><span class=p>&lt;/</span><span class=nt>button</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;/</span><span class=nt>div</span><span class=p>&gt;</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=runoutsideangular>runOutsideAngular</h2><p>在 Angular 中，DOM 事件的触发会导致 Ng 进行“变更检测”；如果该事件的副作用最终没有造成“绑定值”的更新；那么当前的“变更检测”就是多余的。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-ts data-lang=ts><span class=line><span class=cl><span class=kd>@Component</span><span class=p>({</span>
+</span></span><span class=line><span class=cl>  <span class=nx>selector</span><span class=o>:</span> <span class=s1>&#39;app-event-listener&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nx>template</span><span class=o>:</span> <span class=sb>`
+</span></span></span><span class=line><span class=cl><span class=sb>    &lt;button nz-button nzType=&#34;primary&#34; (click)=&#34;handleClick($event)&#34;&gt;
+</span></span></span><span class=line><span class=cl><span class=sb>      点击
+</span></span></span><span class=line><span class=cl><span class=sb>    &lt;/button&gt;
+</span></span></span><span class=line><span class=cl><span class=sb>  `</span>
+</span></span><span class=line><span class=cl><span class=p>})</span>
+</span></span><span class=line><span class=cl><span class=kr>export</span> <span class=kr>class</span> <span class=nx>EventListenerComponent</span> <span class=kr>implements</span> <span class=nx>AfterViewChecked</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>ngAfterViewChecked</span><span class=p>()</span><span class=o>:</span> <span class=k>void</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 每次“变更检测”之后调用
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=s1>&#39;AfterViewChecked&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=nx>handleClick</span><span class=p>(</span><span class=nx>e</span>: <span class=kt>MouseEvent</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 执行的副作用和 Angular 无关
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=nx>e</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=cm>/**
+</span></span></span><span class=line><span class=cl><span class=cm> * 每次点击按钮，控制台依次输出：
+</span></span></span><span class=line><span class=cl><span class=cm> * PointerEvent {...}
+</span></span></span><span class=line><span class=cl><span class=cm> * AfterViewChecked
+</span></span></span><span class=line><span class=cl><span class=cm> * ...
+</span></span></span><span class=line><span class=cl><span class=cm> */</span>
+</span></span></code></pre></td></tr></table></div></div><p>这么看来，最理想的状态是，只对<strong>会造成“绑定值”更新的副作用</strong>进行“变更检测”（这不就是 Vue 吗？）；但是，Ng 没有响应式系统，它只能通过 NgZone 拦截所有可能导致数据变更的函数调用来处理数据“响应”。好在 NgZone 提供了一个 runOutsideAngular 方法，可以使副作用的执行不触发“变更检测”：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-ts data-lang=ts><span class=line><span class=cl><span class=kd>@Component</span><span class=p>({</span>
+</span></span><span class=line><span class=cl>  <span class=nx>selector</span><span class=o>:</span> <span class=s1>&#39;app-event-listener&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nx>template</span><span class=o>:</span> <span class=sb>`
+</span></span></span><span class=line><span class=cl><span class=sb>    &lt;button nz-button nzType=&#34;primary&#34; (click)=&#34;handleClick($event)&#34;&gt;
+</span></span></span><span class=line><span class=cl><span class=sb>      点击
+</span></span></span><span class=line><span class=cl><span class=sb>    &lt;/button&gt;
+</span></span></span><span class=line><span class=cl><span class=sb>  `</span>
+</span></span><span class=line><span class=cl><span class=p>})</span>
+</span></span><span class=line><span class=cl><span class=kr>export</span> <span class=kr>class</span> <span class=nx>EventListenerComponent</span> <span class=kr>implements</span> <span class=nx>AfterViewChecked</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=kr>constructor</span><span class=p>(</span><span class=kr>private</span> <span class=nx>zone</span>: <span class=kt>NgZone</span><span class=p>)</span> <span class=p>{}</span>
+</span></span><span class=line><span class=cl>  <span class=nx>ngAfterViewChecked</span><span class=p>()</span><span class=o>:</span> <span class=k>void</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 每次“变更检测”之后调用
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=s1>&#39;AfterViewChecked&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=nx>handleClick</span><span class=p>(</span><span class=nx>e</span>: <span class=kt>MouseEvent</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 使用 runOutsideAngular 包裹“副作用”
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=k>this</span><span class=p>.</span><span class=nx>zone</span><span class=p>.</span><span class=nx>runOutsideAngular</span><span class=p>(()</span> <span class=o>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=nx>e</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=p>});</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=cm>/**
+</span></span></span><span class=line><span class=cl><span class=cm> * 每次点击按钮，控制台依次输出：
+</span></span></span><span class=line><span class=cl><span class=cm> * PointerEvent {...}
+</span></span></span><span class=line><span class=cl><span class=cm> * AfterViewChecked
+</span></span></span><span class=line><span class=cl><span class=cm> * ...
+</span></span></span><span class=line><span class=cl><span class=cm> */</span>
+</span></span></code></pre></td></tr></table></div></div><p>可以看到 runOutsideAngular 并没有起作用，原因是事件回调 handleClick 已经注册在了 Ng 内部：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-ts data-lang=ts><span class=line><span class=cl><span class=kd>@Component</span><span class=p>({</span>
+</span></span><span class=line><span class=cl>  <span class=nx>selector</span><span class=o>:</span> <span class=s1>&#39;app-event-listener&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nx>template</span><span class=o>:</span> <span class=sb>`
+</span></span></span><span class=line><span class=cl><span class=sb>    &lt;button #btn nz-button nzType=&#34;primary&#34;&gt;点击&lt;/button&gt;
+</span></span></span><span class=line><span class=cl><span class=sb>  `</span>
+</span></span><span class=line><span class=cl><span class=p>})</span>
+</span></span><span class=line><span class=cl><span class=kr>export</span> <span class=kr>class</span> <span class=nx>EventListenerComponent</span> <span class=kr>implements</span> <span class=nx>AfterViewInit</span><span class=p>,</span> <span class=nx>AfterViewChecked</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=kd>@ViewChild</span><span class=p>(</span><span class=s1>&#39;btn&#39;</span><span class=p>)</span> <span class=nx>btn</span><span class=o>!:</span> <span class=nx>ElementRef</span><span class=p>&lt;</span><span class=nt>HTMLButtonElement</span><span class=p>&gt;;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=kr>constructor</span><span class=p>(</span><span class=kr>private</span> <span class=nx>renderer</span>: <span class=kt>Renderer2</span><span class=p>,</span> <span class=kr>private</span> <span class=nx>zone</span>: <span class=kt>NgZone</span><span class=p>)</span> <span class=p>{}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=nx>ngAfterViewInit</span><span class=p>()</span><span class=o>:</span> <span class=k>void</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>this</span><span class=p>.</span><span class=nx>zone</span><span class=p>.</span><span class=nx>runOutsideAngular</span><span class=p>(()</span> <span class=o>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=c1>// 以下三种均在 runOutsideAngular 内部完成事件的绑定
+</span></span></span><span class=line><span class=cl><span class=c1></span>      <span class=k>this</span><span class=p>.</span><span class=nx>setupClickListener1</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>      <span class=k>this</span><span class=p>.</span><span class=nx>setupClickListener2</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>      <span class=k>this</span><span class=p>.</span><span class=nx>setupClickListener3</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>    <span class=p>});</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=nx>ngAfterViewChecked</span><span class=p>()</span><span class=o>:</span> <span class=k>void</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=s1>&#39;AfterViewChecked&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=nx>setupClickListener1() {</span>
+</span></span><span class=line><span class=cl>    <span class=p>(</span><span class=k>this</span><span class=p>.</span><span class=nx>btn</span> <span class=kr>as</span> <span class=kt>any</span><span class=p>).</span><span class=nx>elementRef</span><span class=p>.</span><span class=nx>nativeElement</span><span class=p>.</span><span class=nx>addEventListener</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>      <span class=s1>&#39;click&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>      <span class=p>(</span><span class=nx>e</span>: <span class=kt>MouseEvent</span><span class=p>)</span> <span class=o>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=nx>e</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>      <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=nx>setupClickListener2() {</span>
+</span></span><span class=line><span class=cl>    <span class=k>this</span><span class=p>.</span><span class=nx>renderer</span><span class=p>.</span><span class=nx>listen</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>      <span class=p>(</span><span class=k>this</span><span class=p>.</span><span class=nx>btn</span> <span class=kr>as</span> <span class=kt>any</span><span class=p>).</span><span class=nx>elementRef</span><span class=p>.</span><span class=nx>nativeElement</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>      <span class=s1>&#39;click&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>      <span class=p>(</span><span class=nx>e</span>: <span class=kt>MouseEvent</span><span class=p>)</span> <span class=o>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=nx>e</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>      <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=nx>setupClickListener3() {</span>
+</span></span><span class=line><span class=cl>    <span class=nx>fromEvent</span><span class=p>((</span><span class=k>this</span><span class=p>.</span><span class=nx>btn</span> <span class=kr>as</span> <span class=kt>any</span><span class=p>).</span><span class=nx>elementRef</span><span class=p>.</span><span class=nx>nativeElement</span><span class=p>,</span> <span class=s1>&#39;click&#39;</span><span class=p>).</span><span class=nx>subscribe</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>      <span class=p>(</span><span class=nx>e</span>: <span class=kt>MouseEvent</span><span class=p>)</span> <span class=o>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=nx>e</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>      <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=cm>/**
+</span></span></span><span class=line><span class=cl><span class=cm> * 以上三种绑定方式，每次点击按钮，控制台依次输出：
+</span></span></span><span class=line><span class=cl><span class=cm> * PointerEvent {...}
+</span></span></span><span class=line><span class=cl><span class=cm> * ...
+</span></span></span><span class=line><span class=cl><span class=cm> */</span>
+</span></span></code></pre></td></tr></table></div></div><p>可以使用“指令”将这部分逻辑进行封装：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-ts data-lang=ts><span class=line><span class=cl><span class=kd>@Directive</span><span class=p>({</span>
+</span></span><span class=line><span class=cl>  <span class=nx>selector</span><span class=o>:</span> <span class=s1>&#39;[click.zoneless]&#39;</span>
+</span></span><span class=line><span class=cl><span class=p>})</span>
+</span></span><span class=line><span class=cl><span class=kr>export</span> <span class=kr>class</span> <span class=nx>ClickZonelessDirective</span> <span class=kr>implements</span> <span class=nx>OnInit</span><span class=p>,</span> <span class=nx>OnDestroy</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=kd>@Output</span><span class=p>(</span><span class=s1>&#39;click.zoneless&#39;</span><span class=p>)</span> <span class=nx>clickZoneless</span> <span class=o>=</span> <span class=k>new</span> <span class=nx>EventEmitter</span><span class=p>&lt;</span><span class=nt>MouseEvent</span><span class=p>&gt;();</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=kr>private</span> <span class=nx>removeListener</span>: <span class=kt>Function</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=kr>constructor</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>    <span class=kr>private</span> <span class=kr>readonly</span> <span class=nx>zone</span>: <span class=kt>NgZone</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=kr>private</span> <span class=kr>readonly</span> <span class=nx>el</span>: <span class=kt>ElementRef</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=kr>private</span> <span class=kr>readonly</span> <span class=nx>renderer</span>: <span class=kt>Renderer2</span>
+</span></span><span class=line><span class=cl>  <span class=p>)</span> <span class=p>{}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=nx>ngOnInit() {</span>
+</span></span><span class=line><span class=cl>    <span class=k>this</span><span class=p>.</span><span class=nx>zone</span><span class=p>.</span><span class=nx>runOutsideAngular</span><span class=p>(()</span> <span class=o>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=k>this</span><span class=p>.</span><span class=nx>setupListener</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>    <span class=p>});</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=nx>ngOnDestroy() {</span>
+</span></span><span class=line><span class=cl>    <span class=k>this</span><span class=p>.</span><span class=nx>removeListener</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=nx>setupListener() {</span>
+</span></span><span class=line><span class=cl>    <span class=k>this</span><span class=p>.</span><span class=nx>removeListener</span> <span class=o>=</span> <span class=k>this</span><span class=p>.</span><span class=nx>renderer</span><span class=p>.</span><span class=nx>listen</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>      <span class=k>this</span><span class=p>.</span><span class=nx>el</span><span class=p>.</span><span class=nx>nativeElement</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>      <span class=s1>&#39;click&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>      <span class=p>(</span><span class=nx>e</span>: <span class=kt>MouseEvent</span><span class=p>)</span> <span class=o>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=k>this</span><span class=p>.</span><span class=nx>clickZoneless</span><span class=p>.</span><span class=nx>emit</span><span class=p>(</span><span class=nx>e</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=nx>e</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>      <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=cm>/**
+</span></span></span><span class=line><span class=cl><span class=cm> * 每次点击按钮，控制台依次输出：
+</span></span></span><span class=line><span class=cl><span class=cm> * PointerEvent {...}
+</span></span></span><span class=line><span class=cl><span class=cm> * ...
+</span></span></span><span class=line><span class=cl><span class=cm> */</span>
+</span></span></code></pre></td></tr></table></div></div><p>但是这种方式不够灵活，总不能一种事件就写一个指令。可以借助 <a class=link href=https://angular.cn/api/platform-browser/EventManager target=_blank rel=noopener>EventManager
+</a>实现同样的效果。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-ts data-lang=ts><span class=line><span class=cl><span class=c1>// zoneless-event.service.ts
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kd>@Injectable</span><span class=p>({</span>
+</span></span><span class=line><span class=cl>  <span class=nx>providedIn</span><span class=o>:</span> <span class=s1>&#39;root&#39;</span>
+</span></span><span class=line><span class=cl><span class=p>})</span>
+</span></span><span class=line><span class=cl><span class=kr>export</span> <span class=kr>class</span> <span class=nx>ZonelessEventService</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>manager</span>: <span class=kt>EventManager</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=nx>supports</span><span class=p>(</span><span class=nx>eventName</span>: <span class=kt>string</span><span class=p>)</span><span class=o>:</span> <span class=kr>boolean</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=nx>eventName</span><span class=p>.</span><span class=nx>endsWith</span><span class=p>(</span><span class=s1>&#39;.zoneless&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=nx>addEventListener</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>    <span class=nx>element</span>: <span class=kt>HTMLElement</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nx>eventName</span>: <span class=kt>keyof</span> <span class=nx>HTMLElementEventMap</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nx>handler</span>: <span class=kt>EventListener</span>
+</span></span><span class=line><span class=cl>  <span class=p>)</span><span class=o>:</span> <span class=nb>Function</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=kr>const</span> <span class=p>[</span><span class=nx>nativeEventName</span><span class=p>]</span> <span class=o>=</span> <span class=nx>eventName</span><span class=p>.</span><span class=nx>split</span><span class=p>(</span><span class=s1>&#39;.&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=k>this</span><span class=p>.</span><span class=nx>manager</span><span class=p>.</span><span class=nx>getZone</span><span class=p>().</span><span class=nx>runOutsideAngular</span><span class=p>(()</span> <span class=o>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=nx>element</span><span class=p>.</span><span class=nx>addEventListener</span><span class=p>(</span><span class=nx>nativeEventName</span><span class=p>,</span> <span class=nx>handler</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=p>});</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=p>()</span> <span class=o>=&gt;</span> <span class=nx>element</span><span class=p>.</span><span class=nx>removeEventListener</span><span class=p>(</span><span class=nx>nativeEventName</span><span class=p>,</span> <span class=nx>handler</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=c1>// app.module.ts
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kd>@NgModule</span><span class=p>({</span>
+</span></span><span class=line><span class=cl>  <span class=nx>bootstrap</span><span class=o>:</span> <span class=p>[</span><span class=nx>AppComponent</span><span class=p>],</span>
+</span></span><span class=line><span class=cl>  <span class=nx>declarations</span><span class=o>:</span> <span class=p>[</span><span class=nx>AppComponent</span><span class=p>],</span>
+</span></span><span class=line><span class=cl>  <span class=nx>imports</span><span class=o>:</span> <span class=p>[</span><span class=nx>BrowserModule</span><span class=p>],</span>
+</span></span><span class=line><span class=cl>  <span class=nx>providers</span><span class=o>:</span> <span class=p>[</span>
+</span></span><span class=line><span class=cl>    <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=c1>// @Inject(EVENT_MANAGER_PLUGINS) 就可以拿到 ZonelessEventService
+</span></span></span><span class=line><span class=cl><span class=c1></span>      <span class=nx>provide</span>: <span class=kt>EVENT_MANAGER_PLUGINS</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>      <span class=nx>useClass</span>: <span class=kt>ZonelessEventService</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>      <span class=nx>multi</span>: <span class=kt>true</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=p>]</span>
+</span></span><span class=line><span class=cl><span class=p>})</span>
+</span></span><span class=line><span class=cl><span class=kr>export</span> <span class=kr>class</span> <span class=nx>AppModule</span> <span class=p>{}</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=expressionchangedafterithasbeencheckederror>ExpressionChangedAfterItHasBeenCheckedError</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-ts data-lang=ts><span class=line><span class=cl><span class=kd>@Component</span><span class=p>({</span>
+</span></span><span class=line><span class=cl>  <span class=nx>template</span><span class=o>:</span> <span class=sb>`
+</span></span></span><span class=line><span class=cl><span class=sb>    &lt;label nz-checkbox [(ngModel)]=&#34;checkbox&#34;&gt;
+</span></span></span><span class=line><span class=cl><span class=sb>      &lt;span [textContent]=&#34;time | date : &#39;hh:mm:ss:SSS&#39;&#34;&gt;&lt;/span&gt;
+</span></span></span><span class=line><span class=cl><span class=sb>    &lt;/label&gt;
+</span></span></span><span class=line><span class=cl><span class=sb>  `</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nx>selector</span><span class=o>:</span> <span class=s1>&#39;app-example&#39;</span>
+</span></span><span class=line><span class=cl><span class=p>})</span>
+</span></span><span class=line><span class=cl><span class=kr>export</span> <span class=kr>class</span> <span class=nx>ListComponent</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>checkbox</span> <span class=o>=</span> <span class=kc>false</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=kr>get</span> <span class=nx>time() {</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=nb>Date</span><span class=p>.</span><span class=nx>now</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=cm>/**
+</span></span></span><span class=line><span class=cl><span class=cm> * 每次勾选多选框，控制台输出：
+</span></span></span><span class=line><span class=cl><span class=cm> * NG0100: ExpressionChangedAfterItHasBeenCheckedError: Expression has changed after it was checked.
+</span></span></span><span class=line><span class=cl><span class=cm> * ...
+</span></span></span><span class=line><span class=cl><span class=cm> */</span>
+</span></span></code></pre></td></tr></table></div></div><p>控制台会报**<a class=link href=https://angular.cn/errors/NG0100 target=_blank rel=noopener>
+NG100 错误
+</a>**，原因是多选框的勾选会改变 checkbox，从而触发“变更检测”，导致 DOM 更新，在 DOM 重新渲染的过程中，timeGetter 的返回值和在“变更检测”过程中的返回值不同；渲染前后的值的不同被“发现”了，导致错误被抛出。</p><p>值的变化是什么时候被发现的呢？在组件被渲染到页面的过程中，组件内部会有一个被称为 View 的数据结构，保存着<strong>对组件实例的引用</strong>和<strong>绑定表达式的值</strong>；在变更检测过程中，编译器会将需要更新的 DOM 属性打上标记；对于每个被标记的属性，编译器都会创建一个绑定，该绑定定义了<strong>要更新的属性名称</strong>以及<strong>用来获取新值的表达式</strong>。</p><p>在“变更检测”过程中，会运行<strong>编译器为视图生成的</strong>所有绑定表达式，并将执行结果和<strong>储存在 View 中的 oldValue</strong>进行比较，这就是“脏”检查的由来；如果值有变化，那么就会更新“界面”和“oldValue”；当前组件的“变更检测”进行完毕，就会对“子组件”进行相同的操作。</p><p>在上述例子中，Angular 在 spanView 和 timeGetter 之间建立了一种绑定关系；在每次检测过程中，绑定表达式被执行，timeGetter 返回的时间戳并被日期管道处理，日期管道返回的值会和 oldValue 进行比较，如果检测到值的差异，spanView 的 textContent 会被更新。</p><p>在开发环境中，每个“变更检测周期（整个组件树完成变更检测）”之后会<strong>同步</strong>进行一次“额外的检测”，以确保“最终值”和变更检测过程中的值一致；不同于“变更检测”，在“额外检测”过程中，如果检测到“值的不同”，不会进行<strong>视图更新</strong>，而是抛出<strong>ExpressionChangedAfterItHasBeenCheckedError</strong>错误。</p><p>简单的说，如果值<strong>总是</strong>在“变更检测”期间发生变化，就会造成“变更检测死循环”；“ExpressionChangedAfterItHasBeenCheckedError”错误就是在出现“变更检测死循环”的情况下被抛出的；或者说，当应用<strong>内部状态</strong>和<strong>渲染结果</strong>不匹配时，就会抛出“ExpressionChangedAfterItHasBeenCheckedError”。</p><h2 id=参考>参考</h2><ul><li><a class=link href=https://indepth.dev/posts/1467/how-to-use-controlvalueaccessor-to-enhance-date-input-with-automatic-conversion-and-validation target=_blank rel=noopener>How To Use ControlValueAccessor To Enhance Date Input With Automatic Conversion And Validation</a></li><li><a class=link href=https://indepth.dev/posts/1508/structure-initialization-logic-without-ngoninit-utilize-observables-and-ngonchanges target=_blank rel=noopener>Component Initialization Without ngOnInit With Async Pipes For Observables And ngOnChanges</a></li><li><a class=link href=https://indepth.dev/posts/1058/a-gentle-introduction-into-change-detection-in-angular target=_blank rel=noopener>A Gentle Introduction Into Change Detection in Angular</a></li><li><a class=link href=https://indepth.dev/posts/1434/running-event-listeners-outside-of-the-ngzone target=_blank rel=noopener>Running Event Listeners Outside Of The NgZone</a></li><li><a class=link href=https://netbasal.com/understanding-angular-structural-directives-659acd0f67e target=_blank rel=noopener>Understanding Angular Structural Directives</a></li></ul></section><footer class=article-footer><section class=article-copyright><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span></section></footer></article><aside class=related-content--wrapper><h2 class=section-title>相关文章</h2><div class=related-content><div class="flex article-list--tile"><article class=has-image><a href=/p/angular-%E5%BF%AB%E9%80%9F%E4%B8%8A%E6%89%8B/><div class=article-image><img src=/img/cover/angular.png loading=lazy data-key data-hash=/img/cover/angular.png></div><div class=article-details><h2 class=article-title>Angular 快速上手</h2></div></a></article></div></div></aside><footer class=site-footer><section class=copyright>&copy;
+2017 -
+2024
+<a href=https://github.com/Vikingama target=_blank>馬腊咯稽</a></section><section class=powerby>Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a>, Deploy by Actions<br>主题 <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.13.0>Stack</a></b> 由 <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a> 设计</section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">目录</h2><div class=widget--toc><nav id=TableOfContents><ol><li><a href=#ngtemplateoutlet>ngTemplateOutlet</a></li><li><a href=#ngcomponentoutlet>ngComponentOutlet</a></li><li><a href=#formcontrolname>formControlName</a></li><li><a href=#asyncpipe>asyncPipe</a></li><li><a href=#directive>directive</a></li><li><a href=#runoutsideangular>runOutsideAngular</a></li><li><a href=#expressionchangedafterithasbeencheckederror>ExpressionChangedAfterItHasBeenCheckedError</a></li><li><a href=#参考>参考</a></li></ol></nav></div></section></aside></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=/ts/main.js defer></script></body></html>

@@ -1,0 +1,952 @@
+<!doctype html><html lang=zh-cn dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content='最近在读张鑫旭的 CSS 三部曲，这是第一本，主要讲 CSS2.x，简单做下笔记'><title>《CSS 世界》笔记 · Stay Hungry · Stay Foolish</title>
+<link rel=canonical href=https://vikingama.github.io/p/css-%E4%B8%96%E7%95%8C%E7%AC%94%E8%AE%B0/><link rel=stylesheet href=/scss/style.min.38c15d3a5c1bca30008bb625a46636d24f5deb4bf3217095e667a3abc843eaef.css><meta property='og:title' content='《CSS 世界》笔记'><meta property='og:description' content='最近在读张鑫旭的 CSS 三部曲，这是第一本，主要讲 CSS2.x，简单做下笔记'><meta property='og:url' content='https://vikingama.github.io/p/css-%E4%B8%96%E7%95%8C%E7%AC%94%E8%AE%B0/'><meta property='og:site_name' content='馬腊咯稽'><meta property='og:type' content='article'><meta property='article:section' content='Post'><meta property='article:published_time' content='2022-01-02T00:00:00+00:00'><meta property='article:modified_time' content='2022-01-02T00:00:00+00:00'><meta property='og:image' content='https://vikingama.github.io/img/cover/css.png'><meta name=twitter:title content="《CSS 世界》笔记"><meta name=twitter:description content="最近在读张鑫旭的 CSS 三部曲，这是第一本，主要讲 CSS2.x，简单做下笔记"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content='https://vikingama.github.io/img/cover/css.png'><link rel="shortcut icon" href=/favicon.ico><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><meta name=theme-color content="#ffffff"><meta name=robots content="noarchive"><div class=warning-banner>因为 GitHub 账号二次验证失败，计划迁往
+<a href=https://elementref.github.io/>新地址&rarr;</a></div></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label=切换菜单>
+<span class=hamburger-box><span class=hamburger-inner></span></span></button><header><figure class=site-avatar><a href=/><img src=/img/avatar_huae06eac29c2bc6aa7e83a685ea2f6536_13838_300x0_resize_box_3.png width=300 height=404 class=site-logo loading=lazy alt=Avatar></a></figure><div class=site-meta><h1 class=site-name><a href=/>馬腊咯稽</a></h1><h2 class=site-description>Stay Hungry · Stay Foolish</h2></div></header><ol class=menu id=main-menu><li><a href=/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg>
+<span>首页</span></a></li><li><a href=/archives/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><rect x="3" y="4" width="18" height="4" rx="2"/><path d="M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+<span>归档</span></a></li><li><a href=/search/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="10" cy="10" r="7"/><line x1="21" y1="21" x2="15" y2="15"/></svg>
+<span>搜索</span></a></li><li><a href=https://github.com/ElementRef/AboutConfig target=_blank><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-infinity" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M9.828 9.172a4 4 0 100 5.656A10 10 0 0012 12a10 10 0 012.172-2.828 4 4 0 110 5.656A10 10 0 0112 12 10 10 0 009.828 9.172"/></svg>
+<span>配置</span></a></li><li><a href=/%E5%90%AF%E5%8F%91/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M10 14a3.5 3.5.0 005 0l4-4a3.5 3.5.0 00-5-5l-.5.5"/><path d="M14 10a3.5 3.5.0 00-5 0l-4 4a3.5 3.5.0 005 5l.5-.5"/></svg>
+<span>启发</span></a></li><li><a href=/%E5%91%BD%E4%BB%A4/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-terminal" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 7l5 5-5 5"/><line x1="12" y1="19" x2="19" y2="19"/></svg>
+<span>命令</span></a></li><li><a href=/%E5%85%B3%E4%BA%8E/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="7" r="4"/><path d="M6 21v-2a4 4 0 014-4h4a4 4 0 014 4v2"/></svg>
+<span>关于</span></a></li><div class=menu-bottom-section><li id=dark-mode-toggle><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<span>深色</span></li></div></ol></aside><main class="main full-width"><article class="has-image main-article"><header class=article-header><div class=article-image><a href=/p/css-%E4%B8%96%E7%95%8C%E7%AC%94%E8%AE%B0/><img src=/img/cover/css.png loading=lazy alt="《CSS 世界》笔记"></a></div><div class=article-details><header class=article-category><a href=/categories/css/>CSS</a></header><div class=article-title-wrapper><h2 class=article-title><a href=/p/css-%E4%B8%96%E7%95%8C%E7%AC%94%E8%AE%B0/>《CSS 世界》笔记</a></h2><h3 class=article-subtitle>最近在读张鑫旭的 CSS 三部曲，这是第一本，主要讲 CSS2.x，简单做下笔记</h3></div><footer class=article-time><div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>Jan 02, 2022</time></div><div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>阅读时长：25 分钟</time></div></footer></div></header><section class=article-content><h2 id=文档流>文档流</h2><p><strong>文档流</strong>是指 CSS 中引导元素排列和定位的一条看不见的“水流”。</p><p>CSS 的基石是 HTML，所以 HTML 默认的表现符合“流”，可以通过破坏“流”来实现特殊布局。</p><p>文档流的流向是可以改变的（column、display、float、position&mldr;），这种改变可以让 CSS 的展现更为丰富；因此，“文档流从左往右自上而下”这种说法是不严谨的。</p><p><strong>流体布局</strong>指的是利用元素“流”的特性实现的各类布局效果；因为“流”本身具有自适应特性，所以“流体布局”往往都是具有自适应性的。</p><p><strong>流动性</strong>是一种 margin/border/padding 和 content <strong>自动分配水平空间</strong>的机制；如果手动设置宽度，就完全就不像“水流”那样完全利用容器空间，即所谓的<strong>流动性丢失</strong>。</p><h2 id=块级元素>块级元素</h2><p><strong>块级元素</strong>和 display:block 不是一个概念。例如，li 默认的 display 值是 list-item，table 默认的 display 值是 table，但是它们均是“块级元素”，因为它们都符合块级元素的基本特征；也就是一个水平流上只能单独显示一个元素，多个块级元素则换行显示。</p><p>由于“块级元素”具有<strong>换行</strong>特性，因此理论上它都可以配合 clear 属性来清除浮动带来的影响（IE 中的伪元素不支持 display:list-item；这是不用 display:list-item 清除浮动的主因，兼容性不好）。</p><h2 id=内外盒子臆想>内外盒子（臆想）</h2><p>每个元素都两个盒子，外在盒子和内在盒子。<strong>外在盒子</strong>负责元素是可以一行显示，还是只能换行显示；<strong>内在盒子</strong>负责宽高、内容呈现什么的。</p><p>display:block 元素的盒子实际由外在的“块级盒子”和内在的“块级容器盒子”组成；display:inline-block 元素则由外在的“内联盒子”和内在的“块级容器盒子”组成；display:inline 元素则内外均是“内联盒子”。</p><h2 id=替换元素>替换元素</h2><p>通过修改某个属性值呈现的内容就可以被替换的元素就称为<strong>替换元素</strong>；因此，img、object、video、iframe 或者 textarea 和 input 都是典型的替换元素：</p><ol><li>内容可替换；</li><li>内容外观不受页面上 CSS 的影响（样式表现在 CSS 作用域之外）；</li><li>有自己的默认尺寸；</li><li>在很多 CSS 属性上有自己的一套表现规则（例如：vertical-align）；</li><li>伪元素的 content 属性生成的内容都是替换元素：<ol><li>使用 content 生成的文本是无法选中、无法复制的，如同设置了 user-select:none 一般；</li><li>不影响 :empty 选择器的使用；</li><li>content 动态生成的值无法获取。</li></ol></li></ol><p>使用 content 中的换行符，实现“加载中”动画。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-html data-lang=html><span class=line><span class=cl><span class=p>&lt;</span><span class=nt>style</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  <span class=nt>dot</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>display</span><span class=p>:</span> <span class=kc>inline-block</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>height</span><span class=p>:</span> <span class=mi>1</span><span class=kt>em</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>line-height</span><span class=p>:</span> <span class=mi>1</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>text-align</span><span class=p>:</span> <span class=kc>left</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>vertical-align</span><span class=p>:</span> <span class=mf>-0.25</span><span class=kt>em</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>overflow</span><span class=p>:</span> <span class=kc>hidden</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=nt>dot</span><span class=p>::</span><span class=nd>before</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>display</span><span class=p>:</span> <span class=kc>block</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=c>/* 三个点、两个点、一个点；是因为 IE9 不支持 animation，可以不影响显示效果 */</span>
+</span></span><span class=line><span class=cl>    <span class=k>content</span><span class=p>:</span> <span class=s1>&#39;...\A..\A.&#39;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=c>/* 如何处理元素中的空白：pre（连续的空白符会被保留；在遇到换行符或者 &lt;br&gt; 元素时才会换行） */</span>
+</span></span><span class=line><span class=cl>    <span class=k>white-space</span><span class=p>:</span> <span class=kc>pre</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>animation</span><span class=p>:</span> <span class=kc>dot</span> <span class=mi>3</span><span class=kt>s</span> <span class=kc>infinite</span> <span class=kc>step-start</span> <span class=kc>both</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=c>/* 整个效果的原理就是：伪元素不断上下移动 */</span>
+</span></span><span class=line><span class=cl>  <span class=p>@</span><span class=k>keyframes</span> <span class=nt>dot</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nt>33</span><span class=o>%</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=k>transform</span><span class=p>:</span> <span class=nb>translateY</span><span class=p>(</span><span class=mi>-2</span><span class=kt>em</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=nt>66</span><span class=o>%</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=k>transform</span><span class=p>:</span> <span class=nb>translateY</span><span class=p>(</span><span class=mi>-1</span><span class=kt>em</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;/</span><span class=nt>style</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;</span><span class=nt>body</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  <span class=c>&lt;!-- 使用 dot 自定义元素，可以在 IE8 上实现优雅降级--&gt;</span>
+</span></span><span class=line><span class=cl>  正在加载中
+</span></span><span class=line><span class=cl>  <span class=p>&lt;</span><span class=nt>dot</span><span class=p>&gt;</span>...<span class=p>&lt;/</span><span class=nt>dot</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;/</span><span class=nt>body</span><span class=p>&gt;</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=元素尺寸>元素尺寸</h2><ol><li>元素偏移尺寸：offsetWidth/offsetHeight，元素的 border-box 尺寸；</li><li>元素可视尺寸：clientWidth/clientHeight，元素的 padding-box 尺寸；</li><li>元素外部尺寸：元素的 margin-box 尺寸，有可能为负数。</li></ol><h2 id=minmax-width-与-minmax-height>min/max-width 与 min/max-height</h2><ol><li>min-* 的初始值是 none，max-* 的初始值是 auto；</li><li>如果 width > max-width，width 的值会被 max-width 的值覆盖（即使 width 的权重是 !important）；</li><li>如果 min-width > max-width，min-width 会覆盖 max-width 的值；</li><li>对于任意高度元素的展开收起动画，不妨试试 max-height（height:auto 不会触发过渡动画）。</li></ol><h2 id=margin>margin</h2><ol><li>margin 与 padding 百分比值无论是水平方向还是垂直方向都是相对于宽度计算的；</li><li>块级元素（不包括浮动和绝对定位元素）的上下外边距（margin-top/bottom）有时会合并为单个外边距；<ol><li>第一个/最后一个子元素与父元素；</li><li>上下排列的兄弟元素；</li><li>空的块级元素。</li></ol></li><li>margin 的合并只发生在和当前文档流方向的相垂直的方向上（默认文档流是水平流，可用 writing-mode 改写）；</li><li>阻止 margin 合并的方法：触发 BFC、设置 border、设置 padding、设置 height。</li></ol><h2 id=line-height>line-height</h2><ol><li>line-height 的定义就是两基线的间距，vertical-align 的默认值就是基线（字母 x 的下边缘线）;</li><li>x-height 指的是小写字母 x 的高度，术语描述就是基线和等分线（midline，也称作中线）之间的距离；</li><li>vertical-align:middle 跟上面的中线不是一个意思，middle 指的是基线往上 1/2 x-height 高度（字母 x 交叉点那个位置）；</li><li>vertical-align:middle 并不是绝对的垂直居中对齐，我们平常看到的 middle 效果只是一种近似效果；</li><li>ex 是 CSS 中的一个相对单位（相对于字体和字号），指的是小写字母 x 的高度；没错，就是指 x-height（1ch 表示一个阿拉伯数字 0 的宽度）。</li></ol><p>默认空 div 高度是 0，一旦里面写上几个文字，div 高度就有了；不少人会认为 div 高度是由里面的文字撑开的，也就是 font-size 决定的；但本质上是由 line-height 全权决定的，尽管某些场景确实与 font-size 大小有关。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-html data-lang=html><span class=line><span class=cl><span class=p>&lt;</span><span class=nt>style</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  <span class=p>.</span><span class=nc>line-height-zero</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>outline</span><span class=p>:</span> <span class=mi>1</span><span class=kt>px</span> <span class=kc>solid</span> <span class=kc>red</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>line-height</span><span class=p>:</span> <span class=mi>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>font-size</span><span class=p>:</span> <span class=mi>16</span><span class=kt>px</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=p>.</span><span class=nc>font-size-zero</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>outline</span><span class=p>:</span> <span class=mi>1</span><span class=kt>px</span> <span class=kc>solid</span> <span class=kc>red</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>line-height</span><span class=p>:</span> <span class=mi>16</span><span class=kt>px</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>font-size</span><span class=p>:</span> <span class=mi>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=p>.</span><span class=nc>font-size-relative</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>outline</span><span class=p>:</span> <span class=mi>1</span><span class=kt>px</span> <span class=kc>solid</span> <span class=kc>red</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>line-height</span><span class=p>:</span> <span class=mi>16</span><span class=kt>px</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>font-size</span><span class=p>:</span> <span class=mi>32</span><span class=kt>px</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;/</span><span class=nt>style</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;</span><span class=nt>p</span><span class=p>&gt;</span>第一个：<span class=p>&lt;/</span><span class=nt>p</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;</span><span class=nt>div</span> <span class=na>class</span><span class=o>=</span><span class=s>&#34;line-height-zero&#34;</span><span class=p>&gt;</span>line-height: 0;<span class=p>&lt;/</span><span class=nt>div</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;</span><span class=nt>p</span><span class=p>&gt;</span>第二个：<span class=p>&lt;/</span><span class=nt>p</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;</span><span class=nt>div</span> <span class=na>class</span><span class=o>=</span><span class=s>&#34;font-size-zero&#34;</span><span class=p>&gt;</span>font-size: 0;<span class=p>&lt;/</span><span class=nt>div</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;</span><span class=nt>p</span><span class=p>&gt;</span>第三个：<span class=p>&lt;/</span><span class=nt>p</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;</span><span class=nt>div</span> <span class=na>class</span><span class=o>=</span><span class=s>&#34;font-size-relative&#34;</span><span class=p>&gt;</span>font-size-relative<span class=p>&lt;/</span><span class=nt>div</span><span class=p>&gt;</span>
+</span></span></code></pre></td></tr></table></div></div><img style="display:block;margin:0 auto;width:70%" src=line-height.png><p>对于非替换元素的<strong>纯内联元素</strong>，其可视高度完全由 line-height 决定；注意这里的措辞“完全”，什么 padding、border 属性对可视高度是没有任何影响的。</p><p>对于文本这样的纯内联元素，line-height 就是高度计算的基石，用专业说法就是指定了用来计算行框盒子高度的基础高度。比方说，line-height 设为 16px，则一行文字高度是 16px，两行就是 32px，三行就是 48px；所有浏览器渲染解析都是这个值，1 像素都不差。</p><p>在 CSS 中，行距的上下等分机制（line-height=height 时可以实现近似垂直居中的效果），行距分散在文字的上方和下方（Adobe InDesign 的“行距”是加在文字上方的），行距=(line-height)-(font-size)。</p><p>line-height 的属性值：</p><ol><li>normal，和 font-family 相关联的一个变量，具体解析值还和系统、浏览器有关；</li><li>数值（1.5），解析值是和当前 font-size 相乘后的值，所有子元素继承的是 1.5 这个值；</li><li>百分比（150%），解析值是和当前 font-size 相乘后的值，所有子元素继承的是解析值；</li><li>长度值（21px），所有子元素继承的是解析值（21px）；</li><li>计算行高值时，所有浏览器都是向上取整的。</li></ol><h2 id=vertical-align>vertical-align</h2><p>只能作用在 display 计算值为 inline、inline-block，inline-table 或 table-cell 的元素上；块级、浮动、绝对定位元素上无效。</p><p>vertical-align 的属性值分为以下几类：</p><ol><li>线类：baseline（默认值，字符 x 的下边缘、替换元素的下边缘）、top、middle、bottom；</li><li>文本类：text-top（盒子顶部和父级内容区域的顶部对齐）、text-bottom（盒子底部和父级内容区域的底部对齐）；</li><li>上标下标类：sub（sub 元素默认的 vertical-align 属性值）、super（sup 元素默认的 vertical-align 属性值）；</li><li>数值百分比类：20px、20%（相对于 line-height 的解析值）：根据计算值的不同，相对于基线往上（正值）或往下（负值）偏移。</li></ol><p>对于一个 inline-block 元素，如果里面没有内联元素，或者 overflow 不是 visible，则该元素的 baseline 就是其 margin 底边缘；否则其 baseline 就是元素里面最后一行内联元素的基线。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-html data-lang=html><span class=line><span class=cl><span class=p>&lt;</span><span class=nt>style</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  <span class=nt>span</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>display</span><span class=p>:</span> <span class=kc>inline-block</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>width</span><span class=p>:</span> <span class=mi>120</span><span class=kt>px</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>height</span><span class=p>:</span> <span class=mi>120</span><span class=kt>px</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>background</span><span class=p>:</span> <span class=kc>red</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>text-decoration</span><span class=p>:</span> <span class=kc>underline</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=nt>span</span><span class=p>:</span><span class=nd>last-of-type</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>margin-bottom</span><span class=p>:</span> <span class=mi>120</span><span class=kt>px</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;/</span><span class=nt>style</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;</span><span class=nt>span</span> <span class=na>alt</span><span class=o>=</span><span class=s>&#34;没有内联元素&#34;</span><span class=p>&gt;&lt;/</span><span class=nt>span</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;</span><span class=nt>span</span> <span class=na>alt</span><span class=o>=</span><span class=s>&#34;最后一行内联元素的基线&#34;</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  span
+</span></span><span class=line><span class=cl>  <span class=p>&lt;</span><span class=nt>br</span> <span class=p>/&gt;</span>
+</span></span><span class=line><span class=cl>  span
+</span></span><span class=line><span class=cl><span class=p>&lt;/</span><span class=nt>span</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;</span><span class=nt>span</span> <span class=na>alt</span><span class=o>=</span><span class=s>&#34;margin 底边缘&#34;</span><span class=p>&gt;&lt;/</span><span class=nt>span</span><span class=p>&gt;</span>
+</span></span></code></pre></td></tr></table></div></div><img style="display:block;margin:0 auto;width:70%" src=baseline.png><h2 id=float>float</h2><p>float 的特性：</p><ol><li>块状化并格式化上下文，元素一旦 float 的属性值不为 none，则其 display 计算值就是 block 或者 table；</li><li>破坏文档流，使父元素高度塌陷（这是标准不是 bug，浮动本来就是为了破坏文档流实现文字环绕效果）；</li><li>没有任何 margin 合并。</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=kd>var</span> <span class=nx>span</span> <span class=o>=</span> <span class=nb>document</span><span class=p>.</span><span class=nx>createElement</span><span class=p>(</span><span class=s1>&#39;span&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=nb>document</span><span class=p>.</span><span class=nx>body</span><span class=p>.</span><span class=nx>appendChild</span><span class=p>(</span><span class=nx>span</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=s1>&#39;1. &#39;</span> <span class=o>+</span> <span class=nb>window</span><span class=p>.</span><span class=nx>getComputedStyle</span><span class=p>(</span><span class=nx>span</span><span class=p>).</span><span class=nx>display</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=nx>span</span><span class=p>.</span><span class=nx>style</span><span class=p>.</span><span class=nx>cssFloat</span> <span class=o>=</span> <span class=s1>&#39;left&#39;</span><span class=p>;</span> <span class=c1>// 设置元素左浮动
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=s1>&#39;2. &#39;</span> <span class=o>+</span> <span class=nb>window</span><span class=p>.</span><span class=nx>getComputedStyle</span><span class=p>(</span><span class=nx>span</span><span class=p>).</span><span class=nx>display</span><span class=p>);</span>
+</span></span></code></pre></td></tr></table></div></div><p>浮动锚点是 float 元素所在的“流”中的一个点，这个点本身并不浮动，就表现而言更像一个没有 margin、border 和 padding 的空的内联元素；浮动参考指的是浮动元素对齐参考的实体。在 CSS 世界中，float 元素的“浮动参考”是“行框盒子”，也就是 float 元素在当前“行框盒子”内定位；每一行内联元素都有一个“行框盒子”。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-html data-lang=html><span class=line><span class=cl><span class=p>&lt;</span><span class=nt>style</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  <span class=nt>div</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>background</span><span class=p>:</span> <span class=kc>red</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=nt>div</span> <span class=o>&gt;</span> <span class=nt>a</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>float</span><span class=p>:</span> <span class=kc>right</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;/</span><span class=nt>style</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;</span><span class=nt>div</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多更多
+</span></span><span class=line><span class=cl>  <span class=p>&lt;</span><span class=nt>a</span> <span class=na>href</span><span class=o>=</span><span class=s>&#34;https://baidu.com&#34;</span><span class=p>&gt;</span>更多<span class=p>&lt;/</span><span class=nt>a</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;/</span><span class=nt>div</span><span class=p>&gt;</span>
+</span></span></code></pre></td></tr></table></div></div><p>因此，这里设置了 float:right 的 a 元素是相对于最后一行的“行框盒子”对齐的。</p><img style="display:block;margin:0 auto;width:70%" src=float-anchor.png><p>“浮动锚点”的作用就是产生“行框盒子”，因为“浮动锚点”表现如同一个空的内联元素，有内联元素自然就有“行框盒子”；于是，float 元素对齐的参考实体“行框盒子”对于块状元素也同样适用了，只不过这个“行框盒子”由于没有任何内容，所以无尺寸，看不见也摸不着罢了。</p><h2 id=块级格式化上下文>块级格式化上下文</h2><p>如果一个元素具有 BFC，内部子元素再怎么翻江倒海，都不会影响外部的元素。所以，BFC 元素是不可能发生 margin 重叠的，因为 margin 重叠是会影响外面的元素的；BFC 元素也可以用来清除浮动的影响，因为如果不清除，子元素浮动则父元素高度塌陷，必然会影响后面元素布局和定位，这显然有违 BFC 元素的子元素不会影响外部元素的设定。</p><p>创建块级格式化上下文：</p><ol><li>根元素，html；</li><li>浮动元素，float 不为 none，（left、right、inline-start、inline-end）；</li><li>绝对/固定定位元素，position 为 absolute/fixed；</li><li>匿名表格单元格元素，display 为 table、table-row、table-row-group、table-header-group、table-footer-group、inline-table；</li><li>表格单元格，display 为 table-cell；</li><li>表格标题，display 为 table-caption；</li><li>行内块元素，display 为 inline-block；</li><li>弹性元素，display 为 flex 或 inline-flex；</li><li>网格元素，display 为 grid 或 inline-grid；</li><li>多列容器，column-count 或 column-width 不为 auto；</li><li>overflow 不为 visible 的块元素（hidden、scroll、auto、overlay）；</li><li>display 为 flow-root 的元素；</li><li>contain 为 layout、content 或 paint 的元素；</li><li>column-span 为 all 的元素。</li></ol><p>BFC 的结界特性最重要的用途其实不是去 margin 重叠或者是清除 float 影响，而是实现更健壮、更智能的自适应布局。普通流体元素在设置了 overflow:hidden 后，会自动填满容器中除了浮动元素以外的剩余空间，形成自适应布局效果，而且这种自适应布局要比纯流体自适应更加智能。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-html data-lang=html><span class=line><span class=cl><span class=p>&lt;</span><span class=nt>style</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  <span class=nt>img</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>float</span><span class=p>:</span> <span class=kc>left</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>width</span><span class=p>:</span> <span class=mi>180</span><span class=kt>px</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>margin</span><span class=p>:</span> <span class=mi>0</span> <span class=mi>8</span><span class=kt>px</span> <span class=mi>0</span> <span class=mi>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=nt>p</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>margin</span><span class=p>:</span> <span class=mi>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>overflow</span><span class=p>:</span> <span class=kc>hidden</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;/</span><span class=nt>style</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;</span><span class=nt>div</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  <span class=p>&lt;</span><span class=nt>img</span> <span class=na>src</span><span class=o>=</span><span class=s>&#34;/images/avatar.png&#34;</span> <span class=p>/&gt;</span>
+</span></span><span class=line><span class=cl>  <span class=p>&lt;</span><span class=nt>p</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>    Bacon ipsum dolor amet chislic beef ribs ball tip strip steak. Kevin alcatra
+</span></span><span class=line><span class=cl>    tri-tip, sirloin ball tip prosciutto turducken venison pork loin corned beef
+</span></span><span class=line><span class=cl>    short ribs pork chop cupim. Biltong capicola kevin, flank picanha sirloin
+</span></span><span class=line><span class=cl>    jowl salami frankfurter burgdoggen buffalo rump.
+</span></span><span class=line><span class=cl>  <span class=p>&lt;/</span><span class=nt>p</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;/</span><span class=nt>div</span><span class=p>&gt;</span>
+</span></span></code></pre></td></tr></table></div></div><img style="display:block;margin:0 auto;width:70%" src=bfc.png><h2 id=overflow>overflow</h2><p>overflow 原本的作用指定了块容器元素的内容溢出时是否需要裁剪，“BFC”只是其衍生出来的特性，“剪裁”才是其本职工作；当子元素内容超出容器宽度高度限制的时候，剪裁的边界是 border-box 的内边缘，而非 padding-box 的内边缘。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-html data-lang=html><span class=line><span class=cl><span class=p>&lt;</span><span class=nt>style</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  <span class=nt>div</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>overflow</span><span class=p>:</span> <span class=kc>hidden</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>height</span><span class=p>:</span> <span class=mi>310</span><span class=kt>px</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>padding</span><span class=p>:</span> <span class=mi>20</span><span class=kt>px</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>border</span><span class=p>:</span> <span class=mi>20</span><span class=kt>px</span> <span class=kc>solid</span> <span class=kc>red</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;/</span><span class=nt>style</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;</span><span class=nt>div</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  <span class=p>&lt;</span><span class=nt>img</span> <span class=na>src</span><span class=o>=</span><span class=s>&#34;/images/avatar.png&#34;</span> <span class=p>/&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;/</span><span class=nt>div</span><span class=p>&gt;</span>
+</span></span></code></pre></td></tr></table></div></div><img style="display:block;margin:0 auto;width:70%" src=overflow-cut.png><p>对于 Webkit 浏览器，可以通过以下选择器修改滚动条样式：</p><ol><li>::-webkit-scrollbar，整个滚动条；</li><li>::-webkit-scrollbar-button，滚动条上的按钮（上下箭头）；</li><li>::-webkit-scrollbar-thumb，滚动条上的滚动滑块；</li><li>::-webkit-scrollbar-track，滚动条轨道；</li><li>::-webkit-scrollbar-track-piece，滚动条没有滑块的轨道部分；</li><li>::-webkit-scrollbar-corner，当同时有垂直滚动条和水平滚动条时交汇的部分；</li><li>::-webkit-resizer，某些元素的 corner 部分的部分样式（例，textarea 的可拖动按钮）。</li></ol><p>文本溢出省略：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-html data-lang=html><span class=line><span class=cl><span class=p>&lt;</span><span class=nt>style</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  <span class=nt>div</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>outline</span><span class=p>:</span> <span class=mi>1</span><span class=kt>px</span> <span class=kc>solid</span> <span class=kc>red</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>text-overflow</span><span class=p>:</span> <span class=kc>ellipsis</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>white-space</span><span class=p>:</span> <span class=kc>nowrap</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>overflow</span><span class=p>:</span> <span class=kc>hidden</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=nt>section</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>margin-top</span><span class=p>:</span> <span class=mi>8</span><span class=kt>px</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>overflow</span><span class=p>:</span> <span class=kc>hidden</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>display</span><span class=p>:</span> <span class=kp>-webkit-</span><span class=n>box</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>word-break</span><span class=p>:</span> <span class=n>break-all</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>outline</span><span class=p>:</span> <span class=mi>1</span><span class=kt>px</span> <span class=kc>solid</span> <span class=kc>red</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=c>/* 原始弹性布局草案的一个属性，已经被最新的标准替代 */</span>
+</span></span><span class=line><span class=cl>    <span class=kp>-webkit-</span><span class=n>box-orient</span><span class=p>:</span> <span class=kc>vertical</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=c>/* 可以把块容器中的内容限制为指定的行数 */</span>
+</span></span><span class=line><span class=cl>    <span class=kp>-webkit-</span><span class=n>line-clamp</span><span class=p>:</span> <span class=mi>3</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;/</span><span class=nt>style</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;</span><span class=nt>div</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  Rump chuck boudin ground round cow short ribs pastrami. Porchetta cow kevin
+</span></span><span class=line><span class=cl>  short loin, beef bacon corned beef ball tip filet mignon swine ham. Chislic
+</span></span><span class=line><span class=cl>  ham hock prosciutto beef leberkas pancetta picanha drumstick boudin meatball
+</span></span><span class=line><span class=cl>  t-bone flank strip steak hamburger. Short ribs cow kielbasa spare ribs, tongue
+</span></span><span class=line><span class=cl>  meatloaf pig bacon filet mignon ground round shankle.
+</span></span><span class=line><span class=cl><span class=p>&lt;/</span><span class=nt>div</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;</span><span class=nt>section</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  Rump chuck boudin ground round cow short ribs pastrami. Porchetta cow kevin
+</span></span><span class=line><span class=cl>  short loin, beef bacon corned beef ball tip filet mignon swine ham. Chislic
+</span></span><span class=line><span class=cl>  ham hock prosciutto beef leberkas pancetta picanha drumstick boudin meatball
+</span></span><span class=line><span class=cl>  t-bone flank strip steak hamburger. Short ribs cow kielbasa spare ribs, tongue
+</span></span><span class=line><span class=cl>  meatloaf pig bacon filet mignon ground round shankle.
+</span></span><span class=line><span class=cl><span class=p>&lt;/</span><span class=nt>section</span><span class=p>&gt;</span>
+</span></span></code></pre></td></tr></table></div></div><img style="display:block;margin:0 auto;width:70%" src=overflow-ellipsis.png><h2 id=absolute>absolute</h2><p>一个元素的尺寸和位置经常受其<strong>包含块</strong>（containing block）的影响（比如说，width:50%，那到底是哪个“元素”宽度的一半呢？注意，这里的这个“元素”实际上就是指的“包含块”）；<strong>大多数情况下</strong>，包含块就是这个元素最近的祖先块元素的内容区，确定一个元素的包含块的过程完全依赖于这个元素的 position 属性：</p><ol><li>根元素（html）所在的包含块被称为<strong>初始包含块</strong>，他的尺寸是视口 viewport；</li><li>如果 position:static/relative/sticky，包含块由它的最近的祖先块元素（比如说，inline-block、block 或 list-item 元素）的<strong>内容区</strong>的边缘组成；</li><li>如果 position:absolute，包含块就是由它的最近的 position 不是 static（也就是值为 fixed、absolute、relative 或 sticky）的祖先元素的<strong>内边距区</strong>的边缘组成；</li><li>如果 position:fixed，包含块是视口 viewport。</li></ol><p>没有设置 left/top/right/bottom 的绝对定位称为<strong>无依赖绝对定位</strong>；<strong>无依赖绝对定位</strong>本质上就是“相对定位”，仅仅是不占据 CSS 流的尺寸空间而已（一个不占据任何空间的相对定位元素）。一个无依赖绝对定位的元素，并且其祖先元素全部都是非定位元素，那么他的位置还是当前位置，不是在浏览器左上方；虽然说元素 position:absolute 后的 display 计算值都是块状的，但是其定位的位置和没有设置 position:absolute 时候的位置相关。absolute 是非常独立的 CSS 属性值，其样式和行为表现不依赖其他任何 CSS 属性就可以完成。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-html data-lang=html><span class=line><span class=cl><span class=p>&lt;</span><span class=nt>style</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  <span class=nt>h3</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>margin</span><span class=p>:</span> <span class=mi>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>padding</span><span class=p>:</span> <span class=mi>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=nt>span</span><span class=o>,</span>
+</span></span><span class=line><span class=cl>  <span class=nt>p</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>position</span><span class=p>:</span> <span class=kc>absolute</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>outline</span><span class=p>:</span> <span class=mi>1</span><span class=kt>px</span> <span class=kc>solid</span> <span class=kc>red</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;/</span><span class=nt>style</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;</span><span class=nt>h3</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  标题：
+</span></span><span class=line><span class=cl>  <span class=p>&lt;</span><span class=nt>span</span><span class=p>&gt;</span>span-element<span class=p>&lt;/</span><span class=nt>span</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;/</span><span class=nt>h3</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;</span><span class=nt>h3</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  标题：
+</span></span><span class=line><span class=cl>  <span class=p>&lt;</span><span class=nt>p</span><span class=p>&gt;</span>p-element<span class=p>&lt;/</span><span class=nt>p</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;/</span><span class=nt>h3</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;</span><span class=nt>script</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>spanEle</span> <span class=o>=</span> <span class=nb>document</span><span class=p>.</span><span class=nx>querySelector</span><span class=p>(</span><span class=s1>&#39;span&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>pEle</span> <span class=o>=</span> <span class=nb>document</span><span class=p>.</span><span class=nx>querySelector</span><span class=p>(</span><span class=s1>&#39;p&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=nb>window</span><span class=p>.</span><span class=nx>getComputedStyle</span><span class=p>(</span><span class=nx>spanEle</span><span class=p>).</span><span class=nx>display</span><span class=p>);</span> <span class=c1>// block
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=nb>window</span><span class=p>.</span><span class=nx>getComputedStyle</span><span class=p>(</span><span class=nx>pEle</span><span class=p>).</span><span class=nx>display</span><span class=p>);</span> <span class=c1>// block
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=p>&lt;/</span><span class=nt>script</span><span class=p>&gt;</span>
+</span></span></code></pre></td></tr></table></div></div><img style="display:block;margin:0 auto;width:70%" src=dependless-absolute.png><p>text-align 可以<strong>改变</strong>无依赖绝对定位元素的位置，原因是：</p><ol><li>div 内部，img 之前存在<strong>幽灵空白节点</strong>，受 text-align:center 影响而水平居中显示；</li><li>无依赖绝对定位的 img 本来的位置就应该在<strong>幽灵空白节点</strong>右边，而且不占空间。</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-html data-lang=html><span class=line><span class=cl><span class=p>&lt;</span><span class=nt>style</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  <span class=nt>div</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>text-align</span><span class=p>:</span> <span class=kc>center</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>outline</span><span class=p>:</span> <span class=mi>1</span><span class=kt>px</span> <span class=kc>solid</span> <span class=kc>red</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=c>/*
+</span></span></span><span class=line><span class=cl><span class=c>      如果 overflow 容器不是定位元素
+</span></span></span><span class=line><span class=cl><span class=c>      同时 absolute 元素和 overflow 容器之间也没有定位元素
+</span></span></span><span class=line><span class=cl><span class=c>      则 overflow 无法对 absolute 元素进行剪裁，也不会出现滚动条
+</span></span></span><span class=line><span class=cl><span class=c>      position: relative; 加上这个，img 就会被裁剪
+</span></span></span><span class=line><span class=cl><span class=c>      overflow: hidden;
+</span></span></span><span class=line><span class=cl><span class=c>    */</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=nt>img</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>position</span><span class=p>:</span> <span class=kc>absolute</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>width</span><span class=p>:</span> <span class=mi>180</span><span class=kt>px</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;/</span><span class=nt>style</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;</span><span class=nt>div</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  <span class=p>&lt;</span><span class=nt>img</span> <span class=na>src</span><span class=o>=</span><span class=s>&#34;/images/avatar.png&#34;</span> <span class=p>/&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;/</span><span class=nt>div</span><span class=p>&gt;</span>
+</span></span></code></pre></td></tr></table></div></div><img style="display:block;margin:0 auto;width:70%" src=center-absolute.png><p>当 absolute 遇到 left/top/right/bottom 属性的时候，absolute 元素才真正变成绝对定位元素。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-html data-lang=html><span class=line><span class=cl><span class=p>&lt;</span><span class=nt>style</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  <span class=nt>div</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>position</span><span class=p>:</span> <span class=kc>relative</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>outline</span><span class=p>:</span> <span class=mi>1</span><span class=kt>px</span> <span class=kc>solid</span> <span class=kc>red</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=nt>p</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>position</span><span class=p>:</span> <span class=kc>absolute</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>margin</span><span class=p>:</span> <span class=mi>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>padding</span><span class=p>:</span> <span class=mi>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=nt>p</span><span class=p>:</span><span class=nd>nth-of-type</span><span class=o>(</span><span class=nt>1</span><span class=o>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>top</span><span class=p>:</span> <span class=mi>8</span><span class=kt>px</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>left</span><span class=p>:</span> <span class=mi>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>outline</span><span class=p>:</span> <span class=mi>1</span><span class=kt>px</span> <span class=kc>solid</span> <span class=kc>blue</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=nt>p</span><span class=p>:</span><span class=nd>nth-of-type</span><span class=o>(</span><span class=nt>2</span><span class=o>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>top</span><span class=p>:</span> <span class=mi>38</span><span class=kt>px</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>left</span><span class=p>:</span> <span class=mi>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>right</span><span class=p>:</span> <span class=mi>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>outline</span><span class=p>:</span> <span class=mi>1</span><span class=kt>px</span> <span class=kc>solid</span> <span class=kc>green</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=nt>p</span><span class=p>:</span><span class=nd>nth-of-type</span><span class=o>(</span><span class=nt>3</span><span class=o>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>top</span><span class=p>:</span> <span class=mi>68</span><span class=kt>px</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>right</span><span class=p>:</span> <span class=mi>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>outline</span><span class=p>:</span> <span class=mi>1</span><span class=kt>px</span> <span class=kc>solid</span> <span class=kc>orange</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;/</span><span class=nt>style</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;</span><span class=nt>div</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  <span class=p>&lt;</span><span class=nt>p</span><span class=p>&gt;&lt;/</span><span class=nt>p</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  <span class=p>&lt;</span><span class=nt>p</span><span class=p>&gt;&lt;/</span><span class=nt>p</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  <span class=p>&lt;</span><span class=nt>p</span><span class=p>&gt;&lt;/</span><span class=nt>p</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;/</span><span class=nt>div</span><span class=p>&gt;</span>
+</span></span></code></pre></td></tr></table></div></div><img style="display:block;margin:0 auto;width:70%" src=absolute-size.png><h2 id=层叠规则>层叠规则</h2><p>层叠上下文（stacking context），是 HTML 中的一个三维的概念；如果一个元素含有层叠上下文，我们可以理解为这个元素在 z 轴（垂直于显示器）上就“高人一等”。</p><p>层叠水平（stacking level），决定了<strong>同一个层叠上下文</strong>中元素在 z 轴上的显示顺序。</p><p>层叠顺序（stacking order），表示元素发生层叠时有着特定的<strong>垂直显示顺序</strong>。</p><img style="display:block;margin:0 auto;width:70%" src=stacking-order.png><p>background/border 为装饰属性，浮动和块状元素一般用作布局，而内联元素都是内容。</p><p>当元素发生层叠的时候，其覆盖关系遵循下面两条准则：</p><ol><li><strong>谁大谁上</strong>，当具有明显的层叠水平标识的时候，如生效的 z-index 属性值，在同一个层叠上下文领域，层叠水平值大的那一个覆盖小的那一个；</li><li><strong>后来居上</strong>，当元素的层叠水平一致、层叠顺序相同的时候，在 DOM 流中处于后面的元素会覆盖前面的元素。</li></ol><p>层叠上下文元素有如下特性：</p><ul><li>层叠上下文的<strong>层叠水平</strong>要比普通元素高；</li><li>层叠上下文可以阻断元素的混合模式；</li><li>层叠上下文可以嵌套，内部层叠上下文及其所有子元素均受制于“外部的层叠上下文”；</li><li>每个层叠上下文和兄弟元素独立，也就是说，当进行层叠变化或渲染的时候，只需要考虑后代元素；</li><li>每个层叠上下文是自成体系的，当元素发生层叠的时候，整个元素被认为是在父层叠上下文的层叠顺序中。</li></ul><p><strong>根层叠上下文</strong>指的是页面根元素，可以看成是 &lt;html>元素。因此，页面中所有的元素一定处于至少一个“层叠结界”中。</p><p>对于 position:relative/absolute 以及 Firefox/IE 下含有 position:fixed 声明的<strong>定位元素</strong>，当其 z-index 值<strong>不是 auto</strong> 的时候，会创建层叠上下文。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-html data-lang=html><span class=line><span class=cl><span class=p>&lt;</span><span class=nt>div</span> <span class=na>style</span><span class=o>=</span><span class=s>&#34;position: relative; z-index: auto&#34;</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  <span class=p>&lt;</span><span class=nt>img</span>
+</span></span><span class=line><span class=cl>    <span class=na>style</span><span class=o>=</span><span class=s>&#34;position: absolute; z-index: 2&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=na>src</span><span class=o>=</span><span class=s>&#34;./cat.jpg&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=na>class</span><span class=o>=</span><span class=s>&#34;cat&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=na>alt</span><span class=o>=</span><span class=s>&#34;猫&#34;</span>
+</span></span><span class=line><span class=cl>  <span class=p>/&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;/</span><span class=nt>div</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;</span><span class=nt>div</span> <span class=na>style</span><span class=o>=</span><span class=s>&#34;position: relative; z-index: auto&#34;</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  <span class=p>&lt;</span><span class=nt>img</span>
+</span></span><span class=line><span class=cl>    <span class=na>style</span><span class=o>=</span><span class=s>&#34;position: absolute; z-index: 1&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=na>src</span><span class=o>=</span><span class=s>&#34;./car.jpg&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=na>class</span><span class=o>=</span><span class=s>&#34;car&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=na>alt</span><span class=o>=</span><span class=s>&#34;车&#34;</span>
+</span></span><span class=line><span class=cl>  <span class=p>/&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;/</span><span class=nt>div</span><span class=p>&gt;</span>
+</span></span></code></pre></td></tr></table></div></div><img style="display:block;margin:0 auto;width:70%" src=z-index-auto.png><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-html data-lang=html><span class=line><span class=cl><span class=p>&lt;</span><span class=nt>div</span> <span class=na>style</span><span class=o>=</span><span class=s>&#34;position: relative; z-index: 0&#34;</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  <span class=p>&lt;</span><span class=nt>img</span>
+</span></span><span class=line><span class=cl>    <span class=na>style</span><span class=o>=</span><span class=s>&#34;position: absolute; z-index: 2&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=na>src</span><span class=o>=</span><span class=s>&#34;./cat.jpg&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=na>class</span><span class=o>=</span><span class=s>&#34;cat&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=na>alt</span><span class=o>=</span><span class=s>&#34;猫&#34;</span>
+</span></span><span class=line><span class=cl>  <span class=p>/&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;/</span><span class=nt>div</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;</span><span class=nt>div</span> <span class=na>style</span><span class=o>=</span><span class=s>&#34;position: relative; z-index: 0&#34;</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  <span class=p>&lt;</span><span class=nt>img</span>
+</span></span><span class=line><span class=cl>    <span class=na>style</span><span class=o>=</span><span class=s>&#34;position: absolute; z-index: 1&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=na>src</span><span class=o>=</span><span class=s>&#34;./car.jpg&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=na>class</span><span class=o>=</span><span class=s>&#34;car&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=na>alt</span><span class=o>=</span><span class=s>&#34;车&#34;</span>
+</span></span><span class=line><span class=cl>  <span class=p>/&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;/</span><span class=nt>div</span><span class=p>&gt;</span>
+</span></span></code></pre></td></tr></table></div></div><img style="display:block;margin:0 auto;width:70%" src=z-index-0.png><p>层叠上下文的创建：</p><ol><li>flex 布局元素（display:flex/inline-flex），同时 z-index 值不是 auto；</li><li>元素的 opacity 值不是 1；</li><li>元素的 transform 值不是 none；</li><li>元素的 mix-blend-mode 值不是 normal；</li><li>元素的 filter 值不是 none；</li><li>元素的 isolation 值是 isolate；</li><li>元素的 will-change 属性值为上面 2 ～ 6 的任意一个（如 will-change:opacity）；</li><li>元素的 -webkit-overflow-scrolling 值是 touch。</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-html data-lang=html><span class=line><span class=cl><span class=p>&lt;</span><span class=nt>style</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  <span class=nt>div</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>background-color</span><span class=p>:</span> <span class=kc>cornflowerblue</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>width</span><span class=p>:</span> <span class=mi>270</span><span class=kt>px</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>height</span><span class=p>:</span> <span class=mi>270</span><span class=kt>px</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=c>/* opacity: 0.99; */</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=nt>div</span> <span class=nt>img</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>position</span><span class=p>:</span> <span class=kc>relative</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>right</span><span class=p>:</span> <span class=mi>-50</span><span class=kt>%</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>height</span><span class=p>:</span> <span class=mi>100</span><span class=kt>%</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>z-index</span><span class=p>:</span> <span class=mi>-1</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;/</span><span class=nt>style</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;</span><span class=nt>div</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  <span class=p>&lt;</span><span class=nt>img</span> <span class=na>src</span><span class=o>=</span><span class=s>&#34;./cat.jpg&#34;</span> <span class=na>alt</span><span class=o>=</span><span class=s>&#34;猫&#34;</span> <span class=p>/&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;/</span><span class=nt>div</span><span class=p>&gt;</span>
+</span></span></code></pre></td></tr></table></div></div><img style="display:block;margin:0 auto;width:70%" src=z-index--1.png>
+<img style="display:block;margin:0 auto;width:70%" src=opacity-0.99.png><p>z-index 负值可以隐藏元素，只需要层叠上下文内的某一个父元素加个背景色就可以。它与 clip 隐藏相比的一个优势是，元素无须绝对定位，设置 position:relative 也可以隐藏；另一个优势是，它对原来的布局以及元素的行为没有任何影响，而 clip 隐藏会导致控件 focus 的焦点发生细微的变化，在特定条件下是有体验问题的。它的不足之处就是不具有普遍适用性，需要其他元素配合进行隐藏。</p><h2 id=font>font</h2><p>font-size 的关键字属性分为两类：</p><ol><li>相对尺寸关键字：相对于当前元素计算：<ul><li>large：&lt;big/> 元素的默认 font-size 属性值；</li><li>small：&lt;small/> 元素的默认 font-size 属性值。</li></ul></li><li>绝对尺寸关键字：与当前元素 font-size 无关，仅仅受浏览器设置的字号影响：<ul><li>xx-large：和 &lt;h1/> 元素的计算值一样；</li><li>x-large：和 &lt;h2/> 元素的计算值一样；</li><li>large：和 &lt;h3/> 元素的计算值近似（偏差在一个像素以内）；</li><li>medium：font-size 的初始值，和 &lt;h4/> 元素的计算值一样；</li><li>small：和 &lt;h5/> 元素的计算值近似；</li><li>x-small：和 &lt;h6/> 元素的计算值近似；</li><li>xx-small：无对应的 HTML 元素。</li></ul></li></ol><p>由于浏览器限制，并不是所有小于 12px 的 font-size 都会被当作 12px 处理；有一个值例外，那就是 0，如果 font-size:0，那么文字会直接被隐藏掉，并且只能是 font-size:0，哪怕设置成 font-size:0.0000001px，都还是会被当作 12px 处理的。</p><p>font-family 默认值由操作系统和浏览器共同决定，例如 Windows 和 macOS 下的 Chrome 默认字体不一样，Windows 下的 Chrome 和 Firefox 默认字体也不一样；font-family 支持两类属性值，一类是“字体名”，一类是“字体族”。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-css data-lang=css><span class=line><span class=cl><span class=nt>body</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=c>/* 不用区分大小写 */</span>
+</span></span><span class=line><span class=cl>  <span class=k>font-family</span><span class=p>:</span> <span class=n>simsun</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=nt>section</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=c>/* 如果字体名包含空格，需要使用引号包起来 */</span>
+</span></span><span class=line><span class=cl>  <span class=k>font-family</span><span class=p>:</span> <span class=s1>&#39;Microsoft Yahei&#39;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=nt>span</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=c>/* 如果有多个字体设定，从左往右依次寻找本地是否有对应的字体即可 */</span>
+</span></span><span class=line><span class=cl>  <span class=k>font-family</span><span class=p>:</span> <span class=s1>&#39;PingFang SC&#39;</span><span class=p>,</span> <span class=s1>&#39;Microsoft Yahei&#39;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=nt>i</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=c>/* 通用字体族分很多类 */</span>
+</span></span><span class=line><span class=cl>  <span class=k>font-family</span><span class=p>:</span> <span class=kc>serif</span><span class=p>;</span> <span class=c>/* 衬线字体 */</span>
+</span></span><span class=line><span class=cl>  <span class=k>font-family</span><span class=p>:</span> <span class=kc>sans-serif</span><span class=p>;</span> <span class=c>/* 无衬线字体 */</span>
+</span></span><span class=line><span class=cl>  <span class=k>font-family</span><span class=p>:</span> <span class=kc>monospace</span><span class=p>;</span> <span class=c>/* 等宽字体 */</span>
+</span></span><span class=line><span class=cl>  <span class=k>font-family</span><span class=p>:</span> <span class=kc>cursive</span><span class=p>;</span> <span class=c>/* 手写字体，例如中文楷体 */</span>
+</span></span><span class=line><span class=cl>  <span class=k>font-family</span><span class=p>:</span> <span class=kc>fantasy</span><span class=p>;</span> <span class=c>/* 奇幻字体，用来装饰，字形和原本字符可以没有关系，例如，自定义图标 */</span>
+</span></span><span class=line><span class=cl>  <span class=k>font-family</span><span class=p>:</span> <span class=n>system-ui</span><span class=p>;</span> <span class=c>/* 系统 UI 字体 */</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>衬线字体，通俗讲就是笔画开始、结束的地方有额外装饰而且笔画的粗细会有所不同的字体。比如：宋体、Times New Roman、Georgia 等。无衬线字体没有这些额外的装饰，而且笔画的粗细差不多，比如：雅黑、Arial、Verdana、Tahoma、Helivetica 等。在大多数浏览器下，写在 serif 和 sans-serif 后面的所有字体都会被忽略。</p><p>所谓等宽字体，一般是针对英文字体而言的。东亚字体应该都是等宽的，就是每个字符在同等 font-size 下占据的宽度是一样的。但是英文字体就不一定了。</p><p>微软正黑体是一款全面支持 ClearType 技术的 TrueType 无衬线字体，用于繁体中文系统；对于微软雅黑和微软正黑，这两套字体都同时包含了比较完整的简体和繁体汉字，但这两套字形在正式场合是不能混淆使用的。</p><p>平常所说的“宋体”，指的都是“中易宋体”，英文名称 SimSun。macOS 内置的“宋体 - 简”和我们平常所说的“宋体”并不是同一个字体，其英文名称是“Songti SC”，字形表现也有差异。</p><p>font-weight 如果使用数值作为属性值，必须是 100-900 的整百数，没有 x50 这种东西；font-weight:400 等同于 font-weight:normal；font-weight:700 等同于 font-weight:bold。浏览器支持 100-900 的整百数，没有效果是因为系统缺乏对应粗细的字体。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-html data-lang=html><span class=line><span class=cl><span class=p>&lt;</span><span class=nt>style</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  <span class=nt>p</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>font-family</span><span class=p>:</span> <span class=s1>&#39;MiSans&#39;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;/</span><span class=nt>style</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;</span><span class=nt>body</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  <span class=p>&lt;</span><span class=nt>p</span> <span class=na>style</span><span class=o>=</span><span class=s>&#34;font-weight: 100;&#34;</span><span class=p>&gt;</span>轻如鸿毛，重如泰山<span class=p>&lt;/</span><span class=nt>p</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  <span class=p>&lt;</span><span class=nt>p</span> <span class=na>style</span><span class=o>=</span><span class=s>&#34;font-weight: 200;&#34;</span><span class=p>&gt;</span>轻如鸿毛，重如泰山<span class=p>&lt;/</span><span class=nt>p</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  <span class=p>&lt;</span><span class=nt>p</span> <span class=na>style</span><span class=o>=</span><span class=s>&#34;font-weight: 300;&#34;</span><span class=p>&gt;</span>轻如鸿毛，重如泰山<span class=p>&lt;/</span><span class=nt>p</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  <span class=p>&lt;</span><span class=nt>p</span> <span class=na>style</span><span class=o>=</span><span class=s>&#34;font-weight: 400;&#34;</span><span class=p>&gt;</span>轻如鸿毛，重如泰山<span class=p>&lt;/</span><span class=nt>p</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  <span class=p>&lt;</span><span class=nt>p</span> <span class=na>style</span><span class=o>=</span><span class=s>&#34;font-weight: 500;&#34;</span><span class=p>&gt;</span>轻如鸿毛，重如泰山<span class=p>&lt;/</span><span class=nt>p</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  <span class=p>&lt;</span><span class=nt>p</span> <span class=na>style</span><span class=o>=</span><span class=s>&#34;font-weight: 600;&#34;</span><span class=p>&gt;</span>轻如鸿毛，重如泰山<span class=p>&lt;/</span><span class=nt>p</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  <span class=p>&lt;</span><span class=nt>p</span> <span class=na>style</span><span class=o>=</span><span class=s>&#34;font-weight: 700;&#34;</span><span class=p>&gt;</span>轻如鸿毛，重如泰山<span class=p>&lt;/</span><span class=nt>p</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  <span class=p>&lt;</span><span class=nt>p</span> <span class=na>style</span><span class=o>=</span><span class=s>&#34;font-weight: 800;&#34;</span><span class=p>&gt;</span>轻如鸿毛，重如泰山<span class=p>&lt;/</span><span class=nt>p</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  <span class=p>&lt;</span><span class=nt>p</span> <span class=na>style</span><span class=o>=</span><span class=s>&#34;font-weight: 900;&#34;</span><span class=p>&gt;</span>轻如鸿毛，重如泰山<span class=p>&lt;/</span><span class=nt>p</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;/</span><span class=nt>body</span><span class=p>&gt;</span>
+</span></span></code></pre></td></tr></table></div></div><img style="display:block;margin:0 auto;width:70%" src=font-weight.png><p>font-style 的三个属性值中 italic 和 oblique 这两个关键字都表示“斜体”的意思，差别在于：italic 是使用当前字体的斜体字体，而 oblique 只是单纯地让文字倾斜。如果当前字体没有对应的斜体字体，则退而求其次，解析为 oblique，也就是单纯形状倾斜。</p><p>让各个系统使用各自引以为傲的字体（让网页的字体跟系统走），三种声明都可以：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-css data-lang=css><span class=line><span class=cl><span class=nt>html</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=k>font</span><span class=p>:</span> <span class=n>menu</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=nt>html</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=k>font</span><span class=p>:</span> <span class=kc>small</span><span class=o>-</span><span class=n>caption</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=nt>html</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=k>font</span><span class=p>:</span> <span class=kc>status-bar</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=nt>body</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=k>font-size</span><span class=p>:</span> <span class=mi>16</span><span class=kt>px</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>凡是使用自定义字体的，差不多都是下面这种格式：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-html data-lang=html><span class=line><span class=cl><span class=p>&lt;</span><span class=nt>pre</span> <span class=na>alt</span><span class=o>=</span><span class=s>&#34;传统版本&#34;</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  @font-face {
+</span></span><span class=line><span class=cl>    font-family: ICON;
+</span></span><span class=line><span class=cl>    /* eot 是 IE 的私有格式，兼容模式的 IE 不认识『?』，所以才有了这一行多余的 src */
+</span></span><span class=line><span class=cl>    src: url(&#39;icon.eot&#39;) format(&#39;eot&#39;);
+</span></span><span class=line><span class=cl>    /* #iefix 没什么用，有用的是『?』，防止 IE 对地址的错误解析 */
+</span></span><span class=line><span class=cl>    src: url(&#39;icon.eot?#iefix&#39;) format(&#39;embedded-opentype&#39;),
+</span></span><span class=line><span class=cl>        /* woff2 比 woff 体积更小，Web 开发首选，仅 Chrome 和 Firefox 支持比较好 */
+</span></span><span class=line><span class=cl>        url(&#39;icon.woff2&#39;) format(&#34;woff2&#34;),
+</span></span><span class=line><span class=cl>        /* woff（WebOpenFontFormat）是专门为 Web 开发的字体，Android 4.4 开始支持 */
+</span></span><span class=line><span class=cl>        url(&#39;icon.woff&#39;) format(&#34;woff&#34;),
+</span></span><span class=line><span class=cl>        /* ttf 为操作系统字体，缺点是体积大 */
+</span></span><span class=line><span class=cl>        url(&#39;icon.ttf&#39;) format(&#34;typetrue&#34;),
+</span></span><span class=line><span class=cl>        /* svg 格式是为了兼容 iOS 4.1 以及之前的版本 */
+</span></span><span class=line><span class=cl>        url(&#39;icon.svg#icon&#39;) format(&#39;svg&#39;); /* format 是用来帮助浏览器识别字体格式的，最好不要省略 */
+</span></span><span class=line><span class=cl>    font-weight: normal; /* 多余，用来实现响应式字体，不同字重的情况下使用不同字体 */
+</span></span><span class=line><span class=cl>    font-style: normal; /* 多余，用来实现响应式字体，不同样式的情况下使用不同字体 */
+</span></span><span class=line><span class=cl>  }
+</span></span><span class=line><span class=cl><span class=p>&lt;/</span><span class=nt>pre</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;</span><span class=nt>pre</span> <span class=na>alt</span><span class=o>=</span><span class=s>&#34;精简版本&#34;</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  @font-face {
+</span></span><span class=line><span class=cl>    font-family: ICON;
+</span></span><span class=line><span class=cl>    src: url(&#39;icon.eot&#39;);
+</span></span><span class=line><span class=cl>    src: local(&#39;☺&#39;), /* local 使用系统安装字体，url 使用外部字体，IE6-8 不认识 */
+</span></span><span class=line><span class=cl>        url(&#39;icon.woff2&#39;) format(&#34;woff2&#34;),
+</span></span><span class=line><span class=cl>        url(&#39;icon.woff&#39;) format(&#34;woff&#34;),
+</span></span><span class=line><span class=cl>        url(&#39;icon.ttf&#39;) format(&#34;typetrue&#34;);
+</span></span><span class=line><span class=cl>  }
+</span></span><span class=line><span class=cl><span class=p>&lt;/</span><span class=nt>pre</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;</span><span class=nt>pre</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  @font-face {
+</span></span><span class=line><span class=cl>    font-family: quote;
+</span></span><span class=line><span class=cl>    src: local(&#39;SimSun&#39;);
+</span></span><span class=line><span class=cl>    /* 用来指定哪些字符使用 SimSun 字体 */
+</span></span><span class=line><span class=cl>    unicode-range: U+201c, U+201d;
+</span></span><span class=line><span class=cl>  }
+</span></span><span class=line><span class=cl>  .font {
+</span></span><span class=line><span class=cl>    /* 效果就是，引号使用 SimSun 字体，其他文字使用 Microsoft Yahei 字体 */
+</span></span><span class=line><span class=cl>    font-family: quote, &#39;Microsoft Yahei&#39;;
+</span></span><span class=line><span class=cl>  }
+</span></span><span class=line><span class=cl><span class=p>&lt;/</span><span class=nt>pre</span><span class=p>&gt;</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=text-indent>text-indent</h2><p>text-indent 可以在标签受限的情况下，实现特殊的布局效果：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-html data-lang=html><span class=line><span class=cl><span class=p>&lt;</span><span class=nt>style</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  <span class=nt>p</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>padding-left</span><span class=p>:</span> <span class=mi>25</span><span class=kt>px</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>text-indent</span><span class=p>:</span> <span class=mi>-21</span><span class=kt>px</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;/</span><span class=nt>style</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;</span><span class=nt>p</span><span class=p>&gt;</span>Q: Bacon ipsum dolor amet ribeye tongue pancetta picanha?<span class=p>&lt;/</span><span class=nt>p</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;</span><span class=nt>p</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  A: Pastrami turducken chislic sirloin prosciutto. Pancetta alcatra strip steak
+</span></span><span class=line><span class=cl>  cupim, jerky venison drumstick pig tail porchetta bacon short ribs hamburger
+</span></span><span class=line><span class=cl>  jowl biltong. Kevin short ribs pig frankfurter tongue buffalo.
+</span></span><span class=line><span class=cl><span class=p>&lt;/</span><span class=nt>p</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;</span><span class=nt>p</span><span class=p>&gt;</span>Q: Pork loin drumstick ball tip burgdoggen pork chop filet?<span class=p>&lt;/</span><span class=nt>p</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;</span><span class=nt>p</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  A: Turducken ham hock rump, shankle shank pork chop capicola. Shankle sausage
+</span></span><span class=line><span class=cl>  short loin ground round pork loin. Strip steak salami chislic, cow hamburger
+</span></span><span class=line><span class=cl>  bacon kevin beef shank ground round prosciutto flank pastrami.
+</span></span><span class=line><span class=cl><span class=p>&lt;/</span><span class=nt>p</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;</span><span class=nt>p</span><span class=p>&gt;</span>Q: Strip steak fatback andouille pork chop salami jerky?<span class=p>&lt;/</span><span class=nt>p</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;</span><span class=nt>p</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  A: Tri-tip shank shoulder bresaola. Rump kielbasa shankle, sirloin bresaola
+</span></span><span class=line><span class=cl>  filet mignon ground round meatball tail. Prosciutto porchetta strip steak
+</span></span><span class=line><span class=cl>  drumstick jowl corned beef pork chop cupim turkey biltong pancetta swine.
+</span></span><span class=line><span class=cl><span class=p>&lt;/</span><span class=nt>p</span><span class=p>&gt;</span>
+</span></span></code></pre></td></tr></table></div></div><img style="display:block;margin:0 auto;width:70%" src=text-indent.png><p>text-indent 应该注意几点：</p><ol><li>text-indent 仅对第一行内联盒子内容有效；</li><li>非替换元素以外的 display 计算值为 inline 的内联元素设置 text-indent 值无效；如果计算值是 inline-block/inline-table 则会生效。因此，如果父级块状元素设置了 text-indent 属性值，子 inline-block/inline-table 需要设置 text-indent:0 重置；</li><li>&lt;input/> 标签按钮 text-indent 值无效；</li><li>&lt;button/> 标签按钮 text-indent 值有效，但是存在兼容性差异，IE 理解为单标签，百分比值按照容器计算，而 Chrome/Firefox 标签内还有其他 ShadowDOM 元素，因此百分比值是按照自身的尺寸计算的；</li><li>&lt;input/> 和 &lt;textarea/> 输入框的 text-indent 在低版本 IE 下有兼容问题。</li></ol><h2 id=letter-spacing>letter-spacing</h2><p>letter-spacing 具有一下特征：</p><ol><li>继承性；</li><li>默认值是 normal 而不是 0，虽然说正常情况下，normal 的计算值就是 0，但在有些场景下，letter-spacing 会调整 normal 的计算值以实现更好的版面布局；</li><li>支持负值，且值足够大的时候，会让字符形成重叠，甚至反向排列（非 IE）；</li><li>和 text-indent 属性一样，无论值多大或多小，第一行一定会保留至少一个字符。在默认的左对齐情况下，无论值如何设置，第一个字符的位置一定是纹丝不动的；</li><li>支持小数值，即使 0.1px 也是支持的，但并不总能看到效果，这与屏幕的像素密度有关。对普通的桌面显示器，设备像素比是 1，最小渲染单位是 1px，因此，需要至少连续 10 个字符，才能看到 0.1px 产生的 1px 间距变化，如果是 9 个字符，则不会有效果，这很可能会让人误以为 letter-spacing 不支持非常小的数值，实际上是支持的；</li><li>暂不支持百分比值。</li></ol><h2 id=word-spacing>word-spacing</h2><p>word-spacing 和 letter-spacing 名称类似，其特性也有很多共通之处：</p><ol><li>都具有继承性；</li><li>默认值都是 normal 而不是 0；通常情况下，两者表现并无差异；</li><li>都支持负值，都可以让字符重叠，但是对于 inline-block 和 inline-table 元素却存在兼容性差异，Chrome 下可以重叠，IE/Firefox 下则再大的负值也不会重叠，因此不适合使用 word-spacing 来清除空白间隙；</li><li>都支持小数值，如 word-spacing:0.5px；</li><li>间隔算法都会受到 text-align:justify 两端对齐的影响；</li><li>letter-spacing 作用于所有字符，word-spacing 仅作用于空格字符（即可以是键盘敲出来的空格 Space/Tab，也可以是换行符产生的空格）。</li></ol><h2 id=word-breakbreak-all-与-word-wrapbreak-word>word-break:break-all 与 word-wrap:break-word</h2><p>word-break 的属性如下：</p><ul><li>normal，使用默认的换行规则；</li><li>break-all，允许任意非 CJK（Chinese/Japanese/Korean）文本间的单词断行；</li><li>keep-all，CJK 只能在半角空格或连字符处换行；非 CJK 文本的行为实际上和 normal。</li></ul><p>word-wrap 的属性如下：</p><ul><li>normal，正常的换行规则；</li><li>break-word，一行单词中实在没有其他靠谱的换行点的时候换行。</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-html data-lang=html><span class=line><span class=cl><span class=p>&lt;</span><span class=nt>p</span> <span class=na>style</span><span class=o>=</span><span class=s>&#34;word-break: break-all;&#34;</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  如果您在阅读过程中有任何疑问或者发现表述不严谨的地方，欢迎去官方论坛
+</span></span><span class=line><span class=cl>  http://bbs.cssworld.cn 进行反馈与交流。
+</span></span><span class=line><span class=cl><span class=p>&lt;/</span><span class=nt>p</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;</span><span class=nt>p</span> <span class=na>style</span><span class=o>=</span><span class=s>&#34;word-wrap: break-word;&#34;</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  如果您在阅读过程中有任何疑问或者发现表述不严谨的地方，欢迎去官方论坛
+</span></span><span class=line><span class=cl>  http://bbs.cssworld.cn 进行反馈与交流。
+</span></span><span class=line><span class=cl><span class=p>&lt;/</span><span class=nt>p</span><span class=p>&gt;</span>
+</span></span></code></pre></td></tr></table></div></div><img style="display:block;margin:0 auto;width:70%" src=word-break|word-wrap.png><h2 id=white-space>white-space</h2><p>white-space 声明了如何处理元素内的空白字符，这类空白字符包括 Space、Enter、Tab 产生的空白。因此，white-space 可以决定图文内容是否在一行显示（回车空格是否生效），是否显示大段连续空白（空格是否生效）等。其属性值包括下面这些：</p><ul><li>normal，合并<strong>空白字符</strong>（多个空格变成一个）和<strong>换行符</strong>（多个连续换行合并成一个，并当作一个普通空格处理）；</li><li>pre，不合并<strong>空白字符</strong>，内容只在有<strong>换行符</strong>的地方换行；</li><li>nowrap，合并<strong>空白字符</strong>，但不允许文本环绕，元素的宽度此时表现为“最大可用宽度”，换行符和一些空格全部合并，文本一行显示；</li><li>pre-wrap，不合并<strong>空白字符</strong>，内容只在有<strong>换行符</strong>的地方换行，允许文本环绕（一行文字内容超出容器宽度时，会自动从下一行开始显示）；</li><li>pre-line，合并<strong>空白字符</strong>，内容只在有<strong>换行符</strong>的地方换行，允许文本环绕。</li></ul><img style="display:block;margin:0 auto;width:70%" src=white-space.png><h2 id=text-alignjustify>text-align:justify</h2><p>在默认设置下，text-align:justify 要想有两端对齐的效果，需要满足两点：</p><ol><li>有分隔点，如空格；</li><li>要超过一行，不足一行，不会两端对齐；</li><li>text-align-last:justify，兼容性不是很好（Safari/IE）。</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-html data-lang=html><span class=line><span class=cl><span class=p>&lt;</span><span class=nt>style</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  <span class=p>.</span><span class=nc>justify</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=c>/* 如果不酱紫，容器下方会多出一行 */</span>
+</span></span><span class=line><span class=cl>    <span class=k>font-size</span><span class=p>:</span> <span class=mi>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=p>.</span><span class=nc>justify</span><span class=p>::</span><span class=nd>after</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>content</span><span class=p>:</span> <span class=s1>&#39;&#39;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>display</span><span class=p>:</span> <span class=kc>inline-block</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>width</span><span class=p>:</span> <span class=mi>100</span><span class=kt>%</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=p>.</span><span class=nc>justify</span> <span class=o>&gt;</span> <span class=nt>span</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>font-size</span><span class=p>:</span> <span class=mi>16</span><span class=kt>px</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;/</span><span class=nt>style</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;</span><span class=nt>p</span> <span class=na>style</span><span class=o>=</span><span class=s>&#34;text-align: initial;&#34;</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  如果您在阅读过程中有任何疑问或者发现表述不严谨的地方，欢迎去官方论坛
+</span></span><span class=line><span class=cl>  http://bbs.cssworld.cn 进行反馈与交流。
+</span></span><span class=line><span class=cl><span class=p>&lt;/</span><span class=nt>p</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;</span><span class=nt>p</span> <span class=na>style</span><span class=o>=</span><span class=s>&#34;text-align: justify;&#34;</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  如果您在阅读过程中有任何疑问或者发现表述不严谨的地方，欢迎去官方论坛
+</span></span><span class=line><span class=cl>  http://bbs.cssworld.cn 进行反馈与交流。
+</span></span><span class=line><span class=cl><span class=p>&lt;/</span><span class=nt>p</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;</span><span class=nt>p</span> <span class=na>style</span><span class=o>=</span><span class=s>&#34;text-align: justify; text-align-last: justify;&#34;</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  如果您在阅读过程中有任何疑问或者发现表述不严谨的地方，欢迎去官方论坛
+</span></span><span class=line><span class=cl>  http://bbs.cssworld.cn 进行反馈与交流。
+</span></span><span class=line><span class=cl><span class=p>&lt;/</span><span class=nt>p</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;</span><span class=nt>p</span>
+</span></span><span class=line><span class=cl>  <span class=na>style</span><span class=o>=</span><span class=s>&#34;text-align: justify;&#34;</span>
+</span></span><span class=line><span class=cl>  <span class=na>class</span><span class=o>=</span><span class=s>&#34;justify&#34;</span>
+</span></span><span class=line><span class=cl>  <span class=na>alt</span><span class=o>=</span><span class=s>&#34;这种方法需要额外的元素辅助&#34;</span>
+</span></span><span class=line><span class=cl><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  <span class=p>&lt;</span><span class=nt>span</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>    如果您在阅读过程中有任何疑问或者发现表述不严谨的地方，欢迎去官方论坛
+</span></span><span class=line><span class=cl>    http://bbs.cssworld.cn 进行反馈与交流。
+</span></span><span class=line><span class=cl>  <span class=p>&lt;/</span><span class=nt>span</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;/</span><span class=nt>p</span><span class=p>&gt;</span>
+</span></span></code></pre></td></tr></table></div></div><img style="display:block;margin:0 auto;width:70%" src=text-align-justify.png><h2 id=first-letter-与-first-line>::first-letter 与 ::first-line</h2><p>::first-letter/::first-line 生效的前提：</p><ol><li>不是所有的字符都能单独作为 ::first-letter 伪元素存在的；常见的标点符号、各类括号和引号都不行（::first-line 不适用）；</li><li>可以作为 ::first-letter 伪元素的字符：数字、字母、中文、$、运算符、空格等（::first-line 不适用）；</li><li>元素的 display 计算值必须是：block、inline-block、list-item、table-cell、table-caption；</li><li>::first-letter 伪元素是作为子元素存在的，或者说应当被看作是子元素，CSS 权重更高；</li><li>应用在 ::first-letter 伪元素上的 CSS 只有一部分规则有效。</li></ol><h2 id=displayopacityvisibility>display、opacity、visibility</h2><p><img src=/p/css-%E4%B8%96%E7%95%8C%E7%AC%94%E8%AE%B0/display-opacity-visibility.png width=1818 height=384 srcset="/p/css-%E4%B8%96%E7%95%8C%E7%AC%94%E8%AE%B0/display-opacity-visibility_hu1b16cd2149df0587995ec485d7b7c16e_58154_480x0_resize_box_3.png 480w, /p/css-%E4%B8%96%E7%95%8C%E7%AC%94%E8%AE%B0/display-opacity-visibility_hu1b16cd2149df0587995ec485d7b7c16e_58154_1024x0_resize_box_3.png 1024w" class=gallery-image data-flex-grow=473 data-flex-basis=1136px loading=lazy></p><p>HTML 中有很多标签和属性天然 display:none，如 &lt;style/>、&lt;script/>、&lt;dialog/>、[type=&ldquo;hidden&rdquo;] 元素。如果这些标签在 &lt;body/> 元素中，设置 display:block 是可以让内联 CSS 和 JS 代码直接在页面中显示的。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-html data-lang=html><span class=line><span class=cl><span class=p>&lt;</span><span class=nt>body</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  <span class=p>&lt;</span><span class=nt>style</span> <span class=na>style</span><span class=o>=</span><span class=s>&#34;display: block; border: 1px solid red;&#34;</span> <span class=na>alt</span><span class=o>=</span><span class=s>&#34;必须在 body 中&#34;</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>    <span class=nt>p</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=k>padding</span><span class=p>:</span> <span class=mi>8</span><span class=kt>px</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>      <span class=k>background-color</span><span class=p>:</span> <span class=kc>darkcyan</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>      <span class=k>margin</span><span class=p>:</span> <span class=mi>0</span> <span class=mi>0</span> <span class=mi>48</span><span class=kt>px</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>      <span class=k>border</span><span class=p>:</span> <span class=mi>1</span><span class=kt>px</span> <span class=kc>solid</span> <span class=kc>transparent</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=p>.</span><span class=nc>justify</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=k>font-size</span><span class=p>:</span> <span class=mi>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=p>.</span><span class=nc>justify</span><span class=p>::</span><span class=nd>after</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=k>content</span><span class=p>:</span> <span class=s1>&#39;&#39;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>      <span class=k>display</span><span class=p>:</span> <span class=kc>inline-block</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>      <span class=c>/* vertical-align: bottom; */</span>
+</span></span><span class=line><span class=cl>      <span class=k>width</span><span class=p>:</span> <span class=mi>100</span><span class=kt>%</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=p>.</span><span class=nc>justify</span> <span class=o>&gt;</span> <span class=nt>span</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=k>font-size</span><span class=p>:</span> <span class=mi>16</span><span class=kt>px</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=p>&lt;/</span><span class=nt>style</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  <span class=p>&lt;</span><span class=nt>script</span> <span class=na>style</span><span class=o>=</span><span class=s>&#34;display: block; border: 1px solid blue;&#34;</span> <span class=na>alt</span><span class=o>=</span><span class=s>&#34;必须在 body 中&#34;</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>    <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=s1>&#39;really?&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=p>&lt;/</span><span class=nt>script</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>&lt;/</span><span class=nt>body</span><span class=p>&gt;</span>
+</span></span></code></pre></td></tr></table></div></div><img style="display:block;margin:0 auto;width:70%" src=show-style-script.png><h2 id=cursor>cursor</h2><p>cursor:none 可以隐藏用户鼠标光标，全屏看视频时，可以判断用户行为，自动隐藏鼠标。</p><p>cursor:context-menu 适用于自定义上下文菜单的情形，例如，邮箱、网盘等。</p><p>cursor:default 常搭配 user-select:none 属性使用，表示当前内容不可选。</p><p>cursor:cell 可以让光标变为 Excel 里的样式。</p><h2 id=direction>direction</h2><p>direction 设计的本意是为了兼顾阿拉伯语、希伯来语等从右往左的语言，他有两个属性值：</p><ol><li>ltr，默认值，从左往右；</li><li>rtl，从右往左。</li></ol><p>direction 可以轻易的改变元素的水平呈现顺序；例如，桌面弹窗的确认按钮在左，移动端弹窗的确认按钮在右，就可以简单的通过媒体查询实现。</p></section><footer class=article-footer><section class=article-copyright><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span></section></footer></article><aside class=related-content--wrapper><h2 class=section-title>相关文章</h2><div class=related-content><div class="flex article-list--tile"><article class=has-image><a href=/p/css-%E6%96%B0%E4%B8%96%E7%95%8C%E7%AC%94%E8%AE%B0/><div class=article-image><img src=/img/cover/css.png loading=lazy data-key data-hash=/img/cover/css.png></div><div class=article-details><h2 class=article-title>《CSS 新世界》笔记</h2></div></a></article><article class=has-image><a href=/p/css-%E9%80%89%E6%8B%A9%E5%99%A8%E4%B8%96%E7%95%8C%E7%AC%94%E8%AE%B0/><div class=article-image><img src=/img/cover/css.png loading=lazy data-key data-hash=/img/cover/css.png></div><div class=article-details><h2 class=article-title>《CSS 选择器世界》笔记</h2></div></a></article></div></div></aside><footer class=site-footer><section class=copyright>&copy;
+2017 -
+2024
+<a href=https://github.com/Vikingama target=_blank>馬腊咯稽</a></section><section class=powerby>Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a>, Deploy by Actions<br>主题 <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.13.0>Stack</a></b> 由 <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a> 设计</section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">目录</h2><div class=widget--toc><nav id=TableOfContents><ol><li><a href=#文档流>文档流</a></li><li><a href=#块级元素>块级元素</a></li><li><a href=#内外盒子臆想>内外盒子（臆想）</a></li><li><a href=#替换元素>替换元素</a></li><li><a href=#元素尺寸>元素尺寸</a></li><li><a href=#minmax-width-与-minmax-height>min/max-width 与 min/max-height</a></li><li><a href=#margin>margin</a></li><li><a href=#line-height>line-height</a></li><li><a href=#vertical-align>vertical-align</a></li><li><a href=#float>float</a></li><li><a href=#块级格式化上下文>块级格式化上下文</a></li><li><a href=#overflow>overflow</a></li><li><a href=#absolute>absolute</a></li><li><a href=#层叠规则>层叠规则</a></li><li><a href=#font>font</a></li><li><a href=#text-indent>text-indent</a></li><li><a href=#letter-spacing>letter-spacing</a></li><li><a href=#word-spacing>word-spacing</a></li><li><a href=#word-breakbreak-all-与-word-wrapbreak-word>word-break:break-all 与 word-wrap:break-word</a></li><li><a href=#white-space>white-space</a></li><li><a href=#text-alignjustify>text-align:justify</a></li><li><a href=#first-letter-与-first-line>::first-letter 与 ::first-line</a></li><li><a href=#displayopacityvisibility>display、opacity、visibility</a></li><li><a href=#cursor>cursor</a></li><li><a href=#direction>direction</a></li></ol></nav></div></section></aside></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=/ts/main.js defer></script></body></html>
