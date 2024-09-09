@@ -1,8 +1,23 @@
-User-agent: Googlebot-*
-Allow: /
+User-agent: Baiduspider
+Disallow: /
+
+User-agent: Bingbot
+Disallow: /
+
+User-agent: MSNBot-Media
+Disallow: /
 
 User-agent: Googlebot
-Allow: /
+Disallow: /
+
+User-agent: Googlebot-Image
+Disallow: /
+
+User-agent: Googlebot-News
+Disallow: /
+
+User-agent: Googlebot-Video
+Disallow: /
 
 User-agent: *
 Disallow: /
